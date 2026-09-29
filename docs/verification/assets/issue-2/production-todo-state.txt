@@ -1,0 +1,39 @@
+- banner:
+  - button "Atoms 首页":
+    - generic: a
+    - text: atoms
+    - generic: LAB
+  - generic: 无需注册 · 当前会话
+- main:
+  - complementary:
+    - paragraph: 项目工作台
+    - heading "做一个支持添加、完成、删除任务的待办应用。中文界面，…" [level=1]
+    - paragraph: 尚未保存 · 刷新或离开后会丢失
+    - heading "你的需求" [level=2]
+    - paragraph: 做一个支持添加、完成、删除任务的待办应用。中文界面，清楚区分已完成和未完成任务，适配手机。
+    - generic: ✓
+    - heading "代码已生成" [level=2]
+    - paragraph: 现在可以在预览中操作应用。生成完成不代表所有功能都已验证。
+    - term: 模型
+    - definition: deepseek-flash
+    - term: 生成耗时
+    - definition: 15.7 秒
+    - paragraph: 本次项目和应用数据仅保留在当前页面。保存与恢复将在后续版本提供。
+    - button "＋ 新建项目"
+  - region "应用预览":
+    - generic: 运行预览
+    - generic: 预览已加载 · 请实际操作检查
+    - iframe [active]:
+      - heading "✓ 待办清单" [level=1]
+      - generic: 添加、完成、删除 — 全部保存在内存中
+      - generic: 新任务描述
+      - textbox "新任务描述":
+        - /placeholder: 写点什么…
+      - button "添加任务": +
+      - generic: 未完成 0
+      - generic: 已完成 1
+      - list "任务列表":
+        - button "标记为未完成": ✓
+        - generic: 线上验收：保留并完成
+        - button "删除任务": ✕
+- alert

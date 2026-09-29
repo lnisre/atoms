@@ -1,0 +1,78 @@
+{
+  "verifiedAt": "2026-09-29T08:33:44.529067+00:00",
+  "productionUrl": "https://v0-test0-nine.vercel.app",
+  "deployment": {
+    "id": "dpl_FfNzuf6AjnAqxLdkieJbAhEWF5nV",
+    "readyState": "READY",
+    "alias": [
+      "v0-test0-nine.vercel.app",
+      "v0-test0-lnisres-projects.vercel.app"
+    ],
+    "target": "production",
+    "createdAt": 1790670341331
+  },
+  "requirement": "做一个支持添加、完成、删除任务的待办应用。中文界面，清楚区分已完成和未完成任务，适配手机。",
+  "requestedModel": "deepseek-v4-flash",
+  "responseModel": "deepseek-flash",
+  "displayedGenerationSeconds": 15.7,
+  "artifact": "production-todo.html",
+  "artifactIncludesPlatformGuard": true,
+  "sha256": "440925834c51230dc92c695aa888ea241e66f4df3c114bed619d2db3afc45e74",
+  "externalProbe": {
+    "nodes": {
+      "id1.node.check-host.net": [
+        "id",
+        "Indonesia",
+        "Jakarta",
+        "178.83.180.17",
+        " AS200177"
+      ],
+      "md1.node.check-host.net": [
+        "md",
+        "Moldova",
+        "Chisinau",
+        "178.17.171.235",
+        "AS43289"
+      ],
+      "vn1.node.check-host.net": [
+        "vn",
+        "Vietnam",
+        "Ho Chi Minh City",
+        "45.252.248.142",
+        "AS63760"
+      ]
+    },
+    "ok": 1,
+    "permanent_link": "https://check-host.net/check-report/4e0d085dkca1",
+    "request_id": "4e0d085dkca1"
+  },
+  "externalResults": {
+    "id1.node.check-host.net": [
+      [
+        1,
+        0.612291812896729,
+        "OK",
+        "200",
+        "216.198.79.67"
+      ]
+    ],
+    "md1.node.check-host.net": [
+      [
+        1,
+        0.490556001663208,
+        "OK",
+        "200",
+        "216.198.79.195"
+      ]
+    ],
+    "vn1.node.check-host.net": [
+      [
+        1,
+        5.87551498413086,
+        "OK",
+        "200",
+        "64.29.17.195"
+      ]
+    ]
+  }
+}

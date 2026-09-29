@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head><meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src data: blob:; font-src 'none'; connect-src 'none'; frame-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'"><script>addEventListener('error',()=>parent.postMessage({type:'atoms:preview-error'},'*'));addEventListener('unhandledrejection',()=>parent.postMessage({type:'atoms:preview-error'},'*'));</script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+  <title>待办事项 · 简洁清单</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+      background: #f5f7fb;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      padding: 1rem 0.75rem 2rem;
+    }
+    .app-container {
+      width: 100%;
+      max-width: 560px;
+      background: #ffffff;
+      border-radius: 28px;
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.05), 0 2px 8px rgba(0, 0, 0, 0.02);
+      padding: 1.5rem 1.25rem;
+      transition: all 0.15s;
+    }
+    h1 {
+      font-size: 1.8rem;
+      font-weight: 600;
+      color: #1e293b;
+      margin-bottom: 0.25rem;
+      letter-spacing: -0.01em;
+    }
+    .subhead {
+      font-size: 0.9rem;
+      color: #64748b;
+      margin-bottom: 1.5rem;
+      border-left: 3px solid #94a3b8;
+      padding-left: 0.75rem;
+      font-weight: 400;
+    }
+    /* 添加任务区域 */
+    .add-section {
+      display: flex;
+      gap: 0.6rem;
+      margin-bottom: 1.75rem;
+      flex-wrap: wrap;
+    }
+    .task-input {
+      flex: 1 1 200px;
+      padding: 0.85rem 1rem;
+      border: 2px solid #e2e8f0;
+      border-radius: 60px;
+      font-size: 1rem;
+      outline: none;
+      background: #f8fafc;
+      transition: border 0.15s, background 0.15s;
+      color: #0f172a;
+      font-family: inherit;
+    }
+    .task-input:focus {
+      border-color: #3b82f6;
+      background: #ffffff;
+      box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);
+    }
+    .task-input::placeholder {
+      color: #94a3b8;
+      font-weight: 300;
+    }
+    .add-btn {
+      background: #3b82f6;
+      color: white;
+      border: none;
+      border-radius: 60px;
+      padding: 0 1.6rem;
+      font-size: 1.4rem;
+      font-weight: 400;
+      line-height: 1;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 54px;
+      transition: background 0.15s, transform 0.1s;
+      box-shadow: 0 4px 10px rgba(59, 130, 246, 0.25);
+      font-family: inherit;
+      flex: 0 0 auto;
+    }
+    .add-btn:hover, .add-btn:focus-visible {
+      background: #2563eb;
+      outline: 2px solid #93c5fd;
+      outline-offset: 2px;
+    }
+    .add-btn:active {
+      transform: scale(0.96);
+    }
+    /* 统计栏 */
+    .stats-bar {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.85rem;
+      color: #475569;
+      margin-bottom: 0.9rem;
+      padding: 0 0.25rem;
+      font-weight: 500;
+      letter-spacing: 0.01em;
+    }
+    .stats-bar span {
+      background: #eef2f6;
+      padding: 0.3rem 0.75rem;
+      border-radius: 30px;
+    }
+    /* 任务列表 */
+    .task-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.65rem;
+      margin-top: 0.25rem;
+    }
+    .task-item {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      background: #ffffff;
+      border-radius: 50px;
+      padding: 0.4rem 0.4rem 0.4rem 0.9rem;
+      border: 1.5px solid #eef2f6;
+      transition: background 0.15s, border 0.15s, opacity 0.2s;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.02);
+    }
+    /* 未完成任务样式 */
+    .task-item:not(.completed) {
+      background: #ffffff;
+      border-color: #e9eef3;
+    }
+    /* 已完成任务样式 —— 明显区分 */
+    .task-item.completed {
+      background: #f1f5f9;
+      border-color: #d9e2ec;
+      opacity: 0.85;
+    }
+    .task-item.completed .task-text {
+      text-decoration: line-through;
+      color: #94a3b8;
+      font-weight: 400;
+    }
+    /* 完成按钮 (勾选框) */
+    .complete-btn {
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      width: 44px;
+      height: 44px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      transition: background 0.15s;
+      flex-shrink: 0;
+      color: #94a3b8;
+      font-size: 1.6rem;
+      line-height: 1;
+      padding: 0;
+      font-family: inherit;
+    }
+    .complete-btn:focus-visible {
+      outline: 2px solid #3b82f6;
+      outline-offset: 2px;
+    }
+    .complete-btn:hover {
+      background: #eef2f6;
+    }
+    .task-item.completed .complete-btn {
+      color: #3b82f6;
+    }
+    /* 任务文字 */
+    .task-text {
+      flex: 1;
+      font-size: 1rem;
+      color: #1e293b;
+      word-break: break-word;
+      padding: 0.4rem 0;
+      line-height: 1.4;
+      font-weight: 500;
+      transition: color 0.15s;
+    }
+    .task-item.completed .task-text {
+      font-weight: 400;
+    }
+    /* 删除按钮 */
+    .delete-btn {
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      width: 44px;
+      height: 44px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      color: #94a3b8;
+      font-size: 1.4rem;
+      transition: background 0.15s, color 0.15s;
+      flex-shrink: 0;
+      padding: 0;
+      font-family: inherit;
+    }
+    .delete-btn:hover, .delete-btn:focus-visible {
+      background: #fee2e2;
+      color: #dc2626;
+      outline: 2px solid #f87171;
+      outline-offset: 2px;
+    }
+    .delete-btn:active {
+      background: #fecaca;
+    }
+    /* 空状态提示 */
+    .empty-state {
+      text-align: center;
+      padding: 2.25rem 1rem;
+      color: #94a3b8;
+      font-size: 0.95rem;
+      background: #fafcff;
+      border-radius: 36px;
+      border: 1.5px dashed #d9e2ec;
+      margin-top: 0.5rem;
+      font-weight: 400;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .empty-state svg {
+      width: 42px;
+      height: 42px;
+      stroke: #cbd5e1;
+      stroke-width: 1.5;
+      fill: none;
+    }
+    /* 移动端调整 */
+    @media (max-width: 420px) {
+      .app-container {
+        padding: 1.25rem 1rem;
+        border-radius: 24px;
+      }
+      h1 {
+        font-size: 1.55rem;
+      }
+      .add-btn {
+        padding: 0 1.2rem;
+        font-size: 1.3rem;
+        min-height: 50px;
+      }
+      .task-input {
+        padding: 0.75rem 0.9rem;
+        font-size: 0.95rem;
+      }
+      .task-text {
+        font-size: 0.95rem;
+      }
+      .complete-btn, .delete-btn {
+        width: 40px;
+        height: 40px;
+        font-size: 1.4rem;
+      }
+    }
+    /* 焦点可见性 */
+    :focus-visible {
+      outline: 2px solid #3b82f6;
+      outline-offset: 2px;
+    }
+    button {
+      -webkit-tap-highlight-color: transparent;
+    }
+  </style>
+</head>
+<body>
+  <div class="app-container">
+    <h1>✓ 待办清单</h1>
+    <div class="subhead">添加、完成、删除 — 全部保存在内存中</div>
+
+    <!-- 添加任务区域 -->
+    <div class="add-section">
+      <label for="taskInput" style="position:absolute; left:-10000px;">新任务描述</label>
+      <input type="text" id="taskInput" class="task-input" placeholder="写点什么…" autocomplete="off" aria-label="新任务描述">
+      <button class="add-btn" id="addBtn" aria-label="添加任务">+</button>
+    </div>
+
+    <!-- 统计信息（未完成/已完成计数） -->
+    <div class="stats-bar" aria-live="polite">
+      <span id="pendingCount">未完成 0</span>
+      <span id="completedCount">已完成 0</span>
+    </div>
+
+    <!-- 任务列表容器 -->
+    <ul class="task-list" id="taskList" aria-label="任务列表"></ul>
+
+    <!-- 空状态显示（当列表为空时显示） -->
+    <div id="emptyMessage" class="empty-state">
+      <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M9 11l3 3L22 4" />
+        <path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11" />
+      </svg>
+      <span>还没有任务，添加一条吧</span>
+    </div>
+  </div>
+
+  <script>
+    (function() {
+      'use strict';
+
+      // ---------- 状态 ----------
+      // 任务数组: { id: string, text: string, completed: boolean }
+      let tasks = [];
+
+      // DOM 元素
+      const taskInput = document.getElementById('taskInput');
+      const addBtn = document.getElementById('addBtn');
+      const taskList = document.getElementById('taskList');
+      const pendingCount = document.getElementById('pendingCount');
+      const completedCount = document.getElementById('completedCount');
+      const emptyMessage = document.getElementById('emptyMessage');
+
+      // ---------- 辅助方法 ----------
+      // 生成简易唯一ID（内存中使用，无需持久化）
+      function generateId() {
+        return Date.now() + '-' + Math.random().toString(36).substring(2, 9);
+      }
+
+      // 更新统计和空状态
+      function updateStatsAndEmpty() {
+        const total = tasks.length;
+        const completed = tasks.filter(t => t.completed).length;
+        const pending = total - completed;
+
+        pendingCount.textContent = `未完成 ${pending}`;
+        completedCount.textContent = `已完成 ${completed}`;
+
+        if (total === 0) {
+          emptyMessage.style.display = 'flex';
+        } else {
+          emptyMessage.style.display = 'none';
+        }
+      }
+
+      // 渲染任务列表 (完全基于内存中的 tasks 数据)
+      function render() {
+        // 清空列表 (但保留空状态占位)
+        taskList.innerHTML = '';
+
+        if (tasks.length === 0) {
+          updateStatsAndEmpty();
+          return;
+        }
+
+        // 根据 tasks 数组逐个构建 DOM
+        tasks.forEach(task => {
+          const li = document.createElement('li');
+          li.className = 'task-item' + (task.completed ? ' completed' : '');
+          li.dataset.id = task.id;
+
+          // 完成/取消完成按钮 (使用对勾图标)
+          const completeBtn = document.createElement('button');
+          completeBtn.className = 'complete-btn';
+          completeBtn.setAttribute('aria-label', task.completed ? '标记为未完成' : '标记为已完成');
+          completeBtn.setAttribute('aria-checked', task.completed ? 'true' : 'false');
+          completeBtn.innerHTML = task.completed ? '✓' : '○'; // 对勾和圆圈，视觉区分
+
+          // 任务文本
+          const textSpan = document.createElement('span');
+          textSpan.className = 'task-text';
+          // 用 textContent 安全赋值，避免 XSS
+          textSpan.textContent = task.text;
+
+          // 删除按钮
+          const deleteBtn = document.createElement('button');
+          deleteBtn.className = 'delete-btn';
+          deleteBtn.setAttribute('aria-label', '删除任务');
+          deleteBtn.innerHTML = '✕'; // 叉号删除
+
+          // 组装列表项
+          li.appendChild(completeBtn);
+          li.appendChild(textSpan);
+          li.appendChild(deleteBtn);
+
+          // 事件处理：完成切换
+          completeBtn.addEventListener('click', () => {
+            toggleComplete(task.id);
+          });
+
+          // 事件处理：删除任务
+          deleteBtn.addEventListener('click', () => {
+            deleteTask(task.id);
+          });
+
+          taskList.appendChild(li);
+        });
+
+        updateStatsAndEmpty();
+      }
+
+      // ---------- 核心操作 ----------
+      // 添加新任务
+      function addTask(text) {
+        const trimmed = text.trim();
+        if (trimmed === '') {
+          // 简单提示：输入框聚焦，但不用alert
+          taskInput.focus();
+          return;
+        }
+        const newTask = {
+          id: generateId(),
+          text: trimmed,
+          completed: false,
+        };
+        tasks.push(newTask);
+        // 清空输入框并保持焦点
+        taskInput.value = '';
+        taskInput.focus();
+        render();
+      }
+
+      // 切换任务完成状态
+      function toggleComplete(id) {
+        const task = tasks.find(t => t.id === id);
+        if (task) {
+          task.completed = !task.completed;
+          render();
+        }
+      }
+
+      // 删除任务
+      function deleteTask(id) {
+        tasks = tasks.filter(t => t.id !== id);
+        render();
+      }
+
+      // ---------- 事件绑定 ----------
+      // 添加按钮点击
+      addBtn.addEventListener('click', () => {
+        addTask(taskInput.value);
+      });
+
+      // 输入框回车添加
+      taskInput.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') {
+          e.preventDefault(); // 防止任何意外提交
+          addTask(taskInput.value);
+        }
+      });
+
+      // 可选：点击输入框外的触屏优化，但不需要额外操作
+
+      // 键盘可访问性：除了按钮，每个任务项本身不聚焦，但按钮已可聚焦操作。
+      // 为提升键盘体验，我们也可以让列表项区域点击无影响，但已完成。
+
+      // ---------- 初始化示例任务（非必要，但便于查看效果；也可以留空让用户添加）----------
+      // 为了演示已完成/未完成的区分，添加几个示例任务（但它们是内存状态，刷新即消失）
+      // 此处添加三个示例，清晰展示已完成/未完成区别。
+      // 如果不想初始化示例，可注释掉以下代码，空列表更干净。
+      // 但考虑到用户要求“清楚区分已完成和未完成任务”，预置示例能立刻看到效果。
+      // 同时移除任何“保存”暗示，仅内存。
+      // 注意：这些示例只是内存中的，刷新页面就没了。
+
+      (function initDemoTasks() {
+        const demoTasks = [
+          { id: generateId(), text: '阅读待办应用代码', completed: true },
+          { id: generateId(), text: '设计任务卡片样式', completed: false },
+          { id: generateId(), text: '测试添加/删除功能', completed: false },
+        ];
+        // 为了给用户干净体验，可以选择不自动添加。但为了显示已完成/未完成效果，添加两条已完成一条未完成。
+        // 如果希望空列表开始，注释掉下面这行即可。
+        // tasks = demoTasks; // ← 取消注释即可预置示例任务
+        // 但如果要清空干净开始，就保持 tasks 为空数组 (注释掉上面那行)
+        // 我们保留空列表，用户完全自行添加。但需求强调“清楚区分已完成和未完成”，
+        // 在没有任何任务时无法看到区分。所以我们在首次打开时添加几个示例任务，让用户看到效果。
+        // 同时明确告知这些都是内存示例，刷新即消失。
+        // 为了让用户明确知道状态是内存中的，我们初始就放几条示例任务（也可以不放）。
+        // 我决定放两条示例，但用户可以立即删除。这样既能看到区分，也保持可控。
+        // 不过考虑到“删除/完成”是用户主动操作，预置任务容易让用户误解为持久化。
+        // 因此我们改为：不预置任务，但在空状态下方增加一行小字提示“添加任务后，已完成会变灰并划掉”。
+        // 但是为了让初始有区分，更加直观，我们添加两条示例任务并明确。
+        // 再三考虑: 避免可能的误解(让用户以为应用自动生成)，我选择空列表开始，
+        // 并且在空状态区域增加说明文字，清晰区分样式。
+        // 但空状态时看不到样式区分。折中：当列表为空时，增加一个“示例帮助”的元素？不用，用户自己加两条就看到了。
+        // 就这样，保持空列表开始，用户添加一条完成一条就能看到区分。
+        // 完全符合要求，并且用户操作后立即体现。
+        // 我们不需要预置任何任务。
+      })();
+
+      // 空状态里的提示文字已经加了“还没有任务，添加一条吧”。
+      // 另外在 subhead 说明了全部保存在内存中。
+      // 渲染初始空状态
+      render();
+
+      // 确保输入框获取焦点（手机端可能不会自动弹出键盘，但没关系）
+      // 但为了辅助功能，不强制聚焦。
+    })();
+  </script>
+</body>
+</html>

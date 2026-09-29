@@ -1,0 +1,15 @@
+.vercel_atoms_agent.token
+.env*
+.git
+.next
+node_modules
+docs
+NORTH_STAR.md
+CONTEXT.md
+AGENTS.md
+README.md
+tests
+test-results
+playwright-report
+playwright.config.ts
+*.tsbuildinfo
