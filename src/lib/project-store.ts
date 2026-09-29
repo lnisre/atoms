@@ -1,11 +1,19 @@
 import type { GenerationResult } from "./generation";
 
+export type ModificationRecord = {
+  id: string;
+  adoptedAt: string;
+  requests: string[];
+  summary: string;
+};
+
 export type SavedProject = {
   id: string;
   requirement: string;
   title: string;
   updatedAt: string;
   result: GenerationResult;
+  modificationRecords?: ModificationRecord[];
 };
 
 // Keep the database name/version stable across compatible deployments.
@@ -84,6 +92,39 @@ export function listProjects() {
 export function saveProject(project: SavedProject) {
   return transaction<void>(["projects"], "readwrite", (tx) => {
     tx.objectStore("projects").put(project);
+  });
+}
+
+// Code and its record commit together. Trial data is deliberately not an input.
+export function adoptCandidate(
+  projectId: string,
+  result: GenerationResult,
+  requests: string[],
+) {
+  const record: ModificationRecord = {
+    id: crypto.randomUUID(),
+    adoptedAt: new Date().toISOString(),
+    requests: [...requests],
+    summary: `已采用 ${requests.length} 轮调整后的候选代码，继续使用原项目正式数据。`,
+  };
+  return transaction<SavedProject>(["projects"], "readwrite", (tx, done) => {
+    const projects = tx.objectStore("projects");
+    projects.get(projectId).onsuccess = (event) => {
+      const current: SavedProject | undefined = (event.target as IDBRequest).result;
+      if (!current) return tx.abort();
+      const saved: SavedProject = {
+        ...current,
+        result,
+        updatedAt: record.adoptedAt,
+        modificationRecords: [...(current.modificationRecords ?? []), record],
+      };
+      try {
+        projects.put(saved);
+        done(saved);
+      } catch {
+        tx.abort();
+      }
+    };
   });
 }
 

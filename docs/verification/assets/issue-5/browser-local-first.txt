@@ -1,0 +1,162 @@
+
+> atoms@0.1.0 test:e2e /Users/gaowenlong/Desktop/atoms
+> playwright test --workers\=1
+
+
+Running 14 tests using 1 worker
+
+(node:59070) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘   1 tests/browser/candidate.spec.ts:38:5 › 同项目多轮使用最新候选；试用增删改、失败、放弃、刷新和关闭重开均保全正式数据 (6.4s)
+(node:59574) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘   2 tests/browser/candidate.spec.ts:87:5 › 复制正式数据读取失败不开始空试用；手动重试可成功 (1.2s)
+(node:59671) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘   3 tests/browser/candidate.spec.ts:104:5 › 修改超时结束等待，保留已采用应用供继续使用 (707ms)
+(node:59762) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓   4 tests/browser/generation.spec.ts:12:5 › 需求留在工作台，等待结束后运行隔离预览并保存项目 (659ms)
+  ✓   5 tests/browser/generation.spec.ts:57:5 › 失败后保留需求并允许手动重新生成 (469ms)
+  ✓   6 tests/browser/generation.spec.ts:82:5 › 浏览器等待超时后结束等待并提供重试 (442ms)
+  ✓   7 tests/browser/generation.spec.ts:100:5 › 生成应用运行异常时提示而非宣称验证通过 (473ms)
+  ✓   8 tests/browser/generation.spec.ts:123:5 › 手机首页不横向溢出，示例只填入需求 (386ms)
+  ✓   9 tests/browser/persistence.spec.ts:44:5 › 添加、完成、删除后刷新和关闭重开，恢复需求与业务数据且不调用模型 (1.1s)
+  ✘  10 tests/browser/persistence.spec.ts:94:5 › 多个项目数据隔离，外部伪造的保存消息被忽略 (5.6s)
+(node:60207) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  11 tests/browser/persistence.spec.ts:133:5 › 业务数据事务中止时明确失败，不把请求成功当作保存成功 (946ms)
+  ✓  12 tests/browser/persistence.spec.ts:174:5 › 项目写入失败仍展示结果和错误，不宣称项目已保存 (410ms)
+  ✓  13 tests/browser/persistence.spec.ts:198:5 › 读取失败禁止覆盖原数据，恢复存储后仍能重开 (864ms)
+  ✓  14 tests/browser/save-race.spec.ts:7:5 › 真实旧产物保存时禁止新修改，下一次修改确认后立即关闭可恢复 (1.1s)
+
+
+  1) tests/browser/candidate.spec.ts:38:5 › 同项目多轮使用最新候选；试用增删改、失败、放弃、刷新和关闭重开均保全正式数据 ─────────────────
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: getByText('应用数据已保存', { exact: true })
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" getByText('应用数据已保存', { exact: true }) with timeout 5000ms
+      - waiting for getByText('应用数据已保存', { exact: true })
+
+
+      20 |     await f.getByLabel('任务', { exact: true }).fill(text);
+      21 |     await f.getByRole('button', { name: '添加', exact: true }).click();
+    > 22 |     await expect(page.getByText('应用数据已保存', { exact: true })).toBeVisible();
+         |                                                              ^
+      23 |   }
+      24 |   await page.unroute('**/api/generate');
+      25 | }
+        at setup (/Users/gaowenlong/Desktop/atoms/tests/browser/candidate.spec.ts:22:62)
+        at /Users/gaowenlong/Desktop/atoms/tests/browser/candidate.spec.ts:39:3
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/candidate-同项目多轮使用最新候选；试用增删改、失败、放弃、刷新和关闭重开均保全正式数据/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/candidate-同项目多轮使用最新候选；试用增删改、失败、放弃、刷新和关闭重开均保全正式数据/error-context.md
+
+  2) tests/browser/candidate.spec.ts:87:5 › 复制正式数据读取失败不开始空试用；手动重试可成功 ───────────────────────────────
+
+    Error: expect(locator).toContainText(expected) failed
+
+    Locator: getByRole('alert')
+    Expected substring: "浏览器存储读写失败"
+    Error: strict mode violation: getByRole('alert') resolved to 2 elements:
+        1) <p role="alert" class="save-error">浏览器存储读写失败 原应用与正式数据未被替换，可点击“生成候选”手动重试。</p> aka getByText('浏览器存储读写失败 原应用与正式数据未被替换，可点击“生成候选”手动重试。')
+        2) <div role="alert" aria-live="assertive" id="__next-route-announcer__"></div> aka locator('[id="__next-route-announcer__"]')
+
+    Call log:
+      - Expect "toContainText" getByRole('alert') with timeout 5000ms
+      - waiting for getByRole('alert')
+        - locator resolved to <div role="alert" aria-live="assertive" id="__next-route-announcer__"></div>
+        - unexpected value ""
+
+
+       96 |   });
+       97 |   await modify(page);
+    >  98 |   await expect(page.getByRole('alert')).toContainText('浏览器存储读写失败');
+          |                                         ^
+       99 |   await originalIntact(page);
+      100 |   await page.getByRole('button', { name: '生成候选', exact: true }).click();
+      101 |   await expect(page.frameLocator('iframe').getByRole('heading', { name: '候选第1轮' })).toBeVisible();
+        at /Users/gaowenlong/Desktop/atoms/tests/browser/candidate.spec.ts:98:41
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/candidate-复制正式数据读取失败不开始空试用；手动重试可成功/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/candidate-复制正式数据读取失败不开始空试用；手动重试可成功/error-context.md
+
+  3) tests/browser/candidate.spec.ts:104:5 › 修改超时结束等待，保留已采用应用供继续使用 ─────────────────────────────────
+
+    Error: expect(locator).toContainText(expected) failed
+
+    Locator: getByRole('alert')
+    Expected substring: "等待超时"
+    Error: strict mode violation: getByRole('alert') resolved to 2 elements:
+        1) <p role="alert" class="save-error">等待超时，已结束本次修改。已有应用与候选保留，可手动重新发起。 原应用与正式数据未被替换，可点击“…</p> aka getByText('等待超时，已结束本次修改。已有应用与候选保留，可手动重新发起。 原应用与正式数据未被替换，可点击“生成候选”手动重试。')
+        2) <div role="alert" aria-live="assertive" id="__next-route-announcer__"></div> aka locator('[id="__next-route-announcer__"]')
+
+    Call log:
+      - Expect "toContainText" getByRole('alert') with timeout 5000ms
+      - waiting for getByRole('alert')
+
+
+      108 |   await modify(page);
+      109 |   await page.clock.fastForward(136000);
+    > 110 |   await expect(page.getByRole('alert')).toContainText('等待超时');
+          |                                         ^
+      111 |   await originalIntact(page);
+      112 |   await expect(page.getByRole('button', { name: '生成候选', exact: true })).toBeEnabled();
+      113 | });
+        at /Users/gaowenlong/Desktop/atoms/tests/browser/candidate.spec.ts:110:41
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/candidate-修改超时结束等待，保留已采用应用供继续使用/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/candidate-修改超时结束等待，保留已采用应用供继续使用/error-context.md
+
+  4) tests/browser/persistence.spec.ts:94:5 › 多个项目数据隔离，外部伪造的保存消息被忽略 ────────────────────────────────
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: getByText('应用数据已保存', { exact: true })
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" getByText('应用数据已保存', { exact: true }) with timeout 5000ms
+      - waiting for getByText('应用数据已保存', { exact: true })
+
+
+      39 |     .getByRole("button", { name: "添加", exact: true })
+      40 |     .click();
+    > 41 |   await expect(page.getByText("应用数据已保存", { exact: true })).toBeVisible();
+         |                                                            ^
+      42 | }
+      43 |
+      44 | test("添加、完成、删除后刷新和关闭重开，恢复需求与业务数据且不调用模型", async ({
+        at add (/Users/gaowenlong/Desktop/atoms/tests/browser/persistence.spec.ts:41:60)
+        at /Users/gaowenlong/Desktop/atoms/tests/browser/persistence.spec.ts:96:3
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/persistence-多个项目数据隔离，外部伪造的保存消息被忽略/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/persistence-多个项目数据隔离，外部伪造的保存消息被忽略/error-context.md
+
+  4 failed
+    tests/browser/candidate.spec.ts:38:5 › 同项目多轮使用最新候选；试用增删改、失败、放弃、刷新和关闭重开均保全正式数据 ──────────────────
+    tests/browser/candidate.spec.ts:87:5 › 复制正式数据读取失败不开始空试用；手动重试可成功 ────────────────────────────────
+    tests/browser/candidate.spec.ts:104:5 › 修改超时结束等待，保留已采用应用供继续使用 ──────────────────────────────────
+    tests/browser/persistence.spec.ts:94:5 › 多个项目数据隔离，外部伪造的保存消息被忽略 ─────────────────────────────────
+  10 passed (27.6s)
+ ELIFECYCLE  Command failed with exit code 1.

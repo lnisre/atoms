@@ -1,0 +1,8 @@
+{
+  "trialPreservesDatabase": true,
+  "adoptionPreservesData": true,
+  "refreshPreservesDatabase": true,
+  "closePreservesDatabase": true,
+  "failedAdoptionPreservesDatabase": true,
+  "redeployPreservesDatabase": true
+}

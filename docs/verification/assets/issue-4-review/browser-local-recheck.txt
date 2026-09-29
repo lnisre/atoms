@@ -1,0 +1,14 @@
+
+> atoms@0.1.0 test:e2e /Users/gaowenlong/Desktop/atoms
+> playwright test --workers\=1 --timeout\=60000 --grep\=同项目多轮使用最新候选\|读取失败禁止覆盖原数据\|真实旧产物保存时禁止新修改 --output\=/tmp/atoms-m2-review/playwright-local-recheck
+
+
+Running 3 tests using 1 worker
+
+(node:3681) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  1 tests/browser/candidate.spec.ts:40:5 › 同项目多轮使用最新候选；试用增删改、失败、放弃、刷新和关闭重开均保全正式数据 (17.4s)
+  ✓  2 tests/browser/persistence.spec.ts:201:5 › 读取失败禁止覆盖原数据，恢复存储后仍能重开 (1.8s)
+  ✓  3 tests/browser/save-race.spec.ts:7:5 › 真实旧产物保存时禁止新修改，下一次修改确认后立即关闭可恢复 (3.1s)
+
+  3 passed (28.7s)

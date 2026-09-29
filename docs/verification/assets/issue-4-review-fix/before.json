@@ -1,0 +1,17 @@
+{
+  "mode": "controlled model output; no real model call",
+  "serverStatus": 200,
+  "htmlAcceptedUnchanged": true,
+  "runtime": {
+    "atomsType": "undefined",
+    "scriptCount": 1,
+    "cspCount": 0,
+    "actionDisabled": true
+  },
+  "pageErrors": [
+    "atoms is not defined"
+  ],
+  "platformStorage": "等待应用读取数据",
+  "platformPreviewError": 0,
+  "adoptEnabled": true
+}

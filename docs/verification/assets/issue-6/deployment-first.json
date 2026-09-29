@@ -1,0 +1,13 @@
+{
+  "id": "dpl_EMst4UqYQeURVixEdHDFrUrhc3kv",
+  "url": "v0-test0-4y1vj2umc-lnisres-projects.vercel.app",
+  "readyState": "READY",
+  "target": "production",
+  "alias": [
+    "v0-test0-nine.vercel.app",
+    "v0-test0-lnisres-projects.vercel.app"
+  ],
+  "projectId": "prj_eErnQuAz4P719xKTyuT6XT2Qu5ab",
+  "nodeVersion": "24.x",
+  "createdAt": 1790684475067
+}

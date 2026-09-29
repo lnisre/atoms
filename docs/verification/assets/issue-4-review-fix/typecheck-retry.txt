@@ -1,0 +1,10 @@
+
+> atoms@0.1.0 typecheck /Users/gaowenlong/Desktop/atoms
+> next typegen && tsc --noEmit
+
+Generating route types...
+✓ Types generated successfully
+docs/verification/assets/issue-4-review/spec-edge-pending.mts(1,31): error TS7016: Could not find a declaration file for module '/Users/gaowenlong/Desktop/atoms/node_modules/@playwright/test/index.mjs'. '/Users/gaowenlong/Desktop/atoms/node_modules/@playwright/test/index.mjs' implicitly has an 'any' type.
+docs/verification/assets/issue-4-review/spec-edge-pending.mts(9,36): error TS7006: Parameter 'route' implicitly has an 'any' type.
+docs/verification/assets/issue-4-review/spec-edge-pending.mts(20,36): error TS7006: Parameter 'route' implicitly has an 'any' type.
+ ELIFECYCLE  Command failed with exit code 2.

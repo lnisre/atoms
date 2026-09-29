@@ -1,0 +1,9 @@
+{
+  "whilePending": {
+    "candidateCount": 0,
+    "generating": 1
+  },
+  "candidateContainsCommittedEdit": true,
+  "adoptionPreservesCommittedOfficialEditAndExcludesTrial": true,
+  "reloadRestores": true
+}

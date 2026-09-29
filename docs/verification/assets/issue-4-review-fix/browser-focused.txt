@@ -1,0 +1,15 @@
+
+> atoms@0.1.0 test:e2e /Users/gaowenlong/Desktop/atoms
+> playwright test tests/browser/preview-document.spec.ts --workers\=1 --timeout\=60000 --trace\=on --output\=/tmp/atoms-fix-focused
+
+
+Running 4 tests using 1 worker
+
+(node:66476) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  1 tests/browser/preview-document.spec.ts:7:7 › 真实 head 装配、数据保存恢复和运行异常反馈：普通完整 HTML (1.5s)
+  ✓  2 tests/browser/preview-document.spec.ts:7:7 › 真实 head 装配、数据保存恢复和运行异常反馈：<!-- example <head> --> (1.0s)
+  ✓  3 tests/browser/preview-document.spec.ts:7:7 › 真实 head 装配、数据保存恢复和运行异常反馈：<!-- <head> --><!----><!-- <body> --> (959ms)
+  ✓  4 tests/browser/preview-document.spec.ts:60:5 › 恢复旧的不完整 HTML 时明确显示装配失败且不运行 iframe (789ms)
+
+  4 passed (6.2s)

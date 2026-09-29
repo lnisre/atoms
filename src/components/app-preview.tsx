@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import type { TrialData } from "@/lib/trial-data";
 import { previewDocument } from "@/lib/preview-document";
 import { loadApplicationData, saveApplicationData } from "@/lib/project-store";
 
@@ -9,11 +10,13 @@ export function AppPreview({
   projectId,
   projectSaved,
   onRetry,
+  trial,
 }: {
   html: string;
   projectId: string;
   projectSaved: boolean;
   onRetry: () => void;
+  trial?: TrialData;
 }) {
   const frame = useRef<HTMLIFrameElement>(null);
   const [document, setDocument] = useState("");
@@ -56,7 +59,7 @@ export function AppPreview({
       pending++;
       setStorage(
         message.method === "save"
-          ? "应用数据正在保存…暂时无法编辑，完成后可继续"
+          ? trial ? "试用数据正在更新…" : "应用数据正在保存…暂时无法编辑，完成后可继续"
           : "正在读取应用数据…",
       );
       setStorageError(false);
@@ -64,6 +67,8 @@ export function AppPreview({
       queue = queue.then(async () => {
         if (disposed) return;
         try {
+          if (trial && trial.projectId !== projectId)
+            throw new Error("试用数据与项目不匹配，已阻止读写。");
           if (!projectSaved)
             throw new Error(
               "项目尚未保存，应用数据无法保存。请保留页面并检查浏览器存储权限或空间。",
@@ -71,7 +76,9 @@ export function AppPreview({
           let state: unknown;
           let hasData = false;
           if (message.method === "load") {
-            const record = await loadApplicationData(projectId);
+            const record = trial
+              ? (trial.hasData ? { state: structuredClone(trial.state) } : undefined)
+              : await loadApplicationData(projectId);
             state = record?.state ?? null;
             hasData = !!record;
             readSucceeded = true;
@@ -85,7 +92,12 @@ export function AppPreview({
               throw new Error(
                 "应用数据保存失败：仅支持不超过 1 MB 的 JSON 状态，请减少数据量。",
               );
-            await saveApplicationData(projectId, JSON.parse(json));
+            if (trial) {
+              trial.state = JSON.parse(json);
+              trial.hasData = true;
+            } else {
+              await saveApplicationData(projectId, JSON.parse(json));
+            }
             hasData = true;
           }
           if (disposed) return;
@@ -103,7 +115,9 @@ export function AppPreview({
           if (!pending) {
             setStorageError(false);
             setStorage(
-              hasData ? "应用数据已保存" : "应用数据已读取 · 尚无已保存数据",
+              trial
+                ? "试用数据已更新 · 仅本轮会话有效，未写入正式数据"
+                : hasData ? "应用数据已保存" : "应用数据已读取 · 尚无已保存数据",
             );
           }
         } catch (error) {
@@ -136,20 +150,26 @@ export function AppPreview({
     window.addEventListener("message", receive);
     window.addEventListener("beforeunload", beforeUnload);
     // Mount only after the listener exists: a generated script may load state immediately.
-    setDocument(previewDocument(html, channel, window.location.origin));
+    try {
+      setDocument(previewDocument(html, channel, window.location.origin));
+    } catch {
+      setDocument("");
+      setFailed(true);
+      fail("应用 HTML 结构不完整，无法装配预览；请重新生成。");
+    }
     return () => {
       disposed = true;
       window.removeEventListener("message", receive);
       window.removeEventListener("beforeunload", beforeUnload);
     };
-  }, [html, projectId, projectSaved]);
+  }, [html, projectId, projectSaved, trial]);
 
   return (
     <section className="preview-panel" aria-label="应用预览">
       <div className="preview-toolbar">
         <span>
           <span className="status-dot" />
-          运行预览
+          {trial ? "候选试用 · 未采用" : "运行预览 · 已采用应用"}
         </span>
         <span>{loaded ? "预览已加载 · 请实际操作检查" : "正在加载预览"}</span>
       </div>
@@ -162,7 +182,7 @@ export function AppPreview({
       {failed && (
         <div className="preview-error" role="alert">
           预览出现运行错误，部分功能可能不可用。
-          <button onClick={onRetry}>重新生成</button>
+          <button onClick={onRetry}>{trial ? "修改需求后重新发起" : "重新生成"}</button>
         </div>
       )}
       {document && (

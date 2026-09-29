@@ -1,0 +1,10 @@
+{
+  "status": 200,
+  "id": "dpl_2jJpwyEciyYXkRPWT1KWEGDWsyHE",
+  "url": "v0-test0-m5vi30jxi-lnisres-projects.vercel.app",
+  "readyState": "BLOCKED",
+  "target": "production",
+  "alias": [
+    "v0-test0-lnisres-projects.vercel.app"
+  ]
+}

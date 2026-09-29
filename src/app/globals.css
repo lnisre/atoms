@@ -594,3 +594,12 @@ button.brand {
   padding: 10px;
   line-height: 1.8;
 }
+
+.modification-panel { padding: 24px 0; border-top: 1px solid var(--border, #deded8); }
+.modification-panel h2 { font-size: 16px; margin: 0 0 12px; }
+.modification-panel p { font-size: 13px; line-height: 1.7; }
+.modification-panel label { display: block; margin: 18px 0 8px; font-size: 14px; }
+.modification-panel textarea { width: 100%; min-height: 100px; padding: 12px; border: 1px solid #ccc; border-radius: 8px; background: white; color: #20251f; resize: vertical; }
+.modification-panel form button { margin-top: 12px; }
+.modification-panel ol { padding-left: 20px; }
+.modification-panel small { color: #666; }

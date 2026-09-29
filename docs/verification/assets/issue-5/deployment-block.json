@@ -1,0 +1,10 @@
+{
+  "readyState": "BLOCKED",
+  "readyStateReason": "The deployment was blocked because the commit author doesn’t have permission to create deployments for this project.",
+  "seatBlock": {
+    "blockCode": "TEAM_ACCESS_REQUIRED",
+    "isVerified": false
+  },
+  "alwaysRefuseToBuild": true,
+  "errorLink": "https://vercel.com/docs/deployments/troubleshoot-project-collaboration#team-configuration"
+}

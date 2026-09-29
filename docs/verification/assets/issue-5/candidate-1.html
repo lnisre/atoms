@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+  <title>待办清单 · 轻量任务</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+      background: #f7f9fc;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      padding: 16px;
+    }
+    .app {
+      width: 100%;
+      max-width: 560px;
+      background: #ffffff;
+      border-radius: 28px;
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.06);
+      padding: 24px 20px 32px;
+      margin-top: 12px;
+    }
+    h1 {
+      font-size: 1.8rem;
+      font-weight: 600;
+      color: #1a2e3b;
+      letter-spacing: -0.02em;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    h1 svg { width: 28px; height: 28px; stroke: #2f6e5a; stroke-width: 2; fill: none; }
+    .subhead {
+      font-size: 0.9rem;
+      color: #5c6f7e;
+      margin-bottom: 18px;
+      border-left: 3px solid #a8d5c4;
+      padding-left: 12px;
+    }
+    .trial-note {
+      font-size: 0.78rem;
+      color: #8a6d1f;
+      background: #fdf6e3;
+      border: 1px solid #f0e0b8;
+      border-radius: 14px;
+      padding: 10px 14px;
+      margin-bottom: 18px;
+      line-height: 1.55;
+    }
+    .status-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      min-height: 28px;
+      margin-bottom: 12px;
+      font-size: 0.85rem;
+      color: #3b5e6b;
+    }
+    .save-indicator {
+      background: #e8f0ee;
+      padding: 4px 12px;
+      border-radius: 30px;
+      color: #1f5e4b;
+      transition: opacity 0.2s;
+      font-weight: 500;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .save-indicator.error { background: #ffe3e0; color: #b33a2c; }
+    .input-row { display: flex; gap: 10px; margin-bottom: 14px; }
+    .input-row input {
+      flex: 1;
+      padding: 14px 18px;
+      border: 1.5px solid #dbe4ea;
+      border-radius: 60px;
+      font-size: 1rem;
+      background: #fafdff;
+      outline: none;
+      transition: border 0.2s, box-shadow 0.2s;
+      font-family: inherit;
+      min-width: 0;
+    }
+    .input-row input:focus {
+      border-color: #3f8e78;
+      box-shadow: 0 0 0 4px rgba(63, 142, 120, 0.12);
+    }
+    .input-row input:disabled { background: #f0f4f8; color: #8a9aa8; cursor: not-allowed; }
+    .btn {
+      border: none;
+      background: #2f6e5a;
+      color: white;
+      font-size: 1rem;
+      font-weight: 500;
+      padding: 0 24px;
+      border-radius: 60px;
+      cursor: pointer;
+      transition: background 0.15s, transform 0.1s;
+      font-family: inherit;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 52px;
+      white-space: nowrap;
+      box-shadow: 0 4px 10px rgba(47, 110, 90, 0.2);
+    }
+    .btn:hover { background: #245845; }
+    .btn:active { transform: scale(0.96); }
+    .btn:disabled { background: #b7c9c2; box-shadow: none; cursor: not-allowed; transform: none; }
+    .prio-picker {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 22px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    .prio-picker .prio-label { font-size: 0.85rem; color: #5c6f7e; margin-right: 2px; }
+    .prio-btn {
+      border: 1.5px solid #dbe4ea;
+      background: #fafdff;
+      color: #55707d;
+      font-size: 0.85rem;
+      font-weight: 500;
+      padding: 7px 16px;
+      border-radius: 40px;
+      cursor: pointer;
+      font-family: inherit;
+      transition: background 0.15s, border 0.15s, color 0.15s;
+    }
+    .prio-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+    .prio-btn[aria-pressed="true"] { color: #fff; }
+    .prio-btn[data-prio="high"][aria-pressed="true"] { background: #c44536; border-color: #c44536; }
+    .prio-btn[data-prio="medium"][aria-pressed="true"] { background: #c98a1a; border-color: #c98a1a; }
+    .prio-btn[data-prio="low"][aria-pressed="true"] { background: #4a8fbf; border-color: #4a8fbf; }
+    .filter-bar {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 22px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    .filter-bar .filter-label { font-size: 0.85rem; color: #5c6f7e; margin-right: 2px; }
+    .filter-btn {
+      border: 1.5px solid #dbe4ea;
+      background: #fafdff;
+      color: #55707d;
+      font-size: 0.85rem;
+      font-weight: 500;
+      padding: 7px 16px;
+      border-radius: 40px;
+      cursor: pointer;
+      font-family: inherit;
+      transition: background 0.15s, border 0.15s, color 0.15s;
+    }
+    .filter-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+    .filter-btn[aria-pressed="true"] { background: #2f6e5a; border-color: #2f6e5a; color: #fff; }
+    .task-section { margin-bottom: 26px; }
+    .section-header { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; }
+    .section-header h2 { font-size: 1.1rem; font-weight: 600; color: #1e3a47; letter-spacing: 0.01em; }
+    .section-header .count {
+      background: #eef3f1;
+      font-size: 0.8rem;
+      padding: 3px 12px;
+      border-radius: 40px;
+      color: #2a5b4b;
+      font-weight: 500;
+    }
+    .task-list { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+    .task-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: #fafdff;
+      border-radius: 60px;
+      padding: 6px 6px 6px 14px;
+      border: 1px solid #e5edf2;
+      transition: background 0.15s, border 0.15s;
+      animation: fadeSlide 0.18s ease-out;
+    }
+    @keyframes fadeSlide { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+    .task-item.completed .task-title { text-decoration: line-through; color: #9bb0bb; }
+    .task-item.completed { background: #f3f8f7; border-color: #d5e5e0; }
+    .prio-dot {
+      flex-shrink: 0;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      display: inline-block;
+    }
+    .prio-dot.high { background: #c44536; }
+    .prio-dot.medium { background: #c98a1a; }
+    .prio-dot.low { background: #4a8fbf; }
+    .prio-badge {
+      flex-shrink: 0;
+      font-size: 0.68rem;
+      font-weight: 600;
+      padding: 2px 8px;
+      border-radius: 20px;
+      letter-spacing: 0.02em;
+    }
+    .prio-badge.high { background: #fdecea; color: #b33a2c; }
+    .prio-badge.medium { background: #fdf4e3; color: #9a6b12; }
+    .prio-badge.low { background: #e8f2fa; color: #2f6a94; }
+    .task-title {
+      flex: 1;
+      font-size: 1rem;
+      color: #1f3c47;
+      word-break: break-word;
+      padding: 10px 0;
+      line-height: 1.4;
+      min-width: 0;
+      transition: color 0.15s, text-decoration 0.15s;
+    }
+    .task-actions { display: flex; align-items: center; gap: 4px; flex-shrink: 0; }
+    .icon-btn {
+      background: transparent;
+      border: none;
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      color: #5c7b88;
+      transition: background 0.15s, color 0.15s;
+      padding: 0;
+      font-size: 0;
+      line-height: 0;
+    }
+    .icon-btn:hover { background: #e6efec; color: #1f5e4b; }
+    .icon-btn:active { background: #d0e0da; }
+    .icon-btn svg { width: 22px; height: 22px; stroke: currentColor; stroke-width: 2; fill: none; stroke-linecap: round; stroke-linejoin: round; }
+    .icon-btn.delete:hover { color: #c44536; background: #ffeae6; }
+    .empty-message {
+      text-align: center;
+      padding: 24px 12px;
+      color: #9aafbb;
+      font-size: 0.95rem;
+      border-radius: 60px;
+      background: #fbfefe;
+      border: 1px dashed #cbdae3;
+    }
+    .error-banner {
+      background: #ffe3e0;
+      color: #b33a2c;
+      padding: 14px 18px;
+      border-radius: 40px;
+      font-size: 0.9rem;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      border: 1px solid #f5c6c1;
+      line-height: 1.4;
+    }
+    .footer-note {
+      margin-top: 32px;
+      font-size: 0.75rem;
+      color: #90a6b2;
+      text-align: center;
+      border-top: 1px solid #e2ecf1;
+      padding-top: 18px;
+      line-height: 1.6;
+    }
+    .footer-note strong { font-weight: 600; color: #5b7f8e; }
+    @media (max-width: 420px) {
+      .app { padding: 20px 14px 24px; }
+      h1 { font-size: 1.6rem; }
+      .btn { padding: 0 16px; min-height: 48px; font-size: 0.95rem; }
+      .input-row input { padding: 12px 16px; }
+    }
+  </style>
+</head>
+<body>
+  <main class="app" aria-labelledby="app-title">
+    <h1 id="app-title">
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01" />
+      </svg>
+      待办清单
+    </h1>
+    <div class="subhead">轻量任务 · 优先级与筛选</div>
+
+    <div class="trial-note">
+      <strong>试运行副本</strong>：这里的修改只保存在本次会话的临时副本中。点击“放弃”或刷新、关闭页面后，试运行数据与未采纳的代码都会消失，原始应用数据不会被改动。
+    </div>
+
+    <div id="errorBanner" class="error-banner" style="display: none;" role="alert"></div>
+
+    <div class="status-bar">
+      <span id="saveStatus" class="save-indicator" aria-live="polite"></span>
+    </div>
+
+    <div class="input-row">
+      <input type="text" id="taskInput" placeholder="写一个新任务…" aria-label="新任务描述" disabled autocomplete="off" />
+      <button type="button" id="addBtn" class="btn" disabled>添加</button>
+    </div>
+
+    <div class="prio-picker" role="group" aria-label="选择新任务优先级">
+      <span class="prio-label">优先级</span>
+      <button type="button" class="prio-btn" data-prio="high" aria-pressed="false" disabled>高</button>
+      <button type="button" class="prio-btn" data-prio="medium" aria-pressed="true" disabled>中</button>
+      <button type="button" class="prio-btn" data-prio="low" aria-pressed="false" disabled>低</button>
+    </div>
+
+    <div class="filter-bar" role="group" aria-label="按优先级筛选">
+      <span class="filter-label">筛选</span>
+      <button type="button" class="filter-btn" data-filter="all" aria-pressed="true" disabled>全部</button>
+      <button type="button" class="filter-btn" data-filter="high" aria-pressed="false" disabled>高</button>
+      <button type="button" class="filter-btn" data-filter="medium" aria-pressed="false" disabled>中</button>
+      <button type="button" class="filter-btn" data-filter="low" aria-pressed="false" disabled>低</button>
+    </div>
+
+    <section class="task-section" aria-labelledby="pending-heading">
+      <div class="section-header">
+        <h2 id="pending-heading">未完成</h2>
+        <span class="count" id="pendingCount">0</span>
+      </div>
+      <ul class="task-list" id="pendingList" aria-label="未完成任务列表"></ul>
+      <div id="pendingEmpty" class="empty-message" style="display: none;">✨ 没有未完成任务</div>
+    </section>
+
+    <section class="task-section" aria-labelledby="completed-heading">
+      <div class="section-header">
+        <h2 id="completed-heading">已完成</h2>
+        <span class="count" id="completedCount">0</span>
+      </div>
+      <ul class="task-list" id="completedList" aria-label="已完成任务列表"></ul>
+      <div id="completedEmpty" class="empty-message" style="display: none;">🎯 还没有完成的任务</div>
+    </section>
+
+    <div class="footer-note">
+      <strong>试运行副本：数据仅保存在本次会话</strong><br />
+      放弃、刷新或关闭页面即会丢失；原始应用数据不受影响。恢复范围仅限于当前浏览器和站点。
+    </div>
+  </main>
+
+  <script>
+    (function() {
+      'use strict';
+
+      const PRIORITIES = ['high', 'medium', 'low'];
+      const PRIORITY_LABELS = { high: '高', medium: '中', low: '低' };
+      const PRIORITY_ORDER = { high: 0, medium: 1, low: 2 };
+      const DEFAULT_PRIORITY = 'medium';
+
+      const taskInput = document.getElementById('taskInput');
+      const addBtn = document.getElementById('addBtn');
+      const pendingList = document.getElementById('pendingList');
+      const completedList = document.getElementById('completedList');
+      const pendingCount = document.getElementById('pendingCount');
+      const completedCount = document.getElementById('completedCount');
+      const pendingEmpty = document.getElementById('pendingEmpty');
+      const completedEmpty = document.getElementById('completedEmpty');
+      const saveStatus = document.getElementById('saveStatus');
+      const errorBanner = document.getElementById('errorBanner');
+      const prioBtns = Array.prototype.slice.call(document.querySelectorAll('.prio-btn'));
+      const filterBtns = Array.prototype.slice.call(document.querySelectorAll('.filter-btn'));
+
+      let tasks = [];              // [{ id, title, completed, priority }]
+      let selectedPriority = DEFAULT_PRIORITY;
+      let activeFilter = 'all';
+      let isReady = false;
+
+      function generateId() {
+        return Date.now().toString(36) + Math.random().toString(36).substring(2, 9);
+      }
+
+      function normalizePriority(value) {
+        return PRIORITIES.indexOf(value) !== -1 ? value : DEFAULT_PRIORITY;
+      }
+
+      function renderTasks() {
+        pendingList.textContent = '';
+        completedList.textContent = '';
+
+        const visible = tasks.filter(function(t) {
+          return activeFilter === 'all' || normalizePriority(t.priority) === activeFilter;
+        });
+        const pending = visible.filter(function(t) { return !t.completed; });
+        const completed = visible.filter(function(t) { return t.completed; });
+
+        pendingCount.textContent = String(pending.length);
+        completedCount.textContent = String(completed.length);
+
+        pendingEmpty.style.display = pending.length === 0 ? 'block' : 'none';
+        completedEmpty.style.display = completed.length === 0 ? 'block' : 'none';
+        pendingEmpty.textContent = activeFilter === 'all' ? '✨ 没有未完成任务' : '✨ 该筛选下没有未完成任务';
+        completedEmpty.textContent = activeFilter === 'all' ? '🎯 还没有完成的任务' : '🎯 该筛选下没有已完成任务';
+
+        pending.forEach(function(task) { pendingList.appendChild(createTaskElement(task)); });
+        completed.forEach(function(task) { completedList.appendChild(createTaskElement(task)); });
+      }
+
+      function createTaskElement(task) {
+        const prio = normalizePriority(task.priority);
+
+        const li = document.createElement('li');
+        li.className = 'task-item' + (task.completed ? ' completed' : '');
+        li.dataset.id = task.id;
+
+        const dot = document.createElement('span');
+        dot.className = 'prio-dot ' + prio;
+        dot.setAttribute('aria-hidden', 'true');
+
+        const badge = document.createElement('span');
+        badge.className = 'prio-badge ' + prio;
+        badge.textContent = PRIORITY_LABELS[prio];
+
+        const titleSpan = document.createElement('span');
+        titleSpan.className = 'task-title';
+        titleSpan.textContent = task.title;
+
+        const actionsDiv = document.createElement('div');
+        actionsDiv.className = 'task-actions';
+
+        const toggleBtn = document.createElement('button');
+        toggleBtn.type = 'button';
+        toggleBtn.className = 'icon-btn toggle';
+        toggleBtn.setAttribute('aria-label', (task.completed ? '标记为未完成：' : '标记为已完成：') + task.title);
+        toggleBtn.innerHTML = task.completed
+          ? '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" /><path d="M8 12l2.5 2.5L16 9" /></svg>'
+          : '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" /><path d="M12 8v8M8 12h8" /></svg>';
+        toggleBtn.addEventListener('click', function(e) {
+          e.stopPropagation();
+          mutate(function(state) {
+            const t = state.tasks.find(function(x) { return x.id === task.id; });
+            if (t) t.completed = !t.completed;
+          });
+        });
+
+        const deleteBtn = document.createElement('button');
+        deleteBtn.type = 'button';
+        deleteBtn.className = 'icon-btn delete';
+        deleteBtn.setAttribute('aria-label', '删除任务：' + task.title);
+        deleteBtn.innerHTML = '<svg viewBox="0 0 24 24"><path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6M10 11v6M14 11v6"/></svg>';
+        deleteBtn.addEventListener('click', function(e) {
+          e.stopPropagation();
+          mutate(function(state) {
+            state.tasks = state.tasks.filter(function(x) { return x.id !== task.id; });
+          });
+        });
+
+        actionsDiv.appendChild(toggleBtn);
+        actionsDiv.appendChild(deleteBtn);
+
+        li.appendChild(dot);
+        li.appendChild(badge);
+        li.appendChild(titleSpan);
+        li.appendChild(actionsDiv);
+        return li;
+      }
+
+      function updateSaveStatus(text, isError) {
+        saveStatus.textContent = text;
+        if (isError) saveStatus.classList.add('error');
+        else saveStatus.classList.remove('error');
+      }
+
+      function showError(msg) {
+        errorBanner.textContent = msg;
+        errorBanner.style.display = 'flex';
+      }
+
+      function hideError() {
+        errorBanner.style.display = 'none';
+        errorBanner.textContent = '';
+      }
+
+      // 唯一的异步变更处理器：先同步更新状态与渲染，再立刻发起保存
+      function mutate(mutator) {
+        if (!isReady) return;
+
+        mutator({ tasks: tasks });   // 本地状态更新（保存快照前完成）
+        renderTasks();
+        updateSaveStatus('正在更新试运行…', false);
+
+        const snapshot = {
+          tasks: tasks.map(function(t) {
+            return { id: t.id, title: t.title, completed: t.completed, priority: normalizePriority(t.priority) };
+          }),
+          selectedPriority: selectedPriority,
+          activeFilter: activeFilter
+        };
+
+        // 在同一事件处理器内同步发起保存，不排队、不延迟
+        window.atoms.saveState(snapshot).then(function() {
+          updateSaveStatus('试运行已更新', false);
+        }).catch(function(err) {
+          console.error('保存失败:', err);
+          updateSaveStatus('试运行更新失败', true);
+          showError('试运行更新失败：' + ((err && err.message) || '未知错误'));
+        });
+      }
+
+      function addTask() {
+        if (!isReady) return;
+        const title = taskInput.value.trim();
+        if (!title) { showError('任务内容不能为空'); return; }
+        if (title.length > 500) { showError('任务内容过长（最多500字）'); return; }
+
+        hideError();
+        const prio = selectedPriority;
+        taskInput.value = '';
+
+        mutate(function(state) {
+          state.tasks.push({ id: generateId(), title: title, completed: false, priority: prio });
+        });
+
+        taskInput.focus();
+      }
+
+      function selectPriority(prio) {
+        if (PRIORITIES.indexOf(prio) === -1 || !isReady) return;
+        if (selectedPriority === prio) return;
+        selectedPriority = prio;
+        updatePriorityButtons();
+        mutate(function() { /* 仅持久化偏好，任务列表不变 */ });
+      }
+
+      function setFilter(filter) {
+        if (!isReady) return;
+        if (filter !== 'all' && PRIORITIES.indexOf(filter) === -1) return;
+        if (activeFilter === filter) return;
+        activeFilter = filter;
+        updateFilterButtons();
+        renderTasks();
+        mutate(function() { /* 仅持久化筛选偏好 */ });
+      }
+
+      function updatePriorityButtons() {
+        prioBtns.forEach(function(btn) {
+          btn.setAttribute('aria-pressed', btn.dataset.prio === selectedPriority ? 'true' : 'false');
+        });
+      }
+
+      function updateFilterButtons() {
+        filterBtns.forEach(function(btn) {
+          btn.setAttribute('aria-pressed', btn.dataset.filter === activeFilter ? 'true' : 'false');
+        });
+      }
+
+      function setInteractive(enabled) {
+        taskInput.disabled = !enabled;
+        addBtn.disabled = !enabled;
+        prioBtns.forEach(function(b) { b.disabled = !enabled; });
+        filterBtns.forEach(function(b) { b.disabled = !enabled; });
+        if (enabled) taskInput.focus();
+      }
+
+      async function init() {
+        setInteractive(false);
+        try {
+          const saved = await window.atoms.loadState();
+
+          if (saved && typeof saved === 'object' && Array.isArray(saved.tasks)) {
+            tasks = saved.tasks
+              .filter(function(item) {
+                return item && typeof item === 'object' &&
+                  typeof item.id === 'string' &&
+                  typeof item.title === 'string' &&
+                  typeof item.completed === 'boolean';
+              })
+              .map(function(item) {
+                return {
+                  id: item.id,
+                  title: item.title,
+                  completed: item.completed,
+                  priority: normalizePriority(item.priority)   // 旧记录缺优先级 → 默认中
+                };
+              });
+            const seen = new Set();
+            tasks = tasks.filter(function(t) {
+              if (seen.has(t.id)) return false;
+              seen.add(t.id);
+              return true;
+            });
+            selectedPriority = normalizePriority(saved.selectedPriority);
+            activeFilter = (saved.activeFilter === 'all' || PRIORITIES.indexOf(saved.activeFilter) !== -1)
+              ? saved.activeFilter : 'all';
+          }
+          // saved === null → 全新试运行，保留上述默认值
+
+          updatePriorityButtons();
+          updateFilterButtons();
+          renderTasks();
+          hideError();
+
+          addBtn.addEventListener('click', addTask);
+          taskInput.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') { e.preventDefault(); if (isReady) addTask(); }
+          });
+          taskInput.addEventListener('input', function() {
+            if (errorBanner.style.display !== 'none' && errorBanner.textContent === '任务内容不能为空') hideError();
+          });
+          prioBtns.forEach(function(btn) {
+            btn.addEventListener('click', function() { selectPriority(btn.dataset.prio); });
+          });
+          filterBtns.forEach(function(btn) {
+            btn.addEventListener('click', function() { setFilter(btn.dataset.filter); });
+          });
+
+          isReady = true;   // 交互与保存仅在此之后开放
+          setInteractive(true);
+          updateSaveStatus('试运行已就绪', false);
+        } catch (err) {
+          console.error('初始化失败:', err);
+          isReady = false;
+          setInteractive(false);
+          showError('无法加载试运行数据：' + ((err && err.message) || '未知错误') + '。已保持编辑禁用，未覆盖任何数据。');
+          updateSaveStatus('试运行加载失败', true);
+        }
+      }
+
+      init();
+    })();
+  </script>
+</body>
+</html>

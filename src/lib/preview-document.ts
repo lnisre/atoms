@@ -1,6 +1,10 @@
+import { previewHeadOffset } from "./html-document";
+
 // This bridge is injected before generated scripts. The application never chooses
 // a project ID; the parent binds this frame/session to its own project record.
 export function previewDocument(html: string, channel: string, origin: string) {
+  const offset = previewHeadOffset(html);
+  if (offset === null) throw new Error("应用 HTML 结构不完整，无法装配预览。");
   const config = JSON.stringify({ channel, origin }).replace(/</g, "\\u003c");
   const guard = `<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src data: blob:; font-src 'none'; connect-src 'none'; frame-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'"><script>(()=>{
     const {channel,origin}=${config};
@@ -49,5 +53,5 @@ export function previewDocument(html: string, channel: string, origin: string) {
     }
     Object.defineProperty(window,'atoms',{value:Object.freeze({loadState:()=>request('load'),saveState:state=>request('save',state)}),writable:false,configurable:false});
   })();</script>`;
-  return html.replace(/<head(?:\s[^>]*)?>/i, (head) => head + guard);
+  return html.slice(0, offset) + guard + html.slice(offset);
 }

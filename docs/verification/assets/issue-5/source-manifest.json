@@ -1,0 +1,14 @@
+{
+  "src/app/page.tsx": "7ae0656fd070bcda93c5b3bbafb0fa3e92051584bffc85ff45d72504064984e9",
+  "src/app/api/generate/route.ts": "dde35750d0f224db547b238955c52c51f1af549d2797fe11fa472aca39275e78",
+  "src/components/app-preview.tsx": "51676cd80a951f35797d995795c36effdfb8cd810c51dd5da3a2a451f291c04f",
+  "src/lib/generation.ts": "ad653f32965379dc49a495bef423fcb72a15341e4c55ba3359a1c7fbd27414f2",
+  "src/lib/trial-data.ts": "41ed3dd93cb76f135e2966e32bb9b31ad811d10fa5f0955f66953bc12bf7a794",
+  "src/lib/project-store.ts": "2263dbe1670716da1fe5d95e63317f14d8c0307e0864e784603cc720091532a9",
+  "src/lib/preview-document.ts": "a958153fd7d1b63969900d512cc3b047e94860611ec91d412a4c3633293189af",
+  "src/app/globals.css": "3684931dd2a99385dec4d7706eec7d13f01da7c886562947f4082f1bab5fca08",
+  "tests/browser/candidate.spec.ts": "9a61435e74859e90748724997913142539850288ca21f4c475652972d1a3937e",
+  "tests/browser/persistence.spec.ts": "8640b4c147688501a29cb0e111dc2549638b1d0cf2007edef6d83f8cd3e3276e",
+  "tests/generate.test.ts": "76ab77e753a83c60268ab69c895307f48c969750fee036d5b530f9e3aec1635b",
+  "README.md": "3911d2d831b9cd8fb854ea89479663756713d418ee3100d3605fa58ad0930fd5"
+}

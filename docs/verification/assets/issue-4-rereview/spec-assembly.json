@@ -1,0 +1,62 @@
+[
+  {
+    "file": "docs/verification/assets/issue-5/candidate-1.html",
+    "accepted": true,
+    "sourcePreserved": true
+  },
+  {
+    "file": "docs/verification/assets/issue-5/candidate-2.html",
+    "accepted": true,
+    "sourcePreserved": true
+  },
+  {
+    "file": "docs/verification/assets/issue-5/candidate-3.html",
+    "accepted": true,
+    "sourcePreserved": true
+  },
+  {
+    "file": "docs/verification/assets/issue-5/candidate-4.html",
+    "accepted": true,
+    "sourcePreserved": true
+  },
+  {
+    "file": "docs/verification/assets/issue-5/candidate-5.html",
+    "accepted": true,
+    "sourcePreserved": true
+  },
+  {
+    "file": "docs/verification/assets/issue-5/candidate-6.html",
+    "accepted": true,
+    "sourcePreserved": true
+  },
+  {
+    "file": "docs/verification/assets/issue-5/native-m1/candidate-1.html",
+    "accepted": true,
+    "sourcePreserved": true
+  },
+  {
+    "file": "docs/verification/assets/issue-5/native-m1/candidate-2.html",
+    "accepted": true,
+    "sourcePreserved": true
+  },
+  {
+    "file": "docs/verification/assets/issue-6/candidate-1.html",
+    "accepted": true,
+    "sourcePreserved": true
+  },
+  {
+    "file": "docs/verification/assets/issue-6/candidate-2.html",
+    "accepted": true,
+    "sourcePreserved": true
+  },
+  {
+    "file": "docs/verification/assets/issue-6/candidate-3.html",
+    "accepted": true,
+    "sourcePreserved": true
+  },
+  {
+    "file": "docs/verification/assets/issue-6/candidate-4.html",
+    "accepted": true,
+    "sourcePreserved": true
+  }
+]

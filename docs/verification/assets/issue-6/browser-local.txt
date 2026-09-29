@@ -1,0 +1,27 @@
+
+> atoms@0.1.0 test:e2e /Users/gaowenlong/Desktop/atoms
+> playwright test --workers\=1
+
+
+Running 16 tests using 1 worker
+
+(node:77797) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓   1 tests/browser/candidate.spec.ts:40:5 › 同项目多轮使用最新候选；试用增删改、失败、放弃、刷新和关闭重开均保全正式数据 (3.5s)
+  ✓   2 tests/browser/candidate.spec.ts:89:5 › 复制正式数据读取失败不开始空试用；手动重试可成功 (885ms)
+  ✓   3 tests/browser/candidate.spec.ts:106:5 › 修改超时结束等待，保留已采用应用供继续使用 (893ms)
+  ✓   4 tests/browser/candidate.spec.ts:117:5 › 明确采用最新候选只保存代码与多轮记录；旧通道失效，正式操作和重开可恢复 (2.3s)
+  ✓   5 tests/browser/candidate.spec.ts:183:5 › 采用事务未完成不显示成功；中止保留候选和此前采用记录，可手动重试 (3.3s)
+  ✓   6 tests/browser/generation.spec.ts:12:5 › 需求留在工作台，等待结束后运行隔离预览并保存项目 (787ms)
+  ✓   7 tests/browser/generation.spec.ts:57:5 › 失败后保留需求并允许手动重新生成 (688ms)
+  ✓   8 tests/browser/generation.spec.ts:82:5 › 浏览器等待超时后结束等待并提供重试 (583ms)
+  ✓   9 tests/browser/generation.spec.ts:100:5 › 生成应用运行异常时提示而非宣称验证通过 (632ms)
+  ✓  10 tests/browser/generation.spec.ts:123:5 › 手机首页不横向溢出，示例只填入需求 (585ms)
+  ✓  11 tests/browser/persistence.spec.ts:45:5 › 添加、完成、删除后刷新和关闭重开，恢复需求与业务数据且不调用模型 (1.4s)
+  ✓  12 tests/browser/persistence.spec.ts:97:5 › 多个项目数据隔离，外部伪造的保存消息被忽略 (1.5s)
+  ✓  13 tests/browser/persistence.spec.ts:136:5 › 业务数据事务中止时明确失败，不把请求成功当作保存成功 (1.3s)
+  ✓  14 tests/browser/persistence.spec.ts:177:5 › 项目写入失败仍展示结果和错误，不宣称项目已保存 (605ms)
+  ✓  15 tests/browser/persistence.spec.ts:201:5 › 读取失败禁止覆盖原数据，恢复存储后仍能重开 (1.2s)
+  ✓  16 tests/browser/save-race.spec.ts:7:5 › 真实旧产物保存时禁止新修改，下一次修改确认后立即关闭可恢复 (1.3s)
+
+  16 passed (24.2s)

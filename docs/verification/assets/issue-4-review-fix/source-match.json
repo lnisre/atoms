@@ -1,0 +1,95 @@
+{
+  "deployment": "dpl_42zmSjVZG4daVXycgnsDo7DBxrvb",
+  "checks": [
+    {
+      "path": "src/app/layout.tsx",
+      "local": "6b520507473df378a41e6de1b7affb820efe41ab",
+      "remote": "6b520507473df378a41e6de1b7affb820efe41ab",
+      "matches": true
+    },
+    {
+      "path": "src/app/page.tsx",
+      "local": "8766b1b29725145744f829e708ae928b4f41e149",
+      "remote": "8766b1b29725145744f829e708ae928b4f41e149",
+      "matches": true
+    },
+    {
+      "path": "src/app/globals.css",
+      "local": "360b9e7ef1209d95b0b4a0ca3b1bb6be691922e8",
+      "remote": "360b9e7ef1209d95b0b4a0ca3b1bb6be691922e8",
+      "matches": true
+    },
+    {
+      "path": "src/app/api/generate/route.ts",
+      "local": "e468e49109af56a988f52717275689d6d4cf1f1e",
+      "remote": "e468e49109af56a988f52717275689d6d4cf1f1e",
+      "matches": true
+    },
+    {
+      "path": "src/components/app-preview.tsx",
+      "local": "d40f2269527bbdb7835e588b63132a3ddc29dfca",
+      "remote": "d40f2269527bbdb7835e588b63132a3ddc29dfca",
+      "matches": true
+    },
+    {
+      "path": "src/lib/preview-document.ts",
+      "local": "1be04f1983752ea5db615c3a9b2e28f992f7f1b1",
+      "remote": "1be04f1983752ea5db615c3a9b2e28f992f7f1b1",
+      "matches": true
+    },
+    {
+      "path": "src/lib/trial-data.ts",
+      "local": "95a89f57930782612740080a7bea3b9f87f6ad88",
+      "remote": "95a89f57930782612740080a7bea3b9f87f6ad88",
+      "matches": true
+    },
+    {
+      "path": "src/lib/project-store.ts",
+      "local": "3429cd41a61f3fe4569e1563d0d93c328eae309a",
+      "remote": "3429cd41a61f3fe4569e1563d0d93c328eae309a",
+      "matches": true
+    },
+    {
+      "path": "src/lib/generation.ts",
+      "local": "537a908991b8399d8e90b0c56c1c1019c573897f",
+      "remote": "537a908991b8399d8e90b0c56c1c1019c573897f",
+      "matches": true
+    },
+    {
+      "path": "src/lib/html-document.ts",
+      "local": "03e83b101829f8d46d325e726e6c025cadee54e3",
+      "remote": "03e83b101829f8d46d325e726e6c025cadee54e3",
+      "matches": true
+    },
+    {
+      "path": "package.json",
+      "local": "a4d55375a569789d7e09fc0869b88d84a021f9c4",
+      "remote": "a4d55375a569789d7e09fc0869b88d84a021f9c4",
+      "matches": true
+    },
+    {
+      "path": "pnpm-lock.yaml",
+      "local": "50f7334c4d82c154070dd97a57a98e61fcd247e9",
+      "remote": "50f7334c4d82c154070dd97a57a98e61fcd247e9",
+      "matches": true
+    },
+    {
+      "path": "tsconfig.json",
+      "local": "52fc2ab97ac46504478e32ab1be4523b53ac8f53",
+      "remote": "52fc2ab97ac46504478e32ab1be4523b53ac8f53",
+      "matches": true
+    },
+    {
+      "path": "next.config.ts",
+      "local": "89327ac52fc9a00fb8b885afd6654f18e58b3156",
+      "remote": "89327ac52fc9a00fb8b885afd6654f18e58b3156",
+      "matches": true
+    },
+    {
+      "path": "postcss.config.mjs",
+      "local": "8f8be689e9af58f80351df6e6b551146822f42a4",
+      "remote": "8f8be689e9af58f80351df6e6b551146822f42a4",
+      "matches": true
+    }
+  ]
+}

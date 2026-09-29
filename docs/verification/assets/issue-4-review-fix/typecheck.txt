@@ -1,0 +1,16 @@
+
+> atoms@0.1.0 typecheck /Users/gaowenlong/Desktop/atoms
+> next typegen && tsc --noEmit
+
+Generating route types...
+✓ Types generated successfully
+error TS6053: File '/Users/gaowenlong/Desktop/atoms/.next/types/app/api/generate/route.ts' not found.
+  The file is in the program because:
+    Matched by include pattern '.next/types/**/*.ts' in '/Users/gaowenlong/Desktop/atoms/tsconfig.json'
+error TS6053: File '/Users/gaowenlong/Desktop/atoms/.next/types/app/layout.ts' not found.
+  The file is in the program because:
+    Matched by include pattern '.next/types/**/*.ts' in '/Users/gaowenlong/Desktop/atoms/tsconfig.json'
+error TS6053: File '/Users/gaowenlong/Desktop/atoms/.next/types/app/page.ts' not found.
+  The file is in the program because:
+    Matched by include pattern '.next/types/**/*.ts' in '/Users/gaowenlong/Desktop/atoms/tsconfig.json'
+ ELIFECYCLE  Command failed with exit code 2.

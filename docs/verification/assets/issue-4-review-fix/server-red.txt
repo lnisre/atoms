@@ -1,0 +1,42 @@
+
+> atoms@0.1.0 test /Users/gaowenlong/Desktop/atoms
+> node --import tsx --test tests/generate.test.ts
+
+✔ 无效需求与跨源请求不调用模型 (47.179666ms)
+✔ 未配置密钥时明确失败 (0.674292ms)
+✔ 模型错误不会透传原始响应或返回假应用 (2.429666ms)
+✔ 真实请求合同、完整 HTML 与调用耗时 (3.293208ms)
+✔ 截断、空白或非 HTML 结果不作为成功 (1.195167ms)
+✔ 服务端超时结束请求并给出可重试错误 (0.544458ms)
+✔ 仅解包模型返回的唯一完整文档，不执行前后说明 (0.803209ms)
+✔ 修改完整传递基础代码、追加需求与成功对话；不沿用首次需求长度限制截断代码 (1.113917ms)
+✔ 缺失或超限修改输入明确失败，不丢弃上下文继续生成 (40.868458ms)
+✖ 注释中的结构标签不能冒充真实 head/body，无法装配时明确失败 (3.158584ms)
+ℹ tests 10
+ℹ suites 0
+ℹ pass 9
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 426.64525
+
+✖ failing tests:
+
+test at tests/generate.test.ts:2:8226
+✖ 注释中的结构标签不能冒充真实 head/body，无法装配时明确失败 (3.158584ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  200 !== 502
+  
+      at TestContext.<anonymous> (/Users/gaowenlong/Desktop/atoms/tests/generate.test.ts:159:12)
+      at async Test.run (node:internal/test_runner/test:1332:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:911:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 200,
+    expected: 502,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+ ELIFECYCLE  Test failed. See above for more details.

@@ -1,0 +1,9 @@
+{
+  "add": true,
+  "delete": true,
+  "toggle": true,
+  "prioritySelection": true,
+  "filter": true,
+  "refreshExact": true,
+  "recoveryGenerations": 0
+}

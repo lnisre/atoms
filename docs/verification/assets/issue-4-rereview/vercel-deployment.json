@@ -1,0 +1,10 @@
+{
+  "id": "dpl_42zmSjVZG4daVXycgnsDo7DBxrvb",
+  "readyState": "READY",
+  "target": "production",
+  "alias": [
+    "v0-test0-nine.vercel.app",
+    "v0-test0-lnisres-projects.vercel.app"
+  ],
+  "nodeVersion": "24.x"
+}

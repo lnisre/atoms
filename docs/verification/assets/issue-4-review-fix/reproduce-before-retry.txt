@@ -1,0 +1,16 @@
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:3107/
+Call log:
+[2m  - navigating to "http://127.0.0.1:3107/", waiting until "load"[22m
+
+    at /Users/gaowenlong/Desktop/atoms/docs/verification/assets/issue-4-review/comment-head.mjs:17:13 {
+  log: [
+    '  - navigating to "http://127.0.0.1:3107/", waiting until "load"'
+  ],
+  name: 'Error'
+}
+
+Node.js v24.18.0

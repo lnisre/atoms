@@ -1,0 +1,193 @@
+[
+  {
+    "n": 0,
+    "before": {
+      "inert": false
+    },
+    "frame": [
+      {
+        "type": "pointerdown",
+        "target": "BUTTON",
+        "inert": false
+      },
+      {
+        "type": "mousedown",
+        "target": "BUTTON",
+        "inert": false
+      },
+      {
+        "type": "click",
+        "target": "BUTTON",
+        "inert": false
+      }
+    ],
+    "parent": [],
+    "added": 1
+  },
+  {
+    "n": 1,
+    "before": {
+      "inert": false
+    },
+    "frame": [],
+    "parent": [
+      {
+        "type": "pointerdown",
+        "target": "IFRAME"
+      },
+      {
+        "type": "mousedown",
+        "target": "IFRAME"
+      },
+      {
+        "type": "click",
+        "target": "IFRAME"
+      }
+    ],
+    "added": 0
+  },
+  {
+    "n": 2,
+    "before": {
+      "inert": false
+    },
+    "frame": [
+      {
+        "type": "pointerdown",
+        "target": "BUTTON",
+        "inert": false
+      },
+      {
+        "type": "mousedown",
+        "target": "BUTTON",
+        "inert": false
+      },
+      {
+        "type": "click",
+        "target": "BUTTON",
+        "inert": false
+      }
+    ],
+    "parent": [],
+    "added": 1
+  },
+  {
+    "n": 3,
+    "before": {
+      "inert": false
+    },
+    "frame": [
+      {
+        "type": "pointerdown",
+        "target": "BUTTON",
+        "inert": false
+      },
+      {
+        "type": "mousedown",
+        "target": "BUTTON",
+        "inert": false
+      },
+      {
+        "type": "click",
+        "target": "BUTTON",
+        "inert": false
+      }
+    ],
+    "parent": [],
+    "added": 1
+  },
+  {
+    "n": 4,
+    "before": {
+      "inert": false
+    },
+    "frame": [
+      {
+        "type": "pointerdown",
+        "target": "BUTTON",
+        "inert": false
+      },
+      {
+        "type": "mousedown",
+        "target": "BUTTON",
+        "inert": false
+      },
+      {
+        "type": "click",
+        "target": "BUTTON",
+        "inert": false
+      }
+    ],
+    "parent": [],
+    "added": 1
+  },
+  {
+    "n": 5,
+    "before": {
+      "inert": false
+    },
+    "frame": [],
+    "parent": [
+      {
+        "type": "pointerdown",
+        "target": "IFRAME"
+      },
+      {
+        "type": "mousedown",
+        "target": "IFRAME"
+      },
+      {
+        "type": "click",
+        "target": "IFRAME"
+      }
+    ],
+    "added": 0
+  },
+  {
+    "n": 6,
+    "before": {
+      "inert": false
+    },
+    "frame": [],
+    "parent": [
+      {
+        "type": "pointerdown",
+        "target": "IFRAME"
+      },
+      {
+        "type": "mousedown",
+        "target": "IFRAME"
+      },
+      {
+        "type": "click",
+        "target": "IFRAME"
+      }
+    ],
+    "added": 0
+  },
+  {
+    "n": 7,
+    "before": {
+      "inert": false
+    },
+    "frame": [
+      {
+        "type": "pointerdown",
+        "target": "BUTTON",
+        "inert": false
+      },
+      {
+        "type": "mousedown",
+        "target": "BUTTON",
+        "inert": false
+      },
+      {
+        "type": "click",
+        "target": "BUTTON",
+        "inert": false
+      }
+    ],
+    "parent": [],
+    "added": 1
+  }
+]
