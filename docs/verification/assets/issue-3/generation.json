@@ -1,0 +1,9 @@
+{
+  "requirement": "做一个支持添加、完成、删除任务的待办应用。中文界面，清楚区分已完成和未完成任务，适配手机。",
+  "model": "deepseek-flash",
+  "durationMs": 14788,
+  "generatedAt": "2026-09-29T08:58:39.236Z",
+  "projectUrl": "https://v0-test0-nine.vercel.app/?project=60549993-cb23-40dd-ac34-4378cafef9f3",
+  "requests": 1,
+  "htmlSha256": "2bb927ba0451c64a30b54ae47b1da723813f90da0ce2e3c2cb4900b2f9f533b4"
+}

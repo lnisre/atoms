@@ -1,0 +1,28 @@
+{
+  "nodes": {
+    "hk1.node.check-host.net": [
+      "hk",
+      "Hong Kong",
+      "Hong Kong",
+      "141.98.234.68",
+      "AS207713"
+    ],
+    "kz1.node.check-host.net": [
+      "kz",
+      "Kazakhstan",
+      "Karaganda",
+      "185.120.77.165",
+      "AS203087"
+    ],
+    "pl2.node.check-host.net": [
+      "pl",
+      "Poland",
+      "Warsaw",
+      "195.137.244.1",
+      "AS214379"
+    ]
+  },
+  "ok": 1,
+  "permanent_link": "https://check-host.net/check-report/4e0e16d8k19",
+  "request_id": "4e0e16d8k19"
+}

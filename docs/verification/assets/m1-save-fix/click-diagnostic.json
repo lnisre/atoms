@@ -1,0 +1,344 @@
+[
+  {
+    "i": 0,
+    "ok": true,
+    "box": {
+      "x": 554.640625,
+      "y": 194.5,
+      "width": 43.203125,
+      "height": 25
+    },
+    "frames": [
+      {
+        "url": "http://127.0.0.1:3101/?project=baefaaa7-7f94-45b3-aba2-d17ed075d789",
+        "events": [
+          {
+            "type": "input",
+            "target": "<textarea id=\"requirement\" maxlength=\"4000\" placeholder=\"例如：一个帮我记录今天任务的待办清单，可以添加、完成和删除任务…\" required=\"\"></textarea>",
+            "inert": false,
+            "time": 273.19999980926514
+          },
+          {
+            "type": "pointerdown",
+            "target": "<button class=\"primary-button\" type=\"submit\">开始生成 <span aria-hidden=\"true\">↗</span></button>",
+            "x": 943.969970703125,
+            "y": 627.7100219726562,
+            "inert": false,
+            "time": 325
+          },
+          {
+            "type": "mousedown",
+            "target": "<button class=\"primary-button\" type=\"submit\">开始生成 <span aria-hidden=\"true\">↗</span></button>",
+            "x": 943,
+            "y": 627,
+            "inert": false,
+            "time": 325.69999980926514
+          },
+          {
+            "type": "pointerup",
+            "target": "<button class=\"primary-button\" type=\"submit\">开始生成 <span aria-hidden=\"true\">↗</span></button>",
+            "x": 943.969970703125,
+            "y": 627.7100219726562,
+            "inert": false,
+            "time": 326.90000009536743
+          },
+          {
+            "type": "mouseup",
+            "target": "<button class=\"primary-button\" type=\"submit\">开始生成 <span aria-hidden=\"true\">↗</span></button>",
+            "x": 943,
+            "y": 627,
+            "inert": false,
+            "time": 326.90000009536743
+          },
+          {
+            "type": "click",
+            "target": "<button class=\"primary-button\" type=\"submit\">开始生成 <span aria-hidden=\"true\">↗</span></button>",
+            "x": 943,
+            "y": 627,
+            "inert": false,
+            "time": 326.90000009536743
+          }
+        ]
+      },
+      {
+        "url": "",
+        "events": [
+          {
+            "type": "input",
+            "target": "<input aria-label=\"任务\">",
+            "inert": false,
+            "time": 75
+          },
+          {
+            "type": "pointerdown",
+            "target": "<button>添加</button>",
+            "x": 215.234375,
+            "y": 20.5,
+            "inert": false,
+            "time": 120
+          },
+          {
+            "type": "mousedown",
+            "target": "<button>添加</button>",
+            "x": 215,
+            "y": 20,
+            "inert": false,
+            "time": 120.19999980926514
+          },
+          {
+            "type": "pointerup",
+            "target": "<button>添加</button>",
+            "x": 215.234375,
+            "y": 20.5,
+            "inert": false,
+            "time": 120.2999997138977
+          },
+          {
+            "type": "mouseup",
+            "target": "<button>添加</button>",
+            "x": 215,
+            "y": 20,
+            "inert": false,
+            "time": 120.2999997138977
+          },
+          {
+            "type": "click",
+            "target": "<button>添加</button>",
+            "x": 215,
+            "y": 20,
+            "inert": false,
+            "time": 120.2999997138977
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "i": 1,
+    "ok": true,
+    "box": {
+      "x": 554.640625,
+      "y": 194.5,
+      "width": 43.203125,
+      "height": 25
+    },
+    "frames": [
+      {
+        "url": "http://127.0.0.1:3101/?project=edd4b97f-6107-4737-b38a-2a92449455d2",
+        "events": [
+          {
+            "type": "input",
+            "target": "<textarea id=\"requirement\" maxlength=\"4000\" placeholder=\"例如：一个帮我记录今天任务的待办清单，可以添加、完成和删除任务…\" required=\"\"></textarea>",
+            "inert": false,
+            "time": 156.59999990463257
+          },
+          {
+            "type": "pointerdown",
+            "target": "<button class=\"primary-button\" type=\"submit\">开始生成 <span aria-hidden=\"true\">↗</span></button>",
+            "x": 943.969970703125,
+            "y": 627.7100219726562,
+            "inert": false,
+            "time": 190.40000009536743
+          },
+          {
+            "type": "mousedown",
+            "target": "<button class=\"primary-button\" type=\"submit\">开始生成 <span aria-hidden=\"true\">↗</span></button>",
+            "x": 943,
+            "y": 627,
+            "inert": false,
+            "time": 190.5
+          },
+          {
+            "type": "pointerup",
+            "target": "<button class=\"primary-button\" type=\"submit\">开始生成 <span aria-hidden=\"true\">↗</span></button>",
+            "x": 943.969970703125,
+            "y": 627.7100219726562,
+            "inert": false,
+            "time": 190.80000019073486
+          },
+          {
+            "type": "mouseup",
+            "target": "<button class=\"primary-button\" type=\"submit\">开始生成 <span aria-hidden=\"true\">↗</span></button>",
+            "x": 943,
+            "y": 627,
+            "inert": false,
+            "time": 190.80000019073486
+          },
+          {
+            "type": "click",
+            "target": "<button class=\"primary-button\" type=\"submit\">开始生成 <span aria-hidden=\"true\">↗</span></button>",
+            "x": 943,
+            "y": 627,
+            "inert": false,
+            "time": 190.80000019073486
+          }
+        ]
+      },
+      {
+        "url": "",
+        "events": [
+          {
+            "type": "input",
+            "target": "<input aria-label=\"任务\">",
+            "inert": false,
+            "time": 53.40000009536743
+          },
+          {
+            "type": "pointerdown",
+            "target": "<button>添加</button>",
+            "x": 215.234375,
+            "y": 20.5,
+            "inert": false,
+            "time": 91.2999997138977
+          },
+          {
+            "type": "mousedown",
+            "target": "<button>添加</button>",
+            "x": 215,
+            "y": 20,
+            "inert": false,
+            "time": 91.40000009536743
+          },
+          {
+            "type": "pointerup",
+            "target": "<button>添加</button>",
+            "x": 215.234375,
+            "y": 20.5,
+            "inert": false,
+            "time": 91.5
+          },
+          {
+            "type": "mouseup",
+            "target": "<button>添加</button>",
+            "x": 215,
+            "y": 20,
+            "inert": false,
+            "time": 91.5
+          },
+          {
+            "type": "click",
+            "target": "<button>添加</button>",
+            "x": 215,
+            "y": 20,
+            "inert": false,
+            "time": 91.5
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "i": 2,
+    "ok": false,
+    "box": {
+      "x": 554.640625,
+      "y": 194.5,
+      "width": 43.203125,
+      "height": 25
+    },
+    "frames": [
+      {
+        "url": "http://127.0.0.1:3101/?project=25121ab8-9191-404e-8795-09fc32078d46",
+        "events": [
+          {
+            "type": "input",
+            "target": "<textarea id=\"requirement\" maxlength=\"4000\" placeholder=\"例如：一个帮我记录今天任务的待办清单，可以添加、完成和删除任务…\" required=\"\"></textarea>",
+            "inert": false,
+            "time": 137.39999961853027
+          },
+          {
+            "type": "pointerdown",
+            "target": "<button class=\"primary-button\" type=\"submit\">开始生成 <span aria-hidden=\"true\">↗</span></button>",
+            "x": 943.969970703125,
+            "y": 627.7100219726562,
+            "inert": false,
+            "time": 169.39999961853027
+          },
+          {
+            "type": "mousedown",
+            "target": "<button class=\"primary-button\" type=\"submit\">开始生成 <span aria-hidden=\"true\">↗</span></button>",
+            "x": 943,
+            "y": 627,
+            "inert": false,
+            "time": 169.5
+          },
+          {
+            "type": "pointerup",
+            "target": "<button class=\"primary-button\" type=\"submit\">开始生成 <span aria-hidden=\"true\">↗</span></button>",
+            "x": 943.969970703125,
+            "y": 627.7100219726562,
+            "inert": false,
+            "time": 169.7999997138977
+          },
+          {
+            "type": "mouseup",
+            "target": "<button class=\"primary-button\" type=\"submit\">开始生成 <span aria-hidden=\"true\">↗</span></button>",
+            "x": 943,
+            "y": 627,
+            "inert": false,
+            "time": 169.7999997138977
+          },
+          {
+            "type": "click",
+            "target": "<button class=\"primary-button\" type=\"submit\">开始生成 <span aria-hidden=\"true\">↗</span></button>",
+            "x": 943,
+            "y": 627,
+            "inert": false,
+            "time": 169.89999961853027
+          },
+          {
+            "type": "pointerdown",
+            "target": "<iframe title=\"生成的应用\" sandbox=\"allow-scripts\" referrerpolicy=\"no-referrer\" srcdoc=\"&lt;!DOCTYPE html&gt;&lt;html&gt;&lt;head&gt;&lt;meta http-equiv=&quot;Content-Security-Policy&quot; content=&quot;de",
+            "x": 576.239990234375,
+            "y": 207,
+            "inert": false,
+            "time": 382.5
+          },
+          {
+            "type": "mousedown",
+            "target": "<iframe title=\"生成的应用\" sandbox=\"allow-scripts\" referrerpolicy=\"no-referrer\" srcdoc=\"&lt;!DOCTYPE html&gt;&lt;html&gt;&lt;head&gt;&lt;meta http-equiv=&quot;Content-Security-Policy&quot; content=&quot;de",
+            "x": 576,
+            "y": 207,
+            "inert": false,
+            "time": 382.5
+          },
+          {
+            "type": "pointerup",
+            "target": "<iframe title=\"生成的应用\" sandbox=\"allow-scripts\" referrerpolicy=\"no-referrer\" srcdoc=\"&lt;!DOCTYPE html&gt;&lt;html&gt;&lt;head&gt;&lt;meta http-equiv=&quot;Content-Security-Policy&quot; content=&quot;de",
+            "x": 576.239990234375,
+            "y": 207,
+            "inert": false,
+            "time": 383.5
+          },
+          {
+            "type": "mouseup",
+            "target": "<iframe title=\"生成的应用\" sandbox=\"allow-scripts\" referrerpolicy=\"no-referrer\" srcdoc=\"&lt;!DOCTYPE html&gt;&lt;html&gt;&lt;head&gt;&lt;meta http-equiv=&quot;Content-Security-Policy&quot; content=&quot;de",
+            "x": 576,
+            "y": 207,
+            "inert": false,
+            "time": 383.59999990463257
+          },
+          {
+            "type": "click",
+            "target": "<iframe title=\"生成的应用\" sandbox=\"allow-scripts\" referrerpolicy=\"no-referrer\" srcdoc=\"&lt;!DOCTYPE html&gt;&lt;html&gt;&lt;head&gt;&lt;meta http-equiv=&quot;Content-Security-Policy&quot; content=&quot;de",
+            "x": 576,
+            "y": 207,
+            "inert": false,
+            "time": 383.59999990463257
+          }
+        ]
+      },
+      {
+        "url": "",
+        "events": [
+          {
+            "type": "input",
+            "target": "<input aria-label=\"任务\">",
+            "inert": false,
+            "time": 41.299999713897705
+          }
+        ]
+      }
+    ]
+  }
+]

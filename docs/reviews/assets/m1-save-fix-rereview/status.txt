@@ -1,0 +1,18 @@
+ M CONTEXT.md
+ M README.md
+ M eslint.config.mjs
+ M src/app/api/generate/route.ts
+ M src/app/globals.css
+ M src/app/page.tsx
+ M src/components/app-preview.tsx
+ M tests/browser/generation.spec.ts
+?? docs/adr/0004-m2-conversational-updates.md
+?? docs/reviews/
+?? docs/verification/assets/issue-3/
+?? docs/verification/assets/m1-save-fix/
+?? docs/verification/issue-3.md
+?? docs/verification/m1-save-fix-2026-09-29.md
+?? src/lib/preview-document.ts
+?? src/lib/project-store.ts
+?? tests/browser/persistence.spec.ts
+?? tests/browser/save-race.spec.ts

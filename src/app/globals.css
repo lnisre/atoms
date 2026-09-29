@@ -546,3 +546,51 @@ button.brand {
   padding: 0;
   color: inherit;
 }
+
+.project-list {
+  margin-top: 30px;
+  border-top: 1px solid var(--line);
+  padding-top: 22px;
+}
+.project-list h2 {
+  font-size: 17px;
+  font-weight: 600;
+}
+.project-list p {
+  color: var(--muted);
+  line-height: 1.8;
+  font-size: 12px;
+}
+.project-list button {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+  margin: 10px 0;
+  padding: 15px;
+  text-align: left;
+  border: 1px solid var(--line);
+  border-radius: 9px;
+  background: white;
+  overflow-wrap: anywhere;
+}
+.project-list button:hover {
+  border-color: var(--accent);
+}
+.project-list small {
+  color: var(--muted);
+  font-size: 11px;
+}
+.data-status {
+  margin: 0;
+  padding: 10px 18px;
+  font-size: 12px;
+  color: var(--accent);
+  background: #f4f8ef;
+}
+.save-error {
+  color: #9d3d24 !important;
+  background: #fff1e8;
+  padding: 10px;
+  line-height: 1.8;
+}

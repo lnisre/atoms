@@ -12,6 +12,8 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // Archived review/verification scripts are immutable evidence, not app source.
+    "docs/**/assets/**",
   ]),
 ]);
 

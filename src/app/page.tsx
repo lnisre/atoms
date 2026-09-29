@@ -1,6 +1,11 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import {
+  listProjects,
+  saveProject,
+  type SavedProject,
+} from "@/lib/project-store";
 import { AppPreview } from "@/components/app-preview";
 import {
   CLIENT_TIMEOUT_MS,
@@ -33,9 +38,83 @@ export default function Home() {
   const [requirement, setRequirement] = useState("");
   const [project, setProject] = useState<Project | null>(null);
   const [task, setTask] = useState<Task | null>(null);
+  const [projects, setProjects] = useState<SavedProject[]>([]);
+  const [loadingProjects, setLoadingProjects] = useState(true);
+  const [listError, setListError] = useState("");
+  const [projectSave, setProjectSave] = useState<
+    "unsaved" | "saving" | "saved" | "failed"
+  >("unsaved");
+  const [restored, setRestored] = useState(false);
   const [seconds, setSeconds] = useState(0);
   const active = useRef<AbortController | null>(null);
-  const busy = task?.status === "waiting";
+  const busy = task?.status === "waiting" || projectSave === "saving";
+
+  useEffect(() => {
+    let cancelled = false;
+    listProjects()
+      .then((saved) => {
+        if (cancelled) return;
+        setProjects(saved);
+        const id = new URLSearchParams(window.location.search).get("project");
+        const current = saved.find((item) => item.id === id);
+        if (current) {
+          setProject(current);
+          setTask({ status: "complete", result: current.result });
+          setProjectSave("saved");
+          setRestored(true);
+        } else if (id) {
+          setListError(
+            "此浏览器中找不到该项目。请确认使用原浏览器和原网址，且没有清除站点数据。",
+          );
+        }
+      })
+      .catch(() => {
+        if (!cancelled)
+          setListError(
+            "无法读取已有项目，请检查浏览器存储权限；当前无法保证保存与恢复。",
+          );
+      })
+      .finally(() => {
+        if (!cancelled) setLoadingProjects(false);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  function openProject(saved: SavedProject) {
+    setProject(saved);
+    setTask({ status: "complete", result: saved.result });
+    setProjectSave("saved");
+    setRestored(true);
+    window.history.replaceState(
+      null,
+      "",
+      `?project=${encodeURIComponent(saved.id)}`,
+    );
+  }
+
+  function goHome() {
+    if (
+      projectSave === "failed" &&
+      !window.confirm("项目保存失败。离开会丢失当前生成结果，是否继续？")
+    )
+      return;
+    setProject(null);
+    setTask(null);
+    setProjectSave("unsaved");
+    window.history.replaceState(null, "", "/");
+    setLoadingProjects(true);
+    listProjects()
+      .then((saved) => {
+        setProjects(saved);
+        setListError("");
+      })
+      .catch(() =>
+        setListError("无法读取已有项目，请检查浏览器存储权限或空间。"),
+      )
+      .finally(() => setLoadingProjects(false));
+  }
 
   useEffect(() => {
     if (!busy) return;
@@ -53,6 +132,9 @@ export default function Home() {
     const controller = new AbortController();
     active.current = controller;
     setProject(nextProject);
+    setProjectSave("unsaved");
+    setRestored(false);
+    window.history.replaceState(null, "", "/");
     setTask({ status: "waiting" });
     setSeconds(0);
     const timer = setTimeout(() => controller.abort(), CLIENT_TIMEOUT_MS);
@@ -73,6 +155,28 @@ export default function Home() {
       )
         throw new Error("生成结果不完整，请重新发起。");
       setTask({ status: "complete", result: data });
+      setProjectSave("saving");
+      const saved: SavedProject = {
+        ...nextProject,
+        title: nextProject.requirement.slice(0, 48),
+        result: data,
+        updatedAt: new Date().toISOString(),
+      };
+      try {
+        await saveProject(saved);
+        setProjectSave("saved");
+        setProjects((items) => [
+          saved,
+          ...items.filter((item) => item.id !== saved.id),
+        ]);
+        window.history.replaceState(
+          null,
+          "",
+          `?project=${encodeURIComponent(saved.id)}`,
+        );
+      } catch {
+        setProjectSave("failed");
+      }
     } catch (error) {
       setTask({
         status: "failed",
@@ -94,15 +198,7 @@ export default function Home() {
         <button
           className="brand"
           disabled={busy}
-          onClick={() => {
-            if (
-              !project ||
-              window.confirm("返回首页会清除尚未保存的项目，是否继续？")
-            ) {
-              setProject(null);
-              setTask(null);
-            }
-          }}
+          onClick={goHome}
           aria-label="Atoms 首页"
         >
           <span className="brand-mark" aria-hidden="true">
@@ -111,7 +207,7 @@ export default function Home() {
           atoms<span className="brand-tag">LAB</span>
         </button>
         <span className="topbar-note">从一个想法，到一个可用的应用</span>
-        <span className="session-badge">无需注册 · 当前会话</span>
+        <span className="session-badge">无需注册 · 本浏览器保存</span>
       </header>
       {!project ? (
         <main className="home">
@@ -157,7 +253,7 @@ export default function Home() {
               </span>
               <button
                 className="primary-button"
-                disabled={!requirement.trim()}
+                disabled={!requirement.trim() || loadingProjects}
                 type="submit"
               >
                 开始生成 <span aria-hidden="true">↗</span>
@@ -180,12 +276,33 @@ export default function Home() {
             ))}
           </div>
           <p className="scope-note">
-            支持无需后端的交互小工具。当前版本尚未保存项目和应用数据，刷新或离开后会丢失。
+            支持轻量前端应用。项目和应用数据自动保存在同一浏览器、同一网址（协议、主机和端口）下；请等待保存成功再离开。清除站点数据、无痕会话结束或浏览器回收存储后可能无法找回，不支持跨设备恢复。
           </p>
+          <section className="project-list" aria-label="已有项目">
+            <h2>已有项目</h2>
+            {loadingProjects && <p role="status">正在读取已有项目…</p>}
+            {listError && (
+              <p className="save-error" role="alert">
+                {listError}
+              </p>
+            )}
+            {!loadingProjects && !listError && projects.length === 0 && (
+              <p>还没有已保存的项目。生成一个应用后，会自动出现在这里。</p>
+            )}
+            {projects.map((saved) => (
+              <button key={saved.id} onClick={() => openProject(saved)}>
+                <span>{saved.title}</span>
+                <small>
+                  更新于 {new Date(saved.updatedAt).toLocaleString("zh-CN")} ·
+                  打开项目 ↗
+                </small>
+              </button>
+            ))}
+          </section>
           <div className="home-bottom">
             <span>01 / 描述需求</span>
             <span>02 / 真实生成</span>
-            <span>03 / 操作预览</span>
+            <span>03 / 保存与重开</span>
           </div>
         </main>
       ) : (
@@ -197,7 +314,18 @@ export default function Home() {
                 {project.requirement.slice(0, 26)}
                 {project.requirement.length > 26 ? "…" : ""}
               </h1>
-              <p className="unsaved">尚未保存 · 刷新或离开后会丢失</p>
+              <p
+                className={`unsaved ${projectSave === "failed" ? "save-error" : ""}`}
+                role={projectSave === "failed" ? "alert" : "status"}
+              >
+                {projectSave === "saved"
+                  ? "项目已保存"
+                  : projectSave === "saving"
+                    ? "项目正在保存…"
+                    : projectSave === "failed"
+                      ? "项目保存失败，请保留页面并检查浏览器存储权限或空间；刷新会丢失当前结果。"
+                      : "项目尚未保存"}
+              </p>
             </div>
             <section className="requirement-block">
               <h2>你的需求</h2>
@@ -220,7 +348,9 @@ export default function Home() {
                     ? "正在生成应用"
                     : task?.status === "failed"
                       ? "生成未完成"
-                      : "代码已生成"}
+                      : restored
+                        ? "已恢复保存的应用"
+                        : "代码已生成"}
                 </h2>
               </div>
               {busy && (
@@ -247,7 +377,9 @@ export default function Home() {
               {task?.status === "complete" && (
                 <>
                   <p>
-                    现在可以在预览中操作应用。生成完成不代表所有功能都已验证。
+                    {restored
+                      ? "已读取保存的需求和代码，没有重新调用模型。"
+                      : "现在可以在预览中操作应用。生成完成不代表所有功能都已验证。"}
                   </p>
                   <dl>
                     <div>
@@ -264,31 +396,22 @@ export default function Home() {
             </section>
             <div className="project-footnote">
               <p>
-                本次项目和应用数据仅保留在当前页面。保存与恢复将在后续版本提供。
+                自动保存到本浏览器的当前网址。项目与应用数据分别显示保存结果，请等待保存成功再离开。清除站点数据、无痕会话结束或存储被回收后可能丢失，不支持跨设备找回。
               </p>
-              <button
-                className="text-button"
-                disabled={busy}
-                onClick={() => {
-                  if (
-                    window.confirm(
-                      "当前项目尚未保存。新建项目会清除当前结果，是否继续？",
-                    )
-                  ) {
-                    setProject(null);
-                    setTask(null);
-                  }
-                }}
-              >
-                ＋ 新建项目
+              <button className="text-button" disabled={busy} onClick={goHome}>
+                ＋ 新建项目 / 已有项目
               </button>
             </div>
           </aside>
-          {task?.status === "complete" ? (
+          {task?.status === "complete" && projectSave !== "saving" ? (
             <AppPreview
-              key={task.result.generatedAt}
+              key={project.id + task.result.generatedAt}
               html={task.result.html}
-              onRetry={() => void generate(project)}
+              projectId={project.id}
+              projectSaved={projectSave === "saved"}
+              onRetry={() =>
+                void generate({ ...project, id: crypto.randomUUID() })
+              }
             />
           ) : (
             <section className="preview-placeholder" aria-label="预览等待区">
