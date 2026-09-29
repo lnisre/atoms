@@ -1,0 +1,24 @@
+[
+  {
+    "id": "dpl_2HT9LVH5pA9vXqzcwuTrqN34DbiJ",
+    "readyState": "READY",
+    "alias": [
+      "v0-test0-nine.vercel.app",
+      "v0-test0-lnisres-projects.vercel.app"
+    ],
+    "target": "production",
+    "createdAt": 1790672243383,
+    "nodeVersion": "24.x"
+  },
+  {
+    "id": "dpl_B5PpWge9wEyfgjGaxMZeiv9FPY2c",
+    "readyState": "READY",
+    "alias": [
+      "v0-test0-nine.vercel.app",
+      "v0-test0-lnisres-projects.vercel.app"
+    ],
+    "target": "production",
+    "createdAt": 1790672490162,
+    "nodeVersion": "24.x"
+  }
+]

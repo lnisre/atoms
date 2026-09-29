@@ -9,9 +9,7 @@ const result = {
   generatedAt: "2026-09-29T08:00:00Z",
 };
 
-test("需求留在工作台，等待结束后运行隔离预览，未保存状态明确", async ({
-  page,
-}) => {
+test("需求留在工作台，等待结束后运行隔离预览并保存项目", async ({ page }) => {
   let release: () => void = () => {};
   const gate = new Promise<void>((resolve) => {
     release = resolve;
@@ -52,7 +50,7 @@ test("需求留在工作台，等待结束后运行隔离预览，未保存状�
       }
     }),
   ).toBe(false);
-  await expect(page.getByText("尚未保存 · 刷新或离开后会丢失")).toBeVisible();
+  await expect(page.getByText("项目已保存", { exact: true })).toBeVisible();
   await expect(page.getByText("已保存", { exact: true })).toHaveCount(0);
 });
 

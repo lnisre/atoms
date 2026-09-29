@@ -1,0 +1,15 @@
+{
+  "mode": "redeploy",
+  "at": "2026-09-29T09:02:27.874Z",
+  "url": "https://v0-test0-nine.vercel.app/?project=60549993-cb23-40dd-ac34-4378cafef9f3",
+  "requests": 0,
+  "requirement": "做一个支持添加、完成、删除任务的待办应用。中文界面，清楚区分已完成和未完成任务，适配手机。",
+  "platform": "项目工作台\n\n做一个支持添加、完成、删除任务的待办应用。中文界面，…\n\n项目已保存\n\n你的需求\n\n做一个支持添加、完成、删除任务的待办应用。中文界面，清楚区分已完成和未完成任务，适配手机。\n\n✓\n已恢复保存的应用\n\n已读取保存的需求和代码，没有重新调用模型。\n\n模型\ndeepseek-flash\n生成耗时\n14.8 秒\n\n自动保存到本浏览器的当前网址。项目与应用数据分别显示保存结果，请等待保存成功再离开。清除站点数据、无痕会话结束或存储被回收后可能丢失，不支持跨设备找回。\n\n＋ 新建项目 / 已有项目\n运行预览\n预览已加载 · 请实际操作检查\n\n应用数据已保存",
+  "application": "- main \"待办清单\":\n  - heading \"待办清单\" [level=1]\n  - text: 轻量任务 · 自动保存 就绪\n  - textbox \"新任务描述\":\n    - /placeholder: 写一个新任务…\n  - button \"添加\"\n  - region \"未完成\":\n    - heading \"未完成\" [level=2]\n    - text: \"0\"\n    - list \"未完成任务列表\"\n    - text: ✨ 没有未完成任务\n  - region \"已完成\":\n    - heading \"已完成\" [level=2]\n    - text: \"1\"\n    - list \"已完成任务列表\":\n      - listitem:\n        - text: 线上恢复验收：保留并完成\n        - button \"标记为未完成\":\n          - img\n        - button \"删除任务\":\n          - img\n  - strong: 数据仅保存在此浏览器和站点\n  - text: 清除站点数据将丢失所有任务，恢复范围仅限于当前浏览器。",
+  "checks": {
+    "completedRetained": true,
+    "deletedAbsent": true,
+    "projectSaved": true,
+    "applicationDataSaved": true
+  }
+}

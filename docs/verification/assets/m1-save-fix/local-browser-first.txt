@@ -1,0 +1,60 @@
+
+Running 11 tests using 3 workers
+
+(node:28216) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+
+
+(node:28214) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+
+
+(node:28215) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+
+
+[1/11] tests/browser/generation.spec.ts:12:5 › 需求留在工作台，等待结束后运行隔离预览并保存项目
+[2/11] tests/browser/save-race.spec.ts:7:5 › 真实旧产物保存时禁止新修改，下一次修改确认后立即关闭可恢复
+[3/11] tests/browser/persistence.spec.ts:44:5 › 添加、完成、删除后刷新和关闭重开，恢复需求与业务数据且不调用模型
+[4/11] tests/browser/generation.spec.ts:57:5 › 失败后保留需求并允许手动重新生成
+[5/11] tests/browser/generation.spec.ts:82:5 › 浏览器等待超时后结束等待并提供重试
+[6/11] tests/browser/persistence.spec.ts:94:5 › 多个项目数据隔离，外部伪造的保存消息被忽略
+[7/11] tests/browser/generation.spec.ts:100:5 › 生成应用运行异常时提示而非宣称验证通过
+[8/11] tests/browser/generation.spec.ts:123:5 › 手机首页不横向溢出，示例只填入需求
+[9/11] tests/browser/persistence.spec.ts:133:5 › 业务数据事务中止时明确失败，不把请求成功当作保存成功
+[10/11] tests/browser/persistence.spec.ts:169:5 › 项目写入失败仍展示结果和错误，不宣称项目已保存
+[11/11] tests/browser/persistence.spec.ts:193:5 › 读取失败禁止覆盖原数据，恢复存储后仍能重开
+  1) tests/browser/persistence.spec.ts:193:5 › 读取失败禁止覆盖原数据，恢复存储后仍能重开 ───────────────────────────────
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: getByText('应用数据已保存', { exact: true })
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" getByText('应用数据已保存', { exact: true }) with timeout 5000ms
+      - waiting for getByText('应用数据已保存', { exact: true })
+
+
+      39 |     .getByRole("button", { name: "添加", exact: true })
+      40 |     .click();
+    > 41 |   await expect(page.getByText("应用数据已保存", { exact: true })).toBeVisible();
+         |                                                            ^
+      42 | }
+      43 |
+      44 | test("添加、完成、删除后刷新和关闭重开，恢复需求与业务数据且不调用模型", async ({
+        at add (/Users/gaowenlong/Desktop/atoms/tests/browser/persistence.spec.ts:41:60)
+        at /Users/gaowenlong/Desktop/atoms/tests/browser/persistence.spec.ts:198:3
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/persistence-读取失败禁止覆盖原数据，恢复存储后仍能重开/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/persistence-读取失败禁止覆盖原数据，恢复存储后仍能重开/error-context.md
+
+
+  1 failed
+    tests/browser/persistence.spec.ts:193:5 › 读取失败禁止覆盖原数据，恢复存储后仍能重开 ────────────────────────────────
+  10 passed (23.7s)

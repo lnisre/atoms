@@ -1,0 +1,7 @@
+{
+  "checkedAt": "2026-09-29T09:05:11.329Z",
+  "credential": "deployment token (full value; not printed)",
+  "files": 35,
+  "matches": 0,
+  "modelKeyAccess": "server-only process.env.DEEPSEEK_API_KEY in Route Handler; browser receives html/model/durationMs/generatedAt only"
+}

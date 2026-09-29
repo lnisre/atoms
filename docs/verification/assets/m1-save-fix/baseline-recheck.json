@@ -1,0 +1,13 @@
+{
+  "changedSinceFixStarted": [
+    "src/lib/preview-document.ts",
+    "tests/browser/persistence.spec.ts",
+    "README.md",
+    "eslint.config.mjs",
+    "src/app/api/generate/route.ts",
+    "src/components/app-preview.tsx"
+  ],
+  "deleted": [],
+  "originalReviewFilesUnchanged": true,
+  "sourceSnapshotUnchanged": true
+}

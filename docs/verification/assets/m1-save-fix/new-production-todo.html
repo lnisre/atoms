@@ -1,0 +1,682 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+<title>待办清单</title>
+<style>
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    -webkit-tap-highlight-color: transparent;
+  }
+  body {
+    font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+    background: #f2f4f8;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    padding: 12px;
+    color: #1a202c;
+  }
+  .app {
+    width: 100%;
+    max-width: 540px;
+    background: #ffffff;
+    border-radius: 20px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+    padding: 20px 16px 28px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    height: fit-content;
+    min-height: calc(100vh - 24px);
+  }
+  h1 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    color: #1e293b;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  h1 svg {
+    width: 26px;
+    height: 26px;
+    flex-shrink: 0;
+  }
+  .status-bar {
+    font-size: 0.8rem;
+    min-height: 1.2rem;
+    color: #64748b;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+  .status-bar .dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #22c55e;
+    flex-shrink: 0;
+  }
+  .status-bar .dot.saving {
+    background: #f59e0b;
+    animation: pulse 1s infinite;
+  }
+  .status-bar .dot.error {
+    background: #ef4444;
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.35; }
+  }
+  .input-row {
+    display: flex;
+    gap: 8px;
+  }
+  .input-row input {
+    flex: 1;
+    padding: 12px 14px;
+    border: 1.5px solid #e2e8f0;
+    border-radius: 12px;
+    font-size: 1rem;
+    font-family: inherit;
+    background: #f8fafc;
+    transition: border-color 0.15s, background 0.15s;
+    min-width: 0;
+  }
+  .input-row input:focus {
+    outline: none;
+    border-color: #6366f1;
+    background: #ffffff;
+  }
+  .input-row input:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+  .btn-add {
+    padding: 0 20px;
+    border: none;
+    border-radius: 12px;
+    background: #6366f1;
+    color: #ffffff;
+    font-size: 1rem;
+    font-weight: 600;
+    font-family: inherit;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: background 0.15s, transform 0.1s;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+  .btn-add:hover:not(:disabled) {
+    background: #4f46e5;
+  }
+  .btn-add:active:not(:disabled) {
+    transform: scale(0.96);
+  }
+  .btn-add:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+  .section {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .section-header {
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: #94a3b8;
+    padding-left: 4px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .section-header .count {
+    background: #f1f5f9;
+    color: #64748b;
+    border-radius: 20px;
+    padding: 1px 8px;
+    font-size: 0.7rem;
+    font-weight: 700;
+  }
+  .task-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .task-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 12px;
+    background: #f8fafc;
+    border-radius: 12px;
+    border: 1.5px solid #eef2f6;
+    transition: background 0.15s, opacity 0.15s;
+    min-height: 52px;
+  }
+  .task-item.done {
+    background: #f0fdf4;
+    border-color: #dcfce7;
+  }
+  .task-check {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    border: 2px solid #cbd5e1;
+    background: #ffffff;
+    flex-shrink: 0;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    transition: background 0.15s, border-color 0.15s;
+  }
+  .task-check:hover:not(:disabled) {
+    border-color: #6366f1;
+  }
+  .task-check:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+  .task-item.done .task-check {
+    background: #22c55e;
+    border-color: #22c55e;
+  }
+  .task-check svg {
+    width: 14px;
+    height: 14px;
+    display: none;
+    stroke: #ffffff;
+    stroke-width: 3;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    fill: none;
+  }
+  .task-item.done .task-check svg {
+    display: block;
+  }
+  .task-text {
+    flex: 1;
+    font-size: 0.95rem;
+    line-height: 1.4;
+    word-break: break-word;
+    transition: color 0.15s, text-decoration 0.15s;
+    min-width: 0;
+  }
+  .task-item.done .task-text {
+    color: #86a08e;
+    text-decoration: line-through;
+  }
+  .btn-delete {
+    width: 34px;
+    height: 34px;
+    border-radius: 10px;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: background 0.15s;
+    padding: 0;
+  }
+  .btn-delete:hover:not(:disabled) {
+    background: #fee2e2;
+  }
+  .btn-delete:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+  .btn-delete svg {
+    width: 18px;
+    height: 18px;
+    stroke: #94a3b8;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    fill: none;
+    transition: stroke 0.15s;
+  }
+  .btn-delete:hover:not(:disabled) svg {
+    stroke: #ef4444;
+  }
+  .empty {
+    text-align: center;
+    color: #94a3b8;
+    font-size: 0.9rem;
+    padding: 24px 8px;
+    line-height: 1.5;
+  }
+  .error-banner {
+    background: #fef2f2;
+    border: 1.5px solid #fecaca;
+    border-radius: 12px;
+    padding: 12px 14px;
+    font-size: 0.85rem;
+    color: #b91c1c;
+    line-height: 1.5;
+    display: flex;
+    gap: 8px;
+    align-items: flex-start;
+  }
+  .error-banner svg {
+    width: 18px;
+    height: 18px;
+    flex-shrink: 0;
+    margin-top: 1px;
+    stroke: #ef4444;
+    stroke-width: 2;
+    fill: none;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+  .recovery-note {
+    font-size: 0.7rem;
+    color: #94a3b8;
+    line-height: 1.5;
+    text-align: center;
+    padding: 4px 8px;
+    border-top: 1px solid #f1f5f9;
+    margin-top: auto;
+  }
+  .hidden {
+    display: none !important;
+  }
+  .loading {
+    text-align: center;
+    color: #94a3b8;
+    font-size: 0.9rem;
+    padding: 32px 8px;
+  }
+  @media (max-width: 400px) {
+    .app {
+      padding: 16px 10px 20px;
+      border-radius: 16px;
+    }
+    .btn-add {
+      padding: 0 14px;
+      font-size: 0.9rem;
+    }
+    .input-row input {
+      font-size: 0.95rem;
+      padding: 11px 12px;
+    }
+  }
+</style>
+</head>
+<body>
+<div class="app" id="app">
+  <h1>
+    <svg viewBox="0 0 24 24" fill="none" stroke="#6366f1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <path d="M9 11l3 3L22 4"></path>
+      <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path>
+    </svg>
+    待办清单
+  </h1>
+
+  <div class="status-bar" id="statusBar" role="status" aria-live="polite">
+    <span class="dot" id="statusDot" hidden></span>
+    <span id="statusText">正在加载…</span>
+  </div>
+
+  <div class="error-banner hidden" id="errorBanner" role="alert">
+    <svg viewBox="0 0 24 24" aria-hidden="true">
+      <circle cx="12" cy="12" r="10"></circle>
+      <line x1="12" y1="8" x2="12" y2="12"></line>
+      <line x1="12" y1="16" x2="12.01" y2="16"></line>
+    </svg>
+    <span id="errorText"></span>
+  </div>
+
+  <div class="input-row">
+    <input
+      type="text"
+      id="taskInput"
+      placeholder="添加新任务…"
+      aria-label="新任务内容"
+      maxlength="200"
+      disabled
+      autocomplete="off"
+    >
+    <button type="button" class="btn-add" id="addBtn" disabled aria-label="添加任务">
+      添加
+    </button>
+  </div>
+
+  <div class="loading" id="loadingMsg">正在加载待办数据…</div>
+
+  <div class="section hidden" id="activeSection">
+    <div class="section-header">
+      未完成
+      <span class="count" id="activeCount">0</span>
+    </div>
+    <ul class="task-list" id="activeList"></ul>
+    <div class="empty hidden" id="activeEmpty">暂无未完成任务 🎉</div>
+  </div>
+
+  <div class="section hidden" id="doneSection">
+    <div class="section-header">
+      已完成
+      <span class="count" id="doneCount">0</span>
+    </div>
+    <ul class="task-list" id="doneList"></ul>
+    <div class="empty hidden" id="doneEmpty">还没有已完成的任务</div>
+  </div>
+
+  <div class="recovery-note">
+    🔒 数据仅保存在此浏览器和站点中。清除浏览器站点数据会导致待办丢失，恢复仅限于当前浏览器。
+  </div>
+</div>
+
+<script>
+(function () {
+  'use strict';
+
+  // ---------- DOM ----------
+  var statusDot = document.getElementById('statusDot');
+  var statusText = document.getElementById('statusText');
+  var errorBanner = document.getElementById('errorBanner');
+  var errorText = document.getElementById('errorText');
+  var taskInput = document.getElementById('taskInput');
+  var addBtn = document.getElementById('addBtn');
+  var loadingMsg = document.getElementById('loadingMsg');
+  var activeSection = document.getElementById('activeSection');
+  var doneSection = document.getElementById('doneSection');
+  var activeList = document.getElementById('activeList');
+  var doneList = document.getElementById('doneList');
+  var activeCount = document.getElementById('activeCount');
+  var doneCount = document.getElementById('doneCount');
+  var activeEmpty = document.getElementById('activeEmpty');
+  var doneEmpty = document.getElementById('doneEmpty');
+
+  // ---------- State ----------
+  var tasks = [];
+  var appReady = false;
+  var isSaving = false;
+
+  // ---------- Helpers ----------
+  function uid() {
+    return Date.now().toString(36) + Math.random().toString(36).slice(2, 9);
+  }
+
+  function setStatus(type, msg) {
+    if (type === 'idle') {
+      statusDot.hidden = true;
+      statusText.textContent = msg || '';
+    } else if (type === 'saving') {
+      statusDot.hidden = false;
+      statusDot.className = 'dot saving';
+      statusText.textContent = msg || '保存中…';
+    } else if (type === 'saved') {
+      statusDot.hidden = false;
+      statusDot.className = 'dot';
+      statusText.textContent = msg || '已保存';
+    } else if (type === 'error') {
+      statusDot.hidden = false;
+      statusDot.className = 'dot error';
+      statusText.textContent = msg || '保存失败';
+    }
+  }
+
+  function showError(msg) {
+    errorText.textContent = msg;
+    errorBanner.classList.remove('hidden');
+  }
+
+  function hideError() {
+    errorBanner.classList.add('hidden');
+  }
+
+  function setEditingEnabled(enabled) {
+    appReady = enabled;
+    taskInput.disabled = !enabled;
+    addBtn.disabled = !enabled;
+    // 任务项内的按钮也受控
+    var buttons = document.querySelectorAll('.task-check, .btn-delete');
+    for (var i = 0; i < buttons.length; i++) {
+      buttons[i].disabled = !enabled;
+    }
+  }
+
+  // ---------- Render ----------
+  function createTaskItem(task) {
+    var li = document.createElement('li');
+    li.className = 'task-item' + (task.done ? ' done' : '');
+    li.dataset.id = task.id;
+
+    // 完成按钮
+    var checkBtn = document.createElement('button');
+    checkBtn.type = 'button';
+    checkBtn.className = 'task-check';
+    checkBtn.setAttribute('aria-label', task.done ? '标记为未完成' : '标记为已完成');
+    checkBtn.disabled = !appReady;
+    checkBtn.innerHTML =
+      '<svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"></polyline></svg>';
+    checkBtn.addEventListener('click', function () {
+      handleToggle(task.id);
+    });
+
+    // 文本
+    var span = document.createElement('span');
+    span.className = 'task-text';
+    span.textContent = task.text;
+
+    // 删除按钮
+    var delBtn = document.createElement('button');
+    delBtn.type = 'button';
+    delBtn.className = 'btn-delete';
+    delBtn.setAttribute('aria-label', '删除任务');
+    delBtn.disabled = !appReady;
+    delBtn.innerHTML =
+      '<svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>';
+    delBtn.addEventListener('click', function () {
+      handleDelete(task.id);
+    });
+
+    li.appendChild(checkBtn);
+    li.appendChild(span);
+    li.appendChild(delBtn);
+    return li;
+  }
+
+  function render() {
+    var active = [];
+    var done = [];
+    for (var i = 0; i < tasks.length; i++) {
+      if (tasks[i].done) done.push(tasks[i]);
+      else active.push(tasks[i]);
+    }
+
+    activeList.innerHTML = '';
+    doneList.innerHTML = '';
+
+    for (var a = 0; a < active.length; a++) {
+      activeList.appendChild(createTaskItem(active[a]));
+    }
+    for (var d = 0; d < done.length; d++) {
+      doneList.appendChild(createTaskItem(done[d]));
+    }
+
+    activeCount.textContent = active.length;
+    doneCount.textContent = done.length;
+
+    activeSection.classList.toggle('hidden', tasks.length === 0 && active.length === 0 && done.length === 0);
+    doneSection.classList.toggle('hidden', done.length === 0);
+    activeEmpty.classList.toggle('hidden', active.length > 0);
+    doneEmpty.classList.toggle('hidden', done.length > 0);
+
+    // 如果两个列表都为空，显示全局空状态
+    if (tasks.length === 0) {
+      activeSection.classList.remove('hidden');
+      activeEmpty.classList.remove('hidden');
+    }
+  }
+
+  // ---------- Saving ----------
+  function serialize() {
+    return { tasks: tasks };
+  }
+
+  async function persist(snapshot) {
+    // 同步调用 saveState，不排队、不防抖
+    try {
+      await window.atoms.saveState(snapshot);
+      setStatus('saved', '已保存');
+      hideError();
+      return true;
+    } catch (err) {
+      setStatus('error', '保存失败');
+      showError('保存失败：' + (err && err.message ? err.message : '未知错误') + '。你的修改可能未生效，请重试。');
+      return false;
+    }
+  }
+
+  // ---------- Mutations ----------
+  async function handleAdd() {
+    if (!appReady || isSaving) return;
+    var text = taskInput.value.trim();
+    if (!text) return;
+
+    var newTask = { id: uid(), text: text, done: false };
+    tasks.push(newTask);
+    taskInput.value = '';
+    render();
+
+    isSaving = true;
+    setEditingEnabled(false);
+    setStatus('saving', '保存中…');
+
+    var snapshot = serialize();
+    var ok = await persist(snapshot);
+
+    isSaving = false;
+    setEditingEnabled(true);
+    if (ok) {
+      taskInput.focus();
+    } else {
+      taskInput.focus();
+    }
+  }
+
+  async function handleToggle(id) {
+    if (!appReady || isSaving) return;
+    var task = null;
+    for (var i = 0; i < tasks.length; i++) {
+      if (tasks[i].id === id) { task = tasks[i]; break; }
+    }
+    if (!task) return;
+
+    task.done = !task.done;
+    render();
+
+    isSaving = true;
+    setEditingEnabled(false);
+    setStatus('saving', '保存中…');
+
+    var snapshot = serialize();
+    var ok = await persist(snapshot);
+
+    isSaving = false;
+    setEditingEnabled(true);
+    if (!ok) {
+      // 回滚 UI 状态以匹配未保存的失败？按平台要求：修改可能未生效
+      // 保持当前界面，但状态区提示失败。
+    }
+  }
+
+  async function handleDelete(id) {
+    if (!appReady || isSaving) return;
+    var idx = -1;
+    for (var i = 0; i < tasks.length; i++) {
+      if (tasks[i].id === id) { idx = i; break; }
+    }
+    if (idx === -1) return;
+
+    tasks.splice(idx, 1);
+    render();
+
+    isSaving = true;
+    setEditingEnabled(false);
+    setStatus('saving', '保存中…');
+
+    var snapshot = serialize();
+    var ok = await persist(snapshot);
+
+    isSaving = false;
+    setEditingEnabled(true);
+  }
+
+  // ---------- Load ----------
+  async function init() {
+    loadingMsg.classList.remove('hidden');
+    activeSection.classList.add('hidden');
+    doneSection.classList.add('hidden');
+    setStatus('idle', '正在加载…');
+    setEditingEnabled(false);
+
+    var loaded = null;
+    try {
+      loaded = await window.atoms.loadState();
+    } catch (err) {
+      loadingMsg.classList.add('hidden');
+      setStatus('error', '加载失败');
+      showError('无法读取已保存的数据：' + (err && err.message ? err.message : '未知错误') + '。编辑已禁用，不会覆盖现有数据。');
+      return; // 保持编辑禁用
+    }
+
+    // 恢复状态
+    if (loaded && Array.isArray(loaded.tasks)) {
+      tasks = loaded.tasks.map(function (t) {
+        return {
+          id: typeof t.id === 'string' ? t.id : uid(),
+          text: typeof t.text === 'string' ? t.text : '',
+          done: !!t.done
+        };
+      }).filter(function (t) { return t.text.length > 0; });
+    } else {
+      // 默认：空列表（首次使用）
+      tasks = [];
+    }
+
+    loadingMsg.classList.add('hidden');
+    render();
+    setEditingEnabled(true);
+    setStatus('saved', '已就绪');
+    taskInput.focus();
+  }
+
+  // ---------- Events ----------
+  addBtn.addEventListener('click', handleAdd);
+
+  taskInput.addEventListener('keydown', function (e) {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      handleAdd();
+    }
+  });
+
+  // ---------- Start ----------
+  if (window.atoms && typeof window.atoms.loadState === 'function') {
+    init();
+  } else {
+    loadingMsg.classList.add('hidden');
+    setStatus('error', '初始化失败');
+    showError('应用初始化失败：存储接口不可用。编辑已禁用。');
+  }
+})();
+</script>
+</body>
+</html>

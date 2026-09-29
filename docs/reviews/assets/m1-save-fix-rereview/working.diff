@@ -1,0 +1,687 @@
+diff --git a/CONTEXT.md b/CONTEXT.md
+index f89a8b8..c5256db 100644
+--- a/CONTEXT.md
++++ b/CONTEXT.md
+@@ -13,6 +13,24 @@ _Avoid_：用“项目”指代一次生成尝试。
+ **代码版本**：一次生成产出的代码及运行所需内容，是项目结果的一份快照。
+ _Avoid_：用“应用数据”指代代码版本。
+ 
++**候选版本**：已生成、可供试用，但尚未被用户采用的代码版本。
++_Avoid_：用“当前版本”指代尚未采用的修改结果。
++
++**采用修改**：用户将候选代码确认为项目当前使用版本的动作；试用数据不随该动作写回原项目。
++_Avoid_：把“生成完成”或“预览加载成功”直接称为采用。
++
++**试用数据**：为验证候选版本而使用的应用业务数据副本；试用本身不改动当前项目的业务数据。
++_Avoid_：与当前项目正在使用的业务数据混称。
++
++**修改记录**：已采用修改所对应的用户需求和简短结果记录，用于说明项目的演变。
++_Avoid_：与可恢复的历史代码版本混称。
++
++**代码回退**：将项目使用的代码切换回先前保留的代码版本，不自动恢复过去的应用业务数据。
++_Avoid_：用“数据回滚”或“整个项目回滚”指代代码回退。
++
++**项目快照**：某一确定时刻配对保留的代码版本和应用业务数据。
++_Avoid_：把仅保存 HTML 的代码版本称为完整项目快照。
++
+ **运行检查结果**：针对某个代码版本实际执行检查得到的记录；结论仅覆盖已检查的事项。
+ _Avoid_：用“业务验收通过”泛指预览加载成功。
+ 
+diff --git a/README.md b/README.md
+index 42888dc..9a960b8 100644
+--- a/README.md
++++ b/README.md
+@@ -2,9 +2,9 @@
+ 
+ 输入自然语言需求，通过 DeepSeek 官方 API 生成轻量前端应用，在隔离预览里实际操作。
+ 
+-本次实现范围为 [Issue #2](https://github.com/lnisre/atoms/issues/2)：Home、当前项目工作台、真实生成、可操作预览和手动重试。**项目及应用业务数据尚未持久化，刷新、关闭或新建项目会丢失当前结果。** 自动保存和同浏览器恢复属于后续 Issue #3，不能据此认定整个 M1 已完成。
++当前实现覆盖 [Issue #2](https://github.com/lnisre/atoms/issues/2) 的真实生成与预览，以及 [Issue #3](https://github.com/lnisre/atoms/issues/3) 的自动保存与同浏览器恢复。生成完成后保存项目需求和 HTML；应用操作通过平台数据接口写入 IndexedDB。首页的“已有项目”可重开保存的应用，不重新调用模型。
+ 
+-生产地址：https://v0-test0-nine.vercel.app 。2026-09-29 线上真实待办生成与添加、完成、删除已验证，生成耗时 15.7 秒。
++生产地址：[Atoms Demo](https://v0-test0-nine.vercel.app)。线上验证结果见 [#2 记录](docs/verification/issue-2.md) 与 [#3 记录](docs/verification/issue-3.md)。
+ 
+ ## 运行
+ 
+@@ -29,7 +29,7 @@ pnpm dev
+ - 模型请求在 120 秒超时，浏览器在 135 秒停止等待；Vercel 函数 `maxDuration` 为 180 秒，需启用 Fluid compute。失败后由用户手动重新发起。
+ - 生成物为内含 CSS 和原生 JavaScript 的单文件 HTML，通过 `srcdoc` 放入 `sandbox="allow-scripts"` iframe。没有 `allow-same-origin`，不直接插入平台 DOM。
+ - 预览注入 CSP，禁止外部依赖、网络请求、嵌套页面及表单导航，只允许内联脚本、样式和数据图片。脚本运行错误可提示重新生成；加载成功不代表业务功能正确。沙箱限制权限，但不保证任意生成代码没有逻辑错误或性能问题。
+-- 本阶段要求应用仅使用内存状态，不用 localStorage 冒充平台保存。没有账号、后台任务、对话修改、自动修复或跨设备恢复。
++- 生成应用使用平台注入的 `window.atoms.loadState()` 和 `window.atoms.saveState(data)`，不直接访问浏览器存储。没有账号、后台任务、对话修改、版本历史、自动修复或跨设备恢复。隔离环境不允许表单提交，应使用普通按钮点击与键盘事件。
+ - 浏览器提交的需求会发送给 DeepSeek。模型密钥不进入浏览器 bundle、生成物或日志；上游错误正文不回传。公开无账号演示接口会消耗维护者模型额度，目前未实现账户配额或持久化限流。
+ 
+ 接口依据：[DeepSeek Chat Completions](https://api-docs.deepseek.com/api/create-chat-completion/)、[Vercel 函数时限](https://vercel.com/docs/functions/configuring-functions/duration)。
+@@ -47,12 +47,25 @@ pnpm test:e2e
+ # 也可 TEST_BASE_URL=https://固定生产地址 pnpm test:e2e
+ ```
+ 
+-服务端测试控制模型外部响应，覆盖输入拒绝、未配置、认证/额度/上游失败、截断、文档提取和超时。浏览器回归使用明确的测试夹具，覆盖等待、失败重试、客户端超时、可执行隔离预览、运行错误和手机输入；这些测试不替代真实模型验收。
++服务端测试控制模型外部响应，覆盖输入拒绝、未配置、认证/额度/上游失败、截断、文档提取和超时。浏览器回归使用明确的测试夹具，覆盖等待、失败重试、客户端超时、隔离预览、运行错误、手机输入、项目列表重开、刷新与关闭重开、项目隔离、伪造消息、事务中止及读取/写入失败；这些测试不替代真实模型验收。
+ 
+-真实验收：从 Home 提交待办需求，添加两个不同任务，完成一个并删除另一个，记录生成耗时和产物，确认未显示已保存。线上验收必须从固定生产地址完成，另需外部网络访问证据。具体结果见 `docs/verification/issue-2.md`。
++真实验收：从固定生产地址提交待办需求，添加两个不同任务，完成一个并删除另一个。等待项目与应用数据保存成功，刷新后检查内容、完成状态与删除结果；关闭浏览器后使用原配置文件重开，从已有项目进入，再次验证。记录请求数，确认恢复没有调用生成接口。保持同源再次部署后重复检查；不能用测试夹具代替真实模型产物。
+ 
+ ## Vercel 部署
+ 
+-在对应 Vercel 项目配置生产环境变量 `DEEPSEEK_API_KEY`，选择 Next.js 和 Node.js 24.x，启用 Fluid compute。通过 Vercel CLI 链接该项目，再执行 `vercel --prod`。后续更新继续部署同一项目和固定生产域名，为 #3 的同源存储提供稳定入口。
++在对应 Vercel 项目配置生产环境变量 `DEEPSEEK_API_KEY`，选择 Next.js 和 Node.js 24.x，启用 Fluid compute。通过 Vercel CLI 链接该项目，再执行 `vercel --prod`。后续更新继续部署同一项目和固定生产域名，保持 IndexedDB 的同源存储入口。修改数据库或接口时须保持已有数据和保存 HTML 的兼容性，不能通过改库名或清库完成升级。
+ 
+ `.vercelignore` 排除私人研究资料、北极星、本地凭据、环境文件及测试产物；不要上传整个工作区归档。`.vercel` 保存本机项目链接信息，按 `.gitignore` 排除。
++
++## 自动保存与恢复约定
++
++- 项目包含稳定 UUID、完整需求、列表标题、更新时间及当前 HTML/生成元信息；业务数据单独保存，并关联项目 UUID。M1 仅保存当前代码，没有历史版本。
++- 数据库 `atoms-projects` 版本 1，`projects` 与 `applicationData` 两个 store。部署更新不改变名称、版本和数据格式。业务数据保存与项目更新时间在同一事务提交；只有事务 `complete` 后才显示保存成功。
++- 注入脚本在生成代码之前提供 `window.atoms`。`loadState(): Promise<JSON | null>` 读取已有状态，新项目返回 null；`saveState(data): Promise<void>` 保存完整 JSON 快照（序列化长度最多 1,000,000 字符），成功后 resolve，失败时 reject。模型需先成功读取再允许修改，在每次添加、完成、删除后保存，不能将读取失败视为空数据。
++- 应用调用经 `postMessage` 传给父页面。父页面检查当前 iframe 的 `contentWindow`、opaque origin 和每次预览的随机 channel；项目身份由父页面闭包绑定，消息不能指定其他项目。子页面也检查父窗口、平台 origin 和 channel。发送至 opaque iframe 的回复使用 `*`，同时严格限制目标窗口与 channel。
++- 每次用户修改必须在同一事件处理函数中立即提交完整快照，不能用定时器、防抖或 isSaving 分支推迟保存。`saveState` 在调用时同步将预览设为 inert 并拦截编辑事件，直到保存成功或失败才恢复交互；平台同时显示“暂时无法编辑”。保存期间点击或按键不会产生新修改，需在恢复交互后继续。生成代码不得用后台回调修改业务数据或绕过锁。
++- 新接口在每次打开项目时注入，已保存的旧 HTML 也获得上述保存锁，无需重新生成或迁移数据；已打开的旧页面需重新打开才能使用更新。它保护遵守即时保存接口的应用，不会自动修复任意生成代码的其他逻辑错误。
++- 同一预览内读写按到达顺序执行，防止快速连续操作倒序保存；没有跨标签页冲突协调。多标签同时编辑同一项目时，最后提交的完整快照覆盖之前的内容。
++- 项目保存与应用数据保存分别反馈。存储不可用、配额不足或事务中止时明确提示保留页面并检查权限/空间，不自动重试、不用内存结果冒充保存成功。重新生成预览使用新项目标识，保留此前已保存项目，避免新代码误读旧数据。
++- 刷新使用 URL 的 `?project=<UUID>` 读取已有项目；关闭后重开首页可从项目列表进入。URL 只是本地记录的标识，复制链接不会把项目传给其他浏览器。
++- 恢复要求同一浏览器配置文件、同一平台源（协议、主机、端口）且站点数据仍存在。清除数据、结束无痕会话、存储回收或更换浏览器/设备后不承诺找回。没有服务端备份，浏览器事务提交也不等于独立备份或断电耐久性保证。
+diff --git a/eslint.config.mjs b/eslint.config.mjs
+index 05e726d..bf667f6 100644
+--- a/eslint.config.mjs
++++ b/eslint.config.mjs
+@@ -12,6 +12,8 @@ const eslintConfig = defineConfig([
+     "out/**",
+     "build/**",
+     "next-env.d.ts",
++    // Archived review/verification scripts are immutable evidence, not app source.
++    "docs/**/assets/**",
+   ]),
+ ]);
+ 
+diff --git a/src/app/api/generate/route.ts b/src/app/api/generate/route.ts
+index 4c7318b..6fc508a 100644
+--- a/src/app/api/generate/route.ts
++++ b/src/app/api/generate/route.ts
+@@ -9,8 +9,8 @@ export const maxDuration = 180;
+ const systemPrompt = `You build lightweight frontend applications from the user's requirements.
+ Return ONLY one complete HTML document, starting with <!DOCTYPE html> and ending with </html>. Include explicit head and body tags, inline CSS in style and vanilla JavaScript in script. No markdown or explanation.
+ Implement the requested interactions fully, with accessible labels, keyboard support and responsive layout. Match the user's language. Keep the implementation concise.
+-The document runs inside an iframe with sandbox="allow-scripts" and an opaque origin. It has NO storage or network access. Keep all application state in memory. Do not use localStorage, sessionStorage, IndexedDB, cookies, fetch, external images, fonts, scripts, stylesheets, CDN, imports, packages, forms that navigate, popups or parent document access. Do not claim anything is saved or will survive refresh. No backend, login or external services. Use inline SVG or CSS for graphics.
+-For any requested capability outside this environment, explain the limitation honestly inside the app; never simulate successful backend operations. Render user-entered text with textContent, not HTML interpolation. Use actual event handlers for the requested actions.`;
++The document runs inside an iframe with sandbox="allow-scripts" and an opaque origin. It has NO direct storage or network access. The platform injects window.atoms BEFORE your scripts. Use its fixed Promise-based API for ALL application business data: await window.atoms.loadState() returns the last saved JSON state, or null for a new project; await window.atoms.saveState(jsonData) saves the whole state and resolves ONLY after storage commits. Do not implement, redefine or mock this API. On startup await loadState before enabling interactions; restore saved state exactly (including completed items and deletions), use defaults only when the result is null. If reading fails, show an error and keep editing disabled, never overwrite unread data. After EVERY user mutation (including add, complete, delete), call saveState with the complete current state synchronously in that same event handler, before any await, timer, debounce or other deferred work. The platform makes the preview inert and blocks editing events until saveState settles; do not bypass this lock or mutate business data from timers, asynchronous callbacks or background work. Use one async mutation handler: update state, render, show saving, await saveState(snapshot), then show saved; catch and display failures. Do not queue, debounce or skip saves with an isSaving flag. Do not independently enable editing while a save is pending. Catch errors and show them honestly; show saved only after the Promise resolves. Use JSON-compatible data, at most 1 MB. Never send project IDs or postMessage yourself; only use window.atoms. Do not use localStorage, sessionStorage, IndexedDB, cookies, fetch, external images, fonts, scripts, stylesheets, CDN, imports, packages, forms that navigate, popups or parent document access. Explain that recovery is limited to this browser and site, with site data retained. No backend, login or external services. Use inline SVG or CSS for graphics.
++For any requested capability outside this environment, explain the limitation honestly inside the app; never simulate successful backend operations. Render user-entered text with textContent, not HTML interpolation. Do not use form elements or submit events (sandbox blocks them); use type="button" click handlers and input keydown for Enter. Use actual event handlers for the requested actions.`;
+ 
+ function failure(error: string, status: number) {
+   return Response.json(
+diff --git a/src/app/globals.css b/src/app/globals.css
+index 7254254..c33b153 100644
+--- a/src/app/globals.css
++++ b/src/app/globals.css
+@@ -546,3 +546,51 @@ button.brand {
+   padding: 0;
+   color: inherit;
+ }
++
++.project-list {
++  margin-top: 30px;
++  border-top: 1px solid var(--line);
++  padding-top: 22px;
++}
++.project-list h2 {
++  font-size: 17px;
++  font-weight: 600;
++}
++.project-list p {
++  color: var(--muted);
++  line-height: 1.8;
++  font-size: 12px;
++}
++.project-list button {
++  display: flex;
++  flex-direction: column;
++  gap: 8px;
++  width: 100%;
++  margin: 10px 0;
++  padding: 15px;
++  text-align: left;
++  border: 1px solid var(--line);
++  border-radius: 9px;
++  background: white;
++  overflow-wrap: anywhere;
++}
++.project-list button:hover {
++  border-color: var(--accent);
++}
++.project-list small {
++  color: var(--muted);
++  font-size: 11px;
++}
++.data-status {
++  margin: 0;
++  padding: 10px 18px;
++  font-size: 12px;
++  color: var(--accent);
++  background: #f4f8ef;
++}
++.save-error {
++  color: #9d3d24 !important;
++  background: #fff1e8;
++  padding: 10px;
++  line-height: 1.8;
++}
+diff --git a/src/app/page.tsx b/src/app/page.tsx
+index e8afb76..f2054e8 100644
+--- a/src/app/page.tsx
++++ b/src/app/page.tsx
+@@ -1,6 +1,11 @@
+ "use client";
+ 
+ import { useEffect, useRef, useState } from "react";
++import {
++  listProjects,
++  saveProject,
++  type SavedProject,
++} from "@/lib/project-store";
+ import { AppPreview } from "@/components/app-preview";
+ import {
+   CLIENT_TIMEOUT_MS,
+@@ -33,9 +38,83 @@ export default function Home() {
+   const [requirement, setRequirement] = useState("");
+   const [project, setProject] = useState<Project | null>(null);
+   const [task, setTask] = useState<Task | null>(null);
++  const [projects, setProjects] = useState<SavedProject[]>([]);
++  const [loadingProjects, setLoadingProjects] = useState(true);
++  const [listError, setListError] = useState("");
++  const [projectSave, setProjectSave] = useState<
++    "unsaved" | "saving" | "saved" | "failed"
++  >("unsaved");
++  const [restored, setRestored] = useState(false);
+   const [seconds, setSeconds] = useState(0);
+   const active = useRef<AbortController | null>(null);
+-  const busy = task?.status === "waiting";
++  const busy = task?.status === "waiting" || projectSave === "saving";
++
++  useEffect(() => {
++    let cancelled = false;
++    listProjects()
++      .then((saved) => {
++        if (cancelled) return;
++        setProjects(saved);
++        const id = new URLSearchParams(window.location.search).get("project");
++        const current = saved.find((item) => item.id === id);
++        if (current) {
++          setProject(current);
++          setTask({ status: "complete", result: current.result });
++          setProjectSave("saved");
++          setRestored(true);
++        } else if (id) {
++          setListError(
++            "此浏览器中找不到该项目。请确认使用原浏览器和原网址，且没有清除站点数据。",
++          );
++        }
++      })
++      .catch(() => {
++        if (!cancelled)
++          setListError(
++            "无法读取已有项目，请检查浏览器存储权限；当前无法保证保存与恢复。",
++          );
++      })
++      .finally(() => {
++        if (!cancelled) setLoadingProjects(false);
++      });
++    return () => {
++      cancelled = true;
++    };
++  }, []);
++
++  function openProject(saved: SavedProject) {
++    setProject(saved);
++    setTask({ status: "complete", result: saved.result });
++    setProjectSave("saved");
++    setRestored(true);
++    window.history.replaceState(
++      null,
++      "",
++      `?project=${encodeURIComponent(saved.id)}`,
++    );
++  }
++
++  function goHome() {
++    if (
++      projectSave === "failed" &&
++      !window.confirm("项目保存失败。离开会丢失当前生成结果，是否继续？")
++    )
++      return;
++    setProject(null);
++    setTask(null);
++    setProjectSave("unsaved");
++    window.history.replaceState(null, "", "/");
++    setLoadingProjects(true);
++    listProjects()
++      .then((saved) => {
++        setProjects(saved);
++        setListError("");
++      })
++      .catch(() =>
++        setListError("无法读取已有项目，请检查浏览器存储权限或空间。"),
++      )
++      .finally(() => setLoadingProjects(false));
++  }
+ 
+   useEffect(() => {
+     if (!busy) return;
+@@ -53,6 +132,9 @@ export default function Home() {
+     const controller = new AbortController();
+     active.current = controller;
+     setProject(nextProject);
++    setProjectSave("unsaved");
++    setRestored(false);
++    window.history.replaceState(null, "", "/");
+     setTask({ status: "waiting" });
+     setSeconds(0);
+     const timer = setTimeout(() => controller.abort(), CLIENT_TIMEOUT_MS);
+@@ -73,6 +155,28 @@ export default function Home() {
+       )
+         throw new Error("生成结果不完整，请重新发起。");
+       setTask({ status: "complete", result: data });
++      setProjectSave("saving");
++      const saved: SavedProject = {
++        ...nextProject,
++        title: nextProject.requirement.slice(0, 48),
++        result: data,
++        updatedAt: new Date().toISOString(),
++      };
++      try {
++        await saveProject(saved);
++        setProjectSave("saved");
++        setProjects((items) => [
++          saved,
++          ...items.filter((item) => item.id !== saved.id),
++        ]);
++        window.history.replaceState(
++          null,
++          "",
++          `?project=${encodeURIComponent(saved.id)}`,
++        );
++      } catch {
++        setProjectSave("failed");
++      }
+     } catch (error) {
+       setTask({
+         status: "failed",
+@@ -94,15 +198,7 @@ export default function Home() {
+         <button
+           className="brand"
+           disabled={busy}
+-          onClick={() => {
+-            if (
+-              !project ||
+-              window.confirm("返回首页会清除尚未保存的项目，是否继续？")
+-            ) {
+-              setProject(null);
+-              setTask(null);
+-            }
+-          }}
++          onClick={goHome}
+           aria-label="Atoms 首页"
+         >
+           <span className="brand-mark" aria-hidden="true">
+@@ -111,7 +207,7 @@ export default function Home() {
+           atoms<span className="brand-tag">LAB</span>
+         </button>
+         <span className="topbar-note">从一个想法，到一个可用的应用</span>
+-        <span className="session-badge">无需注册 · 当前会话</span>
++        <span className="session-badge">无需注册 · 本浏览器保存</span>
+       </header>
+       {!project ? (
+         <main className="home">
+@@ -157,7 +253,7 @@ export default function Home() {
+               </span>
+               <button
+                 className="primary-button"
+-                disabled={!requirement.trim()}
++                disabled={!requirement.trim() || loadingProjects}
+                 type="submit"
+               >
+                 开始生成 <span aria-hidden="true">↗</span>
+@@ -180,12 +276,33 @@ export default function Home() {
+             ))}
+           </div>
+           <p className="scope-note">
+-            支持无需后端的交互小工具。当前版本尚未保存项目和应用数据，刷新或离开后会丢失。
++            支持轻量前端应用。项目和应用数据自动保存在同一浏览器、同一网址（协议、主机和端口）下；请等待保存成功再离开。清除站点数据、无痕会话结束或浏览器回收存储后可能无法找回，不支持跨设备恢复。
+           </p>
++          <section className="project-list" aria-label="已有项目">
++            <h2>已有项目</h2>
++            {loadingProjects && <p role="status">正在读取已有项目…</p>}
++            {listError && (
++              <p className="save-error" role="alert">
++                {listError}
++              </p>
++            )}
++            {!loadingProjects && !listError && projects.length === 0 && (
++              <p>还没有已保存的项目。生成一个应用后，会自动出现在这里。</p>
++            )}
++            {projects.map((saved) => (
++              <button key={saved.id} onClick={() => openProject(saved)}>
++                <span>{saved.title}</span>
++                <small>
++                  更新于 {new Date(saved.updatedAt).toLocaleString("zh-CN")} ·
++                  打开项目 ↗
++                </small>
++              </button>
++            ))}
++          </section>
+           <div className="home-bottom">
+             <span>01 / 描述需求</span>
+             <span>02 / 真实生成</span>
+-            <span>03 / 操作预览</span>
++            <span>03 / 保存与重开</span>
+           </div>
+         </main>
+       ) : (
+@@ -197,7 +314,18 @@ export default function Home() {
+                 {project.requirement.slice(0, 26)}
+                 {project.requirement.length > 26 ? "…" : ""}
+               </h1>
+-              <p className="unsaved">尚未保存 · 刷新或离开后会丢失</p>
++              <p
++                className={`unsaved ${projectSave === "failed" ? "save-error" : ""}`}
++                role={projectSave === "failed" ? "alert" : "status"}
++              >
++                {projectSave === "saved"
++                  ? "项目已保存"
++                  : projectSave === "saving"
++                    ? "项目正在保存…"
++                    : projectSave === "failed"
++                      ? "项目保存失败，请保留页面并检查浏览器存储权限或空间；刷新会丢失当前结果。"
++                      : "项目尚未保存"}
++              </p>
+             </div>
+             <section className="requirement-block">
+               <h2>你的需求</h2>
+@@ -220,7 +348,9 @@ export default function Home() {
+                     ? "正在生成应用"
+                     : task?.status === "failed"
+                       ? "生成未完成"
+-                      : "代码已生成"}
++                      : restored
++                        ? "已恢复保存的应用"
++                        : "代码已生成"}
+                 </h2>
+               </div>
+               {busy && (
+@@ -247,7 +377,9 @@ export default function Home() {
+               {task?.status === "complete" && (
+                 <>
+                   <p>
+-                    现在可以在预览中操作应用。生成完成不代表所有功能都已验证。
++                    {restored
++                      ? "已读取保存的需求和代码，没有重新调用模型。"
++                      : "现在可以在预览中操作应用。生成完成不代表所有功能都已验证。"}
+                   </p>
+                   <dl>
+                     <div>
+@@ -264,31 +396,22 @@ export default function Home() {
+             </section>
+             <div className="project-footnote">
+               <p>
+-                本次项目和应用数据仅保留在当前页面。保存与恢复将在后续版本提供。
++                自动保存到本浏览器的当前网址。项目与应用数据分别显示保存结果，请等待保存成功再离开。清除站点数据、无痕会话结束或存储被回收后可能丢失，不支持跨设备找回。
+               </p>
+-              <button
+-                className="text-button"
+-                disabled={busy}
+-                onClick={() => {
+-                  if (
+-                    window.confirm(
+-                      "当前项目尚未保存。新建项目会清除当前结果，是否继续？",
+-                    )
+-                  ) {
+-                    setProject(null);
+-                    setTask(null);
+-                  }
+-                }}
+-              >
+-                ＋ 新建项目
++              <button className="text-button" disabled={busy} onClick={goHome}>
++                ＋ 新建项目 / 已有项目
+               </button>
+             </div>
+           </aside>
+-          {task?.status === "complete" ? (
++          {task?.status === "complete" && projectSave !== "saving" ? (
+             <AppPreview
+-              key={task.result.generatedAt}
++              key={project.id + task.result.generatedAt}
+               html={task.result.html}
+-              onRetry={() => void generate(project)}
++              projectId={project.id}
++              projectSaved={projectSave === "saved"}
++              onRetry={() =>
++                void generate({ ...project, id: crypto.randomUUID() })
++              }
+             />
+           ) : (
+             <section className="preview-placeholder" aria-label="预览等待区">
+diff --git a/src/components/app-preview.tsx b/src/components/app-preview.tsx
+index 5694888..366218d 100644
+--- a/src/components/app-preview.tsx
++++ b/src/components/app-preview.tsx
+@@ -1,34 +1,148 @@
+ "use client";
+ 
+-import { useEffect, useMemo, useRef, useState } from "react";
++import { useEffect, useRef, useState } from "react";
++import { previewDocument } from "@/lib/preview-document";
++import { loadApplicationData, saveApplicationData } from "@/lib/project-store";
+ 
+ export function AppPreview({
+   html,
++  projectId,
++  projectSaved,
+   onRetry,
+ }: {
+   html: string;
++  projectId: string;
++  projectSaved: boolean;
+   onRetry: () => void;
+ }) {
+   const frame = useRef<HTMLIFrameElement>(null);
++  const [document, setDocument] = useState("");
+   const [loaded, setLoaded] = useState(false);
+   const [failed, setFailed] = useState(false);
+-  const document = useMemo(() => {
+-    // Put the policy and error listener before any model-produced script.
+-    const guard = `<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src data: blob:; font-src 'none'; connect-src 'none'; frame-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'"><script>addEventListener('error',()=>parent.postMessage({type:'atoms:preview-error'},'*'));addEventListener('unhandledrejection',()=>parent.postMessage({type:'atoms:preview-error'},'*'));</script>`;
+-    return html.replace(/<head(?:\s[^>]*)?>/i, (head) => head + guard);
+-  }, [html]);
++  const [storage, setStorage] = useState("等待应用读取数据");
++  const [storageError, setStorageError] = useState(false);
+ 
+   useEffect(() => {
++    const channel = crypto.randomUUID();
++    let disposed = false;
++    let queue = Promise.resolve();
++    let pending = 0;
++    let readSucceeded = false;
++    const fail = (message: string) => {
++      if (disposed) return;
++      setStorageError(true);
++      setStorage(message);
++    };
+     const receive = (event: MessageEvent) => {
++      const message = event.data;
++      if (
++        event.source !== frame.current?.contentWindow ||
++        event.origin !== "null" ||
++        message?.channel !== channel
++      )
++        return;
++      if (message.type === "atoms:preview-error") return setFailed(true);
++      if (message.type === "atoms:storage-error")
++        return fail(
++          "应用数据保存或读取失败，请保留页面；刷新可能丢失未保存的修改。",
++        );
+       if (
+-        event.source === frame.current?.contentWindow &&
+-        event.data?.type === "atoms:preview-error"
++        message.type !== "atoms:state" ||
++        !Number.isSafeInteger(message.id) ||
++        !["load", "save"].includes(message.method)
+       )
+-        setFailed(true);
++        return;
++      const source = frame.current!.contentWindow!;
++      pending++;
++      setStorage(
++        message.method === "save"
++          ? "应用数据正在保存…暂时无法编辑，完成后可继续"
++          : "正在读取应用数据…",
++      );
++      setStorageError(false);
++      // Serialize calls so rapid changes cannot overwrite newer state with older state.
++      queue = queue.then(async () => {
++        if (disposed) return;
++        try {
++          if (!projectSaved)
++            throw new Error(
++              "项目尚未保存，应用数据无法保存。请保留页面并检查浏览器存储权限或空间。",
++            );
++          let state: unknown;
++          let hasData = false;
++          if (message.method === "load") {
++            const record = await loadApplicationData(projectId);
++            state = record?.state ?? null;
++            hasData = !!record;
++            readSucceeded = true;
++          } else {
++            if (!readSucceeded)
++              throw new Error(
++                "应用尚未成功读取数据，已阻止覆盖保存。请保留页面并检查浏览器存储。",
++              );
++            const json = JSON.stringify(message.state);
++            if (json === undefined || json.length > 1_000_000)
++              throw new Error(
++                "应用数据保存失败：仅支持不超过 1 MB 的 JSON 状态，请减少数据量。",
++              );
++            await saveApplicationData(projectId, JSON.parse(json));
++            hasData = true;
++          }
++          if (disposed) return;
++          pending--;
++          source.postMessage(
++            {
++              type: "atoms:state-result",
++              channel,
++              id: message.id,
++              ok: true,
++              state,
++            },
++            "*",
++          );
++          if (!pending) {
++            setStorageError(false);
++            setStorage(
++              hasData ? "应用数据已保存" : "应用数据已读取 · 尚无已保存数据",
++            );
++          }
++        } catch (error) {
++          pending--;
++          const detail =
++            error instanceof Error && !error.message.startsWith("浏览器")
++              ? error.message
++              : "应用数据保存或读取失败，请保留页面并检查浏览器存储权限或空间；刷新可能丢失未保存的修改。";
++          fail(detail);
++          if (!disposed)
++            source.postMessage(
++              {
++                type: "atoms:state-result",
++                channel,
++                id: message.id,
++                ok: false,
++                error: detail,
++              },
++              "*",
++            );
++        }
++      });
++    };
++    const beforeUnload = (event: BeforeUnloadEvent) => {
++      if (pending) {
++        event.preventDefault();
++        event.returnValue = "";
++      }
+     };
+     window.addEventListener("message", receive);
+-    return () => window.removeEventListener("message", receive);
+-  }, []);
++    window.addEventListener("beforeunload", beforeUnload);
++    // Mount only after the listener exists: a generated script may load state immediately.
++    setDocument(previewDocument(html, channel, window.location.origin));
++    return () => {
++      disposed = true;
++      window.removeEventListener("message", receive);
++      window.removeEventListener("beforeunload", beforeUnload);
++    };
++  }, [html, projectId, projectSaved]);
+ 
+   return (
+     <section className="preview-panel" aria-label="应用预览">
+@@ -39,20 +153,28 @@ export function AppPreview({
+         </span>
+         <span>{loaded ? "预览已加载 · 请实际操作检查" : "正在加载预览"}</span>
+       </div>
++      <p
++        className={`data-status ${storageError ? "save-error" : ""}`}
++        role={storageError ? "alert" : "status"}
++      >
++        {storage}
++      </p>
+       {failed && (
+         <div className="preview-error" role="alert">
+           预览出现运行错误，部分功能可能不可用。
+           <button onClick={onRetry}>重新生成</button>
+         </div>
+       )}
+-      <iframe
+-        ref={frame}
+-        title="生成的应用"
+-        sandbox="allow-scripts"
+-        referrerPolicy="no-referrer"
+-        srcDoc={document}
+-        onLoad={() => setLoaded(true)}
+-      />
++      {document && (
++        <iframe
++          ref={frame}
++          title="生成的应用"
++          sandbox="allow-scripts"
++          referrerPolicy="no-referrer"
++          srcDoc={document}
++          onLoad={() => setLoaded(true)}
++        />
++      )}
+     </section>
+   );
+ }
+diff --git a/tests/browser/generation.spec.ts b/tests/browser/generation.spec.ts
+index f65cf21..f142975 100644
+--- a/tests/browser/generation.spec.ts
++++ b/tests/browser/generation.spec.ts
+@@ -9,9 +9,7 @@ const result = {
+   generatedAt: "2026-09-29T08:00:00Z",
+ };
+ 
+-test("需求留在工作台，等待结束后运行隔离预览，未保存状态明确", async ({
+-  page,
+-}) => {
++test("需求留在工作台，等待结束后运行隔离预览并保存项目", async ({ page }) => {
+   let release: () => void = () => {};
+   const gate = new Promise<void>((resolve) => {
+     release = resolve;
+@@ -52,7 +50,7 @@ test("需求留在工作台，等待结束后运行隔离预览，未保存状
+       }
+     }),
+   ).toBe(false);
+-  await expect(page.getByText("尚未保存 · 刷新或离开后会丢失")).toBeVisible();
++  await expect(page.getByText("项目已保存", { exact: true })).toBeVisible();
+   await expect(page.getByText("已保存", { exact: true })).toHaveCount(0);
+ });
+ 

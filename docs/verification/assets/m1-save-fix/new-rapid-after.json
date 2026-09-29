@@ -1,0 +1,15 @@
+{
+  "projectUrl": "https://v0-test0-nine.vercel.app/?project=e5052705-847c-4858-be72-2b7d57d172c6",
+  "blocked": {
+    "platform": "应用数据正在保存…暂时无法编辑，完成后可继续",
+    "application": "保存中…"
+  },
+  "before": {
+    "application": "待办清单\n已保存\n添加\n未完成\n2\n真实新产物第一条\n真实新产物第二条\n🔒 数据仅保存在此浏览器和站点中。清除浏览器站点数据会导致待办丢失，恢复仅限于当前浏览器。",
+    "platform": "应用数据已保存"
+  },
+  "after": "待办清单\n已就绪\n添加\n未完成\n2\n真实新产物第一条\n真实新产物第二条\n🔒 数据仅保存在此浏览器和站点中。清除浏览器站点数据会导致待办丢失，恢复仅限于当前浏览器。",
+  "generationRequests": 0,
+  "sandbox": "allow-scripts",
+  "newBridge": true
+}

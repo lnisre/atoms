@@ -1,0 +1,189 @@
+--- before/README.md
++++ after/README.md
+@@ -63,6 +63,8 @@
+ - 数据库 `atoms-projects` 版本 1，`projects` 与 `applicationData` 两个 store。部署更新不改变名称、版本和数据格式。业务数据保存与项目更新时间在同一事务提交；只有事务 `complete` 后才显示保存成功。
+ - 注入脚本在生成代码之前提供 `window.atoms`。`loadState(): Promise<JSON | null>` 读取已有状态，新项目返回 null；`saveState(data): Promise<void>` 保存完整 JSON 快照（序列化长度最多 1,000,000 字符），成功后 resolve，失败时 reject。模型需先成功读取再允许修改，在每次添加、完成、删除后保存，不能将读取失败视为空数据。
+ - 应用调用经 `postMessage` 传给父页面。父页面检查当前 iframe 的 `contentWindow`、opaque origin 和每次预览的随机 channel；项目身份由父页面闭包绑定，消息不能指定其他项目。子页面也检查父窗口、平台 origin 和 channel。发送至 opaque iframe 的回复使用 `*`，同时严格限制目标窗口与 channel。
++- 每次用户修改必须在同一事件处理函数中立即提交完整快照，不能用定时器、防抖或 isSaving 分支推迟保存。`saveState` 在调用时同步将预览设为 inert 并拦截编辑事件，直到保存成功或失败才恢复交互；平台同时显示“暂时无法编辑”。保存期间点击或按键不会产生新修改，需在恢复交互后继续。生成代码不得用后台回调修改业务数据或绕过锁。
++- 新接口在每次打开项目时注入，已保存的旧 HTML 也获得上述保存锁，无需重新生成或迁移数据；已打开的旧页面需重新打开才能使用更新。它保护遵守即时保存接口的应用，不会自动修复任意生成代码的其他逻辑错误。
+ - 同一预览内读写按到达顺序执行，防止快速连续操作倒序保存；没有跨标签页冲突协调。多标签同时编辑同一项目时，最后提交的完整快照覆盖之前的内容。
+ - 项目保存与应用数据保存分别反馈。存储不可用、配额不足或事务中止时明确提示保留页面并检查权限/空间，不自动重试、不用内存结果冒充保存成功。重新生成预览使用新项目标识，保留此前已保存项目，避免新代码误读旧数据。
+ - 刷新使用 URL 的 `?project=<UUID>` 读取已有项目；关闭后重开首页可从项目列表进入。URL 只是本地记录的标识，复制链接不会把项目传给其他浏览器。
+--- before/eslint.config.mjs
++++ after/eslint.config.mjs
+@@ -12,6 +12,8 @@
+     "out/**",
+     "build/**",
+     "next-env.d.ts",
++    // Archived review/verification scripts are immutable evidence, not app source.
++    "docs/**/assets/**",
+   ]),
+ ]);
+ 
+--- before/src/app/api/generate/route.ts
++++ after/src/app/api/generate/route.ts
+@@ -9,7 +9,7 @@
+ const systemPrompt = `You build lightweight frontend applications from the user's requirements.
+ Return ONLY one complete HTML document, starting with <!DOCTYPE html> and ending with </html>. Include explicit head and body tags, inline CSS in style and vanilla JavaScript in script. No markdown or explanation.
+ Implement the requested interactions fully, with accessible labels, keyboard support and responsive layout. Match the user's language. Keep the implementation concise.
+-The document runs inside an iframe with sandbox="allow-scripts" and an opaque origin. It has NO direct storage or network access. The platform injects window.atoms BEFORE your scripts. Use its fixed Promise-based API for ALL application business data: await window.atoms.loadState() returns the last saved JSON state, or null for a new project; await window.atoms.saveState(jsonData) saves the whole state and resolves ONLY after storage commits. Do not implement, redefine or mock this API. On startup await loadState before enabling interactions; restore saved state exactly (including completed items and deletions), use defaults only when the result is null. If reading fails, show an error and keep editing disabled, never overwrite unread data. After EVERY user mutation (including add, complete, delete), automatically call saveState with the complete current state. Catch errors and show them honestly; show saved only after the Promise resolves. Use JSON-compatible data, at most 1 MB. Never send project IDs or postMessage yourself; only use window.atoms. Do not use localStorage, sessionStorage, IndexedDB, cookies, fetch, external images, fonts, scripts, stylesheets, CDN, imports, packages, forms that navigate, popups or parent document access. Explain that recovery is limited to this browser and site, with site data retained. No backend, login or external services. Use inline SVG or CSS for graphics.
++The document runs inside an iframe with sandbox="allow-scripts" and an opaque origin. It has NO direct storage or network access. The platform injects window.atoms BEFORE your scripts. Use its fixed Promise-based API for ALL application business data: await window.atoms.loadState() returns the last saved JSON state, or null for a new project; await window.atoms.saveState(jsonData) saves the whole state and resolves ONLY after storage commits. Do not implement, redefine or mock this API. On startup await loadState before enabling interactions; restore saved state exactly (including completed items and deletions), use defaults only when the result is null. If reading fails, show an error and keep editing disabled, never overwrite unread data. After EVERY user mutation (including add, complete, delete), call saveState with the complete current state synchronously in that same event handler, before any await, timer, debounce or other deferred work. The platform makes the preview inert and blocks editing events until saveState settles; do not bypass this lock or mutate business data from timers, asynchronous callbacks or background work. Use one async mutation handler: update state, render, show saving, await saveState(snapshot), then show saved; catch and display failures. Do not queue, debounce or skip saves with an isSaving flag. Do not independently enable editing while a save is pending. Catch errors and show them honestly; show saved only after the Promise resolves. Use JSON-compatible data, at most 1 MB. Never send project IDs or postMessage yourself; only use window.atoms. Do not use localStorage, sessionStorage, IndexedDB, cookies, fetch, external images, fonts, scripts, stylesheets, CDN, imports, packages, forms that navigate, popups or parent document access. Explain that recovery is limited to this browser and site, with site data retained. No backend, login or external services. Use inline SVG or CSS for graphics.
+ For any requested capability outside this environment, explain the limitation honestly inside the app; never simulate successful backend operations. Render user-entered text with textContent, not HTML interpolation. Do not use form elements or submit events (sandbox blocks them); use type="button" click handlers and input keydown for Enter. Use actual event handlers for the requested actions.`;
+ 
+ function failure(error: string, status: number) {
+--- before/src/components/app-preview.tsx
++++ after/src/components/app-preview.tsx
+@@ -55,7 +55,9 @@
+       const source = frame.current!.contentWindow!;
+       pending++;
+       setStorage(
+-        message.method === "save" ? "应用数据正在保存…" : "正在读取应用数据…",
++        message.method === "save"
++          ? "应用数据正在保存…暂时无法编辑，完成后可继续"
++          : "正在读取应用数据…",
+       );
+       setStorageError(false);
+       // Serialize calls so rapid changes cannot overwrite newer state with older state.
+--- before/src/lib/preview-document.ts
++++ after/src/lib/preview-document.ts
+@@ -5,6 +5,23 @@
+   const guard = `<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src data: blob:; font-src 'none'; connect-src 'none'; frame-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'"><script>(()=>{
+     const {channel,origin}=${config};
+     const pending=new Map();let sequence=0;
++    let saves=0,lockedBody,wasInert=false,focused;
++    // Lock synchronously at the API boundary, including for previously saved HTML.
++    // React/parent message delivery is too late to stop the next application event.
++    function lock(){
++      if(saves++!==0)return;
++      lockedBody=document.body;focused=document.activeElement;
++      if(lockedBody){wasInert=lockedBody.inert;lockedBody.inert=true;}
++    }
++    function unlock(){
++      if(--saves!==0)return;
++      if(lockedBody)lockedBody.inert=wasInert;
++      if(focused?.isConnected)focused.focus({preventScroll:true});
++    }
++    // Also guard handlers in modal dialogs (which can escape ancestor inertness).
++    for(const type of ['click','dblclick','pointerdown','pointerup','mousedown','mouseup','keydown','keyup','beforeinput','input','change','submit','touchstart','touchend','drop']){
++      addEventListener(type,event=>{if(saves){event.preventDefault();event.stopImmediatePropagation();}},{capture:true,passive:false});
++    }
+     const send=(message)=>parent.postMessage({...message,channel},origin);
+     const report=()=>send({type:'atoms:preview-error'});
+     addEventListener('error',report);addEventListener('unhandledrejection',report);
+@@ -16,12 +33,18 @@
+       if(m.ok)request.resolve(m.state);else request.reject(new Error(m.error));
+     });
+     function request(method,state){
++      if(method==='save')lock();
+       return new Promise((resolve,reject)=>{
+         const id=++sequence;
+-        const timer=setTimeout(()=>{pending.delete(id);send({type:'atoms:storage-error'});reject(new Error('应用数据读写超时，请保留页面并检查浏览器存储。'));},25000);
+-        pending.set(id,{resolve,reject,timer});
++        const finish=(callback,value)=>{
++          callback(value);
++          // Let the application's await/catch update its state before new input.
++          if(method==='save')queueMicrotask(unlock);
++        };
++        const timer=setTimeout(()=>{pending.delete(id);send({type:'atoms:storage-error'});finish(reject,new Error('应用数据读写超时，请保留页面并检查浏览器存储。'));},25000);
++        pending.set(id,{resolve:value=>finish(resolve,value),reject:error=>finish(reject,error),timer});
+         try{send({type:'atoms:state',id,method,state});}
+-        catch(error){clearTimeout(timer);pending.delete(id);send({type:'atoms:storage-error'});reject(error);}
++        catch(error){clearTimeout(timer);pending.delete(id);send({type:'atoms:storage-error'});finish(reject,error);}
+       });
+     }
+     Object.defineProperty(window,'atoms',{value:Object.freeze({loadState:()=>request('load'),saveState:state=>request('save',state)}),writable:false,configurable:false});
+--- before/tests/browser/persistence.spec.ts
++++ after/tests/browser/persistence.spec.ts
+@@ -157,6 +157,11 @@
+   await expect(page.getByText("应用数据已保存", { exact: true })).toHaveCount(
+     0,
+   );
++  await expect(page.frameLocator("iframe").locator("body")).not.toHaveAttribute(
++    "inert",
++    "",
++  );
++  await page.frameLocator("iframe").getByLabel("任务", { exact: true }).fill("失败后仍可编辑");
+   await page.reload();
+   await expect(
+     page.frameLocator("iframe").getByText("已经保存", { exact: true }),
+--- before/tests/browser/save-race.spec.ts
++++ after/tests/browser/save-race.spec.ts
+@@ -0,0 +1,78 @@
++import { readFileSync } from "node:fs";
++import { expect, test } from "@playwright/test";
++
++// Unmodified model output that originally lost the second edit on immediate close.
++const html = readFileSync("docs/verification/assets/issue-3/production-todo.html", "utf8");
++
++test("真实旧产物保存时禁止新修改，下一次修改确认后立即关闭可恢复", async ({ page, context }) => {
++  let generations = 0;
++  context.on("request", request => { if (request.url().endsWith("/api/generate")) generations++; });
++  await page.route("**/api/generate", route => route.fulfill({ json: {
++    html, model: "real-artifact-replay", durationMs: 1, generatedAt: "test",
++  } }));
++  await page.goto("/");
++  await page.getByLabel("你想做什么？").fill("连续操作保存回归");
++  await page.getByRole("button", { name: "开始生成" }).click();
++  const f = page.frameLocator("iframe");
++  await expect(f.getByLabel("新任务描述")).toBeEnabled();
++  // Hold the real transaction until the test has attempted another edit. No timing guess.
++  await page.evaluate(() => {
++    const original = IDBDatabase.prototype.transaction;
++    let held = false;
++    const control = window as typeof window & { releaseSave?: boolean };
++    IDBDatabase.prototype.transaction = function (...args: Parameters<typeof original>) {
++      const tx = original.apply(this, args);
++      if (args[1] === "readwrite" && !held) {
++        held = true;
++        const store = tx.objectStore("applicationData");
++        const pump = () => {
++          store.get("__test_keepalive__").onsuccess = () => { if (!control.releaseSave) pump(); };
++        };
++        pump();
++      }
++      return tx;
++    };
++  });
++  await f.getByLabel("新任务描述").fill("第一条已提交");
++  await f.getByRole("button", { name: "添加", exact: true }).click();
++  await expect(f.locator("body")).toHaveAttribute("inert", "");
++  await expect(page.locator(".data-status")).toContainText("暂时无法编辑");
++  // Synthetic events also cover handlers in modal dialogs, which can escape inert.
++  await f.locator("#taskInput").evaluate((input: HTMLInputElement) => { input.value = "保存中不可修改"; });
++  await f.locator("#addBtn").dispatchEvent("click");
++  await f.locator("#taskInput").dispatchEvent("keydown", { key: "Enter" });
++  await expect(f.getByText("保存中不可修改", { exact: true })).toHaveCount(0);
++  await expect(f.locator("#saveStatus")).not.toHaveText("已保存");
++  await page.evaluate(() => { (window as typeof window & { releaseSave: boolean }).releaseSave = true; });
++  await expect(f.locator("#saveStatus")).toHaveText("已保存");
++  await expect(f.locator("body")).not.toHaveAttribute("inert", "");
++  await f.getByLabel("新任务描述").fill("第二条最新修改");
++  const url = page.url();
++  let closed!: () => void;
++  const close = new Promise<void>(resolve => { closed = resolve; });
++  await page.exposeFunction("closeAtSaved", async () => { await page.close(); closed(); });
++  await page.evaluate(() => {
++    addEventListener("message", event => {
++      if (event.data?.type === "test:saved") void (window as typeof window & { closeAtSaved: () => Promise<void> }).closeAtSaved();
++    });
++  });
++  await f.locator("#saveStatus").evaluate(status => {
++    const observer = new MutationObserver(() => {
++      if (status.textContent === "已保存") {
++        observer.disconnect();
++        parent.postMessage({ type: "test:saved" }, "*");
++      }
++    });
++    observer.observe(status, { childList: true, characterData: true, subtree: true });
++  });
++  // The page deliberately closes during this click's navigation bookkeeping.
++  await f.getByRole("button", { name: "添加", exact: true }).click({ noWaitAfter: true });
++  await close;
++  const reopened = await context.newPage();
++  await reopened.goto(url);
++  const rf = reopened.frameLocator("iframe");
++  await expect(rf.getByText("第一条已提交", { exact: true })).toBeVisible();
++  await expect(rf.getByText("第二条最新修改", { exact: true })).toBeVisible();
++  await expect(rf.getByText("保存中不可修改", { exact: true })).toHaveCount(0);
++  expect(generations).toBe(1);
++});

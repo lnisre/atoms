@@ -1,0 +1,13 @@
+ M CONTEXT.md
+ M README.md
+ M src/app/api/generate/route.ts
+ M src/app/globals.css
+ M src/app/page.tsx
+ M src/components/app-preview.tsx
+ M tests/browser/generation.spec.ts
+?? docs/adr/0004-m2-conversational-updates.md
+?? docs/verification/assets/issue-3/
+?? docs/verification/issue-3.md
+?? src/lib/preview-document.ts
+?? src/lib/project-store.ts
+?? tests/browser/persistence.spec.ts

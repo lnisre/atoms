@@ -1,0 +1,42 @@
+
+Running 1 test using 1 worker
+
+(node:21202) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+
+
+[1/1] tests/browser/save-race.spec.ts:7:5 › 真实旧产物保存时禁止新修改，下一次修改确认后立即关闭可恢复
+  1) tests/browser/save-race.spec.ts:7:5 › 真实旧产物保存时禁止新修改，下一次修改确认后立即关闭可恢复 ───────────────────────────
+
+    Error: expect(locator).toHaveAttribute(expected) failed
+
+    Locator:  locator('iframe').contentFrame().locator('body')
+    Expected: ""
+    Received: serializes to the same string
+    Timeout:  5000ms
+
+    Call log:
+      - Expect "toHaveAttribute" locator('iframe').contentFrame().locator('body') with timeout 5000ms
+      - waiting for locator('iframe').contentFrame().locator('body')
+        14 × locator resolved to <body>…</body>
+           - unexpected value "null"
+
+
+      36 |   await f.getByLabel("新任务描述").fill("第一条已提交");
+      37 |   await f.getByRole("button", { name: "添加", exact: true }).click();
+    > 38 |   await expect(f.locator("body")).toHaveAttribute("inert", "");
+         |                                   ^
+      39 |   await expect(page.locator(".data-status")).toContainText("暂时无法编辑");
+      40 |   // Synthetic events also cover handlers in modal dialogs, which can escape inert.
+      41 |   await f.locator("#taskInput").evaluate((input: HTMLInputElement) => { input.value = "保存中不可修改"; });
+        at /Users/gaowenlong/Desktop/atoms/tests/browser/save-race.spec.ts:38:35
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/save-race-真实旧产物保存时禁止新修改，下一次修改确认后立即关闭可恢复/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/save-race-真实旧产物保存时禁止新修改，下一次修改确认后立即关闭可恢复/error-context.md
+
+
+  1 failed
+    tests/browser/save-race.spec.ts:7:5 › 真实旧产物保存时禁止新修改，下一次修改确认后立即关闭可恢复 ────────────────────────────

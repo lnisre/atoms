@@ -1,0 +1,50 @@
+[
+  {
+    "name": "old",
+    "htmlSha256": "2bb927ba0451c64a30b54ae47b1da723813f90da0ce2e3c2cb4900b2f9f533b4",
+    "blocked": {
+      "bodyInert": true,
+      "status": "正在保存…",
+      "platform": "应用数据正在保存…暂时无法编辑，完成后可继续",
+      "unacceptedAbsent": true
+    },
+    "projectUrl": "https://v0-test0-nine.vercel.app/?project=12718f44-d434-4fb6-8e3b-44a06491943c",
+    "beforeClose": {
+      "visible": "待办清单\n轻量任务 · 自动保存\n已保存\n添加\n未完成\n2\n第一条\n第二条\n已完成\n0\n🎯 还没有完成的任务\n数据仅保存在此浏览器和站点\n清除站点数据将丢失所有任务，恢复范围仅限于当前浏览器。",
+      "platform": "应用数据已保存"
+    },
+    "immediateCloseRetainsBoth": true,
+    "abortUnlocks": true,
+    "failureManualNextMutationSaves": true,
+    "refresh": true,
+    "requestsBeforeRestart": 1,
+    "fullRestart": true,
+    "recoveryGenerations": 0,
+    "sandbox": "allow-scripts",
+    "currentBridge": true
+  },
+  {
+    "name": "new",
+    "htmlSha256": "08d073287eb68695e1e5744d5ab764f1ee41fcfd2bbeff063577b7b31dbbe719",
+    "blocked": {
+      "bodyInert": true,
+      "status": "保存中…",
+      "platform": "应用数据正在保存…暂时无法编辑，完成后可继续",
+      "unacceptedAbsent": true
+    },
+    "projectUrl": "https://v0-test0-nine.vercel.app/?project=6b2239de-6569-4227-a4e8-b87f3ed88e54",
+    "beforeClose": {
+      "visible": "待办清单\n已保存\n添加\n未完成\n2\n第一条\n第二条\n🔒 数据仅保存在此浏览器和站点中。清除浏览器站点数据会导致待办丢失，恢复仅限于当前浏览器。",
+      "platform": "应用数据已保存"
+    },
+    "immediateCloseRetainsBoth": true,
+    "abortUnlocks": true,
+    "failureManualNextMutationSaves": true,
+    "refresh": true,
+    "requestsBeforeRestart": 1,
+    "fullRestart": true,
+    "recoveryGenerations": 0,
+    "sandbox": "allow-scripts",
+    "currentBridge": true
+  }
+]
