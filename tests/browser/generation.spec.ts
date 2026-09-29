@@ -33,10 +33,12 @@ test("需求留在工作台，等待结束后运行隔离预览并保存项目",
     "sandbox",
     "allow-scripts",
   );
+  // Use keyboard activation for the generation/iframe contract; first pointer
+  // delivery can be lost by Chrome (event evidence in issue-10 verification).
   await page
     .frameLocator("iframe")
     .getByRole("button", { name: "0", exact: true })
-    .click();
+    .press("Enter");
   await expect(
     page.frameLocator("iframe").getByRole("button", { name: "1", exact: true }),
   ).toBeVisible();

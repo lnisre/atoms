@@ -1,0 +1,30 @@
+[
+  {
+    "path": "src/app/page.tsx",
+    "sha256": "4208561e83d5e28012dc84f02ab663a5e9e09f1fe7819994a700b2c1c6ec1cdf"
+  },
+  {
+    "path": "src/app/globals.css",
+    "sha256": "7bdc5692ad5f8bf483b15a5608d30efb917cd699b9c70d746976bd4638f40ff8"
+  },
+  {
+    "path": "src/components/app-preview.tsx",
+    "sha256": "858db2c2dd13efd1281dfdbb7251b46c9f5b5cf2e7c7181d8d78aa3f8ecb1a0b"
+  },
+  {
+    "path": "tests/browser/workbench.spec.ts",
+    "sha256": "480a2134490ea7f7d9a5287c9caa137239640b4e20301252a656b319b130f99b"
+  },
+  {
+    "path": "tests/browser/candidate.spec.ts",
+    "sha256": "1afb71f6a9e38b1807a3449271842893da6628000818ebb7da2b67aecec85494"
+  },
+  {
+    "path": "tests/browser/generation.spec.ts",
+    "sha256": "f5742bfa1ef71bfb4804dd6dcc396c54df6ca07393fa314bf1ffb7271bb1c258"
+  },
+  {
+    "path": "tests/browser/preview-document.spec.ts",
+    "sha256": "75597e8be2d128469741a9c59b74cee857b6213122a5758e0f6c43ad4078617a"
+  }
+]

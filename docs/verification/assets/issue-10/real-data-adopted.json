@@ -1,0 +1,46 @@
+{
+  "projects": [
+    {
+      "id": "c92f0af3-ba7b-43b0-8781-363f361de0c3",
+      "requirement": "做一个极简中文待办应用，标题为桌面验收待办。只有添加、完成、删除三项能力，用平台 atoms.loadState/saveState 保存。输入框标签为任务，添加按钮文字为添加，任务旁复选框切换完成，删除按钮标识对应任务。白色背景绿色按钮，布局紧凑。",
+      "title": "做一个极简中文待办应用，标题为桌面验收待办。只有添加、完成、删除三项能力，用平台 atoms.l",
+      "result": {
+        "html": "<!DOCTYPE html>\n<html lang=\"zh-CN\">\n<head>\n<meta charset=\"UTF-8\">\n<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n<title>桌面验收待办·已调整</title>\n<style>\n  * { box-sizing: border-box; }\n  body {\n    margin: 0;\n    padding: 16px;\n    font-family: system-ui, -apple-system, \"Segoe UI\", \"Microsoft YaHei\", sans-serif;\n    background: #ffffff;\n    color: #1f2937;\n  }\n  h1 {\n    font-size: 18px;\n    margin: 0 0 12px;\n    font-weight: 600;\n  }\n  .row {\n    display: flex;\n    gap: 8px;\n    margin-bottom: 8px;\n    flex-wrap: wrap;\n  }\n  label {\n    font-size: 13px;\n    display: block;\n    margin-bottom: 4px;\n    color: #374151;\n  }\n  input[type=\"text\"] {\n    flex: 1 1 160px;\n    min-width: 0;\n    padding: 8px 10px;\n    font-size: 14px;\n    border: 1px solid #d1d5db;\n    border-radius: 6px;\n    font-family: inherit;\n  }\n  input[type=\"text\"]:focus {\n    outline: 2px solid #1e3a8a;\n    outline-offset: 1px;\n    border-color: #1e3a8a;\n  }\n  button {\n    font-family: inherit;\n    font-size: 14px;\n    border: none;\n    border-radius: 6px;\n    cursor: pointer;\n  }\n  button:focus-visible {\n    outline: 2px solid #1e3a8a;\n    outline-offset: 2px;\n  }\n  .btn-add {\n    background: #1e3a8a;\n    color: #fff;\n    padding: 8px 16px;\n    font-weight: 600;\n  }\n  .btn-add:hover:not(:disabled) { background: #172554; }\n  .btn-add:disabled { background: #9fb0d0; cursor: not-allowed; }\n  .btn-del {\n    background: #fff;\n    color: #b91c1c;\n    border: 1px solid #fca5a5;\n    padding: 5px 10px;\n    font-size: 13px;\n  }\n  .btn-del:hover:not(:disabled) { background: #fef2f2; }\n  .btn-del:disabled { color: #d1d5db; border-color: #e5e7eb; cursor: not-allowed; }\n  ul {\n    list-style: none;\n    margin: 0;\n    padding: 0;\n  }\n  li {\n    display: flex;\n    align-items: center;\n    gap: 8px;\n    padding: 7px 0;\n    border-bottom: 1px solid #f3f4f6;\n  }\n  li input[type=\"checkbox\"] {\n    width: 16px;\n    height: 16px;\n    accent-color: #16a34a;\n    flex: none;\n    cursor: pointer;\n  }\n  .task-text {\n    flex: 1;\n    font-size: 14px;\n    word-break: break-word;\n    min-width: 0;\n  }\n  .done .task-text {\n    color: #9ca3af;\n    text-decoration: line-through;\n  }\n  .empty {\n    color: #9ca3af;\n    font-size: 13px;\n    padding: 8px 0;\n  }\n  .status {\n    font-size: 12px;\n    margin-top: 10px;\n    min-height: 16px;\n    color: #6b7280;\n  }\n  .status.error { color: #b91c1c; }\n  .status.saved { color: #16a34a; }\n  .note {\n    font-size: 12px;\n    color: #6b7280;\n    margin-top: 12px;\n    line-height: 1.5;\n    border-top: 1px dashed #e5e7eb;\n    padding-top: 8px;\n  }\n</style>\n</head>\n<body>\n  <h1>桌面验收待办·已调整</h1>\n\n  <div>\n    <label for=\"taskInput\">任务</label>\n    <div class=\"row\">\n      <input type=\"text\" id=\"taskInput\" placeholder=\"输入任务内容\" autocomplete=\"off\" disabled>\n      <button type=\"button\" class=\"btn-add\" id=\"addBtn\" disabled>添加</button>\n    </div>\n  </div>\n\n  <ul id=\"taskList\" aria-live=\"polite\"></ul>\n\n  <div class=\"status\" id=\"status\" role=\"status\" aria-live=\"polite\"></div>\n\n  <p class=\"note\">\n    数据通过平台存储接口保存在本浏览器与本站点。恢复仅限于此浏览器和此站点，站点数据会被保留。无后端与登录，无法跨设备同步。\n  </p>\n\n<script>\n(function () {\n  var listEl = document.getElementById('taskList');\n  var inputEl = document.getElementById('taskInput');\n  var addBtn = document.getElementById('addBtn');\n  var statusEl = document.getElementById('status');\n\n  var tasks = [];\n  var ready = false;\n\n  function setStatus(text, cls) {\n    statusEl.textContent = text || '';\n    statusEl.className = 'status' + (cls ? ' ' + cls : '');\n  }\n\n  function setEditing(enabled) {\n    inputEl.disabled = !enabled;\n    addBtn.disabled = !enabled;\n  }\n\n  function render() {\n    listEl.textContent = '';\n    if (tasks.length === 0) {\n      var empty = document.createElement('li');\n      empty.className = 'empty';\n      empty.textContent = '暂无任务。';\n      listEl.appendChild(empty);\n      return;\n    }\n    tasks.forEach(function (task) {\n      var li = document.createElement('li');\n      if (task.done) li.className = 'done';\n\n      var cb = document.createElement('input');\n      cb.type = 'checkbox';\n      cb.checked = !!task.done;\n      cb.disabled = !ready;\n      cb.setAttribute('aria-label', '完成：' + task.text);\n      cb.addEventListener('change', function () {\n        handleToggle(task.id);\n      });\n\n      var span = document.createElement('span');\n      span.className = 'task-text';\n      span.textContent = task.text;\n\n      var del = document.createElement('button');\n      del.type = 'button';\n      del.className = 'btn-del';\n      del.textContent = '删除';\n      del.disabled = !ready;\n      del.setAttribute('aria-label', '删除任务：' + task.text);\n      del.addEventListener('click', function () {\n        handleDelete(task.id);\n      });\n\n      li.appendChild(cb);\n      li.appendChild(span);\n      li.appendChild(del);\n      listEl.appendChild(li);\n    });\n  }\n\n  function snapshot() {\n    return { tasks: tasks.map(function (t) {\n      return { id: t.id, text: t.text, done: !!t.done };\n    }) };\n  }\n\n  async function handleAdd() {\n    var text = inputEl.value.trim();\n    if (!text) return;\n    tasks.push({ id: Date.now() + '-' + Math.random().toString(36).slice(2, 8), text: text, done: false });\n    inputEl.value = '';\n    await runMutation();\n  }\n\n  async function handleToggle(id) {\n    var t = tasks.find(function (x) { return x.id === id; });\n    if (!t) return;\n    t.done = !t.done;\n    await runMutation();\n  }\n\n  async function handleDelete(id) {\n    tasks = tasks.filter(function (x) { return x.id !== id; });\n    await runMutation();\n  }\n\n  async function runMutation() {\n    render();\n    setEditing(false);\n    setStatus('保存中…', '');\n    var data = snapshot();\n    try {\n      await window.atoms.saveState(data);\n      setStatus('已更新', 'saved');\n      setEditing(true);\n      render();\n    } catch (e) {\n      setStatus('保存失败：' + (e && e.message ? e.message : '未知错误'), 'error');\n      setEditing(false);\n    }\n  }\n\n  inputEl.addEventListener('keydown', function (ev) {\n    if (ev.key === 'Enter') {\n      ev.preventDefault();\n      if (ready && !addBtn.disabled) handleAdd();\n    }\n  });\n\n  addBtn.addEventListener('click', function () {\n    handleAdd();\n  });\n\n  async function init() {\n    setEditing(false);\n    render();\n    setStatus('正在读取数据…', '');\n    try {\n      var saved = await window.atoms.loadState();\n      if (saved && Array.isArray(saved.tasks)) {\n        tasks = saved.tasks.map(function (t) {\n          return {\n            id: t && t.id != null ? t.id : Date.now() + '-' + Math.random().toString(36).slice(2, 8),\n            text: t && t.text != null ? String(t.text) : '',\n            done: !!(t && t.done)\n          };\n        });\n      } else {\n        tasks = [];\n      }\n      ready = true;\n      render();\n      setEditing(true);\n      setStatus('', '');\n      inputEl.focus();\n    } catch (e) {\n      ready = false;\n      setEditing(false);\n      render();\n      setStatus('读取失败：' + (e && e.message ? e.message : '未知错误') + '。编辑已禁用，未覆盖已存数据。', 'error');\n    }\n  }\n\n  init();\n})();\n</script>\n</body>\n</html>",
+        "model": "deepseek-flash",
+        "durationMs": 5834,
+        "generatedAt": "2026-09-29T16:16:45.979Z"
+      },
+      "updatedAt": "2026-09-29T16:18:40.016Z",
+      "modificationRecords": [
+        {
+          "id": "cff9d870-7bcf-41cc-b04d-680d906aae02",
+          "adoptedAt": "2026-09-29T16:18:39.709Z",
+          "requests": [
+            "只把页面标题改为桌面验收待办·已调整，并把添加按钮改为深蓝色。保留全部添加、完成、删除和平台数据接口行为，保持原数据结构与旧记录兼容。"
+          ],
+          "summary": "已采用 1 轮调整后的候选代码，继续使用原项目正式数据。"
+        }
+      ]
+    }
+  ],
+  "applicationData": [
+    {
+      "projectId": "c92f0af3-ba7b-43b0-8781-363f361de0c3",
+      "state": {
+        "tasks": [
+          {
+            "id": "1790698559652-mgz5lb",
+            "text": "正式任务甲",
+            "done": true
+          },
+          {
+            "id": "1790698559736-po8qa2",
+            "text": "正式任务乙",
+            "done": false
+          }
+        ]
+      },
+      "updatedAt": "2026-09-29T16:18:40.016Z"
+    }
+  ]
+}

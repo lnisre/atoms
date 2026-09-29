@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
 import type { TrialData } from "@/lib/trial-data";
 import { previewDocument } from "@/lib/preview-document";
 import { loadApplicationData, saveApplicationData } from "@/lib/project-store";
@@ -11,12 +11,14 @@ export function AppPreview({
   projectSaved,
   onRetry,
   trial,
+  actions,
 }: {
   html: string;
   projectId: string;
   projectSaved: boolean;
   onRetry: () => void;
   trial?: TrialData;
+  actions?: ReactNode;
 }) {
   const frame = useRef<HTMLIFrameElement>(null);
   const [document, setDocument] = useState("");
@@ -166,6 +168,7 @@ export function AppPreview({
 
   return (
     <section className="preview-panel" aria-label="应用预览">
+      {actions}
       <div className="preview-toolbar">
         <span>
           <span className="status-dot" />

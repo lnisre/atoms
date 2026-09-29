@@ -1,0 +1,12 @@
+
+Running 5 tests using 1 worker
+
+(node:45710) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  1 tests/browser/generation.spec.ts:12:5 › 需求留在工作台，等待结束后运行隔离预览并保存项目 (976ms)
+  ✓  2 tests/browser/generation.spec.ts:59:5 › 失败后保留需求并允许手动重新生成 (454ms)
+  ✓  3 tests/browser/generation.spec.ts:84:5 › 浏览器等待超时后结束等待并提供重试 (385ms)
+  ✓  4 tests/browser/generation.spec.ts:102:5 › 生成应用运行异常时提示而非宣称验证通过 (509ms)
+  ✓  5 tests/browser/generation.spec.ts:125:5 › 手机首页不横向溢出，示例只填入需求 (363ms)
+
+  5 passed (4.3s)

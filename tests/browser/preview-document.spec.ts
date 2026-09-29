@@ -47,12 +47,15 @@ document.getElementById('error').onclick=()=>{throw new Error('controlled runtim
       try { await fetch("https://example.com/blocked-by-platform"); return false; }
       catch { return true; }
     })).toBe(true);
-    await frame.locator("#action").click();
+    // This checks bridge/commit behavior, not compositor hit testing. Passive event
+    // probes recorded occasional first pointer clicks landing on the outer iframe
+    // (see issue-10 verification); keyboard activation keeps this seam deterministic.
+    await frame.locator("#action").press("Enter");
     await expect(frame.locator("#action")).toHaveText("1");
     await expect(page.locator(".data-status")).toHaveText("应用数据已保存");
     await page.reload();
     await expect(frame.locator("#action")).toHaveText("1");
-    await frame.locator("#error").click();
+    await frame.locator("#error").press("Enter");
     await expect(page.locator(".preview-error")).toContainText("预览出现运行错误");
   });
 }
