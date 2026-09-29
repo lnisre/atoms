@@ -1,0 +1,44 @@
+{
+  "realModelCalls": 2,
+  "controlledModelCalls": 0,
+  "model": "deepseek-flash",
+  "requestedModel": "deepseek-v4-flash",
+  "countsByPhase": {
+    "initial": {
+      "load": 1
+    },
+    "initial-use": {
+      "save": 5
+    },
+    "initial-refresh": {
+      "load": 1
+    },
+    "modification": {
+      "load": 1
+    },
+    "trial": {
+      "save": 4
+    },
+    "adoption": {
+      "load": 1
+    },
+    "official-use": {
+      "save": 3
+    },
+    "official-refresh": {
+      "load": 1
+    },
+    "complete-reopen": {
+      "load": 1
+    },
+    "reopened-use": {
+      "save": 2
+    }
+  },
+  "formalSaveRequests": 10,
+  "trialSaveRequests": 4,
+  "loadRequests": 6,
+  "recoveryModelRequests": 0,
+  "runtimeErrors": [],
+  "scope": "fresh persistent profile, production origin, original model HTML, no request routing or business-state injection"
+}

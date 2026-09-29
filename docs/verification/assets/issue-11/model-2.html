@@ -1,0 +1,679 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>M3 阅读记录验收</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+      background: #f4f6fa;
+      color: #1e293b;
+      padding: 1.5rem;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+    }
+
+    .app {
+      max-width: 720px;
+      width: 100%;
+      background: #ffffff;
+      border-radius: 24px;
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
+      padding: 2rem 1.8rem 2.2rem;
+      transition: opacity 0.15s;
+    }
+
+    h1 {
+      font-size: 1.8rem;
+      font-weight: 500;
+      letter-spacing: 0.5px;
+      margin-bottom: 1.8rem;
+      color: #0f172a;
+      border-left: 6px solid #3b82f6;
+      padding-left: 1rem;
+    }
+
+    .form-panel {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.8rem;
+      margin-bottom: 1.2rem;
+      background: #f8fafc;
+      padding: 1.2rem 1.2rem;
+      border-radius: 18px;
+      align-items: center;
+    }
+
+    .form-panel input {
+      flex: 1 1 200px;
+      padding: 0.85rem 1.2rem;
+      border: 1.5px solid #e2e8f0;
+      border-radius: 40px;
+      font-size: 1rem;
+      background: white;
+      outline: none;
+      transition: border 0.2s;
+      min-width: 0;
+    }
+
+    .form-panel input:focus {
+      border-color: #3b82f6;
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+    }
+
+    .form-panel select {
+      padding: 0.85rem 1.6rem 0.85rem 1rem;
+      border: 1.5px solid #e2e8f0;
+      border-radius: 40px;
+      font-size: 1rem;
+      background: white;
+      outline: none;
+      cursor: pointer;
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23475569' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 1rem center;
+      background-size: 1.1rem;
+    }
+
+    .form-panel select:focus {
+      border-color: #3b82f6;
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+    }
+
+    .form-panel button {
+      padding: 0.85rem 1.8rem;
+      background: #3b82f6;
+      color: white;
+      border: none;
+      border-radius: 40px;
+      font-size: 1rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background 0.2s, box-shadow 0.2s;
+      white-space: nowrap;
+      box-shadow: 0 4px 8px rgba(59, 130, 246, 0.25);
+    }
+
+    .form-panel button:hover {
+      background: #2563eb;
+      box-shadow: 0 6px 12px rgba(59, 130, 246, 0.35);
+    }
+
+    .form-panel button:disabled {
+      opacity: 0.5;
+      pointer-events: none;
+      box-shadow: none;
+      background: #94a3b8;
+    }
+
+    .filter-panel {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.8rem;
+      align-items: center;
+      margin-bottom: 1.4rem;
+      padding: 0 0.2rem;
+    }
+
+    .filter-panel label {
+      font-size: 0.85rem;
+      color: #64748b;
+      margin-right: 0.2rem;
+    }
+
+    .filter-panel select {
+      padding: 0.5rem 1.8rem 0.5rem 0.9rem;
+      border: 1.5px solid #e2e8f0;
+      border-radius: 30px;
+      font-size: 0.9rem;
+      background: white;
+      outline: none;
+      cursor: pointer;
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23475569' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 0.6rem center;
+      background-size: 0.9rem;
+    }
+
+    .filter-panel select:focus {
+      outline: 2px solid #3b82f6;
+      outline-offset: 1px;
+    }
+
+    .filter-panel select:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .status-message {
+      font-size: 0.9rem;
+      min-height: 1.5rem;
+      color: #475569;
+      margin-bottom: 0.7rem;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      transition: color 0.2s;
+    }
+
+    .status-message.error {
+      color: #b91c1c;
+    }
+
+    .book-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+
+    .book-item {
+      background: #f8fafc;
+      border-radius: 16px;
+      padding: 0.9rem 1.2rem;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.75rem;
+      border: 1px solid #eef2f6;
+      transition: background 0.15s;
+    }
+
+    .book-title {
+      font-size: 1.05rem;
+      font-weight: 500;
+      color: #1e293b;
+      word-break: break-word;
+      flex: 1 1 160px;
+      min-width: 0;
+    }
+
+    .book-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      align-items: center;
+    }
+
+    .book-actions select {
+      padding: 0.45rem 1.8rem 0.45rem 0.9rem;
+      border-radius: 30px;
+      border: 1.5px solid #cbd5e1;
+      background-color: white;
+      font-size: 0.9rem;
+      cursor: pointer;
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23475569' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 0.6rem center;
+      background-size: 0.9rem;
+    }
+
+    .book-actions select:focus {
+      outline: 2px solid #3b82f6;
+      outline-offset: 1px;
+    }
+
+    .rating-select.rated {
+      color: #b45309;
+      border-color: #fcd34d;
+      font-weight: 500;
+    }
+
+    .book-actions select:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
+    .delete-btn {
+      background: transparent;
+      border: none;
+      border-radius: 30px;
+      padding: 0.45rem 0.9rem;
+      font-size: 0.9rem;
+      color: #b91c1c;
+      cursor: pointer;
+      transition: background 0.15s, color 0.15s;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.25rem;
+      font-weight: 500;
+      border: 1px solid transparent;
+    }
+
+    .delete-btn:hover {
+      background: #fee2e2;
+      border-color: #fca5a5;
+    }
+
+    .delete-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      background: transparent;
+      border-color: transparent;
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 2.5rem 1rem;
+      color: #94a3b8;
+      background: #f8fafc;
+      border-radius: 18px;
+      font-size: 1rem;
+    }
+
+    .recovery-note {
+      font-size: 0.8rem;
+      color: #64748b;
+      margin-top: 2rem;
+      text-align: center;
+      border-top: 1px solid #e2e8f0;
+      padding-top: 1.2rem;
+      line-height: 1.5;
+    }
+
+    .recovery-note svg {
+      display: inline-block;
+      vertical-align: middle;
+      margin-right: 0.3rem;
+      width: 14px;
+      height: 14px;
+      stroke: #64748b;
+    }
+  </style>
+</head>
+<body>
+  <div class="app" id="app">
+    <h1>M3 阅读记录验收</h1>
+
+    <div class="form-panel">
+      <input type="text" id="bookTitleInput" placeholder="输入书名" aria-label="书名" autocomplete="off" />
+      <select id="statusSelect" aria-label="阅读状态">
+        <option value="想读">想读</option>
+        <option value="在读">在读</option>
+        <option value="已读">已读</option>
+      </select>
+      <button type="button" id="addBtn" aria-label="添加阅读记录">添加记录</button>
+    </div>
+
+    <div class="filter-panel">
+      <label for="filterStatus">状态筛选</label>
+      <select id="filterStatus" aria-label="按阅读状态筛选">
+        <option value="all">全部</option>
+        <option value="想读">想读</option>
+        <option value="在读">在读</option>
+        <option value="已读">已读</option>
+      </select>
+      <label for="filterRating">评分筛选</label>
+      <select id="filterRating" aria-label="按评分筛选">
+        <option value="all">全部</option>
+        <option value="none">未评分</option>
+        <option value="5">5 分</option>
+        <option value="4">4 分</option>
+        <option value="3">3 分</option>
+        <option value="2">2 分</option>
+        <option value="1">1 分</option>
+      </select>
+    </div>
+
+    <div class="status-message" id="statusMessage" role="status" aria-live="polite"></div>
+
+    <ul class="book-list" id="bookList"></ul>
+
+    <div class="recovery-note">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="10"></circle>
+        <line x1="12" y1="16" x2="12" y2="12"></line>
+        <line x1="12" y1="8" x2="12.01" y2="8"></line>
+      </svg>
+      数据仅保存在此浏览器与站点中，更换设备或清除站点数据后无法恢复。
+    </div>
+  </div>
+
+  <script>
+    (function() {
+      'use strict';
+
+      // ---------- 状态 ----------
+      let books = [];                 // { id, title, status, rating }
+      let appReady = false;
+
+      // 筛选条件
+      let filterStatus = 'all';
+      let filterRating = 'all';
+
+      // DOM 元素
+      const titleInput = document.getElementById('bookTitleInput');
+      const statusSelect = document.getElementById('statusSelect');
+      const addBtn = document.getElementById('addBtn');
+      const bookList = document.getElementById('bookList');
+      const statusMessage = document.getElementById('statusMessage');
+      const filterStatusSel = document.getElementById('filterStatus');
+      const filterRatingSel = document.getElementById('filterRating');
+
+      // ---------- 工具函数 ----------
+      function generateId() {
+        return Date.now() + '-' + Math.random().toString(36).substring(2, 9);
+      }
+
+      function enableEditing(enable) {
+        appReady = enable;
+        titleInput.disabled = !enable;
+        statusSelect.disabled = !enable;
+        addBtn.disabled = !enable;
+        filterStatusSel.disabled = !enable;
+        filterRatingSel.disabled = !enable;
+        // 列表中的控件在渲染时根据 appReady 设置 disabled
+      }
+
+      function showStatusMessage(text, isError = false) {
+        statusMessage.textContent = text;
+        statusMessage.classList.toggle('error', isError);
+      }
+
+      function clearStatusMessage() {
+        statusMessage.textContent = '';
+        statusMessage.classList.remove('error');
+      }
+
+      function filteredBooks() {
+        return books.filter(b => {
+          if (filterStatus !== 'all' && b.status !== filterStatus) return false;
+          if (filterRating !== 'all') {
+            if (filterRating === 'none') {
+              if (b.rating !== null) return false;
+            } else {
+              if (b.rating !== Number(filterRating)) return false;
+            }
+          }
+          return true;
+        });
+      }
+
+      // ---------- 渲染 ----------
+      function render() {
+        bookList.innerHTML = '';
+
+        if (books.length === 0) {
+          const emptyLi = document.createElement('li');
+          emptyLi.className = 'empty-state';
+          emptyLi.textContent = '还没有阅读记录，添加一本吧';
+          bookList.appendChild(emptyLi);
+          return;
+        }
+
+        const visible = filteredBooks();
+
+        if (visible.length === 0) {
+          const emptyLi = document.createElement('li');
+          emptyLi.className = 'empty-state';
+          emptyLi.textContent = '没有符合筛选条件的记录';
+          bookList.appendChild(emptyLi);
+          return;
+        }
+
+        const fragment = document.createDocumentFragment();
+
+        visible.forEach(book => {
+          const li = document.createElement('li');
+          li.className = 'book-item';
+          li.dataset.id = book.id;
+
+          // 书名
+          const titleSpan = document.createElement('span');
+          titleSpan.className = 'book-title';
+          titleSpan.textContent = book.title;   // 安全渲染
+
+          // 操作容器
+          const actionsDiv = document.createElement('div');
+          actionsDiv.className = 'book-actions';
+
+          // 状态下拉
+          const statusSel = document.createElement('select');
+          statusSel.className = 'status-select';
+          statusSel.setAttribute('aria-label', `修改《${book.title}》的阅读状态`);
+          ['想读', '在读', '已读'].forEach(st => {
+            const opt = document.createElement('option');
+            opt.value = st;
+            opt.textContent = st;
+            if (st === book.status) opt.selected = true;
+            statusSel.appendChild(opt);
+          });
+          statusSel.disabled = !appReady;
+          statusSel.addEventListener('change', (e) => {
+            if (!appReady) return;
+            const newStatus = e.target.value;
+            if (newStatus === book.status) return;
+            handleUpdateStatus(book.id, newStatus);
+          });
+
+          // 评分下拉
+          const ratingSel = document.createElement('select');
+          ratingSel.className = 'rating-select' + (book.rating !== null ? ' rated' : '');
+          ratingSel.setAttribute('aria-label', `修改《${book.title}》的评分`);
+          const ratingOptions = [
+            { value: '', label: '未评分' },
+            { value: '5', label: '★★★★★ 5 分' },
+            { value: '4', label: '★★★★ 4 分' },
+            { value: '3', label: '★★★ 3 分' },
+            { value: '2', label: '★★ 2 分' },
+            { value: '1', label: '★ 1 分' }
+          ];
+          ratingOptions.forEach(ro => {
+            const opt = document.createElement('option');
+            opt.value = ro.value;
+            opt.textContent = ro.label;
+            if ((book.rating === null && ro.value === '') || (book.rating !== null && ro.value === String(book.rating))) {
+              opt.selected = true;
+            }
+            ratingSel.appendChild(opt);
+          });
+          ratingSel.disabled = !appReady;
+          ratingSel.addEventListener('change', (e) => {
+            if (!appReady) return;
+            const raw = e.target.value;
+            const newRating = raw === '' ? null : Number(raw);
+            if (newRating === book.rating) return;
+            handleUpdateRating(book.id, newRating);
+          });
+
+          // 删除按钮
+          const delBtn = document.createElement('button');
+          delBtn.type = 'button';
+          delBtn.className = 'delete-btn';
+          delBtn.setAttribute('aria-label', `删除《${book.title}》`);
+          delBtn.textContent = '删除';
+          delBtn.disabled = !appReady;
+          delBtn.addEventListener('click', () => {
+            if (!appReady) return;
+            handleDeleteBook(book.id);
+          });
+
+          actionsDiv.appendChild(statusSel);
+          actionsDiv.appendChild(ratingSel);
+          actionsDiv.appendChild(delBtn);
+          li.appendChild(titleSpan);
+          li.appendChild(actionsDiv);
+          fragment.appendChild(li);
+        });
+
+        bookList.appendChild(fragment);
+      }
+
+      // ---------- 同步保存 (唯一入口) ----------
+      async function saveStateAndUpdateUI(snapshot, successMessage = '已更新') {
+        showStatusMessage('正在保存…', false);
+        const previousReady = appReady;
+        enableEditing(false);
+        render();
+
+        try {
+          await window.atoms.saveState(snapshot);
+          // 保存成功
+          showStatusMessage(successMessage, false);
+          if (previousReady) {
+            enableEditing(true);
+            render();
+          } else {
+            render();
+          }
+        } catch (err) {
+          console.error('保存失败:', err);
+          showStatusMessage('保存失败：' + (err && err.message ? err.message : '未知错误'), true);
+          if (previousReady) {
+            enableEditing(true);
+            render();
+          } else {
+            render();
+          }
+        }
+      }
+
+      // ---------- 事件处理 ----------
+      async function handleAddBook() {
+        if (!appReady) return;
+        const title = titleInput.value.trim();
+        if (!title) {
+          showStatusMessage('请输入书名', true);
+          return;
+        }
+
+        const status = statusSelect.value;
+        const newBook = {
+          id: generateId(),
+          title: title,
+          status: status,
+          rating: null
+        };
+
+        // 更新内存状态
+        books.push(newBook);
+        // 立即渲染
+        render();
+        // 清空输入框
+        titleInput.value = '';
+        titleInput.focus();
+
+        const snapshot = JSON.parse(JSON.stringify(books));
+        await saveStateAndUpdateUI(snapshot, '记录已添加');
+      }
+
+      async function handleUpdateStatus(bookId, newStatus) {
+        if (!appReady) return;
+        const book = books.find(b => b.id === bookId);
+        if (!book || book.status === newStatus) return;
+
+        book.status = newStatus;
+        render();
+
+        const snapshot = JSON.parse(JSON.stringify(books));
+        await saveStateAndUpdateUI(snapshot, '状态已更新');
+      }
+
+      async function handleUpdateRating(bookId, newRating) {
+        if (!appReady) return;
+        const book = books.find(b => b.id === bookId);
+        if (!book || book.rating === newRating) return;
+
+        book.rating = newRating;
+        render();
+
+        const snapshot = JSON.parse(JSON.stringify(books));
+        await saveStateAndUpdateUI(snapshot, '评分已更新');
+      }
+
+      async function handleDeleteBook(bookId) {
+        if (!appReady) return;
+        const index = books.findIndex(b => b.id === bookId);
+        if (index === -1) return;
+
+        books.splice(index, 1);
+        render();
+
+        const snapshot = JSON.parse(JSON.stringify(books));
+        await saveStateAndUpdateUI(snapshot, '记录已删除');
+      }
+
+      // 添加按钮点击
+      addBtn.addEventListener('click', handleAddBook);
+
+      // 输入框回车
+      titleInput.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          handleAddBook();
+        }
+      });
+
+      // 筛选变化（纯 UI，不涉及业务数据保存）
+      filterStatusSel.addEventListener('change', (e) => {
+        filterStatus = e.target.value;
+        render();
+      });
+      filterRatingSel.addEventListener('change', (e) => {
+        filterRating = e.target.value;
+        render();
+      });
+
+      // ---------- 启动初始化 ----------
+      async function initialize() {
+        // 先禁用所有编辑
+        enableEditing(false);
+        render();
+
+        showStatusMessage('正在加载数据…', false);
+
+        try {
+          const savedState = await window.atoms.loadState();
+
+          if (savedState === null || savedState === undefined) {
+            books = [];
+          } else if (Array.isArray(savedState)) {
+            books = savedState
+              .filter(item => item && typeof item.title === 'string' &&
+                              typeof item.status === 'string' && typeof item.id === 'string')
+              .map(item => ({
+                id: item.id,
+                title: item.title,
+                status: item.status,
+                rating: (typeof item.rating === 'number' && item.rating >= 1 && item.rating <= 5)
+                  ? item.rating
+                  : (item.rating === null ? null : null)
+              }));
+          } else {
+            console.error('保存的数据格式异常，应为数组:', savedState);
+            showStatusMessage('数据格式异常，无法读取。请检查浏览器存储。编辑已禁用。', true);
+            enableEditing(false);
+            render();
+            return;
+          }
+
+          // 先启用编辑，再渲染，确保恢复的记录控件可交互
+          enableEditing(true);
+          render();
+          clearStatusMessage();
+        } catch (err) {
+          console.error('加载失败:', err);
+          showStatusMessage('读取数据失败：' + (err && err.message ? err.message : '未知错误') + '。为保护数据，编辑已禁用。', true);
+          enableEditing(false);
+          render();
+        }
+      }
+
+      initialize();
+    })();
+  </script>
+</body>
+</html>

@@ -1,0 +1,11 @@
+await generate('做一个中文阅读记录应用，标题为「M3 阅读记录验收」。可以输入书名并选择阅读状态（想读、在读、已读）添加记录；列表中可以修改阅读状态、删除记录。初始不要示例数据。请保存我的阅读记录，重开后继续使用。界面简洁，适合桌面工作台内使用。');
+generate('做一个中文阅读记录应用，标题为「M3 阅读记录验收」。可以输入书名并选择阅读状态（想读、在读、已读）添加记录；列表中可以修改阅读状态、删除记录。初始不要示例数据。请保存我的阅读记录，重开后继续使用。界面简洁，适合桌面工作台内使用。')
+page.frameLocator('iframe').locator('body').ariaSnapshot()
+
+(async()=>eval((await import('node:fs')).readFileSync(out+'/initial-use.js','utf8')))()
+(async()=>{phase='initial-refresh';await page.reload();await expect(page.getByText('应用数据已保存',{exact:true})).toBeVisible();await capture('initial-refreshed');console.log(await page.frameLocator('iframe').locator('body').ariaSnapshot());await expect(page.frameLocator('iframe').getByRole('combobox',{name:'修改《验收甲·三体》的阅读状态',exact:true})).toBeEnabled();})()
+(async()=>{phase='modification';return generate((await import('node:fs')).readFileSync(out+'/request-modification.txt','utf8').trim(),true);})()
+page.frameLocator('iframe').locator('body').ariaSnapshot()
+(async()=>eval((await import('node:fs')).readFileSync(out+'/trial.js','utf8')))()
+(async()=>eval((await import('node:fs')).readFileSync(out+'/adopt-use.js','utf8')))()
+(async()=>eval((await import('node:fs')).readFileSync(out+'/recovery.js','utf8')))()

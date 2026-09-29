@@ -1,0 +1,11 @@
+{
+  "defaults": "both unrated",
+  "rating5Filter": "A only",
+  "combinedInProgress5": "empty",
+  "combinedCompleted5": "A only",
+  "unratedFilter": "B only",
+  "trialAdded": "仅试用·不应写回",
+  "trialDeleted": "验收甲·三体",
+  "trialStatus": "B completed",
+  "officialProjectAndDataUnchanged": true
+}

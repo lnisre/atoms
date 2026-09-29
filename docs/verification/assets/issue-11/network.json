@@ -1,0 +1,206 @@
+[
+  {
+    "phase": "initial",
+    "time": 1790701557298,
+    "method": "GET",
+    "url": "https://v0-test0-nine.vercel.app/"
+  },
+  {
+    "phase": "initial",
+    "time": 1790701557827,
+    "method": "GET",
+    "url": "https://v0-test0-nine.vercel.app/_next/static/immutable/chunks/0_los6q0t8tgc.css"
+  },
+  {
+    "phase": "initial",
+    "time": 1790701557827,
+    "method": "GET",
+    "url": "https://v0-test0-nine.vercel.app/_next/static/immutable/chunks/0xeop_s68yvsc.js"
+  },
+  {
+    "phase": "initial",
+    "time": 1790701557827,
+    "method": "GET",
+    "url": "https://v0-test0-nine.vercel.app/_next/static/immutable/chunks/0b2y7-7cjq2rn.js"
+  },
+  {
+    "phase": "initial",
+    "time": 1790701557827,
+    "method": "GET",
+    "url": "https://v0-test0-nine.vercel.app/_next/static/immutable/chunks/1ktpsjd8n6di6.js"
+  },
+  {
+    "phase": "initial",
+    "time": 1790701557827,
+    "method": "GET",
+    "url": "https://v0-test0-nine.vercel.app/_next/static/immutable/chunks/turbopack-1wod_2qcd1ckt.js"
+  },
+  {
+    "phase": "initial",
+    "time": 1790701557827,
+    "method": "GET",
+    "url": "https://v0-test0-nine.vercel.app/_next/static/immutable/chunks/2fqbv9jtl8g95.js"
+  },
+  {
+    "phase": "initial",
+    "time": 1790701557827,
+    "method": "GET",
+    "url": "https://v0-test0-nine.vercel.app/_next/static/immutable/chunks/0razidvcdwn-d.js"
+  },
+  {
+    "phase": "initial",
+    "time": 1790701584268,
+    "method": "POST",
+    "url": "https://v0-test0-nine.vercel.app/api/generate"
+  },
+  {
+    "phase": "initial-refresh",
+    "time": 1790701733244,
+    "method": "GET",
+    "url": "https://v0-test0-nine.vercel.app/?project=370fc6dc-723f-4329-b6d2-9af9c8e1b8f6"
+  },
+  {
+    "phase": "initial-refresh",
+    "time": 1790701733525,
+    "method": "GET",
+    "url": "https://v0-test0-nine.vercel.app/_next/static/immutable/chunks/0_los6q0t8tgc.css"
+  },
+  {
+    "phase": "initial-refresh",
+    "time": 1790701733528,
+    "method": "GET",
+    "url": "https://v0-test0-nine.vercel.app/_next/static/immutable/chunks/0xeop_s68yvsc.js"
+  },
+  {
+    "phase": "initial-refresh",
+    "time": 1790701733529,
+    "method": "GET",
+    "url": "https://v0-test0-nine.vercel.app/_next/static/immutable/chunks/0b2y7-7cjq2rn.js"
+  },
+  {
+    "phase": "initial-refresh",
+    "time": 1790701733529,
+    "method": "GET",
+    "url": "https://v0-test0-nine.vercel.app/_next/static/immutable/chunks/1ktpsjd8n6di6.js"
+  },
+  {
+    "phase": "initial-refresh",
+    "time": 1790701733529,
+    "method": "GET",
+    "url": "https://v0-test0-nine.vercel.app/_next/static/immutable/chunks/turbopack-1wod_2qcd1ckt.js"
+  },
+  {
+    "phase": "initial-refresh",
+    "time": 1790701733529,
+    "method": "GET",
+    "url": "https://v0-test0-nine.vercel.app/_next/static/immutable/chunks/2fqbv9jtl8g95.js"
+  },
+  {
+    "phase": "initial-refresh",
+    "time": 1790701733529,
+    "method": "GET",
+    "url": "https://v0-test0-nine.vercel.app/_next/static/immutable/chunks/0razidvcdwn-d.js"
+  },
+  {
+    "phase": "modification",
+    "time": 1790701764951,
+    "method": "POST",
+    "url": "https://v0-test0-nine.vercel.app/api/generate"
+  },
+  {
+    "phase": "official-refresh",
+    "time": 1790702066867,
+    "method": "GET",
+    "url": "https://v0-test0-nine.vercel.app/?project=370fc6dc-723f-4329-b6d2-9af9c8e1b8f6"
+  },
+  {
+    "phase": "official-refresh",
+    "time": 1790702068087,
+    "method": "GET",
+    "url": "https://v0-test0-nine.vercel.app/_next/static/immutable/chunks/0_los6q0t8tgc.css"
+  },
+  {
+    "phase": "official-refresh",
+    "time": 1790702068089,
+    "method": "GET",
+    "url": "https://v0-test0-nine.vercel.app/_next/static/immutable/chunks/0xeop_s68yvsc.js"
+  },
+  {
+    "phase": "official-refresh",
+    "time": 1790702068089,
+    "method": "GET",
+    "url": "https://v0-test0-nine.vercel.app/_next/static/immutable/chunks/0b2y7-7cjq2rn.js"
+  },
+  {
+    "phase": "official-refresh",
+    "time": 1790702068089,
+    "method": "GET",
+    "url": "https://v0-test0-nine.vercel.app/_next/static/immutable/chunks/1ktpsjd8n6di6.js"
+  },
+  {
+    "phase": "official-refresh",
+    "time": 1790702068090,
+    "method": "GET",
+    "url": "https://v0-test0-nine.vercel.app/_next/static/immutable/chunks/turbopack-1wod_2qcd1ckt.js"
+  },
+  {
+    "phase": "official-refresh",
+    "time": 1790702068090,
+    "method": "GET",
+    "url": "https://v0-test0-nine.vercel.app/_next/static/immutable/chunks/2fqbv9jtl8g95.js"
+  },
+  {
+    "phase": "official-refresh",
+    "time": 1790702068090,
+    "method": "GET",
+    "url": "https://v0-test0-nine.vercel.app/_next/static/immutable/chunks/0razidvcdwn-d.js"
+  },
+  {
+    "phase": "complete-reopen",
+    "time": 1790702070236,
+    "method": "GET",
+    "url": "https://v0-test0-nine.vercel.app/"
+  },
+  {
+    "phase": "complete-reopen",
+    "time": 1790702070747,
+    "method": "GET",
+    "url": "https://v0-test0-nine.vercel.app/_next/static/immutable/chunks/0_los6q0t8tgc.css"
+  },
+  {
+    "phase": "complete-reopen",
+    "time": 1790702070749,
+    "method": "GET",
+    "url": "https://v0-test0-nine.vercel.app/_next/static/immutable/chunks/0xeop_s68yvsc.js"
+  },
+  {
+    "phase": "complete-reopen",
+    "time": 1790702070749,
+    "method": "GET",
+    "url": "https://v0-test0-nine.vercel.app/_next/static/immutable/chunks/0b2y7-7cjq2rn.js"
+  },
+  {
+    "phase": "complete-reopen",
+    "time": 1790702070749,
+    "method": "GET",
+    "url": "https://v0-test0-nine.vercel.app/_next/static/immutable/chunks/1ktpsjd8n6di6.js"
+  },
+  {
+    "phase": "complete-reopen",
+    "time": 1790702070749,
+    "method": "GET",
+    "url": "https://v0-test0-nine.vercel.app/_next/static/immutable/chunks/turbopack-1wod_2qcd1ckt.js"
+  },
+  {
+    "phase": "complete-reopen",
+    "time": 1790702070749,
+    "method": "GET",
+    "url": "https://v0-test0-nine.vercel.app/_next/static/immutable/chunks/2fqbv9jtl8g95.js"
+  },
+  {
+    "phase": "complete-reopen",
+    "time": 1790702070749,
+    "method": "GET",
+    "url": "https://v0-test0-nine.vercel.app/_next/static/immutable/chunks/0razidvcdwn-d.js"
+  }
+]
