@@ -1,0 +1,63 @@
+{
+  "checkedAt": "2026-09-30T10:28:11.516Z",
+  "baseCommit": "01e2e13255d6e5a1b2d59af751c08e477cde0e66",
+  "production": {
+    "id": "dpl_68LXQuH7oBNajTAM7JJKZMpVAJRH",
+    "readyState": "READY",
+    "url": "v0-test0-eg8fth3l9-lnisres-projects.vercel.app",
+    "meta": {
+      "sourceCommit": "19302fad1e97193050a4ed3eaf017ef89c24405c",
+      "ticket": "18",
+      "actor": "codex",
+      "lambdaRuntimeStats": "{\"nodejs\":2}",
+      "bundler": "turbopack"
+    }
+  },
+  "publicHome": {
+    "status": 200,
+    "finalUrl": "https://v0-test0-nine.vercel.app/",
+    "expectedHomeText": true
+  },
+  "originalEvidenceManifest": {
+    "files": 52,
+    "mismatches": []
+  },
+  "newModelCalls": 0,
+  "browserTestsRerun": false,
+  "newReferenceScreenshots": 0,
+  "sourceChanges": false,
+  "toolAttempts": [
+    {
+      "operation": "cua.getState",
+      "result": "Mac locked; automatic unlock failed; native apps unavailable"
+    },
+    {
+      "operation": "cua.createBrowserTab iab atoms.dev/zh/dashboard",
+      "result": "timeout after 30 seconds; kernel reset"
+    },
+    {
+      "operation": "cua.getState retry",
+      "result": "timeout after 30 seconds; kernel reset"
+    }
+  ],
+  "archivedScreenshots": {
+    "generating-0.png": {
+      "source": "/tmp/atoms-issue18/generating-0.png",
+      "sha256": "08eb018061f804665ab847cb11356b2ac1b84193a7037b0912918f168f244a5f",
+      "dimensions": [
+        1440,
+        900
+      ],
+      "newCapture": false
+    },
+    "reopened-1440.png": {
+      "source": "/tmp/atoms-issue18/reopened-1440.png",
+      "sha256": "8476f182f4dcb234360e00654a7676652d5ff112d7213a633f65ee907baf31de",
+      "dimensions": [
+        1440,
+        900
+      ],
+      "newCapture": false
+    }
+  }
+}
