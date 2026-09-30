@@ -1,0 +1,2527 @@
+{
+  "provenance": "Original same-task browser result; agent-authored synthetic counter request; fresh isolated context. No token, signature ticket or headers exported.",
+  "artifact": "cloud-counter-1.html",
+  "request": {
+    "protocol": "atoms-qa/1",
+    "taskId": "2f65bc55-0c84-44b4-9c6a-dd3f22433d34",
+    "requestId": "22e457c7-49c9-4b72-a2bf-130390dd8a54",
+    "codeHash": "0c6309e9e89eefb9a83c471a3c1625875e2a876d78b27c30a0555f69bb9c4975",
+    "planHash": "554f3872a40ae869018703d59c89b2d686ab9250830c20e7ba4f0d7f3eddfdfe",
+    "deadline": 1790796104352,
+    "scenarios": [
+      {
+        "id": "platform-timing",
+        "seed": {
+          "count": 7
+        },
+        "loadDelayMs": 500,
+        "saveDelayMs": 500,
+        "checks": [
+          {
+            "id": "platform-timing-0",
+            "label": "platform-timing 1",
+            "command": {
+              "op": "assert",
+              "selector": "button:not(:disabled),input:not(:disabled),select:not(:disabled),textarea:not(:disabled)",
+              "property": "count",
+              "equals": 0
+            }
+          },
+          {
+            "id": "platform-timing-1",
+            "label": "platform-timing 2",
+            "command": {
+              "op": "bridge",
+              "property": "saveAttempts",
+              "equals": 0
+            }
+          },
+          {
+            "id": "platform-timing-2",
+            "label": "platform-timing 3",
+            "command": {
+              "op": "wait",
+              "ms": 700
+            }
+          },
+          {
+            "id": "platform-timing-3",
+            "label": "platform-timing 4",
+            "command": {
+              "op": "click",
+              "selector": "#btn-increment"
+            }
+          },
+          {
+            "id": "platform-timing-4",
+            "label": "platform-timing 5",
+            "command": {
+              "op": "assert",
+              "selector": "body",
+              "property": "inert",
+              "equals": true
+            }
+          },
+          {
+            "id": "platform-timing-5",
+            "label": "platform-timing 6",
+            "command": {
+              "op": "assert",
+              "selector": "[data-atoms-status]",
+              "property": "text",
+              "equals": "正在保存"
+            }
+          },
+          {
+            "id": "platform-timing-6",
+            "label": "platform-timing 7",
+            "command": {
+              "op": "click",
+              "selector": "#btn-increment",
+              "probeWhileInert": true
+            }
+          },
+          {
+            "id": "platform-timing-7",
+            "label": "platform-timing 8",
+            "command": {
+              "op": "data",
+              "path": [],
+              "equals": {
+                "count": 7
+              }
+            }
+          },
+          {
+            "id": "platform-timing-8",
+            "label": "platform-timing 9",
+            "command": {
+              "op": "wait",
+              "ms": 700
+            }
+          },
+          {
+            "id": "platform-timing-9",
+            "label": "platform-timing 10",
+            "command": {
+              "op": "assert",
+              "selector": "body",
+              "property": "inert",
+              "equals": false
+            }
+          },
+          {
+            "id": "platform-timing-10",
+            "label": "platform-timing 11",
+            "command": {
+              "op": "assert",
+              "selector": "[data-atoms-status]",
+              "property": "text",
+              "equals": "已保存"
+            }
+          },
+          {
+            "id": "platform-timing-11",
+            "label": "platform-timing 12",
+            "command": {
+              "op": "data",
+              "path": [
+                "count"
+              ],
+              "equals": 8
+            }
+          },
+          {
+            "id": "platform-timing-12",
+            "label": "platform-timing 13",
+            "command": {
+              "op": "bridge",
+              "property": "saveAttempts",
+              "equals": 1
+            }
+          },
+          {
+            "id": "platform-timing-13",
+            "label": "platform-timing 14",
+            "command": {
+              "op": "bridge",
+              "property": "commits",
+              "equals": 1
+            }
+          }
+        ]
+      },
+      {
+        "id": "platform-read-failure",
+        "seed": {
+          "count": 7
+        },
+        "fault": "read",
+        "checks": [
+          {
+            "id": "platform-read-failure-0",
+            "label": "platform-read-failure 1",
+            "command": {
+              "op": "wait",
+              "ms": 700
+            }
+          },
+          {
+            "id": "platform-read-failure-1",
+            "label": "platform-read-failure 2",
+            "command": {
+              "op": "assert",
+              "selector": "[data-atoms-status]",
+              "property": "text",
+              "equals": "读取失败"
+            }
+          },
+          {
+            "id": "platform-read-failure-2",
+            "label": "platform-read-failure 3",
+            "command": {
+              "op": "assert",
+              "selector": "button:not(:disabled),input:not(:disabled),select:not(:disabled),textarea:not(:disabled)",
+              "property": "count",
+              "equals": 0
+            }
+          },
+          {
+            "id": "platform-read-failure-3",
+            "label": "platform-read-failure 4",
+            "command": {
+              "op": "bridge",
+              "property": "saveAttempts",
+              "equals": 0
+            }
+          },
+          {
+            "id": "platform-read-failure-4",
+            "label": "platform-read-failure 5",
+            "command": {
+              "op": "bridge",
+              "property": "commits",
+              "equals": 0
+            }
+          },
+          {
+            "id": "platform-read-failure-5",
+            "label": "platform-read-failure 6",
+            "command": {
+              "op": "data",
+              "path": [],
+              "equals": {
+                "count": 7
+              }
+            }
+          }
+        ]
+      },
+      {
+        "id": "platform-save-failure",
+        "seed": {
+          "count": 7
+        },
+        "fault": "save",
+        "saveDelayMs": 500,
+        "checks": [
+          {
+            "id": "platform-save-failure-0",
+            "label": "platform-save-failure 1",
+            "command": {
+              "op": "wait",
+              "ms": 700
+            }
+          },
+          {
+            "id": "platform-save-failure-1",
+            "label": "platform-save-failure 2",
+            "command": {
+              "op": "click",
+              "selector": "#btn-increment"
+            }
+          },
+          {
+            "id": "platform-save-failure-2",
+            "label": "platform-save-failure 3",
+            "command": {
+              "op": "assert",
+              "selector": "body",
+              "property": "inert",
+              "equals": true
+            }
+          },
+          {
+            "id": "platform-save-failure-3",
+            "label": "platform-save-failure 4",
+            "command": {
+              "op": "wait",
+              "ms": 700
+            }
+          },
+          {
+            "id": "platform-save-failure-4",
+            "label": "platform-save-failure 5",
+            "command": {
+              "op": "assert",
+              "selector": "[data-atoms-status]",
+              "property": "text",
+              "equals": "保存失败"
+            }
+          },
+          {
+            "id": "platform-save-failure-5",
+            "label": "platform-save-failure 6",
+            "command": {
+              "op": "data",
+              "path": [],
+              "equals": {
+                "count": 7
+              }
+            }
+          },
+          {
+            "id": "platform-save-failure-6",
+            "label": "platform-save-failure 7",
+            "command": {
+              "op": "bridge",
+              "property": "saveAttempts",
+              "equals": 1
+            }
+          },
+          {
+            "id": "platform-save-failure-7",
+            "label": "platform-save-failure 8",
+            "command": {
+              "op": "bridge",
+              "property": "rejectedSaves",
+              "equals": 1
+            }
+          },
+          {
+            "id": "platform-save-failure-8",
+            "label": "platform-save-failure 9",
+            "command": {
+              "op": "bridge",
+              "property": "commits",
+              "equals": 0
+            }
+          }
+        ]
+      },
+      {
+        "id": "init-zero",
+        "seed": {
+          "count": 0
+        },
+        "checks": [
+          {
+            "id": "platform-startup-wait",
+            "label": "等待检查页面读取合成数据",
+            "command": {
+              "op": "wait",
+              "ms": 150
+            }
+          },
+          {
+            "id": "1",
+            "label": "init-zero: no saved data renders 0 with exactly one output and enabled controls",
+            "command": {
+              "op": "assert",
+              "selector": "#counter-value",
+              "property": "text",
+              "equals": "0"
+            }
+          },
+          {
+            "id": "2",
+            "label": "init-zero: only one output element exists",
+            "command": {
+              "op": "assert",
+              "selector": "output",
+              "property": "count",
+              "equals": 1
+            }
+          },
+          {
+            "id": "3",
+            "label": "init-zero: no saved data means count absent in parent data",
+            "command": {
+              "op": "data",
+              "path": [
+                "count"
+              ],
+              "equals": null
+            }
+          }
+        ]
+      },
+      {
+        "id": "increment",
+        "seed": {
+          "count": 7
+        },
+        "checks": [
+          {
+            "id": "platform-startup-wait",
+            "label": "等待检查页面读取合成数据",
+            "command": {
+              "op": "wait",
+              "ms": 150
+            }
+          },
+          {
+            "id": "1",
+            "label": "初始渲染：单页加载后 output 显示 seed 的 count=7，并存在且仅存在一个 output 元素",
+            "command": {
+              "op": "assert",
+              "selector": "#counter-value",
+              "property": "text",
+              "equals": "7"
+            }
+          },
+          {
+            "id": "2",
+            "label": "页面中 <output> 元素数量为 1",
+            "command": {
+              "op": "assert",
+              "selector": "output",
+              "property": "count",
+              "equals": 1
+            }
+          },
+          {
+            "id": "3",
+            "label": "点击增加按钮后 output 显示 8",
+            "command": {
+              "op": "click",
+              "selector": "#btn-increment"
+            }
+          },
+          {
+            "id": "platform-settle-3",
+            "label": "等待业务操作及合成数据桥完成",
+            "command": {
+              "op": "wait",
+              "ms": 150
+            }
+          },
+          {
+            "id": "4",
+            "label": "等待保存完成并观察 output 已更新为 seed+1",
+            "command": {
+              "op": "wait",
+              "ms": 100
+            }
+          },
+          {
+            "id": "5",
+            "label": "增加后 output 文本为 8",
+            "command": {
+              "op": "assert",
+              "selector": "#counter-value",
+              "property": "text",
+              "equals": "8"
+            }
+          },
+          {
+            "id": "6",
+            "label": "增加后持久化数据 count 已保存为 8",
+            "command": {
+              "op": "data",
+              "path": [
+                "count"
+              ],
+              "equals": 8
+            }
+          },
+          {
+            "id": "7",
+            "label": "增加一次同步触发一次 saveState 调用",
+            "command": {
+              "op": "bridge",
+              "property": "saveAttempts",
+              "equals": 1
+            }
+          },
+          {
+            "id": "8",
+            "label": "增加一次成功提交一次持久化",
+            "command": {
+              "op": "bridge",
+              "property": "commits",
+              "equals": 1
+            }
+          },
+          {
+            "id": "9",
+            "label": "再次点击增加按钮",
+            "command": {
+              "op": "click",
+              "selector": "#btn-increment"
+            }
+          },
+          {
+            "id": "platform-settle-9",
+            "label": "等待业务操作及合成数据桥完成",
+            "command": {
+              "op": "wait",
+              "ms": 150
+            }
+          },
+          {
+            "id": "10",
+            "label": "等待第二次保存完成",
+            "command": {
+              "op": "wait",
+              "ms": 100
+            }
+          },
+          {
+            "id": "11",
+            "label": "第二次增加后 output 文本为 9",
+            "command": {
+              "op": "assert",
+              "selector": "#counter-value",
+              "property": "text",
+              "equals": "9"
+            }
+          },
+          {
+            "id": "12",
+            "label": "第二次增加后持久化数据 count 为 9",
+            "command": {
+              "op": "data",
+              "path": [
+                "count"
+              ],
+              "equals": 9
+            }
+          },
+          {
+            "id": "13",
+            "label": "累计两次增加共触发两次 saveState",
+            "command": {
+              "op": "bridge",
+              "property": "saveAttempts",
+              "equals": 2
+            }
+          }
+        ]
+      },
+      {
+        "id": "decrement",
+        "seed": {
+          "count": 5
+        },
+        "checks": [
+          {
+            "id": "platform-startup-wait",
+            "label": "等待检查页面读取合成数据",
+            "command": {
+              "op": "wait",
+              "ms": 150
+            }
+          },
+          {
+            "id": "1",
+            "label": "初始加载后显示 seed 的 count=5",
+            "command": {
+              "op": "assert",
+              "selector": "#counter-value",
+              "property": "text",
+              "equals": "5"
+            }
+          },
+          {
+            "id": "2",
+            "label": "仅有单个 output 元素",
+            "command": {
+              "op": "assert",
+              "selector": "output",
+              "property": "count",
+              "equals": 1
+            }
+          },
+          {
+            "id": "3",
+            "label": "页面只有一个 output（备选选择器）",
+            "command": {
+              "op": "assert",
+              "selector": "#counter-value",
+              "property": "count",
+              "equals": 1
+            }
+          },
+          {
+            "id": "4",
+            "label": "点击“减少”前 bridge 保存次数为 0",
+            "command": {
+              "op": "bridge",
+              "property": "saveAttempts",
+              "equals": 0
+            }
+          },
+          {
+            "id": "5",
+            "label": "点击“减少”按钮",
+            "command": {
+              "op": "click",
+              "selector": "#btn-decrement"
+            }
+          },
+          {
+            "id": "platform-settle-5",
+            "label": "等待业务操作及合成数据桥完成",
+            "command": {
+              "op": "wait",
+              "ms": 150
+            }
+          },
+          {
+            "id": "6",
+            "label": "等待业务结算",
+            "command": {
+              "op": "wait",
+              "ms": 100
+            }
+          },
+          {
+            "id": "7",
+            "label": "点击后 output 显示 4（5-1）",
+            "command": {
+              "op": "assert",
+              "selector": "#counter-value",
+              "property": "text",
+              "equals": "4"
+            }
+          },
+          {
+            "id": "8",
+            "label": "持久化父数据 count 保存为 4",
+            "command": {
+              "op": "data",
+              "path": [
+                "count"
+              ],
+              "equals": 4
+            }
+          },
+          {
+            "id": "9",
+            "label": "保存调用计数为 1",
+            "command": {
+              "op": "bridge",
+              "property": "saveAttempts",
+              "equals": 1
+            }
+          }
+        ]
+      },
+      {
+        "id": "reset-zero",
+        "seed": {
+          "count": 7
+        },
+        "checks": [
+          {
+            "id": "platform-startup-wait",
+            "label": "等待检查页面读取合成数据",
+            "command": {
+              "op": "wait",
+              "ms": 150
+            }
+          },
+          {
+            "id": "1",
+            "label": "reset-zero: initial value from seed 7 is rendered",
+            "command": {
+              "op": "assert",
+              "selector": "#counter-value",
+              "property": "text",
+              "equals": "7"
+            }
+          },
+          {
+            "id": "2",
+            "label": "reset-zero: reset button enabled after load",
+            "command": {
+              "op": "assert",
+              "selector": "#btn-reset",
+              "property": "disabled",
+              "equals": false
+            }
+          },
+          {
+            "id": "3",
+            "label": "reset-zero: click reset sets output to 0",
+            "command": {
+              "op": "click",
+              "selector": "#btn-reset"
+            }
+          },
+          {
+            "id": "platform-settle-3",
+            "label": "等待业务操作及合成数据桥完成",
+            "command": {
+              "op": "wait",
+              "ms": 150
+            }
+          },
+          {
+            "id": "4",
+            "label": "reset-zero: output shows 0 after reset click",
+            "command": {
+              "op": "assert",
+              "selector": "#counter-value",
+              "property": "text",
+              "equals": "0"
+            }
+          },
+          {
+            "id": "5",
+            "label": "reset-zero: persisted count is 0 after reset",
+            "command": {
+              "op": "data",
+              "path": [
+                "count"
+              ],
+              "equals": 0
+            }
+          },
+          {
+            "id": "6",
+            "label": "reset-zero: exactly one commit recorded",
+            "command": {
+              "op": "bridge",
+              "property": "commits",
+              "equals": 1
+            }
+          },
+          {
+            "id": "7",
+            "label": "reset-zero: exactly one save attempt recorded",
+            "command": {
+              "op": "bridge",
+              "property": "saveAttempts",
+              "equals": 1
+            }
+          },
+          {
+            "id": "8",
+            "label": "reset-zero: reset twice still 0 and saves again",
+            "command": {
+              "op": "click",
+              "selector": "#btn-reset"
+            }
+          },
+          {
+            "id": "platform-settle-8",
+            "label": "等待业务操作及合成数据桥完成",
+            "command": {
+              "op": "wait",
+              "ms": 150
+            }
+          },
+          {
+            "id": "9",
+            "label": "reset-zero: output remains 0 after second reset",
+            "command": {
+              "op": "assert",
+              "selector": "#counter-value",
+              "property": "text",
+              "equals": "0"
+            }
+          },
+          {
+            "id": "10",
+            "label": "reset-zero: persisted count still 0",
+            "command": {
+              "op": "data",
+              "path": [
+                "count"
+              ],
+              "equals": 0
+            }
+          },
+          {
+            "id": "11",
+            "label": "reset-zero: two commits after two resets",
+            "command": {
+              "op": "bridge",
+              "property": "commits",
+              "equals": 2
+            }
+          }
+        ]
+      },
+      {
+        "id": "output-display",
+        "seed": {
+          "count": 0
+        },
+        "checks": [
+          {
+            "id": "platform-startup-wait",
+            "label": "等待检查页面读取合成数据",
+            "command": {
+              "op": "wait",
+              "ms": 150
+            }
+          },
+          {
+            "id": "1",
+            "label": "output-display: exactly one output element on the page",
+            "command": {
+              "op": "assert",
+              "selector": "output",
+              "property": "count",
+              "equals": 1
+            }
+          },
+          {
+            "id": "2",
+            "label": "output-display: initial output text is plain decimal integer 0",
+            "command": {
+              "op": "assert",
+              "selector": "#counter-value",
+              "property": "text",
+              "equals": "0"
+            }
+          },
+          {
+            "id": "3",
+            "label": "output-display: increment updates output text to plain 1",
+            "command": {
+              "op": "click",
+              "selector": "#btn-increment"
+            }
+          },
+          {
+            "id": "platform-settle-3",
+            "label": "等待业务操作及合成数据桥完成",
+            "command": {
+              "op": "wait",
+              "ms": 150
+            }
+          },
+          {
+            "id": "4",
+            "label": "output-display: increment output text equals 1",
+            "command": {
+              "op": "assert",
+              "selector": "#counter-value",
+              "property": "text",
+              "equals": "1"
+            }
+          },
+          {
+            "id": "5",
+            "label": "output-display: decrement updates output text back to plain 0",
+            "command": {
+              "op": "click",
+              "selector": "#btn-decrement"
+            }
+          },
+          {
+            "id": "platform-settle-5",
+            "label": "等待业务操作及合成数据桥完成",
+            "command": {
+              "op": "wait",
+              "ms": 150
+            }
+          },
+          {
+            "id": "6",
+            "label": "output-display: decrement output text equals 0",
+            "command": {
+              "op": "assert",
+              "selector": "#counter-value",
+              "property": "text",
+              "equals": "0"
+            }
+          },
+          {
+            "id": "7",
+            "label": "output-display: reset returns output text to plain 0",
+            "command": {
+              "op": "click",
+              "selector": "#btn-reset"
+            }
+          },
+          {
+            "id": "platform-settle-7",
+            "label": "等待业务操作及合成数据桥完成",
+            "command": {
+              "op": "wait",
+              "ms": 150
+            }
+          },
+          {
+            "id": "8",
+            "label": "output-display: reset output text equals 0",
+            "command": {
+              "op": "assert",
+              "selector": "#counter-value",
+              "property": "text",
+              "equals": "0"
+            }
+          },
+          {
+            "id": "9",
+            "label": "output-display: negative value renders as plain -1 without extra text",
+            "command": {
+              "op": "click",
+              "selector": "#btn-decrement"
+            }
+          },
+          {
+            "id": "platform-settle-9",
+            "label": "等待业务操作及合成数据桥完成",
+            "command": {
+              "op": "wait",
+              "ms": 150
+            }
+          },
+          {
+            "id": "10",
+            "label": "output-display: negative output text equals -1",
+            "command": {
+              "op": "assert",
+              "selector": "#counter-value",
+              "property": "text",
+              "equals": "-1"
+            }
+          }
+        ]
+      },
+      {
+        "id": "reload-restore",
+        "seed": {
+          "count": 5
+        },
+        "checks": [
+          {
+            "id": "platform-startup-wait",
+            "label": "等待检查页面读取合成数据",
+            "command": {
+              "op": "wait",
+              "ms": 150
+            }
+          },
+          {
+            "id": "1",
+            "label": "reload-restore: output shows persisted count from seed",
+            "command": {
+              "op": "assert",
+              "selector": "#counter-value",
+              "property": "text",
+              "equals": "5"
+            }
+          },
+          {
+            "id": "2",
+            "label": "reload-restore: exactly one output element",
+            "command": {
+              "op": "assert",
+              "selector": "output",
+              "property": "count",
+              "equals": 1
+            }
+          },
+          {
+            "id": "3",
+            "label": "reload-restore: increment button enabled after restore",
+            "command": {
+              "op": "assert",
+              "selector": "#btn-increment",
+              "property": "disabled",
+              "equals": false
+            }
+          },
+          {
+            "id": "4",
+            "label": "reload-restore: decrement button enabled after restore",
+            "command": {
+              "op": "assert",
+              "selector": "#btn-decrement",
+              "property": "disabled",
+              "equals": false
+            }
+          },
+          {
+            "id": "5",
+            "label": "reload-restore: reset button enabled after restore",
+            "command": {
+              "op": "assert",
+              "selector": "#btn-reset",
+              "property": "disabled",
+              "equals": false
+            }
+          },
+          {
+            "id": "6",
+            "label": "reload-restore: status shows loaded",
+            "command": {
+              "op": "assert",
+              "selector": "#app-status",
+              "property": "text",
+              "equals": "已读取"
+            }
+          },
+          {
+            "id": "7",
+            "label": "reload-restore: increment from restored count persists seed+1",
+            "command": {
+              "op": "click",
+              "selector": "#btn-increment"
+            }
+          },
+          {
+            "id": "platform-settle-7",
+            "label": "等待业务操作及合成数据桥完成",
+            "command": {
+              "op": "wait",
+              "ms": 150
+            }
+          },
+          {
+            "id": "8",
+            "label": "reload-restore: output updated to 6 in DOM",
+            "command": {
+              "op": "assert",
+              "selector": "#counter-value",
+              "property": "text",
+              "equals": "6"
+            }
+          },
+          {
+            "id": "9",
+            "label": "reload-restore: persisted count equals seed+1",
+            "command": {
+              "op": "data",
+              "path": [
+                "count"
+              ],
+              "equals": 6
+            }
+          },
+          {
+            "id": "10",
+            "label": "reload-restore: one save call after increment",
+            "command": {
+              "op": "bridge",
+              "property": "saveAttempts",
+              "equals": 1
+            }
+          },
+          {
+            "id": "11",
+            "label": "reload-restore: one commit recorded",
+            "command": {
+              "op": "bridge",
+              "property": "commits",
+              "equals": 1
+            }
+          },
+          {
+            "id": "12",
+            "label": "reload-restore: no rejected saves",
+            "command": {
+              "op": "bridge",
+              "property": "rejectedSaves",
+              "equals": 0
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "result": {
+    "protocol": "atoms-qa/1",
+    "taskId": "2f65bc55-0c84-44b4-9c6a-dd3f22433d34",
+    "requestId": "22e457c7-49c9-4b72-a2bf-130390dd8a54",
+    "codeHash": "0c6309e9e89eefb9a83c471a3c1625875e2a876d78b27c30a0555f69bb9c4975",
+    "planHash": "554f3872a40ae869018703d59c89b2d686ab9250830c20e7ba4f0d7f3eddfdfe",
+    "status": "failed",
+    "results": [
+      {
+        "scenarioId": "platform-timing",
+        "checkId": "platform-timing-0",
+        "command": {
+          "op": "assert",
+          "selector": "button:not(:disabled),input:not(:disabled),select:not(:disabled),textarea:not(:disabled)",
+          "property": "count",
+          "equals": 0
+        },
+        "expected": 0,
+        "actual": 0,
+        "status": "passed",
+        "startedAt": 1790795901904,
+        "endedAt": 1790795901905
+      },
+      {
+        "scenarioId": "platform-timing",
+        "checkId": "platform-timing-1",
+        "command": {
+          "op": "bridge",
+          "property": "saveAttempts",
+          "equals": 0
+        },
+        "expected": 0,
+        "actual": 0,
+        "status": "passed",
+        "startedAt": 1790795901906,
+        "endedAt": 1790795901906
+      },
+      {
+        "scenarioId": "platform-timing",
+        "checkId": "platform-timing-2",
+        "command": {
+          "op": "wait",
+          "ms": 700
+        },
+        "expected": 700,
+        "actual": 700,
+        "status": "passed",
+        "startedAt": 1790795901906,
+        "endedAt": 1790795902609
+      },
+      {
+        "scenarioId": "platform-timing",
+        "checkId": "platform-timing-3",
+        "command": {
+          "op": "click",
+          "selector": "#btn-increment"
+        },
+        "expected": "executed",
+        "actual": "executed",
+        "status": "passed",
+        "startedAt": 1790795902609,
+        "endedAt": 1790795902610
+      },
+      {
+        "scenarioId": "platform-timing",
+        "checkId": "platform-timing-4",
+        "command": {
+          "op": "assert",
+          "selector": "body",
+          "property": "inert",
+          "equals": true
+        },
+        "expected": true,
+        "actual": true,
+        "status": "passed",
+        "startedAt": 1790795902610,
+        "endedAt": 1790795902611
+      },
+      {
+        "scenarioId": "platform-timing",
+        "checkId": "platform-timing-5",
+        "command": {
+          "op": "assert",
+          "selector": "[data-atoms-status]",
+          "property": "text",
+          "equals": "正在保存"
+        },
+        "expected": "正在保存",
+        "actual": "正在保存",
+        "status": "passed",
+        "startedAt": 1790795902611,
+        "endedAt": 1790795902612
+      },
+      {
+        "scenarioId": "platform-timing",
+        "checkId": "platform-timing-6",
+        "command": {
+          "op": "click",
+          "selector": "#btn-increment",
+          "probeWhileInert": true
+        },
+        "expected": "executed",
+        "actual": "executed",
+        "status": "passed",
+        "startedAt": 1790795902612,
+        "endedAt": 1790795902613
+      },
+      {
+        "scenarioId": "platform-timing",
+        "checkId": "platform-timing-7",
+        "command": {
+          "op": "data",
+          "path": [],
+          "equals": {
+            "count": 7
+          }
+        },
+        "expected": {
+          "count": 7
+        },
+        "actual": {
+          "count": 7
+        },
+        "status": "passed",
+        "startedAt": 1790795902613,
+        "endedAt": 1790795902613
+      },
+      {
+        "scenarioId": "platform-timing",
+        "checkId": "platform-timing-8",
+        "command": {
+          "op": "wait",
+          "ms": 700
+        },
+        "expected": 700,
+        "actual": 700,
+        "status": "passed",
+        "startedAt": 1790795902613,
+        "endedAt": 1790795903316
+      },
+      {
+        "scenarioId": "platform-timing",
+        "checkId": "platform-timing-9",
+        "command": {
+          "op": "assert",
+          "selector": "body",
+          "property": "inert",
+          "equals": false
+        },
+        "expected": false,
+        "actual": false,
+        "status": "passed",
+        "startedAt": 1790795903316,
+        "endedAt": 1790795903317
+      },
+      {
+        "scenarioId": "platform-timing",
+        "checkId": "platform-timing-10",
+        "command": {
+          "op": "assert",
+          "selector": "[data-atoms-status]",
+          "property": "text",
+          "equals": "已保存"
+        },
+        "expected": "已保存",
+        "actual": "已保存",
+        "status": "passed",
+        "startedAt": 1790795903318,
+        "endedAt": 1790795903321
+      },
+      {
+        "scenarioId": "platform-timing",
+        "checkId": "platform-timing-11",
+        "command": {
+          "op": "data",
+          "path": [
+            "count"
+          ],
+          "equals": 8
+        },
+        "expected": 8,
+        "actual": 8,
+        "status": "passed",
+        "startedAt": 1790795903321,
+        "endedAt": 1790795903321
+      },
+      {
+        "scenarioId": "platform-timing",
+        "checkId": "platform-timing-12",
+        "command": {
+          "op": "bridge",
+          "property": "saveAttempts",
+          "equals": 1
+        },
+        "expected": 1,
+        "actual": 1,
+        "status": "passed",
+        "startedAt": 1790795903321,
+        "endedAt": 1790795903321
+      },
+      {
+        "scenarioId": "platform-timing",
+        "checkId": "platform-timing-13",
+        "command": {
+          "op": "bridge",
+          "property": "commits",
+          "equals": 1
+        },
+        "expected": 1,
+        "actual": 1,
+        "status": "passed",
+        "startedAt": 1790795903321,
+        "endedAt": 1790795903321
+      },
+      {
+        "scenarioId": "platform-read-failure",
+        "checkId": "platform-read-failure-0",
+        "command": {
+          "op": "wait",
+          "ms": 700
+        },
+        "expected": 700,
+        "actual": 700,
+        "status": "passed",
+        "startedAt": 1790795903394,
+        "endedAt": 1790795904099
+      },
+      {
+        "scenarioId": "platform-read-failure",
+        "checkId": "platform-read-failure-1",
+        "command": {
+          "op": "assert",
+          "selector": "[data-atoms-status]",
+          "property": "text",
+          "equals": "读取失败"
+        },
+        "expected": "读取失败",
+        "actual": "读取失败",
+        "status": "passed",
+        "startedAt": 1790795904099,
+        "endedAt": 1790795904101
+      },
+      {
+        "scenarioId": "platform-read-failure",
+        "checkId": "platform-read-failure-2",
+        "command": {
+          "op": "assert",
+          "selector": "button:not(:disabled),input:not(:disabled),select:not(:disabled),textarea:not(:disabled)",
+          "property": "count",
+          "equals": 0
+        },
+        "expected": 0,
+        "actual": 0,
+        "status": "passed",
+        "startedAt": 1790795904101,
+        "endedAt": 1790795904101
+      },
+      {
+        "scenarioId": "platform-read-failure",
+        "checkId": "platform-read-failure-3",
+        "command": {
+          "op": "bridge",
+          "property": "saveAttempts",
+          "equals": 0
+        },
+        "expected": 0,
+        "actual": 0,
+        "status": "passed",
+        "startedAt": 1790795904102,
+        "endedAt": 1790795904102
+      },
+      {
+        "scenarioId": "platform-read-failure",
+        "checkId": "platform-read-failure-4",
+        "command": {
+          "op": "bridge",
+          "property": "commits",
+          "equals": 0
+        },
+        "expected": 0,
+        "actual": 0,
+        "status": "passed",
+        "startedAt": 1790795904102,
+        "endedAt": 1790795904102
+      },
+      {
+        "scenarioId": "platform-read-failure",
+        "checkId": "platform-read-failure-5",
+        "command": {
+          "op": "data",
+          "path": [],
+          "equals": {
+            "count": 7
+          }
+        },
+        "expected": {
+          "count": 7
+        },
+        "actual": {
+          "count": 7
+        },
+        "status": "passed",
+        "startedAt": 1790795904102,
+        "endedAt": 1790795904102
+      },
+      {
+        "scenarioId": "platform-save-failure",
+        "checkId": "platform-save-failure-0",
+        "command": {
+          "op": "wait",
+          "ms": 700
+        },
+        "expected": 700,
+        "actual": 700,
+        "status": "passed",
+        "startedAt": 1790795904138,
+        "endedAt": 1790795904864
+      },
+      {
+        "scenarioId": "platform-save-failure",
+        "checkId": "platform-save-failure-1",
+        "command": {
+          "op": "click",
+          "selector": "#btn-increment"
+        },
+        "expected": "executed",
+        "actual": "executed",
+        "status": "passed",
+        "startedAt": 1790795904864,
+        "endedAt": 1790795904865
+      },
+      {
+        "scenarioId": "platform-save-failure",
+        "checkId": "platform-save-failure-2",
+        "command": {
+          "op": "assert",
+          "selector": "body",
+          "property": "inert",
+          "equals": true
+        },
+        "expected": true,
+        "actual": true,
+        "status": "passed",
+        "startedAt": 1790795904866,
+        "endedAt": 1790795904866
+      },
+      {
+        "scenarioId": "platform-save-failure",
+        "checkId": "platform-save-failure-3",
+        "command": {
+          "op": "wait",
+          "ms": 700
+        },
+        "expected": 700,
+        "actual": 700,
+        "status": "passed",
+        "startedAt": 1790795904866,
+        "endedAt": 1790795905569
+      },
+      {
+        "scenarioId": "platform-save-failure",
+        "checkId": "platform-save-failure-4",
+        "command": {
+          "op": "assert",
+          "selector": "[data-atoms-status]",
+          "property": "text",
+          "equals": "保存失败"
+        },
+        "expected": "保存失败",
+        "actual": "保存失败",
+        "status": "passed",
+        "startedAt": 1790795905569,
+        "endedAt": 1790795905571
+      },
+      {
+        "scenarioId": "platform-save-failure",
+        "checkId": "platform-save-failure-5",
+        "command": {
+          "op": "data",
+          "path": [],
+          "equals": {
+            "count": 7
+          }
+        },
+        "expected": {
+          "count": 7
+        },
+        "actual": {
+          "count": 7
+        },
+        "status": "passed",
+        "startedAt": 1790795905571,
+        "endedAt": 1790795905571
+      },
+      {
+        "scenarioId": "platform-save-failure",
+        "checkId": "platform-save-failure-6",
+        "command": {
+          "op": "bridge",
+          "property": "saveAttempts",
+          "equals": 1
+        },
+        "expected": 1,
+        "actual": 1,
+        "status": "passed",
+        "startedAt": 1790795905571,
+        "endedAt": 1790795905571
+      },
+      {
+        "scenarioId": "platform-save-failure",
+        "checkId": "platform-save-failure-7",
+        "command": {
+          "op": "bridge",
+          "property": "rejectedSaves",
+          "equals": 1
+        },
+        "expected": 1,
+        "actual": 1,
+        "status": "passed",
+        "startedAt": 1790795905571,
+        "endedAt": 1790795905571
+      },
+      {
+        "scenarioId": "platform-save-failure",
+        "checkId": "platform-save-failure-8",
+        "command": {
+          "op": "bridge",
+          "property": "commits",
+          "equals": 0
+        },
+        "expected": 0,
+        "actual": 0,
+        "status": "passed",
+        "startedAt": 1790795905571,
+        "endedAt": 1790795905571
+      },
+      {
+        "scenarioId": "init-zero",
+        "checkId": "platform-startup-wait",
+        "command": {
+          "op": "wait",
+          "ms": 150
+        },
+        "expected": 150,
+        "actual": 150,
+        "status": "passed",
+        "startedAt": 1790795905599,
+        "endedAt": 1790795905778
+      },
+      {
+        "scenarioId": "init-zero",
+        "checkId": "1",
+        "command": {
+          "op": "assert",
+          "selector": "#counter-value",
+          "property": "text",
+          "equals": "0"
+        },
+        "expected": "0",
+        "actual": "0",
+        "status": "passed",
+        "startedAt": 1790795905778,
+        "endedAt": 1790795905779
+      },
+      {
+        "scenarioId": "init-zero",
+        "checkId": "2",
+        "command": {
+          "op": "assert",
+          "selector": "output",
+          "property": "count",
+          "equals": 1
+        },
+        "expected": 1,
+        "actual": 1,
+        "status": "passed",
+        "startedAt": 1790795905780,
+        "endedAt": 1790795905783
+      },
+      {
+        "scenarioId": "init-zero",
+        "checkId": "3",
+        "command": {
+          "op": "data",
+          "path": [
+            "count"
+          ],
+          "equals": null
+        },
+        "expected": null,
+        "actual": 0,
+        "status": "failed",
+        "startedAt": 1790795905783,
+        "endedAt": 1790795905783
+      },
+      {
+        "scenarioId": "increment",
+        "checkId": "platform-startup-wait",
+        "command": {
+          "op": "wait",
+          "ms": 150
+        },
+        "expected": 150,
+        "actual": 150,
+        "status": "passed",
+        "startedAt": 1790795905804,
+        "endedAt": 1790795905977
+      },
+      {
+        "scenarioId": "increment",
+        "checkId": "1",
+        "command": {
+          "op": "assert",
+          "selector": "#counter-value",
+          "property": "text",
+          "equals": "7"
+        },
+        "expected": "7",
+        "actual": "7",
+        "status": "passed",
+        "startedAt": 1790795905977,
+        "endedAt": 1790795905979
+      },
+      {
+        "scenarioId": "increment",
+        "checkId": "2",
+        "command": {
+          "op": "assert",
+          "selector": "output",
+          "property": "count",
+          "equals": 1
+        },
+        "expected": 1,
+        "actual": 1,
+        "status": "passed",
+        "startedAt": 1790795905979,
+        "endedAt": 1790795905983
+      },
+      {
+        "scenarioId": "increment",
+        "checkId": "3",
+        "command": {
+          "op": "click",
+          "selector": "#btn-increment"
+        },
+        "expected": "executed",
+        "actual": "executed",
+        "status": "passed",
+        "startedAt": 1790795905983,
+        "endedAt": 1790795905985
+      },
+      {
+        "scenarioId": "increment",
+        "checkId": "platform-settle-3",
+        "command": {
+          "op": "wait",
+          "ms": 150
+        },
+        "expected": 150,
+        "actual": 150,
+        "status": "passed",
+        "startedAt": 1790795905985,
+        "endedAt": 1790795906137
+      },
+      {
+        "scenarioId": "increment",
+        "checkId": "4",
+        "command": {
+          "op": "wait",
+          "ms": 100
+        },
+        "expected": 100,
+        "actual": 100,
+        "status": "passed",
+        "startedAt": 1790795906137,
+        "endedAt": 1790795906240
+      },
+      {
+        "scenarioId": "increment",
+        "checkId": "5",
+        "command": {
+          "op": "assert",
+          "selector": "#counter-value",
+          "property": "text",
+          "equals": "8"
+        },
+        "expected": "8",
+        "actual": "8",
+        "status": "passed",
+        "startedAt": 1790795906240,
+        "endedAt": 1790795906242
+      },
+      {
+        "scenarioId": "increment",
+        "checkId": "6",
+        "command": {
+          "op": "data",
+          "path": [
+            "count"
+          ],
+          "equals": 8
+        },
+        "expected": 8,
+        "actual": 8,
+        "status": "passed",
+        "startedAt": 1790795906242,
+        "endedAt": 1790795906242
+      },
+      {
+        "scenarioId": "increment",
+        "checkId": "7",
+        "command": {
+          "op": "bridge",
+          "property": "saveAttempts",
+          "equals": 1
+        },
+        "expected": 1,
+        "actual": 1,
+        "status": "passed",
+        "startedAt": 1790795906242,
+        "endedAt": 1790795906242
+      },
+      {
+        "scenarioId": "increment",
+        "checkId": "8",
+        "command": {
+          "op": "bridge",
+          "property": "commits",
+          "equals": 1
+        },
+        "expected": 1,
+        "actual": 1,
+        "status": "passed",
+        "startedAt": 1790795906242,
+        "endedAt": 1790795906242
+      },
+      {
+        "scenarioId": "increment",
+        "checkId": "9",
+        "command": {
+          "op": "click",
+          "selector": "#btn-increment"
+        },
+        "expected": "executed",
+        "actual": "executed",
+        "status": "passed",
+        "startedAt": 1790795906242,
+        "endedAt": 1790795906243
+      },
+      {
+        "scenarioId": "increment",
+        "checkId": "platform-settle-9",
+        "command": {
+          "op": "wait",
+          "ms": 150
+        },
+        "expected": 150,
+        "actual": 150,
+        "status": "passed",
+        "startedAt": 1790795906243,
+        "endedAt": 1790795906396
+      },
+      {
+        "scenarioId": "increment",
+        "checkId": "10",
+        "command": {
+          "op": "wait",
+          "ms": 100
+        },
+        "expected": 100,
+        "actual": 100,
+        "status": "passed",
+        "startedAt": 1790795906396,
+        "endedAt": 1790795906499
+      },
+      {
+        "scenarioId": "increment",
+        "checkId": "11",
+        "command": {
+          "op": "assert",
+          "selector": "#counter-value",
+          "property": "text",
+          "equals": "9"
+        },
+        "expected": "9",
+        "actual": "9",
+        "status": "passed",
+        "startedAt": 1790795906499,
+        "endedAt": 1790795906500
+      },
+      {
+        "scenarioId": "increment",
+        "checkId": "12",
+        "command": {
+          "op": "data",
+          "path": [
+            "count"
+          ],
+          "equals": 9
+        },
+        "expected": 9,
+        "actual": 9,
+        "status": "passed",
+        "startedAt": 1790795906500,
+        "endedAt": 1790795906500
+      },
+      {
+        "scenarioId": "increment",
+        "checkId": "13",
+        "command": {
+          "op": "bridge",
+          "property": "saveAttempts",
+          "equals": 2
+        },
+        "expected": 2,
+        "actual": 2,
+        "status": "passed",
+        "startedAt": 1790795906500,
+        "endedAt": 1790795906500
+      },
+      {
+        "scenarioId": "decrement",
+        "checkId": "platform-startup-wait",
+        "command": {
+          "op": "wait",
+          "ms": 150
+        },
+        "expected": 150,
+        "actual": 150,
+        "status": "passed",
+        "startedAt": 1790795906522,
+        "endedAt": 1790795906699
+      },
+      {
+        "scenarioId": "decrement",
+        "checkId": "1",
+        "command": {
+          "op": "assert",
+          "selector": "#counter-value",
+          "property": "text",
+          "equals": "5"
+        },
+        "expected": "5",
+        "actual": "5",
+        "status": "passed",
+        "startedAt": 1790795906699,
+        "endedAt": 1790795906701
+      },
+      {
+        "scenarioId": "decrement",
+        "checkId": "2",
+        "command": {
+          "op": "assert",
+          "selector": "output",
+          "property": "count",
+          "equals": 1
+        },
+        "expected": 1,
+        "actual": 1,
+        "status": "passed",
+        "startedAt": 1790795906701,
+        "endedAt": 1790795906702
+      },
+      {
+        "scenarioId": "decrement",
+        "checkId": "3",
+        "command": {
+          "op": "assert",
+          "selector": "#counter-value",
+          "property": "count",
+          "equals": 1
+        },
+        "expected": 1,
+        "actual": 1,
+        "status": "passed",
+        "startedAt": 1790795906702,
+        "endedAt": 1790795906703
+      },
+      {
+        "scenarioId": "decrement",
+        "checkId": "4",
+        "command": {
+          "op": "bridge",
+          "property": "saveAttempts",
+          "equals": 0
+        },
+        "expected": 0,
+        "actual": 0,
+        "status": "passed",
+        "startedAt": 1790795906704,
+        "endedAt": 1790795906704
+      },
+      {
+        "scenarioId": "decrement",
+        "checkId": "5",
+        "command": {
+          "op": "click",
+          "selector": "#btn-decrement"
+        },
+        "expected": "executed",
+        "actual": "executed",
+        "status": "passed",
+        "startedAt": 1790795906704,
+        "endedAt": 1790795906705
+      },
+      {
+        "scenarioId": "decrement",
+        "checkId": "platform-settle-5",
+        "command": {
+          "op": "wait",
+          "ms": 150
+        },
+        "expected": 150,
+        "actual": 150,
+        "status": "passed",
+        "startedAt": 1790795906705,
+        "endedAt": 1790795906857
+      },
+      {
+        "scenarioId": "decrement",
+        "checkId": "6",
+        "command": {
+          "op": "wait",
+          "ms": 100
+        },
+        "expected": 100,
+        "actual": 100,
+        "status": "passed",
+        "startedAt": 1790795906857,
+        "endedAt": 1790795906959
+      },
+      {
+        "scenarioId": "decrement",
+        "checkId": "7",
+        "command": {
+          "op": "assert",
+          "selector": "#counter-value",
+          "property": "text",
+          "equals": "4"
+        },
+        "expected": "4",
+        "actual": "4",
+        "status": "passed",
+        "startedAt": 1790795906959,
+        "endedAt": 1790795906961
+      },
+      {
+        "scenarioId": "decrement",
+        "checkId": "8",
+        "command": {
+          "op": "data",
+          "path": [
+            "count"
+          ],
+          "equals": 4
+        },
+        "expected": 4,
+        "actual": 4,
+        "status": "passed",
+        "startedAt": 1790795906961,
+        "endedAt": 1790795906961
+      },
+      {
+        "scenarioId": "decrement",
+        "checkId": "9",
+        "command": {
+          "op": "bridge",
+          "property": "saveAttempts",
+          "equals": 1
+        },
+        "expected": 1,
+        "actual": 1,
+        "status": "passed",
+        "startedAt": 1790795906961,
+        "endedAt": 1790795906961
+      },
+      {
+        "scenarioId": "reset-zero",
+        "checkId": "platform-startup-wait",
+        "command": {
+          "op": "wait",
+          "ms": 150
+        },
+        "expected": 150,
+        "actual": 150,
+        "status": "passed",
+        "startedAt": 1790795906980,
+        "endedAt": 1790795907157
+      },
+      {
+        "scenarioId": "reset-zero",
+        "checkId": "1",
+        "command": {
+          "op": "assert",
+          "selector": "#counter-value",
+          "property": "text",
+          "equals": "7"
+        },
+        "expected": "7",
+        "actual": "7",
+        "status": "passed",
+        "startedAt": 1790795907157,
+        "endedAt": 1790795907159
+      },
+      {
+        "scenarioId": "reset-zero",
+        "checkId": "2",
+        "command": {
+          "op": "assert",
+          "selector": "#btn-reset",
+          "property": "disabled",
+          "equals": false
+        },
+        "expected": false,
+        "actual": false,
+        "status": "passed",
+        "startedAt": 1790795907159,
+        "endedAt": 1790795907160
+      },
+      {
+        "scenarioId": "reset-zero",
+        "checkId": "3",
+        "command": {
+          "op": "click",
+          "selector": "#btn-reset"
+        },
+        "expected": "executed",
+        "actual": "executed",
+        "status": "passed",
+        "startedAt": 1790795907160,
+        "endedAt": 1790795907161
+      },
+      {
+        "scenarioId": "reset-zero",
+        "checkId": "platform-settle-3",
+        "command": {
+          "op": "wait",
+          "ms": 150
+        },
+        "expected": 150,
+        "actual": 150,
+        "status": "passed",
+        "startedAt": 1790795907161,
+        "endedAt": 1790795907314
+      },
+      {
+        "scenarioId": "reset-zero",
+        "checkId": "4",
+        "command": {
+          "op": "assert",
+          "selector": "#counter-value",
+          "property": "text",
+          "equals": "0"
+        },
+        "expected": "0",
+        "actual": "0",
+        "status": "passed",
+        "startedAt": 1790795907314,
+        "endedAt": 1790795907316
+      },
+      {
+        "scenarioId": "reset-zero",
+        "checkId": "5",
+        "command": {
+          "op": "data",
+          "path": [
+            "count"
+          ],
+          "equals": 0
+        },
+        "expected": 0,
+        "actual": 0,
+        "status": "passed",
+        "startedAt": 1790795907316,
+        "endedAt": 1790795907316
+      },
+      {
+        "scenarioId": "reset-zero",
+        "checkId": "6",
+        "command": {
+          "op": "bridge",
+          "property": "commits",
+          "equals": 1
+        },
+        "expected": 1,
+        "actual": 1,
+        "status": "passed",
+        "startedAt": 1790795907316,
+        "endedAt": 1790795907316
+      },
+      {
+        "scenarioId": "reset-zero",
+        "checkId": "7",
+        "command": {
+          "op": "bridge",
+          "property": "saveAttempts",
+          "equals": 1
+        },
+        "expected": 1,
+        "actual": 1,
+        "status": "passed",
+        "startedAt": 1790795907316,
+        "endedAt": 1790795907316
+      },
+      {
+        "scenarioId": "reset-zero",
+        "checkId": "8",
+        "command": {
+          "op": "click",
+          "selector": "#btn-reset"
+        },
+        "expected": "executed",
+        "actual": "executed",
+        "status": "passed",
+        "startedAt": 1790795907316,
+        "endedAt": 1790795907317
+      },
+      {
+        "scenarioId": "reset-zero",
+        "checkId": "platform-settle-8",
+        "command": {
+          "op": "wait",
+          "ms": 150
+        },
+        "expected": 150,
+        "actual": 150,
+        "status": "passed",
+        "startedAt": 1790795907317,
+        "endedAt": 1790795907470
+      },
+      {
+        "scenarioId": "reset-zero",
+        "checkId": "9",
+        "command": {
+          "op": "assert",
+          "selector": "#counter-value",
+          "property": "text",
+          "equals": "0"
+        },
+        "expected": "0",
+        "actual": "0",
+        "status": "passed",
+        "startedAt": 1790795907470,
+        "endedAt": 1790795907472
+      },
+      {
+        "scenarioId": "reset-zero",
+        "checkId": "10",
+        "command": {
+          "op": "data",
+          "path": [
+            "count"
+          ],
+          "equals": 0
+        },
+        "expected": 0,
+        "actual": 0,
+        "status": "passed",
+        "startedAt": 1790795907472,
+        "endedAt": 1790795907472
+      },
+      {
+        "scenarioId": "reset-zero",
+        "checkId": "11",
+        "command": {
+          "op": "bridge",
+          "property": "commits",
+          "equals": 2
+        },
+        "expected": 2,
+        "actual": 2,
+        "status": "passed",
+        "startedAt": 1790795907472,
+        "endedAt": 1790795907472
+      },
+      {
+        "scenarioId": "output-display",
+        "checkId": "platform-startup-wait",
+        "command": {
+          "op": "wait",
+          "ms": 150
+        },
+        "expected": 150,
+        "actual": 150,
+        "status": "passed",
+        "startedAt": 1790795907504,
+        "endedAt": 1790795907687
+      },
+      {
+        "scenarioId": "output-display",
+        "checkId": "1",
+        "command": {
+          "op": "assert",
+          "selector": "output",
+          "property": "count",
+          "equals": 1
+        },
+        "expected": 1,
+        "actual": 1,
+        "status": "passed",
+        "startedAt": 1790795907687,
+        "endedAt": 1790795907689
+      },
+      {
+        "scenarioId": "output-display",
+        "checkId": "2",
+        "command": {
+          "op": "assert",
+          "selector": "#counter-value",
+          "property": "text",
+          "equals": "0"
+        },
+        "expected": "0",
+        "actual": "0",
+        "status": "passed",
+        "startedAt": 1790795907689,
+        "endedAt": 1790795907690
+      },
+      {
+        "scenarioId": "output-display",
+        "checkId": "3",
+        "command": {
+          "op": "click",
+          "selector": "#btn-increment"
+        },
+        "expected": "executed",
+        "actual": "executed",
+        "status": "passed",
+        "startedAt": 1790795907690,
+        "endedAt": 1790795907691
+      },
+      {
+        "scenarioId": "output-display",
+        "checkId": "platform-settle-3",
+        "command": {
+          "op": "wait",
+          "ms": 150
+        },
+        "expected": 150,
+        "actual": 150,
+        "status": "passed",
+        "startedAt": 1790795907691,
+        "endedAt": 1790795907844
+      },
+      {
+        "scenarioId": "output-display",
+        "checkId": "4",
+        "command": {
+          "op": "assert",
+          "selector": "#counter-value",
+          "property": "text",
+          "equals": "1"
+        },
+        "expected": "1",
+        "actual": "1",
+        "status": "passed",
+        "startedAt": 1790795907844,
+        "endedAt": 1790795907845
+      },
+      {
+        "scenarioId": "output-display",
+        "checkId": "5",
+        "command": {
+          "op": "click",
+          "selector": "#btn-decrement"
+        },
+        "expected": "executed",
+        "actual": "executed",
+        "status": "passed",
+        "startedAt": 1790795907845,
+        "endedAt": 1790795907850
+      },
+      {
+        "scenarioId": "output-display",
+        "checkId": "platform-settle-5",
+        "command": {
+          "op": "wait",
+          "ms": 150
+        },
+        "expected": 150,
+        "actual": 150,
+        "status": "passed",
+        "startedAt": 1790795907850,
+        "endedAt": 1790795908003
+      },
+      {
+        "scenarioId": "output-display",
+        "checkId": "6",
+        "command": {
+          "op": "assert",
+          "selector": "#counter-value",
+          "property": "text",
+          "equals": "0"
+        },
+        "expected": "0",
+        "actual": "0",
+        "status": "passed",
+        "startedAt": 1790795908003,
+        "endedAt": 1790795908004
+      },
+      {
+        "scenarioId": "output-display",
+        "checkId": "7",
+        "command": {
+          "op": "click",
+          "selector": "#btn-reset"
+        },
+        "expected": "executed",
+        "actual": "executed",
+        "status": "passed",
+        "startedAt": 1790795908004,
+        "endedAt": 1790795908005
+      },
+      {
+        "scenarioId": "output-display",
+        "checkId": "platform-settle-7",
+        "command": {
+          "op": "wait",
+          "ms": 150
+        },
+        "expected": 150,
+        "actual": 150,
+        "status": "passed",
+        "startedAt": 1790795908005,
+        "endedAt": 1790795908158
+      },
+      {
+        "scenarioId": "output-display",
+        "checkId": "8",
+        "command": {
+          "op": "assert",
+          "selector": "#counter-value",
+          "property": "text",
+          "equals": "0"
+        },
+        "expected": "0",
+        "actual": "0",
+        "status": "passed",
+        "startedAt": 1790795908158,
+        "endedAt": 1790795908160
+      },
+      {
+        "scenarioId": "output-display",
+        "checkId": "9",
+        "command": {
+          "op": "click",
+          "selector": "#btn-decrement"
+        },
+        "expected": "executed",
+        "actual": "executed",
+        "status": "passed",
+        "startedAt": 1790795908160,
+        "endedAt": 1790795908162
+      },
+      {
+        "scenarioId": "output-display",
+        "checkId": "platform-settle-9",
+        "command": {
+          "op": "wait",
+          "ms": 150
+        },
+        "expected": 150,
+        "actual": 150,
+        "status": "passed",
+        "startedAt": 1790795908162,
+        "endedAt": 1790795908315
+      },
+      {
+        "scenarioId": "output-display",
+        "checkId": "10",
+        "command": {
+          "op": "assert",
+          "selector": "#counter-value",
+          "property": "text",
+          "equals": "-1"
+        },
+        "expected": "-1",
+        "actual": "-1",
+        "status": "passed",
+        "startedAt": 1790795908315,
+        "endedAt": 1790795908317
+      },
+      {
+        "scenarioId": "reload-restore",
+        "checkId": "platform-startup-wait",
+        "command": {
+          "op": "wait",
+          "ms": 150
+        },
+        "expected": 150,
+        "actual": 150,
+        "status": "passed",
+        "startedAt": 1790795908349,
+        "endedAt": 1790795908527
+      },
+      {
+        "scenarioId": "reload-restore",
+        "checkId": "1",
+        "command": {
+          "op": "assert",
+          "selector": "#counter-value",
+          "property": "text",
+          "equals": "5"
+        },
+        "expected": "5",
+        "actual": "5",
+        "status": "passed",
+        "startedAt": 1790795908527,
+        "endedAt": 1790795908529
+      },
+      {
+        "scenarioId": "reload-restore",
+        "checkId": "2",
+        "command": {
+          "op": "assert",
+          "selector": "output",
+          "property": "count",
+          "equals": 1
+        },
+        "expected": 1,
+        "actual": 1,
+        "status": "passed",
+        "startedAt": 1790795908529,
+        "endedAt": 1790795908531
+      },
+      {
+        "scenarioId": "reload-restore",
+        "checkId": "3",
+        "command": {
+          "op": "assert",
+          "selector": "#btn-increment",
+          "property": "disabled",
+          "equals": false
+        },
+        "expected": false,
+        "actual": false,
+        "status": "passed",
+        "startedAt": 1790795908531,
+        "endedAt": 1790795908536
+      },
+      {
+        "scenarioId": "reload-restore",
+        "checkId": "4",
+        "command": {
+          "op": "assert",
+          "selector": "#btn-decrement",
+          "property": "disabled",
+          "equals": false
+        },
+        "expected": false,
+        "actual": false,
+        "status": "passed",
+        "startedAt": 1790795908536,
+        "endedAt": 1790795908538
+      },
+      {
+        "scenarioId": "reload-restore",
+        "checkId": "5",
+        "command": {
+          "op": "assert",
+          "selector": "#btn-reset",
+          "property": "disabled",
+          "equals": false
+        },
+        "expected": false,
+        "actual": false,
+        "status": "passed",
+        "startedAt": 1790795908538,
+        "endedAt": 1790795908540
+      },
+      {
+        "scenarioId": "reload-restore",
+        "checkId": "6",
+        "command": {
+          "op": "assert",
+          "selector": "#app-status",
+          "property": "text",
+          "equals": "已读取"
+        },
+        "expected": "已读取",
+        "actual": "已读取",
+        "status": "passed",
+        "startedAt": 1790795908540,
+        "endedAt": 1790795908542
+      },
+      {
+        "scenarioId": "reload-restore",
+        "checkId": "7",
+        "command": {
+          "op": "click",
+          "selector": "#btn-increment"
+        },
+        "expected": "executed",
+        "actual": "executed",
+        "status": "passed",
+        "startedAt": 1790795908542,
+        "endedAt": 1790795908544
+      },
+      {
+        "scenarioId": "reload-restore",
+        "checkId": "platform-settle-7",
+        "command": {
+          "op": "wait",
+          "ms": 150
+        },
+        "expected": 150,
+        "actual": 150,
+        "status": "passed",
+        "startedAt": 1790795908544,
+        "endedAt": 1790795908697
+      },
+      {
+        "scenarioId": "reload-restore",
+        "checkId": "8",
+        "command": {
+          "op": "assert",
+          "selector": "#counter-value",
+          "property": "text",
+          "equals": "6"
+        },
+        "expected": "6",
+        "actual": "6",
+        "status": "passed",
+        "startedAt": 1790795908697,
+        "endedAt": 1790795908699
+      },
+      {
+        "scenarioId": "reload-restore",
+        "checkId": "9",
+        "command": {
+          "op": "data",
+          "path": [
+            "count"
+          ],
+          "equals": 6
+        },
+        "expected": 6,
+        "actual": 6,
+        "status": "passed",
+        "startedAt": 1790795908699,
+        "endedAt": 1790795908699
+      },
+      {
+        "scenarioId": "reload-restore",
+        "checkId": "10",
+        "command": {
+          "op": "bridge",
+          "property": "saveAttempts",
+          "equals": 1
+        },
+        "expected": 1,
+        "actual": 1,
+        "status": "passed",
+        "startedAt": 1790795908699,
+        "endedAt": 1790795908699
+      },
+      {
+        "scenarioId": "reload-restore",
+        "checkId": "11",
+        "command": {
+          "op": "bridge",
+          "property": "commits",
+          "equals": 1
+        },
+        "expected": 1,
+        "actual": 1,
+        "status": "passed",
+        "startedAt": 1790795908699,
+        "endedAt": 1790795908699
+      },
+      {
+        "scenarioId": "reload-restore",
+        "checkId": "12",
+        "command": {
+          "op": "bridge",
+          "property": "rejectedSaves",
+          "equals": 0
+        },
+        "expected": 0,
+        "actual": 0,
+        "status": "passed",
+        "startedAt": 1790795908699,
+        "endedAt": 1790795908699
+      }
+    ],
+    "detail": "实际检查存在失败；未交付应用。"
+  }
+}

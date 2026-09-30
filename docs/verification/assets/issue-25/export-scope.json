@@ -1,6 +1,6 @@
 {
   "inputs": "Three exact agent-authored synthetic requests, fresh browser contexts; no existing user business data loaded.",
-  "runsAudited": 26,
+  "runsAudited": 29,
   "credentialMarkerFindings": 0,
   "excluded": [
     "raw event streams",

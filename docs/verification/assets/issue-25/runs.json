@@ -1,6 +1,60 @@
 [
   {
     "kind": "live-generation",
+    "run": "cloud-counter-1",
+    "taskId": "2f65bc55-0c84-44b4-9c6a-dd3f22433d34",
+    "syntheticRequirement": "做一个中文计数器，初始数值为 0，三个按钮分别叫“增加”“减少”“重置”，每次加一、减一或归零并保存，同浏览器重开恢复数值。用一个 output 元素只显示当前数字。普通样式自行决定。",
+    "generationSaved": false,
+    "restored": false,
+    "restorationRequests": null,
+    "workflowElapsedMs": 52764,
+    "modelRequests": 14,
+    "errors": [
+      "首次 QA 未通过，未交付应用：验收未通过：init-zero 场景的检查项 3 失败（data.count 期望 null，实际为 0），因此整体判定为假。其余计数器初始化、增减重置、output 显示及重载恢复等检查项均通过。"
+    ],
+    "knownInputTokens": 38476,
+    "knownOutputTokens": 5892,
+    "unknownUsageRequests": 0,
+    "testFailure": "Explicit failed task"
+  },
+  {
+    "kind": "live-generation",
+    "run": "cloud-counter-2",
+    "taskId": "25857ec6-9e0d-48d0-85e1-a54b71a6999e",
+    "syntheticRequirement": "做一个中文计数器，初始数值为 0，三个按钮分别叫“增加”“减少”“重置”，每次加一、减一或归零并保存，同浏览器重开恢复数值。用一个 output 元素只显示当前数字。普通样式自行决定。",
+    "generationSaved": false,
+    "restored": false,
+    "restorationRequests": null,
+    "workflowElapsedMs": 49921,
+    "modelRequests": 14,
+    "errors": [
+      "首次 QA 未通过，未交付应用：实际检查存在失败：counter-decrement 场景期望恢复值 4 但实际输出 5，saveAttempts 期望 1 实际 0；restore-value 场景期望恢复值 5 但实际输出 0，减一后期望 4 实际 -1，未知字段 note 期望保留但实际为 null。因此未通过。"
+    ],
+    "knownInputTokens": 36729,
+    "knownOutputTokens": 4661,
+    "unknownUsageRequests": 0,
+    "testFailure": "Explicit failed task"
+  },
+  {
+    "kind": "live-generation",
+    "run": "cloud-counter-3",
+    "taskId": "51729022-ed35-4714-ab78-85ca5d8ac225",
+    "syntheticRequirement": "做一个中文计数器，初始数值为 0，三个按钮分别叫“增加”“减少”“重置”，每次加一、减一或归零并保存，同浏览器重开恢复数值。用一个 output 元素只显示当前数字。普通样式自行决定。",
+    "generationSaved": false,
+    "restored": false,
+    "restorationRequests": null,
+    "workflowElapsedMs": 49134,
+    "modelRequests": 15,
+    "errors": [
+      "首次 QA 未通过，未交付应用：QA 结果 status=failed，存在多处失败：counter-value（#count-output 文本期望 7 实际 0）、decrement（#count-output 与 data.count 期望 0/-1 实际 -1/-2）、reset（#count-output 与 data.count 期望 0 实际 7，saveAttempts/commits 期望 1 实际 0）、restore（data.count 期望 0 实际 null；saveAttempts/commits 期望 2 实际 6）。由于存在失败项，判定未通过。"
+    ],
+    "knownInputTokens": 34270,
+    "knownOutputTokens": 4737,
+    "unknownUsageRequests": 0,
+    "testFailure": "Explicit failed task"
+  },
+  {
+    "kind": "live-generation",
     "run": "cloud-todo-1",
     "taskId": "004afa31-f318-4916-956e-a6db23ce004b",
     "syntheticRequirement": "做一个中文待办应用，支持添加、完成、删除任务，区分完成状态，同浏览器重开恢复。输入框无障碍名称为“待办内容”，添加按钮叫“添加任务”。普通样式自行决定。",

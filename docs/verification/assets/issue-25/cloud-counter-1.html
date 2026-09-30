@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>计数器</title>
+<style>
+  :root { color-scheme: light; }
+  html, body { height: 100%; }
+  body {
+    margin: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: system-ui, -apple-system, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+    background: #f2f4f8;
+    color: #1c2431;
+  }
+  .app {
+    width: min(92vw, 360px);
+    background: #ffffff;
+    border: 1px solid #dde3ec;
+    border-radius: 14px;
+    padding: 24px 20px 20px;
+    box-shadow: 0 8px 24px rgba(28, 36, 49, 0.08);
+    text-align: center;
+  }
+  h1 {
+    margin: 0 0 16px;
+    font-size: 18px;
+    font-weight: 600;
+    color: #47536b;
+  }
+  #counter-value {
+    display: block;
+    margin: 0 auto 20px;
+    font-size: 56px;
+    line-height: 1.1;
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+    color: #1c2431;
+    min-height: 64px;
+  }
+  .buttons {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+  }
+  button {
+    flex: 1 1 0;
+    padding: 12px 8px;
+    font-size: 16px;
+    font-family: inherit;
+    color: #ffffff;
+    background: #3b6ef5;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+  }
+  button:hover:enabled { background: #2f5fe0; }
+  button:active:enabled { background: #2751c6; }
+  button:disabled { background: #b9c4d8; cursor: not-allowed; }
+  #btn-reset { background: #6b7891; }
+  #btn-reset:hover:enabled { background: #5b677e; }
+  #btn-reset:active:enabled { background: #4d5870; }
+  [data-atoms-status] {
+    display: block;
+    margin: 16px 0 0;
+    font-size: 13px;
+    color: #64748b;
+    min-height: 18px;
+  }
+</style>
+</head>
+<body>
+  <main class="app">
+    <h1>计数器</h1>
+    <output id="counter-value" data-atoms-output aria-live="polite">0</output>
+    <div class="buttons">
+      <button id="btn-increment" type="button" disabled>增加</button>
+      <button id="btn-decrement" type="button" disabled>减少</button>
+      <button id="btn-reset" type="button" disabled>重置</button>
+    </div>
+    <span data-atoms-status id="app-status">读取中</span>
+  </main>
+
+<script>
+(function () {
+  "use strict";
+
+  var outputEl = document.getElementById("counter-value");
+  var btnInc = document.getElementById("btn-increment");
+  var btnDec = document.getElementById("btn-decrement");
+  var btnReset = document.getElementById("btn-reset");
+  var statusEl = document.getElementById("app-status");
+
+  var data = null;       // 已加载的业务数据对象
+  var saving = false;    // 是否正在保存
+
+  function setStatus(text) {
+    statusEl.textContent = text;
+  }
+
+  function setControlsDisabled(disabled) {
+    btnInc.disabled = disabled;
+    btnDec.disabled = disabled;
+    btnReset.disabled = disabled;
+  }
+
+  function renderCount() {
+    var n = (data && typeof data.count === "number" && isFinite(data.count)) ? data.count : 0;
+    outputEl.textContent = String(n);
+  }
+
+  function normalize(raw) {
+    var obj;
+    if (raw && typeof raw === "object" && !Array.isArray(raw)) {
+      obj = raw;                       // 保留其余已存在字段
+    } else {
+      obj = {};
+    }
+    if (typeof obj.count !== "number" || !isFinite(obj.count)) {
+      obj.count = 0;
+    }
+    obj.count = Math.trunc(obj.count);
+    return obj;
+  }
+
+  // 同一事件内同步调用 saveState；保存期间禁用按钮并显示状态
+  function persist(mutate) {
+    if (saving) { return; }
+    var prev = data;
+
+    // 同步完成业务状态变更并渲染
+    var next = {};
+    for (var k in prev) {
+      if (Object.prototype.hasOwnProperty.call(prev, k)) { next[k] = prev[k]; }
+    }
+    mutate(next);
+    if (typeof next.count !== "number" || !isFinite(next.count)) { next.count = 0; }
+    next.count = Math.trunc(next.count);
+    data = next;
+    renderCount();
+
+    saving = true;
+    setControlsDisabled(true);
+    setStatus("正在保存");
+
+    var toSave = data;
+    Promise.resolve()
+      .then(function () {
+        return window.atoms.saveState(toSave);
+      })
+      .then(function () {
+        saving = false;
+        setStatus("已保存");
+        setControlsDisabled(false);
+      })
+      .catch(function () {
+        // 失败：回滚到之前的状态并渲染
+        saving = false;
+        data = prev;
+        renderCount();
+        setStatus("保存失败");
+        setControlsDisabled(false);
+      });
+  }
+
+  btnInc.addEventListener("click", function () {
+    persist(function (d) { d.count = d.count + 1; });
+  });
+
+  btnDec.addEventListener("click", function () {
+    persist(function (d) { d.count = d.count - 1; });
+  });
+
+  btnReset.addEventListener("click", function () {
+    persist(function (d) { d.count = 0; });
+  });
+
+  // 初始：控件全部禁用，先渲染默认 0
+  setControlsDisabled(true);
+  data = normalize(null);
+  renderCount();
+  setStatus("读取中");
+
+  Promise.resolve()
+    .then(function () {
+      return window.atoms.loadState();
+    })
+    .then(function (loaded) {
+      data = normalize(loaded);
+      renderCount();
+      setStatus("已读取");
+      setControlsDisabled(false);
+    })
+    .catch(function () {
+      // 读取失败：保持全禁用，绝不再尝试保存
+      setStatus("读取失败");
+      setControlsDisabled(true);
+    });
+})();
+</script>
+</body>
+</html>
