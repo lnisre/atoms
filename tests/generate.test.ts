@@ -254,3 +254,24 @@ test("客户端收到产物后连接异常也不提交成功；取消读取会�
   await reader.cancel();
   assert.equal(aborted, true);
 });
+
+test("修改沿用同次正文协议与实时事件，保留完整上下文和缺正文降级", async () => {
+  process.env.DEEPSEEK_API_KEY = "test-key";
+  for (const missing of [false, true]) {
+    let calls = 0;
+    globalThis.fetch = async (_url, options) => {
+      calls++;
+      const payload = JSON.parse(String(options?.body));
+      assert.match(payload.messages[0].content, /assistantReply/);
+      assert.equal(payload.max_tokens, 12288);
+      assert.deepEqual(JSON.parse(payload.messages.at(-1).content).successfulModifications, ["上一轮"]);
+      return Response.json({ choices: [{ finish_reason: "stop", message: { content: JSON.stringify({ html: fullHtml, ...(missing ? {} : { assistantReply: "本轮真实说明" }) }) } }] });
+    };
+    const req = editRequest({ baseHtml: fullHtml, modification: "本轮修改", context: ["上一轮"] });
+    req.headers.set("Accept", "application/x-ndjson"); req.headers.set("X-Atoms-Task-Id", "modification-task");
+    const output = await events(await POST(req));
+    assert.equal(calls, 1); assert.equal(output.at(-1).assistantReply, missing ? null : "本轮真实说明");
+    assert.equal(output.at(-1).result.html, fullHtml);
+    assert.ok(output.filter(x => x.type === "step").every(x => x.event.taskId === "modification-task"));
+  }
+});

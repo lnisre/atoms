@@ -79,9 +79,9 @@ export function AppPreview({
       const recordOperation = recorder.current;
       queue = queue.then(async () => {
         if (disposed) return;
-        const stepId = `data-${message.id}`;
-        const label = message.method === "load" ? "读取应用数据" : "保存应用数据";
-        recordOperation?.(stepId, label, "started", "通过平台接口访问本项目的正式业务数据。");
+        const stepId = `data-${channel}-${message.id}`;
+        const label = trial ? (message.method === "load" ? "读取试用数据" : "更新试用数据") : (message.method === "load" ? "读取应用数据" : "保存应用数据");
+        recordOperation?.(stepId, label, "started", trial ? "访问本轮会话的试用副本，不写入正式数据。" : "通过平台接口访问本项目的正式业务数据。");
         try {
           if (trial && trial.projectId !== projectId)
             throw new Error("试用数据与项目不匹配，已阻止读写。");
@@ -116,7 +116,7 @@ export function AppPreview({
             }
             hasData = true;
           }
-          recordOperation?.(stepId, label, "completed", message.method === "load" ? "读取已完成；未复制业务数据到执行记录。" : "正式业务数据事务已提交。");
+          recordOperation?.(stepId, label, "completed", message.method === "load" ? "读取已完成；未复制业务数据到执行记录。" : trial ? "试用副本已更新，未写入正式数据。" : "正式业务数据事务已提交。");
           if (disposed) return;
           pending--;
           source.postMessage(
