@@ -1,0 +1,13 @@
+{
+  "kind": "real M4 compatibility request, not four-role QA",
+  "taskId": "40ee6241-f3e1-4186-94c4-d9c919465774",
+  "modelRequests": 1,
+  "requestedModel": "deepseek-v4-flash",
+  "responseModel": "deepseek-flash",
+  "workflowElapsedMs": 8196,
+  "generationDurationMs": 8057,
+  "titlePresent": true,
+  "providerResponseId": null,
+  "usage": null,
+  "note": "Legacy M4 response does not expose provider response id or token usage; these are not fabricated."
+}
