@@ -1,0 +1,10 @@
+Vercel CLI 61.0.0 (Node.js 24.18.0)
+Deploying v0-test0
+Uploading [--------------------] (0.0B/46.7KB)
+Uploading [=======-------------] (17.6KB/46.7KB)
+Uploading [===========---------] (26.9KB/46.7KB)
+Uploading [==================--] (42.9KB/46.7KB)
+Uploading [====================] (46.7KB/46.7KB)
+  Inspect         https://vercel.com/lnisres-projects/v0-test0/2jJpwyEciyYXkRPWT1KWEGDWsyHE
+  Production      https://v0-test0-m5vi30jxi-lnisres-projects.vercel.app
+Building…

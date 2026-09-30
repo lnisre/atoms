@@ -1,0 +1,68 @@
+[
+  {
+    "n": 1,
+    "request": {
+      "requirement": "做一个支持添加、完成、删除任务的待办应用。中文界面，清楚区分已完成和未完成任务，适配手机。",
+      "modification": "增加任务优先级与筛选",
+      "context": [],
+      "baseHtmlSha256": "08d073287eb68695e1e5744d5ab764f1ee41fcfd2bbeff063577b7b31dbbe719"
+    },
+    "result": {
+      "model": "deepseek-flash",
+      "durationMs": 18292,
+      "generatedAt": "2026-09-29T12:22:58.801Z",
+      "htmlSha256": "162cf518f86fd1407ee016fe374a6ad017e73637b22f9aa4518b449fc582d38c"
+    },
+    "status": 200
+  },
+  {
+    "n": 2,
+    "request": {
+      "requirement": "做一个支持添加、完成、删除任务的待办应用。中文界面，清楚区分已完成和未完成任务，适配手机。",
+      "modification": "把筛选放到顶部",
+      "context": [
+        "增加任务优先级与筛选"
+      ],
+      "baseHtmlSha256": "162cf518f86fd1407ee016fe374a6ad017e73637b22f9aa4518b449fc582d38c"
+    },
+    "result": {
+      "model": "deepseek-flash",
+      "durationMs": 17654,
+      "generatedAt": "2026-09-29T12:23:57.695Z",
+      "htmlSha256": "ebcb69f0c957d6c752a72bde3cc87b1761561116636cf803c38ec570054aec1d"
+    },
+    "status": 200
+  },
+  {
+    "n": 3,
+    "request": {
+      "requirement": "做一个支持添加、完成、删除任务的待办应用。中文界面，清楚区分已完成和未完成任务，适配手机。",
+      "modification": "允许直接修改已有任务的优先级，保留已有任务、完成状态、筛选与全部现有功能。",
+      "context": [],
+      "baseHtmlSha256": "ebcb69f0c957d6c752a72bde3cc87b1761561116636cf803c38ec570054aec1d"
+    },
+    "result": {
+      "model": "deepseek-flash",
+      "durationMs": 19710,
+      "generatedAt": "2026-09-29T12:27:48.382Z",
+      "htmlSha256": "57b1ae0ec4f061bbe50a3d878fe37111e978bb2d8e304b670649a7cdaaf6f246"
+    },
+    "status": 200
+  },
+  {
+    "n": 4,
+    "request": {
+      "requirement": "做一个支持添加、完成、删除任务的待办应用。中文界面，清楚区分已完成和未完成任务，适配手机。",
+      "modification": "把应用标题改成“未采用的关闭重开检查”，保留所有现有功能与数据。",
+      "context": [],
+      "baseHtmlSha256": "57b1ae0ec4f061bbe50a3d878fe37111e978bb2d8e304b670649a7cdaaf6f246"
+    },
+    "result": {
+      "model": "deepseek-flash",
+      "durationMs": 19045,
+      "generatedAt": "2026-09-29T12:42:28.125Z",
+      "htmlSha256": "a2226399c4edfc1ee2d62e6b1db2d688b26600bd02c0f136efa257144fa2e4d3"
+    },
+    "status": 200
+  }
+]

@@ -1,0 +1,760 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+  <title>待办清单 · 轻量任务</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+      background: #f7f9fc;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      padding: 16px;
+    }
+    .app {
+      width: 100%;
+      max-width: 560px;
+      background: #ffffff;
+      border-radius: 28px;
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.06);
+      padding: 24px 20px 32px;
+      margin-top: 12px;
+    }
+    h1 {
+      font-size: 1.8rem;
+      font-weight: 600;
+      color: #1a2e3b;
+      letter-spacing: -0.02em;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    h1 svg {
+      width: 28px;
+      height: 28px;
+      stroke: #2f6e5a;
+      stroke-width: 2;
+      fill: none;
+    }
+    .subhead {
+      font-size: 0.9rem;
+      color: #5c6f7e;
+      margin-bottom: 24px;
+      padding-left: 4px;
+      border-left: 3px solid #a8d5c4;
+      padding-left: 12px;
+    }
+    .trial-banner {
+      background: #fff6e0;
+      color: #8a5a00;
+      padding: 12px 16px;
+      border-radius: 20px;
+      font-size: 0.82rem;
+      margin-bottom: 18px;
+      border: 1px solid #f2d999;
+      line-height: 1.5;
+    }
+    .trial-banner strong {
+      font-weight: 600;
+    }
+    .status-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      min-height: 28px;
+      margin-bottom: 12px;
+      font-size: 0.85rem;
+      color: #3b5e6b;
+    }
+    .save-indicator {
+      background: #e8f0ee;
+      padding: 4px 12px;
+      border-radius: 30px;
+      color: #1f5e4b;
+      transition: opacity 0.2s;
+      font-weight: 500;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .save-indicator.error {
+      background: #ffe3e0;
+      color: #b33a2c;
+    }
+    .input-row {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+    }
+    .input-row input {
+      flex: 1;
+      min-width: 160px;
+      padding: 14px 18px;
+      border: 1.5px solid #dbe4ea;
+      border-radius: 60px;
+      font-size: 1rem;
+      background: #fafdff;
+      outline: none;
+      transition: border 0.2s, box-shadow 0.2s;
+      font-family: inherit;
+    }
+    .input-row input:focus {
+      border-color: #3f8e78;
+      box-shadow: 0 0 0 4px rgba(63, 142, 120, 0.12);
+    }
+    .input-row input:disabled {
+      background: #f0f4f8;
+      color: #8a9aa8;
+      cursor: not-allowed;
+    }
+    .priority-select {
+      padding: 14px 14px;
+      border: 1.5px solid #dbe4ea;
+      border-radius: 60px;
+      font-size: 0.95rem;
+      background: #fafdff;
+      font-family: inherit;
+      color: #1f3c47;
+      cursor: pointer;
+      outline: none;
+    }
+    .priority-select:focus {
+      border-color: #3f8e78;
+      box-shadow: 0 0 0 4px rgba(63, 142, 120, 0.12);
+    }
+    .priority-select:disabled {
+      background: #f0f4f8;
+      color: #8a9aa8;
+      cursor: not-allowed;
+    }
+    .btn {
+      border: none;
+      background: #2f6e5a;
+      color: white;
+      font-size: 1rem;
+      font-weight: 500;
+      padding: 0 24px;
+      border-radius: 60px;
+      cursor: pointer;
+      transition: background 0.15s, transform 0.1s;
+      font-family: inherit;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 52px;
+      white-space: nowrap;
+      box-shadow: 0 4px 10px rgba(47, 110, 90, 0.2);
+    }
+    .btn:hover {
+      background: #245845;
+    }
+    .btn:active {
+      transform: scale(0.96);
+    }
+    .btn:disabled {
+      background: #b7c9c2;
+      box-shadow: none;
+      cursor: not-allowed;
+      transform: none;
+    }
+    .filter-bar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 22px;
+      align-items: center;
+    }
+    .filter-label {
+      font-size: 0.85rem;
+      color: #5c6f7e;
+      font-weight: 500;
+      margin-right: 2px;
+    }
+    .filter-chip {
+      border: 1.5px solid #dbe4ea;
+      background: #ffffff;
+      color: #3b5e6b;
+      font-size: 0.82rem;
+      font-family: inherit;
+      padding: 7px 14px;
+      border-radius: 40px;
+      cursor: pointer;
+      transition: background 0.15s, border 0.15s, color 0.15s;
+      white-space: nowrap;
+    }
+    .filter-chip:hover {
+      background: #f0f7f4;
+    }
+    .filter-chip.active {
+      background: #2f6e5a;
+      border-color: #2f6e5a;
+      color: #ffffff;
+      font-weight: 500;
+    }
+    .filter-chip:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+    .task-section {
+      margin-bottom: 26px;
+    }
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+    .section-header h2 {
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: #1e3a47;
+      letter-spacing: 0.01em;
+    }
+    .section-header .count {
+      background: #eef3f1;
+      font-size: 0.8rem;
+      padding: 3px 12px;
+      border-radius: 40px;
+      color: #2a5b4b;
+      font-weight: 500;
+    }
+    .task-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .task-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: #fafdff;
+      border-radius: 60px;
+      padding: 6px 6px 6px 16px;
+      border: 1px solid #e5edf2;
+      transition: background 0.15s, border 0.15s;
+      animation: fadeSlide 0.18s ease-out;
+    }
+    @keyframes fadeSlide {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .task-item.completed .task-title {
+      text-decoration: line-through;
+      color: #9bb0bb;
+    }
+    .task-item.completed {
+      background: #f3f8f7;
+      border-color: #d5e5e0;
+    }
+    .priority-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      flex-shrink: 0;
+      border: 2px solid transparent;
+    }
+    .priority-dot.p-high { background: #e05a44; }
+    .priority-dot.p-medium { background: #e8a33d; }
+    .priority-dot.p-low { background: #4d9e85; }
+    .task-title {
+      flex: 1;
+      font-size: 1rem;
+      color: #1f3c47;
+      word-break: break-word;
+      padding: 10px 0;
+      line-height: 1.4;
+      min-width: 0;
+      transition: color 0.15s, text-decoration 0.15s;
+    }
+    .priority-tag {
+      font-size: 0.7rem;
+      padding: 3px 8px;
+      border-radius: 30px;
+      font-weight: 600;
+      flex-shrink: 0;
+      letter-spacing: 0.02em;
+    }
+    .priority-tag.p-high { background: #fde3df; color: #b33a2c; }
+    .priority-tag.p-medium { background: #fdf0dc; color: #9a6a12; }
+    .priority-tag.p-low { background: #e2f3ee; color: #1f6b54; }
+    .task-actions {
+      display: flex;
+      align-items: center;
+      gap: 2px;
+      flex-shrink: 0;
+    }
+    .icon-btn {
+      background: transparent;
+      border: none;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      color: #5c7b88;
+      transition: background 0.15s, color 0.15s;
+      padding: 0;
+      font-size: 0;
+      line-height: 0;
+    }
+    .icon-btn:hover {
+      background: #e6efec;
+      color: #1f5e4b;
+    }
+    .icon-btn:active {
+      background: #d0e0da;
+    }
+    .icon-btn svg {
+      width: 21px;
+      height: 21px;
+      stroke: currentColor;
+      stroke-width: 2;
+      fill: none;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+    .icon-btn.delete:hover {
+      color: #c44536;
+      background: #ffeae6;
+    }
+    .empty-message {
+      text-align: center;
+      padding: 24px 12px;
+      color: #9aafbb;
+      font-size: 0.95rem;
+      border-radius: 60px;
+      background: #fbfefe;
+      border: 1px dashed #cbdae3;
+    }
+    .error-banner {
+      background: #ffe3e0;
+      color: #b33a2c;
+      padding: 14px 18px;
+      border-radius: 40px;
+      font-size: 0.9rem;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      border: 1px solid #f5c6c1;
+    }
+    .footer-note {
+      margin-top: 32px;
+      font-size: 0.75rem;
+      color: #90a6b2;
+      text-align: center;
+      border-top: 1px solid #e2ecf1;
+      padding-top: 18px;
+      line-height: 1.6;
+    }
+    .footer-note strong {
+      font-weight: 600;
+      color: #5b7f8e;
+    }
+    @media (max-width: 420px) {
+      .app { padding: 20px 14px 24px; }
+      h1 { font-size: 1.6rem; }
+      .btn { padding: 0 16px; min-height: 48px; font-size: 0.95rem; }
+      .input-row input { padding: 12px 16px; }
+    }
+  </style>
+</head>
+<body>
+  <main class="app" aria-labelledby="app-title">
+    <h1 id="app-title">
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01" />
+      </svg>
+      待办清单
+    </h1>
+    <div class="subhead">轻量任务 · 优先级与筛选</div>
+
+    <div class="trial-banner">
+      <strong>试用副本：</strong>本次改动仅保存在本浏览器和本站点的临时试用数据中，保存成功仅表示“试用已更新”，并非正式保存。丢弃、刷新或关闭页面后，试用数据与未采用的代码都会消失。原始应用数据不会被此次试用改动。
+    </div>
+
+    <!-- 错误显示区域 -->
+    <div id="errorBanner" class="error-banner" style="display: none;" role="alert"></div>
+
+    <!-- 状态栏 / 保存反馈 -->
+    <div class="status-bar">
+      <span id="saveStatus" class="save-indicator" aria-live="polite"></span>
+    </div>
+
+    <!-- 添加任务 -->
+    <div class="input-row">
+      <input type="text" id="taskInput" placeholder="写一个新任务…" aria-label="新任务描述" disabled autocomplete="off" />
+      <select id="prioritySelect" class="priority-select" aria-label="任务优先级" disabled>
+        <option value="medium">中优先级</option>
+        <option value="high">高优先级</option>
+        <option value="low">低优先级</option>
+      </select>
+      <button type="button" id="addBtn" class="btn" disabled>添加</button>
+    </div>
+
+    <!-- 优先级筛选 -->
+    <div class="filter-bar" role="group" aria-label="按优先级筛选">
+      <span class="filter-label">筛选：</span>
+      <button type="button" class="filter-chip active" data-filter="all" disabled>全部</button>
+      <button type="button" class="filter-chip" data-filter="high" disabled>高</button>
+      <button type="button" class="filter-chip" data-filter="medium" disabled>中</button>
+      <button type="button" class="filter-chip" data-filter="low" disabled>低</button>
+    </div>
+
+    <!-- 未完成任务区域 -->
+    <section class="task-section" aria-labelledby="pending-heading">
+      <div class="section-header">
+        <h2 id="pending-heading">未完成</h2>
+        <span class="count" id="pendingCount">0</span>
+      </div>
+      <ul class="task-list" id="pendingList" aria-label="未完成任务列表"></ul>
+      <div id="pendingEmpty" class="empty-message" style="display: none;">✨ 没有符合条件的未完成任务</div>
+    </section>
+
+    <!-- 已完成任务区域 -->
+    <section class="task-section" aria-labelledby="completed-heading">
+      <div class="section-header">
+        <h2 id="completed-heading">已完成</h2>
+        <span class="count" id="completedCount">0</span>
+      </div>
+      <ul class="task-list" id="completedList" aria-label="已完成任务列表"></ul>
+      <div id="completedEmpty" class="empty-message" style="display: none;">🎯 没有符合条件的已完成任务</div>
+    </section>
+
+    <div class="footer-note">
+      <strong>试用数据仅保存在此浏览器和站点，且为临时副本</strong><br />
+      丢弃、刷新或关闭后恢复范围仅限于当前浏览器，试用改动不会写入正式数据。清除站点数据将丢失所有任务。
+    </div>
+  </main>
+
+  <script>
+    (function() {
+      'use strict';
+
+      // ---------- DOM 元素 ----------
+      const taskInput = document.getElementById('taskInput');
+      const prioritySelect = document.getElementById('prioritySelect');
+      const addBtn = document.getElementById('addBtn');
+      const pendingList = document.getElementById('pendingList');
+      const completedList = document.getElementById('completedList');
+      const pendingCount = document.getElementById('pendingCount');
+      const completedCount = document.getElementById('completedCount');
+      const pendingEmpty = document.getElementById('pendingEmpty');
+      const completedEmpty = document.getElementById('completedEmpty');
+      const saveStatus = document.getElementById('saveStatus');
+      const errorBanner = document.getElementById('errorBanner');
+      const filterChips = Array.prototype.slice.call(document.querySelectorAll('.filter-chip'));
+
+      // ---------- 状态 ----------
+      // 每个任务: { id, title, completed, priority }
+      // 旧数据缺少 priority，加载时补默认 'medium'，不覆盖其他字段
+      let tasks = [];
+      let filter = 'all';          // 'all' | 'high' | 'medium' | 'low'
+      let isReady = false;         // loadState 完成前禁止编辑
+      let interactive = false;     // 是否允许编辑（保存挂起时禁用）
+
+      const PRIORITIES = ['high', 'medium', 'low'];
+      const PRIORITY_LABEL = { high: '高', medium: '中', low: '低' };
+      const PRIORITY_RANK = { high: 0, medium: 1, low: 2 };
+
+      // ---------- 工具 ----------
+      function generateId() {
+        return Date.now().toString(36) + Math.random().toString(36).substring(2, 9);
+      }
+
+      function normalizePriority(p) {
+        return PRIORITIES.indexOf(p) !== -1 ? p : 'medium';
+      }
+
+      function updateSaveStatus(text, isError) {
+        saveStatus.textContent = text;
+        if (isError) {
+          saveStatus.classList.add('error');
+        } else {
+          saveStatus.classList.remove('error');
+        }
+      }
+
+      function showError(msg) {
+        errorBanner.textContent = msg;
+        errorBanner.style.display = 'flex';
+      }
+
+      function hideError() {
+        errorBanner.style.display = 'none';
+        errorBanner.textContent = '';
+      }
+
+      // ---------- 渲染 ----------
+      function render() {
+        pendingList.innerHTML = '';
+        completedList.innerHTML = '';
+
+        const matchesFilter = function(t) {
+          return filter === 'all' || t.priority === filter;
+        };
+
+        const visible = tasks.filter(matchesFilter);
+        const pending = visible.filter(function(t) { return !t.completed; });
+        const completed = visible.filter(function(t) { return t.completed; });
+
+        // 排序：未完成按优先级（高→低），同优先级保持原顺序
+        pending.sort(function(a, b) {
+          return PRIORITY_RANK[a.priority] - PRIORITY_RANK[b.priority];
+        });
+
+        pendingCount.textContent = pending.length;
+        completedCount.textContent = completed.length;
+
+        const noneAtAll = tasks.length === 0;
+        pendingEmpty.textContent = noneAtAll ? '✨ 没有未完成任务' : '✨ 没有符合条件的未完成任务';
+        completedEmpty.textContent = noneAtAll ? '🎯 还没有完成的任务' : '🎯 没有符合条件的已完成任务';
+
+        pendingEmpty.style.display = pending.length === 0 ? 'block' : 'none';
+        completedEmpty.style.display = completed.length === 0 ? 'block' : 'none';
+
+        pending.forEach(function(task) {
+          pendingList.appendChild(createTaskElement(task));
+        });
+        completed.forEach(function(task) {
+          completedList.appendChild(createTaskElement(task));
+        });
+      }
+
+      function createTaskElement(task) {
+        const li = document.createElement('li');
+        li.className = 'task-item' + (task.completed ? ' completed' : '');
+        li.dataset.id = task.id;
+
+        const dot = document.createElement('span');
+        dot.className = 'priority-dot p-' + task.priority;
+        dot.setAttribute('aria-hidden', 'true');
+
+        const titleSpan = document.createElement('span');
+        titleSpan.className = 'task-title';
+        titleSpan.textContent = task.title;   // 安全渲染
+
+        const tag = document.createElement('span');
+        tag.className = 'priority-tag p-' + task.priority;
+        tag.textContent = PRIORITY_LABEL[task.priority];
+        tag.setAttribute('aria-label', '优先级：' + PRIORITY_LABEL[task.priority]);
+
+        const actionsDiv = document.createElement('div');
+        actionsDiv.className = 'task-actions';
+
+        const toggleBtn = document.createElement('button');
+        toggleBtn.type = 'button';
+        toggleBtn.className = 'icon-btn toggle';
+        toggleBtn.setAttribute('aria-label', task.completed ? '标记为未完成' : '标记为已完成');
+        toggleBtn.innerHTML = task.completed
+          ? '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" /><path d="M8 12l2.5 2.5L16 9" /></svg>'
+          : '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" /><path d="M12 8v8M8 12h8" /></svg>';
+        toggleBtn.addEventListener('click', function(e) {
+          e.stopPropagation();
+          mutate(function(state) {
+            const t = state.tasks.find(function(x) { return x.id === task.id; });
+            if (t) t.completed = !t.completed;
+          });
+        });
+
+        const deleteBtn = document.createElement('button');
+        deleteBtn.type = 'button';
+        deleteBtn.className = 'icon-btn delete';
+        deleteBtn.setAttribute('aria-label', '删除任务');
+        deleteBtn.innerHTML = '<svg viewBox="0 0 24 24"><path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6M10 11v6M14 11v6"/></svg>';
+        deleteBtn.addEventListener('click', function(e) {
+          e.stopPropagation();
+          mutate(function(state) {
+            state.tasks = state.tasks.filter(function(x) { return x.id !== task.id; });
+          });
+        });
+
+        actionsDiv.appendChild(toggleBtn);
+        actionsDiv.appendChild(deleteBtn);
+        li.appendChild(dot);
+        li.appendChild(titleSpan);
+        li.appendChild(tag);
+        li.appendChild(actionsDiv);
+        return li;
+      }
+
+      // ---------- 交互开关 ----------
+      function setInteractive(enabled) {
+        interactive = enabled;
+        taskInput.disabled = !enabled;
+        prioritySelect.disabled = !enabled;
+        addBtn.disabled = !enabled;
+        filterChips.forEach(function(c) { c.disabled = !enabled; });
+        filterChips.forEach(function(c) {
+          c.classList.toggle('active', c.dataset.filter === filter);
+        });
+      }
+
+      // ---------- 唯一异步变更处理器 ----------
+      // mutate: 同步更新本地数据 -> 渲染 -> 显示“保存中” -> await saveState -> 显示成功
+      async function mutate(applyFn) {
+        if (!isReady || !interactive) return;
+
+        const prevTasks = tasks.map(function(t) { return Object.assign({}, t); });
+        const nextState = {
+          tasks: tasks.map(function(t) { return Object.assign({}, t); })
+        };
+
+        applyFn(nextState);
+
+        // 同步提交本地状态
+        tasks = nextState.tasks;
+        render();
+
+        setInteractive(false);
+        updateSaveStatus('正在更新试用…', false);
+        hideError();
+
+        try {
+          await window.atoms.saveState({ tasks: tasks });
+          updateSaveStatus('试用已更新', false);
+          setInteractive(true);
+        } catch (err) {
+          // 回滚本地显示到上次状态，避免与存储不一致
+          tasks = prevTasks;
+          render();
+          setInteractive(true);
+          updateSaveStatus('保存失败', true);
+          showError('试用更新失败：' + (err && err.message ? err.message : '未知错误') + '。本次改动未保存。');
+        }
+      }
+
+      // ---------- 用户操作 -> 调用 mutate ----------
+      function addTask() {
+        if (!isReady || !interactive) return;
+        const title = taskInput.value.trim();
+        if (!title) {
+          showError('任务内容不能为空');
+          return;
+        }
+        if (title.length > 500) {
+          showError('任务内容过长（最多500字）');
+          return;
+        }
+        const priority = normalizePriority(prioritySelect.value);
+        const newTask = {
+          id: generateId(),
+          title: title,
+          completed: false,
+          priority: priority
+        };
+        taskInput.value = '';
+        prioritySelect.value = 'medium';
+
+        mutate(function(state) {
+          state.tasks.push(newTask);
+        }).then(function() {
+          if (interactive) taskInput.focus();
+        });
+      }
+
+      function applyFilter(next) {
+        if (!isReady || !interactive) return;
+        filter = next;
+        filterChips.forEach(function(c) {
+          c.classList.toggle('active', c.dataset.filter === filter);
+        });
+        render();
+      }
+
+      // ---------- 键盘 ----------
+      function handleInputKeydown(e) {
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          addTask();
+        }
+      }
+
+      // ---------- 初始化 ----------
+      async function init() {
+        setInteractive(false);
+
+        try {
+          const saved = await window.atoms.loadState();
+
+          if (saved && typeof saved === 'object' && Array.isArray(saved.tasks)) {
+            const seen = new Set();
+            tasks = saved.tasks
+              .filter(function(item) {
+                return item && typeof item === 'object' &&
+                  typeof item.id === 'string' &&
+                  typeof item.title === 'string' &&
+                  typeof item.completed === 'boolean';
+              })
+              .filter(function(item) {
+                if (seen.has(item.id)) return false;
+                seen.add(item.id);
+                return true;
+              })
+              .map(function(item) {
+                // 保留所有旧字段；仅当缺少 priority 时补默认值
+                const copy = Object.assign({}, item);
+                copy.completed = item.completed;
+                if (PRIORITIES.indexOf(copy.priority) === -1) {
+                  copy.priority = 'medium';
+                }
+                return copy;
+              });
+          } else if (saved === null) {
+            tasks = [];
+          } else {
+            // 结构不符：显示为空，但不写回覆盖，等用户操作再保存
+            tasks = [];
+          }
+
+          if (saved && typeof saved === 'object' && typeof saved.filter === 'string' &&
+              (saved.filter === 'all' || PRIORITIES.indexOf(saved.filter) !== -1)) {
+            filter = saved.filter;
+          }
+
+          render();
+          isReady = true;
+          setInteractive(true);
+          updateSaveStatus('试用就绪', false);
+          hideError();
+
+          addBtn.addEventListener('click', addTask);
+          taskInput.addEventListener('keydown', handleInputKeydown);
+          taskInput.addEventListener('input', function() {
+            if (errorBanner.style.display !== 'none' &&
+                errorBanner.textContent === '任务内容不能为空') {
+              hideError();
+            }
+          });
+          filterChips.forEach(function(c) {
+            c.addEventListener('click', function() {
+              applyFilter(c.dataset.filter);
+            });
+          });
+
+        } catch (err) {
+          setInteractive(false);
+          showError('无法加载数据：' + (err && err.message ? err.message : '未知错误') +
+            '。编辑已禁用，请刷新页面重试。');
+          updateSaveStatus('加载失败', true);
+        }
+      }
+
+      init();
+    })();
+  </script>
+</body>
+</html>

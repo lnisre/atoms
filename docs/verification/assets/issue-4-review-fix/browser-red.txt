@@ -1,0 +1,117 @@
+
+> atoms@0.1.0 test:e2e /Users/gaowenlong/Desktop/atoms
+> playwright test tests/browser/preview-document.spec.ts --workers\=1 --output\=/tmp/atoms-fix-red
+
+
+Running 3 tests using 1 worker
+
+(node:55763) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  1 tests/browser/preview-document.spec.ts:7:7 › 真实 head 装配、数据保存恢复和运行异常反馈：普通完整 HTML (1.7s)
+(node:55989) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  2 tests/browser/preview-document.spec.ts:7:7 › 真实 head 装配、数据保存恢复和运行异常反馈：<!-- example <head> --> (5.7s)
+(node:56289) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  3 tests/browser/preview-document.spec.ts:7:7 › 真实 head 装配、数据保存恢复和运行异常反馈：<!-- <head> --><!----><!-- <body> --> (6.7s)
+
+
+  1) tests/browser/preview-document.spec.ts:7:7 › 真实 head 装配、数据保存恢复和运行异常反馈：普通完整 HTML ───────────────
+
+    Error: expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 3
+    + Received  + 3
+
+      Object {
+        "bridge": "object",
+    -   "csp": 1,
+    -   "first": "META",
+    -   "headAttribute": ">",
+    +   "csp": 0,
+    +   "first": "SCRIPT",
+    +   "headAttribute": "><meta http-equiv=",
+      }
+
+      42 |       first: document.head.firstElementChild?.tagName,
+      43 |       headAttribute: document.head.getAttribute("data-example"),
+    > 44 |     }))).toEqual({ bridge: "object", csp: 1, first: "META", headAttribute: ">" });
+         |          ^
+      45 |     await expect(page.locator("iframe")).toHaveAttribute("sandbox", "allow-scripts");
+      46 |     expect(await frame.locator("body").evaluate(async () => {
+      47 |       try { await fetch("https://example.com/blocked-by-platform"); return false; }
+        at /Users/gaowenlong/Desktop/atoms/tests/browser/preview-document.spec.ts:44:10
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ../../../../tmp/atoms-fix-red/preview-document-真实-head-装配、数据保存恢复和运行异常反馈：普通完整-HTML/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../../../../tmp/atoms-fix-red/preview-document-真实-head-装配、数据保存恢复和运行异常反馈：普通完整-HTML/error-context.md
+
+  2) tests/browser/preview-document.spec.ts:7:7 › 真实 head 装配、数据保存恢复和运行异常反馈：<!-- example <head> --> ─
+
+    Error: expect(locator).toBeEnabled() failed
+
+    Locator:  locator('iframe').contentFrame().locator('#action')
+    Expected: enabled
+    Received: disabled
+    Timeout:  5000ms
+
+    Call log:
+      - Expect "toBeEnabled" locator('iframe').contentFrame().locator('#action') with timeout 5000ms
+      - waiting for locator('iframe').contentFrame().locator('#action')
+        14 × locator resolved to <button disabled id="action">0</button>
+           - unexpected value "disabled"
+
+
+      36 |     await page.getByRole("button", { name: "开始生成" }).click();
+      37 |     const frame = page.frameLocator("iframe");
+    > 38 |     await expect(frame.locator("#action")).toBeEnabled();
+         |                                            ^
+      39 |     expect(await frame.locator("body").evaluate(() => ({
+      40 |       bridge: (window as unknown as { bridgeAtFirstScript: string }).bridgeAtFirstScript,
+      41 |       csp: document.head.querySelectorAll('meta[http-equiv="Content-Security-Policy"]').length,
+        at /Users/gaowenlong/Desktop/atoms/tests/browser/preview-document.spec.ts:38:44
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ../../../../tmp/atoms-fix-red/preview-document-真实-head-装-3a693-运行异常反馈：----example-head----/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../../../../tmp/atoms-fix-red/preview-document-真实-head-装-3a693-运行异常反馈：----example-head----/error-context.md
+
+  3) tests/browser/preview-document.spec.ts:7:7 › 真实 head 装配、数据保存恢复和运行异常反馈：<!-- <head> --><!----><!-- <body> --> 
+
+    Error: expect(locator).toBeEnabled() failed
+
+    Locator:  locator('iframe').contentFrame().locator('#action')
+    Expected: enabled
+    Received: disabled
+    Timeout:  5000ms
+
+    Call log:
+      - Expect "toBeEnabled" locator('iframe').contentFrame().locator('#action') with timeout 5000ms
+      - waiting for locator('iframe').contentFrame().locator('#action')
+        13 × locator resolved to <button disabled id="action">0</button>
+           - unexpected value "disabled"
+
+
+      36 |     await page.getByRole("button", { name: "开始生成" }).click();
+      37 |     const frame = page.frameLocator("iframe");
+    > 38 |     await expect(frame.locator("#action")).toBeEnabled();
+         |                                            ^
+      39 |     expect(await frame.locator("body").evaluate(() => ({
+      40 |       bridge: (window as unknown as { bridgeAtFirstScript: string }).bridgeAtFirstScript,
+      41 |       csp: document.head.querySelectorAll('meta[http-equiv="Content-Security-Policy"]').length,
+        at /Users/gaowenlong/Desktop/atoms/tests/browser/preview-document.spec.ts:38:44
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ../../../../tmp/atoms-fix-red/preview-document-真实-head-装-77221----head------------body----/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../../../../tmp/atoms-fix-red/preview-document-真实-head-装-77221----head------------body----/error-context.md
+
+  3 failed
+    tests/browser/preview-document.spec.ts:7:7 › 真实 head 装配、数据保存恢复和运行异常反馈：普通完整 HTML ────────────────
+    tests/browser/preview-document.spec.ts:7:7 › 真实 head 装配、数据保存恢复和运行异常反馈：<!-- example <head> --> ──
+    tests/browser/preview-document.spec.ts:7:7 › 真实 head 装配、数据保存恢复和运行异常反馈：<!-- <head> --><!----><!-- <body> --> 
+ ELIFECYCLE  Command failed with exit code 1.

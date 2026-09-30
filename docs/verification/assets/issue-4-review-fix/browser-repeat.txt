@@ -1,0 +1,39 @@
+
+> atoms@0.1.0 test:e2e /Users/gaowenlong/Desktop/atoms
+> playwright test tests/browser/preview-document.spec.ts --workers\=1 --timeout\=60000 --repeat-each\=5 --output\=/tmp/atoms-fix-repeat
+
+
+Running 20 tests using 1 worker
+
+(node:70327) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓   1 tests/browser/preview-document.spec.ts:7:7 › 真实 head 装配、数据保存恢复和运行异常反馈：普通完整 HTML (1.6s)
+  ✓   2 tests/browser/preview-document.spec.ts:7:7 › 真实 head 装配、数据保存恢复和运行异常反馈：<!-- example <head> --> (3.8s)
+  ✓   3 tests/browser/preview-document.spec.ts:7:7 › 真实 head 装配、数据保存恢复和运行异常反馈：<!-- <head> --><!----><!-- <body> --> (1.8s)
+  ✓   4 tests/browser/preview-document.spec.ts:60:5 › 恢复旧的不完整 HTML 时明确显示装配失败且不运行 iframe (892ms)
+(node:70666) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓   5 tests/browser/preview-document.spec.ts:7:7 › 真实 head 装配、数据保存恢复和运行异常反馈：普通完整 HTML (1.9s)
+  ✓   6 tests/browser/preview-document.spec.ts:7:7 › 真实 head 装配、数据保存恢复和运行异常反馈：<!-- example <head> --> (878ms)
+  ✓   7 tests/browser/preview-document.spec.ts:7:7 › 真实 head 装配、数据保存恢复和运行异常反馈：<!-- <head> --><!----><!-- <body> --> (873ms)
+  ✓   8 tests/browser/preview-document.spec.ts:60:5 › 恢复旧的不完整 HTML 时明确显示装配失败且不运行 iframe (650ms)
+(node:71233) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓   9 tests/browser/preview-document.spec.ts:7:7 › 真实 head 装配、数据保存恢复和运行异常反馈：普通完整 HTML (6.5s)
+  ✓  10 tests/browser/preview-document.spec.ts:7:7 › 真实 head 装配、数据保存恢复和运行异常反馈：<!-- example <head> --> (2.7s)
+  ✓  11 tests/browser/preview-document.spec.ts:7:7 › 真实 head 装配、数据保存恢复和运行异常反馈：<!-- <head> --><!----><!-- <body> --> (13.5s)
+  ✓  12 tests/browser/preview-document.spec.ts:60:5 › 恢复旧的不完整 HTML 时明确显示装配失败且不运行 iframe (6.9s)
+(node:72327) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  13 tests/browser/preview-document.spec.ts:7:7 › 真实 head 装配、数据保存恢复和运行异常反馈：普通完整 HTML (2.3s)
+  ✓  14 tests/browser/preview-document.spec.ts:7:7 › 真实 head 装配、数据保存恢复和运行异常反馈：<!-- example <head> --> (2.7s)
+  ✓  15 tests/browser/preview-document.spec.ts:7:7 › 真实 head 装配、数据保存恢复和运行异常反馈：<!-- <head> --><!----><!-- <body> --> (3.3s)
+  ✓  16 tests/browser/preview-document.spec.ts:60:5 › 恢复旧的不完整 HTML 时明确显示装配失败且不运行 iframe (1.1s)
+(node:73010) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  17 tests/browser/preview-document.spec.ts:7:7 › 真实 head 装配、数据保存恢复和运行异常反馈：普通完整 HTML (1.7s)
+  ✓  18 tests/browser/preview-document.spec.ts:7:7 › 真实 head 装配、数据保存恢复和运行异常反馈：<!-- example <head> --> (914ms)
+  ✓  19 tests/browser/preview-document.spec.ts:7:7 › 真实 head 装配、数据保存恢复和运行异常反馈：<!-- <head> --><!----><!-- <body> --> (800ms)
+  ✓  20 tests/browser/preview-document.spec.ts:60:5 › 恢复旧的不完整 HTML 时明确显示装配失败且不运行 iframe (562ms)
+
+  20 passed (11.5m)

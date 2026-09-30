@@ -1,0 +1,51 @@
+
+> atoms@0.1.0 test:e2e /Users/gaowenlong/Desktop/atoms
+> playwright test tests/browser/persistence.spec.ts --workers\=1
+
+
+Running 5 tests using 1 worker
+
+(node:70961) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  1 tests/browser/persistence.spec.ts:45:5 › 添加、完成、删除后刷新和关闭重开，恢复需求与业务数据且不调用模型 (1.8s)
+  ✓  2 tests/browser/persistence.spec.ts:95:5 › 多个项目数据隔离，外部伪造的保存消息被忽略 (1.2s)
+  ✘  3 tests/browser/persistence.spec.ts:134:5 › 业务数据事务中止时明确失败，不把请求成功当作保存成功 (5.8s)
+(node:71641) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  4 tests/browser/persistence.spec.ts:175:5 › 项目写入失败仍展示结果和错误，不宣称项目已保存 (951ms)
+  ✓  5 tests/browser/persistence.spec.ts:199:5 › 读取失败禁止覆盖原数据，恢复存储后仍能重开 (1.1s)
+
+
+  1) tests/browser/persistence.spec.ts:134:5 › 业务数据事务中止时明确失败，不把请求成功当作保存成功 ──────────────────────────
+
+    Error: expect(locator).toContainText(expected) failed
+
+    Locator: getByRole('main').getByRole('alert')
+    Expected substring: "应用数据保存或读取失败"
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toContainText" getByRole('main').getByRole('alert') with timeout 5000ms
+      - waiting for getByRole('main').getByRole('alert')
+
+
+      153 |     .getByRole("button", { name: "添加", exact: true })
+      154 |     .click();
+    > 155 |   await expect(page.getByRole("main").getByRole("alert")).toContainText(
+          |                                                           ^
+      156 |     "应用数据保存或读取失败",
+      157 |   );
+      158 |   await expect(page.getByText("应用数据已保存", { exact: true })).toHaveCount(
+        at /Users/gaowenlong/Desktop/atoms/tests/browser/persistence.spec.ts:155:59
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/persistence-业务数据事务中止时明确失败，不把请求成功当作保存成功/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/persistence-业务数据事务中止时明确失败，不把请求成功当作保存成功/error-context.md
+
+  1 failed
+    tests/browser/persistence.spec.ts:134:5 › 业务数据事务中止时明确失败，不把请求成功当作保存成功 ───────────────────────────
+  4 passed (13.9s)
+ ELIFECYCLE  Command failed with exit code 1.

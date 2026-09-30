@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+  <title>关闭重开候选验收</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+      background: #f7f9fc;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      padding: 16px;
+    }
+    .app {
+      width: 100%;
+      max-width: 560px;
+      background: #ffffff;
+      border-radius: 28px;
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.06);
+      padding: 24px 20px 32px;
+      margin-top: 12px;
+    }
+    h1 {
+      font-size: 1.8rem;
+      font-weight: 600;
+      color: #1a2e3b;
+      letter-spacing: -0.02em;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    h1 svg {
+      width: 28px;
+      height: 28px;
+      stroke: #2f6e5a;
+      stroke-width: 2;
+      fill: none;
+    }
+    .subhead {
+      font-size: 0.9rem;
+      color: #5c6f7e;
+      margin-bottom: 24px;
+      border-left: 3px solid #a8d5c4;
+      padding-left: 12px;
+    }
+    .trial-banner {
+      background: #fff7e6;
+      border: 1px solid #f0d9a8;
+      color: #8a6116;
+      border-radius: 18px;
+      padding: 12px 16px;
+      font-size: 0.82rem;
+      line-height: 1.55;
+      margin-bottom: 18px;
+    }
+    .trial-banner strong {
+      font-weight: 600;
+      color: #6f4d0d;
+    }
+    .status-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      min-height: 28px;
+      margin-bottom: 12px;
+      font-size: 0.85rem;
+      color: #3b5e6b;
+    }
+    .save-indicator {
+      background: #e8f0ee;
+      padding: 4px 12px;
+      border-radius: 30px;
+      color: #1f5e4b;
+      transition: opacity 0.2s;
+      font-weight: 500;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .save-indicator.error {
+      background: #ffe3e0;
+      color: #b33a2c;
+    }
+    .save-indicator.trial {
+      background: #fdf1dc;
+      color: #8a6116;
+    }
+    .input-row {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 28px;
+    }
+    .input-row input {
+      flex: 1;
+      padding: 14px 18px;
+      border: 1.5px solid #dbe4ea;
+      border-radius: 60px;
+      font-size: 1rem;
+      background: #fafdff;
+      outline: none;
+      transition: border 0.2s, box-shadow 0.2s;
+      font-family: inherit;
+    }
+    .input-row input:focus {
+      border-color: #3f8e78;
+      box-shadow: 0 0 0 4px rgba(63, 142, 120, 0.12);
+    }
+    .input-row input:disabled {
+      background: #f0f4f8;
+      color: #8a9aa8;
+      cursor: not-allowed;
+    }
+    .btn {
+      border: none;
+      background: #2f6e5a;
+      color: white;
+      font-size: 1rem;
+      font-weight: 500;
+      padding: 0 24px;
+      border-radius: 60px;
+      cursor: pointer;
+      transition: background 0.15s, transform 0.1s;
+      font-family: inherit;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 52px;
+      white-space: nowrap;
+      box-shadow: 0 4px 10px rgba(47, 110, 90, 0.2);
+    }
+    .btn:hover {
+      background: #245845;
+    }
+    .btn:active {
+      transform: scale(0.96);
+    }
+    .btn:disabled {
+      background: #b7c9c2;
+      box-shadow: none;
+      cursor: not-allowed;
+      transform: none;
+    }
+    .task-section {
+      margin-bottom: 26px;
+    }
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+    .section-header h2 {
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: #1e3a47;
+      letter-spacing: 0.01em;
+    }
+    .section-header .count {
+      background: #eef3f1;
+      font-size: 0.8rem;
+      padding: 3px 12px;
+      border-radius: 40px;
+      color: #2a5b4b;
+      font-weight: 500;
+    }
+    .task-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .task-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: #fafdff;
+      border-radius: 60px;
+      padding: 6px 6px 6px 18px;
+      border: 1px solid #e5edf2;
+      transition: background 0.15s, border 0.15s;
+      animation: fadeSlide 0.18s ease-out;
+    }
+    @keyframes fadeSlide {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .task-item.completed .task-title {
+      text-decoration: line-through;
+      color: #9bb0bb;
+    }
+    .task-item.completed {
+      background: #f3f8f7;
+      border-color: #d5e5e0;
+    }
+    .task-title {
+      flex: 1;
+      font-size: 1rem;
+      color: #1f3c47;
+      word-break: break-word;
+      padding: 10px 0;
+      line-height: 1.4;
+      min-width: 0;
+      transition: color 0.15s, text-decoration 0.15s;
+    }
+    .task-actions {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-shrink: 0;
+    }
+    .icon-btn {
+      background: transparent;
+      border: none;
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      color: #5c7b88;
+      transition: background 0.15s, color 0.15s;
+      padding: 0;
+      font-size: 0;
+      line-height: 0;
+    }
+    .icon-btn:hover {
+      background: #e6efec;
+      color: #1f5e4b;
+    }
+    .icon-btn:active {
+      background: #d0e0da;
+    }
+    .icon-btn svg {
+      width: 22px;
+      height: 22px;
+      stroke: currentColor;
+      stroke-width: 2;
+      fill: none;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+    .icon-btn.delete:hover {
+      color: #c44536;
+      background: #ffeae6;
+    }
+    .empty-message {
+      text-align: center;
+      padding: 24px 12px;
+      color: #9aafbb;
+      font-size: 0.95rem;
+      border-radius: 60px;
+      background: #fbfefe;
+      border: 1px dashed #cbdae3;
+    }
+    .error-banner {
+      background: #ffe3e0;
+      color: #b33a2c;
+      padding: 14px 18px;
+      border-radius: 40px;
+      font-size: 0.9rem;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      border: 1px solid #f5c6c1;
+    }
+    .footer-note {
+      margin-top: 32px;
+      font-size: 0.75rem;
+      color: #90a6b2;
+      text-align: center;
+      border-top: 1px solid #e2ecf1;
+      padding-top: 18px;
+      line-height: 1.6;
+    }
+    .footer-note strong {
+      font-weight: 600;
+      color: #5b7f8e;
+    }
+    @media (max-width: 420px) {
+      .app { padding: 20px 14px 24px; }
+      h1 { font-size: 1.6rem; }
+      .btn { padding: 0 16px; min-height: 48px; font-size: 0.95rem; }
+      .input-row input { padding: 12px 16px; }
+    }
+  </style>
+</head>
+<body>
+  <main class="app" aria-labelledby="app-title">
+    <h1 id="app-title">
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01" />
+      </svg>
+      关闭重开候选验收
+    </h1>
+    <div class="subhead">轻量任务 · 试用副本</div>
+
+    <div class="trial-banner" role="note">
+      <strong>试用副本说明：</strong>当前使用仅限本次会话的试用数据。保存成功仅表示“试用副本已更新”，并非持久保存。若放弃验收、刷新或关闭页面，试用数据与本未采纳的代码都会消失；本应用原有的正式数据不受试用影响，不会被修改。
+    </div>
+
+    <!-- 错误显示区域 -->
+    <div id="errorBanner" class="error-banner" style="display: none;" role="alert"></div>
+
+    <!-- 状态栏 / 保存反馈 -->
+    <div class="status-bar">
+      <span id="saveStatus" class="save-indicator" aria-live="polite"></span>
+    </div>
+
+    <!-- 添加任务 -->
+    <div class="input-row">
+      <input type="text" id="taskInput" placeholder="写一个新任务…" aria-label="新任务描述" disabled autocomplete="off" />
+      <button type="button" id="addBtn" class="btn" disabled>添加</button>
+    </div>
+
+    <!-- 未完成任务区域 -->
+    <section class="task-section" aria-labelledby="pending-heading">
+      <div class="section-header">
+        <h2 id="pending-heading">未完成</h2>
+        <span class="count" id="pendingCount">0</span>
+      </div>
+      <ul class="task-list" id="pendingList" aria-label="未完成任务列表"></ul>
+      <div id="pendingEmpty" class="empty-message" style="display: none;">✨ 没有未完成任务</div>
+    </section>
+
+    <!-- 已完成任务区域 -->
+    <section class="task-section" aria-labelledby="completed-heading">
+      <div class="section-header">
+        <h2 id="completed-heading">已完成</h2>
+        <span class="count" id="completedCount">0</span>
+      </div>
+      <ul class="task-list" id="completedList" aria-label="已完成任务列表"></ul>
+      <div id="completedEmpty" class="empty-message" style="display: none;">🎯 还没有完成的任务</div>
+    </section>
+
+    <div class="footer-note">
+      <strong>数据仅保存在此浏览器和站点</strong><br />
+      清除站点数据将丢失所有任务，恢复范围仅限于当前浏览器。试用副本数据在刷新或关闭后不保证保留。<br />
+      本应用无后端、无登录、无外部服务，也不支持云端或跨设备同步与恢复。
+    </div>
+  </main>
+
+  <script>
+    (function() {
+      'use strict';
+
+      // ---------- DOM 元素 ----------
+      const taskInput = document.getElementById('taskInput');
+      const addBtn = document.getElementById('addBtn');
+      const pendingList = document.getElementById('pendingList');
+      const completedList = document.getElementById('completedList');
+      const pendingCount = document.getElementById('pendingCount');
+      const completedCount = document.getElementById('completedCount');
+      const pendingEmpty = document.getElementById('pendingEmpty');
+      const completedEmpty = document.getElementById('completedEmpty');
+      const saveStatus = document.getElementById('saveStatus');
+      const errorBanner = document.getElementById('errorBanner');
+
+      // ---------- 状态 ----------
+      let tasks = [];            // [{ id: string, title: string, completed: boolean }]
+      let isReady = false;       // loadState 完成前禁止编辑
+
+      // ---------- 工具函数 ----------
+      function generateId() {
+        return Date.now().toString(36) + Math.random().toString(36).substring(2, 9);
+      }
+
+      // 安全渲染：使用 textContent 避免 XSS
+      function renderTasks() {
+        pendingList.innerHTML = '';
+        completedList.innerHTML = '';
+
+        const pending = tasks.filter(t => !t.completed);
+        const completed = tasks.filter(t => t.completed);
+
+        pendingCount.textContent = pending.length;
+        completedCount.textContent = completed.length;
+
+        pendingEmpty.style.display = pending.length === 0 ? 'block' : 'none';
+        completedEmpty.style.display = completed.length === 0 ? 'block' : 'none';
+
+        pending.forEach(task => {
+          pendingList.appendChild(createTaskElement(task));
+        });
+        completed.forEach(task => {
+          completedList.appendChild(createTaskElement(task));
+        });
+      }
+
+      function createTaskElement(task) {
+        const li = document.createElement('li');
+        li.className = 'task-item' + (task.completed ? ' completed' : '');
+        li.dataset.id = task.id;
+
+        const titleSpan = document.createElement('span');
+        titleSpan.className = 'task-title';
+        titleSpan.textContent = task.title;
+
+        const actionsDiv = document.createElement('div');
+        actionsDiv.className = 'task-actions';
+
+        const toggleBtn = document.createElement('button');
+        toggleBtn.type = 'button';
+        toggleBtn.className = 'icon-btn toggle';
+        toggleBtn.setAttribute('aria-label', task.completed ? '标记为未完成' : '标记为已完成');
+        toggleBtn.innerHTML = task.completed
+          ? '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9" /><path d="M8 12l2.5 2.5L16 9" /></svg>'
+          : '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9" /><path d="M12 8v8M8 12h8" /></svg>';
+        toggleBtn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          if (isReady) handleMutation(() => toggleTask(task.id));
+        });
+
+        const deleteBtn = document.createElement('button');
+        deleteBtn.type = 'button';
+        deleteBtn.className = 'icon-btn delete';
+        deleteBtn.setAttribute('aria-label', '删除任务');
+        deleteBtn.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6M10 11v6M14 11v6"/></svg>';
+        deleteBtn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          if (isReady) handleMutation(() => deleteTask(task.id));
+        });
+
+        actionsDiv.appendChild(toggleBtn);
+        actionsDiv.appendChild(deleteBtn);
+        li.appendChild(titleSpan);
+        li.appendChild(actionsDiv);
+        return li;
+      }
+
+      // ---------- 保存反馈 ----------
+      function setStatus(text, isError, isTrial) {
+        saveStatus.textContent = text;
+        saveStatus.classList.toggle('error', !!isError);
+        saveStatus.classList.toggle('trial', !!isTrial);
+      }
+
+      function showError(msg) {
+        errorBanner.textContent = msg;
+        errorBanner.style.display = 'flex';
+      }
+
+      function hideError() {
+        errorBanner.style.display = 'none';
+        errorBanner.textContent = '';
+      }
+
+      // ---------- 单一异步变更处理 ----------
+      // 同步修改状态并渲染，然后立即以完整快照调用 saveState
+      async function handleMutation(mutator) {
+        if (!isReady) return;
+
+        let snapshot;
+        try {
+          mutator();
+          renderTasks();
+          snapshot = { tasks: tasks.map(t => ({ id: t.id, title: t.title, completed: t.completed })) };
+        } catch (err) {
+          showError('操作失败：' + (err.message || '未知错误'));
+          return;
+        }
+
+        setStatus('试用更新中…', false, true);
+
+        try {
+          await window.atoms.saveState(snapshot);
+          hideError();
+          setStatus('试用副本已更新', false, true);
+        } catch (err) {
+          console.error('保存失败:', err);
+          setStatus('试用保存失败', true, false);
+          showError('试用副本保存失败：' + (err && err.message ? err.message : '未知错误') +
+                    '。当前修改可能未写入试用副本，原有数据未被修改。');
+        }
+      }
+
+      // ---------- 任务操作（仅修改内存状态） ----------
+      function addTask() {
+        const title = taskInput.value.trim();
+        if (!title) {
+          showError('任务内容不能为空');
+          return;
+        }
+        if (title.length > 500) {
+          showError('任务内容过长（最多500字）');
+          return;
+        }
+
+        hideError();
+        tasks.push({ id: generateId(), title: title, completed: false });
+        taskInput.value = '';
+        taskInput.focus();
+      }
+
+      function toggleTask(id) {
+        const task = tasks.find(t => t.id === id);
+        if (!task) return;
+        task.completed = !task.completed;
+      }
+
+      function deleteTask(id) {
+        tasks = tasks.filter(t => t.id !== id);
+      }
+
+      // ---------- 键盘支持 ----------
+      function handleInputKeydown(e) {
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          if (!isReady) return;
+          const title = taskInput.value.trim();
+          if (!title) {
+            showError('任务内容不能为空');
+            return;
+          }
+          handleMutation(addTask);
+        }
+      }
+
+      // ---------- 启用/禁用交互 ----------
+      function setInteractive(enabled) {
+        taskInput.disabled = !enabled;
+        addBtn.disabled = !enabled;
+        if (enabled) {
+          taskInput.focus();
+        }
+      }
+
+      // ---------- 初始化 ----------
+      async function init() {
+        setInteractive(false);
+        setStatus('正在加载试用副本…', false, true);
+
+        try {
+          const saved = await window.atoms.loadState();
+
+          if (saved === null || saved === undefined) {
+            tasks = [];
+          } else if (typeof saved === 'object' && Array.isArray(saved.tasks)) {
+            const seen = new Set();
+            tasks = saved.tasks
+              .filter(item =>
+                item && typeof item === 'object' &&
+                typeof item.id === 'string' &&
+                typeof item.title === 'string' &&
+                typeof item.completed === 'boolean'
+              )
+              .filter(item => {
+                if (seen.has(item.id)) return false;
+                seen.add(item.id);
+                return true;
+              })
+              .map(item => ({
+                id: item.id,
+                title: item.title,
+                completed: item.completed
+              }));
+          } else {
+            // 结构不符合预期：不覆盖未读取的数据，保持禁用并提示
+            setInteractive(false);
+            setStatus('加载失败', true, false);
+            showError('试用副本数据结构无法识别，为避免覆盖数据，编辑功能保持禁用。');
+            return;
+          }
+
+          renderTasks();
+          isReady = true;
+          setInteractive(true);
+          hideError();
+          setStatus('试用副本已就绪', false, true);
+
+          addBtn.addEventListener('click', () => {
+            if (isReady) handleMutation(addTask);
+          });
+          taskInput.addEventListener('keydown', handleInputKeydown);
+          taskInput.addEventListener('input', () => {
+            if (errorBanner.style.display !== 'none' && errorBanner.textContent === '任务内容不能为空') {
+              hideError();
+            }
+          });
+
+        } catch (err) {
+          console.error('初始化失败:', err);
+          isReady = false;
+          setInteractive(false);
+          setStatus('加载失败', true, false);
+          showError('无法加载试用副本：' + (err && err.message ? err.message : '未知错误') +
+                    '。为避免覆盖数据，编辑功能保持禁用，请稍后重试。');
+        }
+      }
+
+      init();
+    })();
+  </script>
+</body>
+</html>

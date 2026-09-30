@@ -1,0 +1,35 @@
+ M CONTEXT.md
+ M README.md
+ M eslint.config.mjs
+ M package.json
+ M pnpm-lock.yaml
+ M src/app/api/generate/route.ts
+ M src/app/globals.css
+ M src/app/page.tsx
+ M src/components/app-preview.tsx
+ M src/lib/generation.ts
+ M tests/browser/generation.spec.ts
+ M tests/generate.test.ts
+ M tsconfig.json
+?? docs/adr/0004-m2-conversational-updates.md
+?? docs/reviews/
+?? docs/verification/assets/issue-3/
+?? docs/verification/assets/issue-4-review-fix/
+?? docs/verification/assets/issue-4-review/
+?? docs/verification/assets/issue-5/
+?? docs/verification/assets/issue-6/
+?? docs/verification/assets/m1-save-fix/
+?? docs/verification/issue-3.md
+?? docs/verification/issue-4-review-fix.md
+?? docs/verification/issue-4-review.md
+?? docs/verification/issue-5.md
+?? docs/verification/issue-6.md
+?? docs/verification/m1-save-fix-2026-09-29.md
+?? src/lib/html-document.ts
+?? src/lib/preview-document.ts
+?? src/lib/project-store.ts
+?? src/lib/trial-data.ts
+?? tests/browser/candidate.spec.ts
+?? tests/browser/persistence.spec.ts
+?? tests/browser/preview-document.spec.ts
+?? tests/browser/save-race.spec.ts

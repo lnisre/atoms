@@ -1,0 +1,11 @@
+{
+  "status": 200,
+  "id": "dpl_5dBLgx56rX12Tt5gPDRMqADijCAV",
+  "url": "v0-test0-7zpgwzi94-lnisres-projects.vercel.app",
+  "readyState": "READY",
+  "target": "production",
+  "alias": [
+    "v0-test0-nine.vercel.app",
+    "v0-test0-lnisres-projects.vercel.app"
+  ]
+}

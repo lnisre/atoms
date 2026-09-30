@@ -1,0 +1,8 @@
+{
+  "injected": "IndexedDB put success then transaction abort (controlled)",
+  "candidateKept": true,
+  "previousCodeRecordDataExact": true,
+  "reopenedOldVersion": true,
+  "nextBaseIsAdopted": true,
+  "contextReset": true
+}

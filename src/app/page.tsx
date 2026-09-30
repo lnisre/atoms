@@ -3,9 +3,13 @@
 import { useEffect, useRef, useState } from "react";
 import {
   listProjects,
+  loadApplicationData,
   saveProject,
+  adoptCandidate,
+  type ModificationRecord,
   type SavedProject,
 } from "@/lib/project-store";
+import type { TrialData } from "@/lib/trial-data";
 import { AppPreview } from "@/components/app-preview";
 import {
   CLIENT_TIMEOUT_MS,
@@ -45,9 +49,19 @@ export default function Home() {
     "unsaved" | "saving" | "saved" | "failed"
   >("unsaved");
   const [restored, setRestored] = useState(false);
+  const [modification, setModification] = useState("");
+  const [candidate, setCandidate] = useState<{ result: GenerationResult; trial: TrialData; revision: number } | null>(null);
+  const [dialogue, setDialogue] = useState<string[]>([]);
+  const [records, setRecords] = useState<ModificationRecord[]>([]);
+  const [adopting, setAdopting] = useState(false);
+  const [adoptionError, setAdoptionError] = useState("");
+  const adoptionPending = useRef(false);
+  const [modifying, setModifying] = useState(false);
+  const [modificationError, setModificationError] = useState("");
   const [seconds, setSeconds] = useState(0);
   const active = useRef<AbortController | null>(null);
-  const busy = task?.status === "waiting" || projectSave === "saving";
+  const initialBusy = task?.status === "waiting" || projectSave === "saving";
+  const busy = initialBusy || modifying || adopting;
 
   useEffect(() => {
     let cancelled = false;
@@ -59,6 +73,7 @@ export default function Home() {
         const current = saved.find((item) => item.id === id);
         if (current) {
           setProject(current);
+          setRecords(current.modificationRecords ?? []);
           setTask({ status: "complete", result: current.result });
           setProjectSave("saved");
           setRestored(true);
@@ -82,8 +97,18 @@ export default function Home() {
     };
   }, []);
 
+  function discardChanges() {
+    setCandidate(null);
+    setDialogue([]);
+    setModification("");
+    setModificationError("");
+    setAdoptionError("");
+  }
+
   function openProject(saved: SavedProject) {
+    discardChanges();
     setProject(saved);
+    setRecords(saved.modificationRecords ?? []);
     setTask({ status: "complete", result: saved.result });
     setProjectSave("saved");
     setRestored(true);
@@ -100,6 +125,7 @@ export default function Home() {
       !window.confirm("项目保存失败。离开会丢失当前生成结果，是否继续？")
     )
       return;
+    discardChanges();
     setProject(null);
     setTask(null);
     setProjectSave("unsaved");
@@ -126,12 +152,24 @@ export default function Home() {
     return () => clearInterval(timer);
   }, [busy]);
   useEffect(() => () => active.current?.abort(), []);
+  useEffect(() => {
+    const beforeUnload = (event: BeforeUnloadEvent) => {
+      if (adoptionPending.current) {
+        event.preventDefault();
+        event.returnValue = "";
+      }
+    };
+    window.addEventListener("beforeunload", beforeUnload);
+    return () => window.removeEventListener("beforeunload", beforeUnload);
+  }, []);
 
   async function generate(nextProject: Project) {
-    if (active.current) return;
+    if (active.current || adoptionPending.current) return;
     const controller = new AbortController();
     active.current = controller;
     setProject(nextProject);
+    setRecords([]);
+    discardChanges();
     setProjectSave("unsaved");
     setRestored(false);
     window.history.replaceState(null, "", "/");
@@ -189,6 +227,62 @@ export default function Home() {
     } finally {
       clearTimeout(timer);
       active.current = null;
+    }
+  }
+
+  async function modify() {
+    if (active.current || adoptionPending.current || !project || task?.status !== "complete" || projectSave !== "saved" || !modification.trim()) return;
+    const controller = new AbortController();
+    active.current = controller;
+    const change = modification.trim();
+    setModifying(true);
+    setModificationError("");
+    setAdoptionError("");
+    setSeconds(0);
+    const timer = setTimeout(() => controller.abort(), CLIENT_TIMEOUT_MS);
+    try {
+      const response = await fetch("/api/generate", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ requirement: project.requirement, modification: change, baseHtml: (candidate?.result ?? task.result).html, context: dialogue }),
+        signal: controller.signal,
+      });
+      const result = await response.json().catch(() => null);
+      if (!response.ok) throw new Error(result?.error || "修改未完成，请手动重新发起。");
+      if (!result || typeof result.html !== "string" || typeof result.durationMs !== "number") throw new Error("修改结果不完整，请重新发起。");
+      // Clone only a successfully read committed state. A failed read never becomes empty trial data.
+      const record = candidate ? undefined : await loadApplicationData(project.id);
+      const trial = candidate?.trial ?? { projectId: project.id, state: structuredClone(record?.state ?? null), hasData: !!record };
+      setCandidate({ result, trial, revision: (candidate?.revision ?? 0) + 1 });
+      setDialogue(items => [...items, change]);
+      setModification("");
+    } catch (error) {
+      setModificationError(controller.signal.aborted ? "等待超时，已结束本次修改。已有应用与候选保留，可手动重新发起。" : error instanceof Error ? error.message : "修改失败，请重新发起。");
+    } finally {
+      clearTimeout(timer);
+      active.current = null;
+      setModifying(false);
+    }
+  }
+
+  async function adopt() {
+    if (!project || !candidate || active.current || adoptionPending.current) return;
+    adoptionPending.current = true;
+    setAdopting(true);
+    setAdoptionError("");
+    try {
+      const saved = await adoptCandidate(project.id, candidate.result, dialogue);
+      setTask({ status: "complete", result: saved.result });
+      setRecords(saved.modificationRecords ?? []);
+      setProjects(items => [saved, ...items.filter(item => item.id !== saved.id)]);
+      setRestored(false);
+      // Remount with a fresh channel and official storage only after commit.
+      discardChanges();
+    } catch {
+      setAdoptionError("采用保存失败。原先已保存的代码、修改记录和正式数据仍保留；当前候选尚未采用，请保留页面并检查浏览器存储权限或空间，再手动点击“采用修改”。");
+    } finally {
+      adoptionPending.current = false;
+      setAdopting(false);
     }
   }
 
@@ -338,13 +432,13 @@ export default function Home() {
             >
               <div className="state-title">
                 <span
-                  className={busy ? "spinner" : "state-symbol"}
+                  className={initialBusy ? "spinner" : "state-symbol"}
                   aria-hidden="true"
                 >
-                  {busy ? "" : task?.status === "failed" ? "!" : "✓"}
+                  {initialBusy ? "" : task?.status === "failed" ? "!" : "✓"}
                 </span>
                 <h2>
-                  {busy
+                  {initialBusy
                     ? "正在生成应用"
                     : task?.status === "failed"
                       ? "生成未完成"
@@ -353,7 +447,7 @@ export default function Home() {
                         : "代码已生成"}
                 </h2>
               </div>
-              {busy && (
+              {initialBusy && (
                 <>
                   <p>
                     已提交模型服务，正在等待完整结果。此时可以保留页面，生成完成后会自动展示预览。
@@ -394,6 +488,32 @@ export default function Home() {
                 </>
               )}
             </section>
+            {task?.status === "complete" && projectSave === "saved" && (
+              <section className="modification-panel" aria-label="对话修改">
+                <section aria-label="已采用修改记录">
+                  <h2>已采用修改记录</h2>
+                  {records.length === 0 ? <p>还没有已采用的修改记录。</p> : <ol>{records.map(record => <li key={record.id}>
+                    <small>{new Date(record.adoptedAt).toLocaleString("zh-CN")} · 已采用并保存</small>
+                    {record.requests.map((request, index) => <p key={index}>{request}</p>)}
+                    <p>{record.summary}</p>
+                  </li>)}</ol>}
+                </section>
+                <h2>{candidate ? "继续修改候选" : "修改这个应用"}</h2>
+                <p>候选、试用数据和本轮对话仅在当前会话保留。放弃、离开项目、刷新或关闭后会丢失。采用只保存代码与修改记录；试用中的增删改不会写回正式数据。</p>
+                {dialogue.length > 0 && <ol aria-label="本轮对话">{dialogue.map((change, index) => <li key={index}><p>{change}</p><small>第 {index + 1} 轮候选已生成 · 未采用</small></li>)}</ol>}
+                <form onSubmit={event => { event.preventDefault(); void modify(); }}>
+                  <label htmlFor="modification">追加修改需求</label>
+                  <textarea id="modification" value={modification} onChange={event => setModification(event.target.value)} maxLength={MAX_REQUIREMENT_LENGTH} disabled={busy} placeholder="例如：增加任务优先级与筛选" required />
+                  <button className="primary-button" disabled={busy || !modification.trim()} type="submit">{modifying ? "正在生成候选…" : "生成候选"}</button>
+                </form>
+                {modifying && <p role="status">正在基于{candidate ? "最新候选" : "已采用代码"}修改，已等待 {seconds} 秒，最多约 2 分钟。现有预览仍可使用。</p>}
+                {modificationError && <p className="save-error" role="alert">{modificationError} 原应用与正式数据未被替换，可点击“生成候选”手动重试。</p>}
+                {candidate && <button className="primary-button" disabled={busy} onClick={() => void adopt()}>{adopting ? "正在保存采用…" : "采用修改"}</button>}
+                {adopting && <p role="status">正在保存代码与修改记录，完成前仍为未采用候选。请等待保存成功再离开。</p>}
+                {adoptionError && <p className="save-error" role="alert">{adoptionError}</p>}
+                {(candidate || modificationError) && <button className="text-button" disabled={busy} onClick={discardChanges}>放弃本轮修改</button>}
+              </section>
+            )}
             <div className="project-footnote">
               <p>
                 自动保存到本浏览器的当前网址。项目与应用数据分别显示保存结果，请等待保存成功再离开。清除站点数据、无痕会话结束或存储被回收后可能丢失，不支持跨设备找回。
@@ -405,13 +525,15 @@ export default function Home() {
           </aside>
           {task?.status === "complete" && projectSave !== "saving" ? (
             <AppPreview
-              key={project.id + task.result.generatedAt}
-              html={task.result.html}
+              key={project.id + task.result.generatedAt + (candidate ? `:trial:${candidate.revision}` : ":adopted")}
+              html={(candidate?.result ?? task.result).html}
+              trial={candidate?.trial}
               projectId={project.id}
               projectSaved={projectSave === "saved"}
-              onRetry={() =>
-                void generate({ ...project, id: crypto.randomUUID() })
-              }
+              onRetry={() => {
+                if (candidate) document.getElementById("modification")?.focus();
+                else if (!modifying) void generate({ ...project, id: crypto.randomUUID() });
+              }}
             />
           ) : (
             <section className="preview-placeholder" aria-label="预览等待区">

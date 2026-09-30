@@ -1,0 +1,11 @@
+▲ Next.js 16.3.6 (webpack)
+✓ Running next.config.ts took 23ms
+
+  Creating an optimized production build ...
+✓ Compiled successfully in 2.9s
+  Running TypeScript ...
+docs/verification/assets/issue-4-review/spec-edge-pending.mts(1,31): error TS7016: Could not find a declaration file for module '/Users/gaowenlong/Desktop/atoms/node_modules/@playwright/test/index.mjs'. '/Users/gaowenlong/Desktop/atoms/node_modules/@playwright/test/index.mjs' implicitly has an 'any' type.
+docs/verification/assets/issue-4-review/spec-edge-pending.mts(9,36): error TS7006: Parameter 'route' implicitly has an 'any' type.
+docs/verification/assets/issue-4-review/spec-edge-pending.mts(20,36): error TS7006: Parameter 'route' implicitly has an 'any' type.
+Failed to type check.
+

@@ -1,0 +1,3 @@
+{"round":4,"modification":"增加任务优先级与筛选","adoptedBase":true,"context":[]}
+{"round":5,"modification":"把筛选放到顶部","adoptedBase":false,"context":["增加任务优先级与筛选"]}
+{"round":6,"modification":"把应用标题改成「关闭重开候选验收」，保留原有添加、完成和删除功能。","adoptedBase":true,"context":[]}

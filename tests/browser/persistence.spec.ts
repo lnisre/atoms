@@ -37,7 +37,8 @@ async function add(page: Page, text: string) {
   await page
     .frameLocator("iframe")
     .getByRole("button", { name: "添加", exact: true })
-    .click();
+    // Keyboard activation avoids the recorded headless Chrome first-frame hit-test race.
+    .press("Enter");
   await expect(page.getByText("应用数据已保存", { exact: true })).toBeVisible();
 }
 
@@ -55,7 +56,9 @@ test("添加、完成、删除后刷新和关闭重开，恢复需求与业务�
   await page
     .frameLocator("iframe")
     .getByLabel("完成 保留并完成", { exact: true })
-    .check();
+    // The first pointer can hit the opaque iframe host in headless Chrome.
+    .press("Space");
+  await expect(page.frameLocator("iframe").getByLabel("完成 保留并完成", { exact: true })).toBeChecked();
   await page
     .frameLocator("iframe")
     .getByRole("button", { name: "删除 删除临时项", exact: true })
@@ -150,7 +153,7 @@ test("业务数据事务中止时明确失败，不把请求成功当作保存�
   await page
     .frameLocator("iframe")
     .getByRole("button", { name: "添加", exact: true })
-    .click();
+    .press("Enter");
   await expect(page.getByRole("main").getByRole("alert")).toContainText(
     "应用数据保存或读取失败",
   );

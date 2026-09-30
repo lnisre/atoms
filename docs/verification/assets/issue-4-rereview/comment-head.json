@@ -1,0 +1,15 @@
+{
+  "mode": "controlled model output; no real model call",
+  "serverStatus": 200,
+  "htmlAcceptedUnchanged": true,
+  "runtime": {
+    "atomsType": "object",
+    "scriptCount": 2,
+    "cspCount": 1,
+    "actionDisabled": false
+  },
+  "pageErrors": [],
+  "platformStorage": "试用数据已更新 · 仅本轮会话有效，未写入正式数据",
+  "platformPreviewError": 0,
+  "adoptEnabled": true
+}

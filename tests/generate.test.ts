@@ -117,3 +117,46 @@ test("仅解包模型返回的唯一完整文档，不执行前后说明", async
     });
   assert.equal((await POST(request())).status, 502);
 });
+
+const editRequest = (fields: Record<string, unknown>) => new Request("http://localhost:3100/api/generate", {
+  method: "POST", headers: { "Content-Type": "application/json", origin: "http://localhost:3100" },
+  body: JSON.stringify({ requirement: "原始待办需求", ...fields }),
+});
+test("修改完整传递基础代码、追加需求与成功对话；不沿用首次需求长度限制截断代码", async () => {
+  process.env.DEEPSEEK_API_KEY = "test-key";
+  const html = "<!DOCTYPE html><html><head></head><body>候选</body></html>";
+  const baseHtml = html + " ".repeat(30000);
+  globalThis.fetch = async (_url, options) => {
+    const payload = JSON.parse(String(options?.body));
+    const input = JSON.parse(payload.messages.at(-1).content);
+    assert.deepEqual(input, { originalRequirement: "原始待办需求", modification: "把筛选放到顶部", baseHtml, successfulModifications: ["增加优先级与筛选"] });
+    assert.match(payload.messages[0].content, /window.atoms/);
+    assert.match(payload.messages[1].content, /session-only trial copy/);
+    return Response.json({ choices: [{ finish_reason: "stop", message: { content: html } }] });
+  };
+  assert.equal((await POST(editRequest({ baseHtml, modification: "把筛选放到顶部", context: ["增加优先级与筛选"] }))).status, 200);
+});
+test("缺失或超限修改输入明确失败，不丢弃上下文继续生成", async () => {
+  globalThis.fetch = async () => { throw new Error("Must not call provider"); };
+  const valid = { baseHtml: "existing html", modification: "增加筛选", context: [] };
+  for (const fields of [
+    { ...valid, baseHtml: undefined }, { ...valid, baseHtml: "x".repeat(500001) },
+    { ...valid, modification: "" }, { ...valid, modification: "x".repeat(4001) },
+    { ...valid, context: [42] }, { ...valid, context: ["x".repeat(32001)] },
+  ]) assert.equal((await POST(editRequest(fields))).status, 400);
+  assert.equal((await POST(editRequest({ ...valid, baseHtml: "x".repeat(3300001) }))).status, 413);
+});
+
+test("注释中的结构标签不能冒充真实 head/body，无法装配时明确失败", async () => {
+  process.env.DEEPSEEK_API_KEY = "test-key";
+  for (const html of [
+    "<!DOCTYPE html><html><!-- <head> --><body>缺少真实 head</body></html>",
+    "<!DOCTYPE html><html><head></head><!-- <body> --></html>",
+    "<!DOCTYPE html><html><script>void 0</script><head></head><body>脚本先于真实 head</body></html>",
+  ]) {
+    globalThis.fetch = async () => Response.json({ choices: [{ finish_reason: "stop", message: { content: html } }] });
+    const response = await POST(request());
+    assert.equal(response.status, 502);
+    assert.match((await response.json()).error, /完整 HTML/);
+  }
+});

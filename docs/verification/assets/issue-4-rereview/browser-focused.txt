@@ -1,0 +1,11 @@
+
+Running 4 tests using 1 worker
+
+(node:6131) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  1 tests/browser/preview-document.spec.ts:7:7 › 真实 head 装配、数据保存恢复和运行异常反馈：普通完整 HTML (3.3s)
+  ✓  2 tests/browser/preview-document.spec.ts:7:7 › 真实 head 装配、数据保存恢复和运行异常反馈：<!-- example <head> --> (1.9s)
+  ✓  3 tests/browser/preview-document.spec.ts:7:7 › 真实 head 装配、数据保存恢复和运行异常反馈：<!-- <head> --><!----><!-- <body> --> (1.9s)
+  ✓  4 tests/browser/preview-document.spec.ts:60:5 › 恢复旧的不完整 HTML 时明确显示装配失败且不运行 iframe (1.7s)
+
+  4 passed (11.1s)

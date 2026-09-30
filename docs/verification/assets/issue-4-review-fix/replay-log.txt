@@ -1,0 +1,1 @@
+{"mode":"unmodified real model artifact replay; controlled API responses; no new model call","hashChain":true,"trialIsolation":true,"defaultsAndFilterAndLayout":true,"multiround":true,"codeOnlyAdoption":true,"officialSaveAndReopen":true,"recoveryModelRequests":0}
