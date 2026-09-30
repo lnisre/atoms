@@ -1,0 +1,16 @@
+{
+  "refreshExact": true,
+  "completeBrowserClose": true,
+  "profile": "/private/tmp/atoms-issue-11-reading-20260930",
+  "projectListEntryCount": 1,
+  "codeAndRecordsExactlyRestored": true,
+  "dataExactlyRestored": true,
+  "reopenedControlsEnabled": true,
+  "reopenedStatusChangesSaved": true,
+  "reopenedFilterWorks": true,
+  "generationCountBefore": 2,
+  "generationCountAfter": 2,
+  "recoveryGenerationCalls": 0,
+  "projectId": "370fc6dc-723f-4329-b6d2-9af9c8e1b8f6",
+  "htmlSha256": "6e1f441c2c26e767960332f17f3ceb359ce0da8eef3724cc683fd5928822aa32"
+}

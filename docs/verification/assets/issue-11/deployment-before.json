@@ -1,0 +1,32 @@
+{
+  "checkedAt": "2026-09-29T17:04:00.043Z",
+  "alias": "v0-test0-nine.vercel.app",
+  "deployment": {
+    "id": "dpl_3c8byi7JK7THH8DGmB4LzLhNYvXf",
+    "url": "v0-test0-1klcfv0zb-lnisres-projects.vercel.app",
+    "target": "production",
+    "readyState": "READY",
+    "alias": [
+      "v0-test0-nine.vercel.app",
+      "v0-test0-lnisres-projects.vercel.app"
+    ],
+    "nodeVersion": "24.x",
+    "meta": {
+      "githubCommitAuthorName": "lnisre",
+      "githubCommitAuthorEmail": "1313081+lnisre@users.noreply.github.com",
+      "githubCommitMessage": "feat: implement real app generation and sandboxed preview",
+      "githubCommitOrg": "lnisre",
+      "githubCommitRef": "main",
+      "githubCommitRepo": "atoms",
+      "githubCommitSha": "3b586af67495ffd22ea1c3ebe9f2802016616bd2",
+      "githubDeployment": "1",
+      "githubOrg": "lnisre",
+      "githubRepo": "atoms",
+      "gitDirty": "1",
+      "gitRootDirectory": "",
+      "actor": "codex",
+      "lambdaRuntimeStats": "{\"nodejs\":2}",
+      "bundler": "turbopack"
+    }
+  }
+}

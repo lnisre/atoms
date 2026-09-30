@@ -1,0 +1,10 @@
+{
+  "onlyCodeAdopted": true,
+  "dataExactlyPreserved": true,
+  "trialAdditionAbsent": true,
+  "trialDeletionReverted": true,
+  "trialStatusReverted": true,
+  "trialRatingReverted": true,
+  "recordRequestPreserved": true,
+  "officialFilter": "want-to-read + 3 = B; want-to-read + 5 = empty; completed + 5 = A"
+}

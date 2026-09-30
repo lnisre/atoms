@@ -1,0 +1,122 @@
+[
+  {
+    "phase": "initial",
+    "time": 1790701598530,
+    "type": "atoms:state",
+    "method": "load"
+  },
+  {
+    "phase": "initial-use",
+    "time": 1790701715285,
+    "type": "atoms:state",
+    "method": "save"
+  },
+  {
+    "phase": "initial-use",
+    "time": 1790701715374,
+    "type": "atoms:state",
+    "method": "save"
+  },
+  {
+    "phase": "initial-use",
+    "time": 1790701715385,
+    "type": "atoms:state",
+    "method": "save"
+  },
+  {
+    "phase": "initial-use",
+    "time": 1790701715424,
+    "type": "atoms:state",
+    "method": "save"
+  },
+  {
+    "phase": "initial-use",
+    "time": 1790701715474,
+    "type": "atoms:state",
+    "method": "save"
+  },
+  {
+    "phase": "initial-refresh",
+    "time": 1790701733591,
+    "type": "atoms:state",
+    "method": "load"
+  },
+  {
+    "phase": "modification",
+    "time": 1790701779612,
+    "type": "atoms:state",
+    "method": "load"
+  },
+  {
+    "phase": "trial",
+    "time": 1790701854926,
+    "type": "atoms:state",
+    "method": "save"
+  },
+  {
+    "phase": "trial",
+    "time": 1790701855199,
+    "type": "atoms:state",
+    "method": "save"
+  },
+  {
+    "phase": "trial",
+    "time": 1790701855207,
+    "type": "atoms:state",
+    "method": "save"
+  },
+  {
+    "phase": "trial",
+    "time": 1790701855249,
+    "type": "atoms:state",
+    "method": "save"
+  },
+  {
+    "phase": "adoption",
+    "time": 1790702018904,
+    "type": "atoms:state",
+    "method": "load"
+  },
+  {
+    "phase": "official-use",
+    "time": 1790702019342,
+    "type": "atoms:state",
+    "method": "save"
+  },
+  {
+    "phase": "official-use",
+    "time": 1790702019358,
+    "type": "atoms:state",
+    "method": "save"
+  },
+  {
+    "phase": "official-use",
+    "time": 1790702019367,
+    "type": "atoms:state",
+    "method": "save"
+  },
+  {
+    "phase": "official-refresh",
+    "time": 1790702068173,
+    "type": "atoms:state",
+    "method": "load"
+  },
+  {
+    "phase": "complete-reopen",
+    "time": 1790702071095,
+    "type": "atoms:state",
+    "method": "load"
+  },
+  {
+    "phase": "reopened-use",
+    "time": 1790702071296,
+    "type": "atoms:state",
+    "method": "save"
+  },
+  {
+    "phase": "reopened-use",
+    "time": 1790702071310,
+    "type": "atoms:state",
+    "method": "save"
+  }
+]
