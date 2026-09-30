@@ -1,0 +1,12 @@
+{
+  "status": 200,
+  "request": {
+    "requirement": "做一个极简中文待办应用，标题为桌面验收待办。只有添加、完成、删除三项能力，用平台 atoms.loadState/saveState 保存。输入框标签为任务，添加按钮文字为添加，任务旁复选框切换完成，删除按钮标识对应任务。白色背景绿色按钮，布局紧凑。"
+  },
+  "result": {
+    "model": "deepseek-flash",
+    "durationMs": 6559,
+    "generatedAt": "2026-09-29T16:15:00.841Z",
+    "htmlSha256": "26ed7cb248f63ff116979db42ec6d027c7868b588096bc344607590a475f4d2a"
+  }
+}

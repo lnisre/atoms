@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>桌面验收待办</title>
+<style>
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    padding: 16px;
+    font-family: system-ui, -apple-system, "Segoe UI", "Microsoft YaHei", sans-serif;
+    background: #ffffff;
+    color: #1f2937;
+  }
+  h1 {
+    font-size: 18px;
+    margin: 0 0 12px;
+    font-weight: 600;
+  }
+  .row {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 8px;
+    flex-wrap: wrap;
+  }
+  label {
+    font-size: 13px;
+    display: block;
+    margin-bottom: 4px;
+    color: #374151;
+  }
+  input[type="text"] {
+    flex: 1 1 160px;
+    min-width: 0;
+    padding: 8px 10px;
+    font-size: 14px;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    font-family: inherit;
+  }
+  input[type="text"]:focus {
+    outline: 2px solid #16a34a;
+    outline-offset: 1px;
+    border-color: #16a34a;
+  }
+  button {
+    font-family: inherit;
+    font-size: 14px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+  }
+  button:focus-visible {
+    outline: 2px solid #15803d;
+    outline-offset: 2px;
+  }
+  .btn-add {
+    background: #16a34a;
+    color: #fff;
+    padding: 8px 16px;
+    font-weight: 600;
+  }
+  .btn-add:hover:not(:disabled) { background: #15803d; }
+  .btn-add:disabled { background: #a7d5b8; cursor: not-allowed; }
+  .btn-del {
+    background: #fff;
+    color: #b91c1c;
+    border: 1px solid #fca5a5;
+    padding: 5px 10px;
+    font-size: 13px;
+  }
+  .btn-del:hover:not(:disabled) { background: #fef2f2; }
+  .btn-del:disabled { color: #d1d5db; border-color: #e5e7eb; cursor: not-allowed; }
+  ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  li {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 7px 0;
+    border-bottom: 1px solid #f3f4f6;
+  }
+  li input[type="checkbox"] {
+    width: 16px;
+    height: 16px;
+    accent-color: #16a34a;
+    flex: none;
+    cursor: pointer;
+  }
+  .task-text {
+    flex: 1;
+    font-size: 14px;
+    word-break: break-word;
+    min-width: 0;
+  }
+  .done .task-text {
+    color: #9ca3af;
+    text-decoration: line-through;
+  }
+  .empty {
+    color: #9ca3af;
+    font-size: 13px;
+    padding: 8px 0;
+  }
+  .status {
+    font-size: 12px;
+    margin-top: 10px;
+    min-height: 16px;
+    color: #6b7280;
+  }
+  .status.error { color: #b91c1c; }
+  .status.saved { color: #16a34a; }
+  .note {
+    font-size: 12px;
+    color: #6b7280;
+    margin-top: 12px;
+    line-height: 1.5;
+    border-top: 1px dashed #e5e7eb;
+    padding-top: 8px;
+  }
+</style>
+</head>
+<body>
+  <h1>桌面验收待办</h1>
+
+  <div>
+    <label for="taskInput">任务</label>
+    <div class="row">
+      <input type="text" id="taskInput" placeholder="输入任务内容" autocomplete="off" disabled>
+      <button type="button" class="btn-add" id="addBtn" disabled>添加</button>
+    </div>
+  </div>
+
+  <ul id="taskList" aria-live="polite"></ul>
+
+  <div class="status" id="status" role="status" aria-live="polite"></div>
+
+  <p class="note">
+    数据通过平台存储接口保存在本浏览器与本站点。恢复仅限于此浏览器和此站点，站点数据会被保留。无后端与登录，无法跨设备同步。
+  </p>
+
+<script>
+(function () {
+  var listEl = document.getElementById('taskList');
+  var inputEl = document.getElementById('taskInput');
+  var addBtn = document.getElementById('addBtn');
+  var statusEl = document.getElementById('status');
+
+  var tasks = [];
+  var ready = false;
+
+  function setStatus(text, cls) {
+    statusEl.textContent = text || '';
+    statusEl.className = 'status' + (cls ? ' ' + cls : '');
+  }
+
+  function setEditing(enabled) {
+    inputEl.disabled = !enabled;
+    addBtn.disabled = !enabled;
+  }
+
+  function render() {
+    listEl.textContent = '';
+    if (tasks.length === 0) {
+      var empty = document.createElement('li');
+      empty.className = 'empty';
+      empty.textContent = '暂无任务。';
+      listEl.appendChild(empty);
+      return;
+    }
+    tasks.forEach(function (task) {
+      var li = document.createElement('li');
+      if (task.done) li.className = 'done';
+
+      var cb = document.createElement('input');
+      cb.type = 'checkbox';
+      cb.checked = !!task.done;
+      cb.disabled = !ready;
+      cb.setAttribute('aria-label', '完成：' + task.text);
+      cb.addEventListener('change', function () {
+        handleToggle(task.id);
+      });
+
+      var span = document.createElement('span');
+      span.className = 'task-text';
+      span.textContent = task.text;
+
+      var del = document.createElement('button');
+      del.type = 'button';
+      del.className = 'btn-del';
+      del.textContent = '删除';
+      del.disabled = !ready;
+      del.setAttribute('aria-label', '删除任务：' + task.text);
+      del.addEventListener('click', function () {
+        handleDelete(task.id);
+      });
+
+      li.appendChild(cb);
+      li.appendChild(span);
+      li.appendChild(del);
+      listEl.appendChild(li);
+    });
+  }
+
+  function snapshot() {
+    return { tasks: tasks.map(function (t) {
+      return { id: t.id, text: t.text, done: !!t.done };
+    }) };
+  }
+
+  async function handleAdd() {
+    var text = inputEl.value.trim();
+    if (!text) return;
+    tasks.push({ id: Date.now() + '-' + Math.random().toString(36).slice(2, 8), text: text, done: false });
+    inputEl.value = '';
+    await runMutation();
+  }
+
+  async function handleToggle(id) {
+    var t = tasks.find(function (x) { return x.id === id; });
+    if (!t) return;
+    t.done = !t.done;
+    await runMutation();
+  }
+
+  async function handleDelete(id) {
+    tasks = tasks.filter(function (x) { return x.id !== id; });
+    await runMutation();
+  }
+
+  async function runMutation() {
+    render();
+    setEditing(false);
+    setStatus('保存中…', '');
+    var data = snapshot();
+    try {
+      await window.atoms.saveState(data);
+      setStatus('已保存', 'saved');
+      setEditing(true);
+      render();
+    } catch (e) {
+      setStatus('保存失败：' + (e && e.message ? e.message : '未知错误'), 'error');
+      setEditing(false);
+    }
+  }
+
+  inputEl.addEventListener('keydown', function (ev) {
+    if (ev.key === 'Enter') {
+      ev.preventDefault();
+      if (ready && !addBtn.disabled) handleAdd();
+    }
+  });
+
+  addBtn.addEventListener('click', function () {
+    handleAdd();
+  });
+
+  async function init() {
+    setEditing(false);
+    render();
+    setStatus('正在读取数据…', '');
+    try {
+      var saved = await window.atoms.loadState();
+      if (saved && Array.isArray(saved.tasks)) {
+        tasks = saved.tasks.map(function (t) {
+          return {
+            id: t && t.id != null ? t.id : Date.now() + '-' + Math.random().toString(36).slice(2, 8),
+            text: t && t.text != null ? String(t.text) : '',
+            done: !!(t && t.done)
+          };
+        });
+      } else {
+        tasks = [];
+      }
+      ready = true;
+      render();
+      setEditing(true);
+      setStatus('', '');
+      inputEl.focus();
+    } catch (e) {
+      ready = false;
+      setEditing(false);
+      render();
+      setStatus('读取失败：' + (e && e.message ? e.message : '未知错误') + '。编辑已禁用，未覆盖已存数据。', 'error');
+    }
+  }
+
+  init();
+})();
+</script>
+</body>
+</html>

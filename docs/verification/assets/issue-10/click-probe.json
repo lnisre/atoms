@@ -1,0 +1,411 @@
+[
+  {
+    "i": 0,
+    "initial": {
+      "bridge": "object",
+      "csp": 1,
+      "first": "META",
+      "headAttribute": ">"
+    },
+    "passed": true,
+    "parentEvents": [],
+    "frameEvents": [
+      {
+        "type": "pointerdown",
+        "target": "BUTTON",
+        "id": "action",
+        "inert": false,
+        "time": 121.19999980926514
+      },
+      {
+        "type": "mousedown",
+        "target": "BUTTON",
+        "id": "action",
+        "inert": false,
+        "time": 121.19999980926514
+      },
+      {
+        "type": "pointerup",
+        "target": "BUTTON",
+        "id": "action",
+        "inert": false,
+        "time": 121.40000009536743
+      },
+      {
+        "type": "mouseup",
+        "target": "BUTTON",
+        "id": "action",
+        "inert": false,
+        "time": 121.40000009536743
+      },
+      {
+        "type": "click",
+        "target": "BUTTON",
+        "id": "action",
+        "inert": false,
+        "time": 121.40000009536743
+      }
+    ],
+    "status": "应用数据已保存",
+    "button": "1",
+    "inert": false
+  },
+  {
+    "i": 1,
+    "initial": {
+      "bridge": "object",
+      "csp": 1,
+      "first": "META",
+      "headAttribute": ">"
+    },
+    "passed": true,
+    "parentEvents": [],
+    "frameEvents": [
+      {
+        "type": "pointerdown",
+        "target": "BUTTON",
+        "id": "action",
+        "inert": false,
+        "time": 116.80000019073486
+      },
+      {
+        "type": "mousedown",
+        "target": "BUTTON",
+        "id": "action",
+        "inert": false,
+        "time": 116.90000009536743
+      },
+      {
+        "type": "pointerup",
+        "target": "BUTTON",
+        "id": "action",
+        "inert": false,
+        "time": 117
+      },
+      {
+        "type": "mouseup",
+        "target": "BUTTON",
+        "id": "action",
+        "inert": false,
+        "time": 117
+      },
+      {
+        "type": "click",
+        "target": "BUTTON",
+        "id": "action",
+        "inert": false,
+        "time": 117
+      }
+    ],
+    "status": "应用数据已保存",
+    "button": "1",
+    "inert": false
+  },
+  {
+    "i": 2,
+    "initial": {
+      "bridge": "object",
+      "csp": 1,
+      "first": "META",
+      "headAttribute": ">"
+    },
+    "passed": true,
+    "parentEvents": [],
+    "frameEvents": [
+      {
+        "type": "pointerdown",
+        "target": "BUTTON",
+        "id": "action",
+        "inert": false,
+        "time": 105.09999990463257
+      },
+      {
+        "type": "mousedown",
+        "target": "BUTTON",
+        "id": "action",
+        "inert": false,
+        "time": 105.09999990463257
+      },
+      {
+        "type": "pointerup",
+        "target": "BUTTON",
+        "id": "action",
+        "inert": false,
+        "time": 105.19999980926514
+      },
+      {
+        "type": "mouseup",
+        "target": "BUTTON",
+        "id": "action",
+        "inert": false,
+        "time": 105.19999980926514
+      },
+      {
+        "type": "click",
+        "target": "BUTTON",
+        "id": "action",
+        "inert": false,
+        "time": 105.19999980926514
+      }
+    ],
+    "status": "应用数据已保存",
+    "button": "1",
+    "inert": false
+  },
+  {
+    "i": 3,
+    "initial": {
+      "bridge": "object",
+      "csp": 1,
+      "first": "META",
+      "headAttribute": ">"
+    },
+    "passed": false,
+    "parentEvents": [
+      {
+        "type": "pointerdown",
+        "target": "IFRAME",
+        "id": "",
+        "inert": false,
+        "time": 421.19999980926514
+      },
+      {
+        "type": "mousedown",
+        "target": "IFRAME",
+        "id": "",
+        "inert": false,
+        "time": 421.19999980926514
+      },
+      {
+        "type": "pointerup",
+        "target": "IFRAME",
+        "id": "",
+        "inert": false,
+        "time": 422.09999990463257
+      },
+      {
+        "type": "mouseup",
+        "target": "IFRAME",
+        "id": "",
+        "inert": false,
+        "time": 422.09999990463257
+      },
+      {
+        "type": "click",
+        "target": "IFRAME",
+        "id": "",
+        "inert": false,
+        "time": 422.09999990463257
+      }
+    ],
+    "frameEvents": [],
+    "status": "应用数据已读取 · 尚无已保存数据",
+    "button": "0",
+    "inert": false,
+    "secondClickWorked": true
+  },
+  {
+    "i": 4,
+    "initial": {
+      "bridge": "object",
+      "csp": 1,
+      "first": "META",
+      "headAttribute": ">"
+    },
+    "passed": true,
+    "parentEvents": [],
+    "frameEvents": [
+      {
+        "type": "pointerdown",
+        "target": "BUTTON",
+        "id": "action",
+        "inert": false,
+        "time": 106.5
+      },
+      {
+        "type": "mousedown",
+        "target": "BUTTON",
+        "id": "action",
+        "inert": false,
+        "time": 106.5
+      },
+      {
+        "type": "pointerup",
+        "target": "BUTTON",
+        "id": "action",
+        "inert": false,
+        "time": 106.59999990463257
+      },
+      {
+        "type": "mouseup",
+        "target": "BUTTON",
+        "id": "action",
+        "inert": false,
+        "time": 106.59999990463257
+      },
+      {
+        "type": "click",
+        "target": "BUTTON",
+        "id": "action",
+        "inert": false,
+        "time": 106.59999990463257
+      }
+    ],
+    "status": "应用数据已保存",
+    "button": "1",
+    "inert": false
+  },
+  {
+    "i": 5,
+    "initial": {
+      "bridge": "object",
+      "csp": 1,
+      "first": "META",
+      "headAttribute": ">"
+    },
+    "passed": true,
+    "parentEvents": [],
+    "frameEvents": [
+      {
+        "type": "pointerdown",
+        "target": "BUTTON",
+        "id": "action",
+        "inert": false,
+        "time": 106.59999990463257
+      },
+      {
+        "type": "mousedown",
+        "target": "BUTTON",
+        "id": "action",
+        "inert": false,
+        "time": 106.59999990463257
+      },
+      {
+        "type": "pointerup",
+        "target": "BUTTON",
+        "id": "action",
+        "inert": false,
+        "time": 106.69999980926514
+      },
+      {
+        "type": "mouseup",
+        "target": "BUTTON",
+        "id": "action",
+        "inert": false,
+        "time": 106.69999980926514
+      },
+      {
+        "type": "click",
+        "target": "BUTTON",
+        "id": "action",
+        "inert": false,
+        "time": 106.69999980926514
+      }
+    ],
+    "status": "应用数据已保存",
+    "button": "1",
+    "inert": false
+  },
+  {
+    "i": 6,
+    "initial": {
+      "bridge": "object",
+      "csp": 1,
+      "first": "META",
+      "headAttribute": ">"
+    },
+    "passed": true,
+    "parentEvents": [],
+    "frameEvents": [
+      {
+        "type": "pointerdown",
+        "target": "BUTTON",
+        "id": "action",
+        "inert": false,
+        "time": 106.2000002861023
+      },
+      {
+        "type": "mousedown",
+        "target": "BUTTON",
+        "id": "action",
+        "inert": false,
+        "time": 106.30000019073486
+      },
+      {
+        "type": "pointerup",
+        "target": "BUTTON",
+        "id": "action",
+        "inert": false,
+        "time": 106.40000009536743
+      },
+      {
+        "type": "mouseup",
+        "target": "BUTTON",
+        "id": "action",
+        "inert": false,
+        "time": 106.5
+      },
+      {
+        "type": "click",
+        "target": "BUTTON",
+        "id": "action",
+        "inert": false,
+        "time": 106.5
+      }
+    ],
+    "status": "应用数据已保存",
+    "button": "1",
+    "inert": false
+  },
+  {
+    "i": 7,
+    "initial": {
+      "bridge": "object",
+      "csp": 1,
+      "first": "META",
+      "headAttribute": ">"
+    },
+    "passed": true,
+    "parentEvents": [],
+    "frameEvents": [
+      {
+        "type": "pointerdown",
+        "target": "BUTTON",
+        "id": "action",
+        "inert": false,
+        "time": 71.90000009536743
+      },
+      {
+        "type": "mousedown",
+        "target": "BUTTON",
+        "id": "action",
+        "inert": false,
+        "time": 71.90000009536743
+      },
+      {
+        "type": "pointerup",
+        "target": "BUTTON",
+        "id": "action",
+        "inert": false,
+        "time": 72
+      },
+      {
+        "type": "mouseup",
+        "target": "BUTTON",
+        "id": "action",
+        "inert": false,
+        "time": 72
+      },
+      {
+        "type": "click",
+        "target": "BUTTON",
+        "id": "action",
+        "inert": false,
+        "time": 72
+      }
+    ],
+    "status": "应用数据已保存",
+    "button": "1",
+    "inert": false
+  }
+]

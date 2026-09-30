@@ -207,7 +207,7 @@ test('采用事务未完成不显示成功；中止保留候选和此前采用�
   await expect(page.getByRole('button', { name: '正在保存采用…', exact: true })).toBeDisabled();
   await expect(page.getByText('候选试用 · 未采用')).toBeVisible();
   await expect(page.getByLabel('已采用修改记录').locator('li')).toHaveCount(1);
-  await expect(page.getByRole('region', { name: '对话修改' }).getByRole('alert')).toContainText('采用保存失败');
+  await expect(page.getByLabel('候选操作').getByRole('alert')).toContainText('采用保存失败');
   await expect(page.frameLocator('iframe').getByRole('heading', { name: '候选第2轮' })).toBeVisible();
   const check = await context.newPage(); await check.goto(page.url());
   await expect(check.frameLocator('iframe').getByRole('heading', { name: '候选第1轮' })).toBeVisible();

@@ -1,0 +1,17 @@
+{
+  "project": "v0-test0",
+  "projectId": "prj_eErnQuAz4P719xKTyuT6XT2Qu5ab",
+  "nodeVersion": "24.x",
+  "alias": "v0-test0-nine.vercel.app",
+  "deployment": {
+    "id": "dpl_3c8byi7JK7THH8DGmB4LzLhNYvXf",
+    "url": "v0-test0-1klcfv0zb-lnisres-projects.vercel.app",
+    "target": "production",
+    "readyState": "READY",
+    "alias": [
+      "v0-test0-nine.vercel.app",
+      "v0-test0-lnisres-projects.vercel.app"
+    ],
+    "nodeVersion": "24.x"
+  }
+}

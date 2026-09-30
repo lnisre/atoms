@@ -300,11 +300,14 @@ export default function Home() {
           </span>
           atoms<span className="brand-tag">LAB</span>
         </button>
-        <span className="topbar-note">从一个想法，到一个可用的应用</span>
+        <nav aria-label="主导航">
+          {project ? <button className="text-button" disabled={busy} onClick={goHome}>← 新建项目 / 已有项目</button> : <a className="text-button" href="#projects">已有项目 ↗</a>}
+        </nav>
         <span className="session-badge">无需注册 · 本浏览器保存</span>
       </header>
       {!project ? (
         <main className="home">
+          <div className="home-create">
           <div className="home-intro">
             <p className="eyebrow">YOUR NEXT LITTLE APP</p>
             <h1>
@@ -372,7 +375,8 @@ export default function Home() {
           <p className="scope-note">
             支持轻量前端应用。项目和应用数据自动保存在同一浏览器、同一网址（协议、主机和端口）下；请等待保存成功再离开。清除站点数据、无痕会话结束或浏览器回收存储后可能无法找回，不支持跨设备恢复。
           </p>
-          <section className="project-list" aria-label="已有项目">
+          </div>
+          <section id="projects" className="project-list" aria-label="已有项目">
             <h2>已有项目</h2>
             {loadingProjects && <p role="status">正在读取已有项目…</p>}
             {listError && (
@@ -404,130 +408,72 @@ export default function Home() {
           <aside className="project-panel">
             <div className="project-heading">
               <p className="eyebrow">项目工作台</p>
-              <h1>
-                {project.requirement.slice(0, 26)}
-                {project.requirement.length > 26 ? "…" : ""}
-              </h1>
-              <p
-                className={`unsaved ${projectSave === "failed" ? "save-error" : ""}`}
-                role={projectSave === "failed" ? "alert" : "status"}
-              >
-                {projectSave === "saved"
-                  ? "项目已保存"
-                  : projectSave === "saving"
-                    ? "项目正在保存…"
-                    : projectSave === "failed"
-                      ? "项目保存失败，请保留页面并检查浏览器存储权限或空间；刷新会丢失当前结果。"
-                      : "项目尚未保存"}
+              <h1>{project.requirement.slice(0, 26)}{project.requirement.length > 26 ? "…" : ""}</h1>
+              <p className={`unsaved ${projectSave === "failed" ? "save-error" : ""}`} role={projectSave === "failed" ? "alert" : "status"}>
+                {projectSave === "saved" ? "项目已保存" : projectSave === "saving" ? "项目正在保存…" : projectSave === "failed" ? "项目保存失败，请保留页面并检查浏览器存储权限或空间；刷新会丢失当前结果。" : "项目尚未保存"}
               </p>
             </div>
-            <section className="requirement-block">
-              <h2>你的需求</h2>
-              <p>{project.requirement}</p>
-            </section>
-            <section
-              className={`task-state ${task?.status}`}
-              aria-live="polite"
-              aria-atomic="true"
-            >
-              <div className="state-title">
-                <span
-                  className={initialBusy ? "spinner" : "state-symbol"}
-                  aria-hidden="true"
-                >
-                  {initialBusy ? "" : task?.status === "failed" ? "!" : "✓"}
-                </span>
-                <h2>
-                  {initialBusy
-                    ? "正在生成应用"
-                    : task?.status === "failed"
-                      ? "生成未完成"
-                      : restored
-                        ? "已恢复保存的应用"
-                        : "代码已生成"}
-                </h2>
-              </div>
-              {initialBusy && (
-                <>
-                  <p>
-                    已提交模型服务，正在等待完整结果。此时可以保留页面，生成完成后会自动展示预览。
-                  </p>
-                  <p className="elapsed">
-                    已等待 {seconds} 秒<span>最多等待约 2 分钟</span>
-                  </p>
-                </>
-              )}
-              {task?.status === "failed" && (
-                <>
-                  <p role="alert">{task.error}</p>
-                  <button
-                    className="primary-button"
-                    onClick={() => void generate(project)}
-                  >
-                    重新生成
-                  </button>
-                </>
-              )}
-              {task?.status === "complete" && (
-                <>
-                  <p>
-                    {restored
-                      ? "已读取保存的需求和代码，没有重新调用模型。"
-                      : "现在可以在预览中操作应用。生成完成不代表所有功能都已验证。"}
-                  </p>
-                  <dl>
-                    <div>
-                      <dt>模型</dt>
-                      <dd>{task.result.model}</dd>
-                    </div>
-                    <div>
-                      <dt>生成耗时</dt>
-                      <dd>{(task.result.durationMs / 1000).toFixed(1)} 秒</dd>
-                    </div>
-                  </dl>
-                </>
-              )}
-            </section>
-            {task?.status === "complete" && projectSave === "saved" && (
-              <section className="modification-panel" aria-label="对话修改">
-                <section aria-label="已采用修改记录">
-                  <h2>已采用修改记录</h2>
-                  {records.length === 0 ? <p>还没有已采用的修改记录。</p> : <ol>{records.map(record => <li key={record.id}>
+            <div className="conversation-scroll" role="region" aria-label="项目对话与详情" tabIndex={0}>
+              <section className={`task-state ${task?.status}`} aria-live="polite" aria-atomic="true">
+                <div className="state-title">
+                  <span className={initialBusy ? "spinner" : "state-symbol"} aria-hidden="true">{initialBusy ? "" : task?.status === "failed" ? "!" : "✓"}</span>
+                  <h2>{initialBusy ? "正在生成应用" : task?.status === "failed" ? "生成未完成" : restored ? "已恢复保存的应用" : "代码已生成"}</h2>
+                </div>
+                {initialBusy && <><p>已提交模型服务，正在等待完整结果。生成完成后会自动展示预览。</p><p className="elapsed">已等待 {seconds} 秒 · 最多约 2 分钟</p></>}
+                {task?.status === "failed" && <><p role="alert">{task.error}</p><button className="primary-button" onClick={() => void generate(project)}>重新生成</button></>}
+                {task?.status === "complete" && <p>{restored ? "已读取保存的需求和代码，没有重新调用模型。" : "现在可以在预览中操作应用。生成完成不代表所有功能都已验证。"}</p>}
+              </section>
+              {dialogue.length > 0 && <section className="current-dialogue">
+                <h2>本轮对话 <span>最新在前</span></h2>
+                <ol aria-label="本轮对话">{dialogue.map((change, index) => ({ change, index })).reverse().map(({ change, index }) => <li key={index}><small>第 {index + 1} 轮候选已生成 · 未采用</small><p>{change}</p></li>)}</ol>
+              </section>}
+              <section className="record-history" aria-label="已采用修改记录">
+                <h2>最近修改结果</h2>
+                {records.length === 0 ? <p>还没有已采用的修改记录。</p> : <>
+                  <ol>{records.slice(-1).map(record => <li key={record.id}>
                     <small>{new Date(record.adoptedAt).toLocaleString("zh-CN")} · 已采用并保存</small>
-                    {record.requests.map((request, index) => <p key={index}>{request}</p>)}
-                    <p>{record.summary}</p>
-                  </li>)}</ol>}
-                </section>
-                <h2>{candidate ? "继续修改候选" : "修改这个应用"}</h2>
-                <p>候选、试用数据和本轮对话仅在当前会话保留。放弃、离开项目、刷新或关闭后会丢失。采用只保存代码与修改记录；试用中的增删改不会写回正式数据。</p>
-                {dialogue.length > 0 && <ol aria-label="本轮对话">{dialogue.map((change, index) => <li key={index}><p>{change}</p><small>第 {index + 1} 轮候选已生成 · 未采用</small></li>)}</ol>}
-                <form onSubmit={event => { event.preventDefault(); void modify(); }}>
-                  <label htmlFor="modification">追加修改需求</label>
-                  <textarea id="modification" value={modification} onChange={event => setModification(event.target.value)} maxLength={MAX_REQUIREMENT_LENGTH} disabled={busy} placeholder="例如：增加任务优先级与筛选" required />
-                  <button className="primary-button" disabled={busy || !modification.trim()} type="submit">{modifying ? "正在生成候选…" : "生成候选"}</button>
-                </form>
+                    {record.requests.map((request, index) => <p key={index}>{request}</p>)}<p>{record.summary}</p>
+                  </li>)}</ol>
+                  {records.length > 1 && <details><summary>较早修改记录（{records.length - 1}）</summary><ol>{records.slice(0, -1).reverse().map(record => <li key={record.id}>
+                    <small>{new Date(record.adoptedAt).toLocaleString("zh-CN")} · 已采用并保存</small>
+                    {record.requests.map((request, index) => <p key={index}>{request}</p>)}<p>{record.summary}</p>
+                  </li>)}</ol></details>}
+                </>}
+              </section>
+              <details className="requirement-block"><summary>原需求详情</summary><p>{project.requirement}</p></details>
+              {task?.status === "complete" && <details className="generation-details"><summary>模型与耗时</summary>
+                <dl><div><dt>模型</dt><dd>{(candidate?.result ?? task.result).model}</dd></div><div><dt>{candidate ? "最近候选耗时" : "生成耗时"}</dt><dd>{((candidate?.result ?? task.result).durationMs / 1000).toFixed(1)} 秒</dd></div></dl>
+              </details>}
+              <details className="storage-details"><summary>保存与恢复范围</summary><p>自动保存到本浏览器的当前网址。项目与应用数据分别显示保存结果，请等待保存成功再离开。清除站点数据、无痕会话结束或存储被回收后可能丢失，不支持跨设备找回。</p></details>
+            </div>
+            {task?.status === "complete" && projectSave === "saved" && <section className="modification-panel" aria-label="对话修改">
+              <div className="modification-feedback" aria-live="polite">
                 {modifying && <p role="status">正在基于{candidate ? "最新候选" : "已采用代码"}修改，已等待 {seconds} 秒，最多约 2 分钟。现有预览仍可使用。</p>}
                 {modificationError && <p className="save-error" role="alert">{modificationError} 原应用与正式数据未被替换，可点击“生成候选”手动重试。</p>}
-                {candidate && <button className="primary-button" disabled={busy} onClick={() => void adopt()}>{adopting ? "正在保存采用…" : "采用修改"}</button>}
-                {adopting && <p role="status">正在保存代码与修改记录，完成前仍为未采用候选。请等待保存成功再离开。</p>}
-                {adoptionError && <p className="save-error" role="alert">{adoptionError}</p>}
-                {(candidate || modificationError) && <button className="text-button" disabled={busy} onClick={discardChanges}>放弃本轮修改</button>}
-              </section>
-            )}
-            <div className="project-footnote">
-              <p>
-                自动保存到本浏览器的当前网址。项目与应用数据分别显示保存结果，请等待保存成功再离开。清除站点数据、无痕会话结束或存储被回收后可能丢失，不支持跨设备找回。
-              </p>
-              <button className="text-button" disabled={busy} onClick={goHome}>
-                ＋ 新建项目 / 已有项目
-              </button>
-            </div>
+              </div>
+              <form onSubmit={event => { event.preventDefault(); void modify(); }}>
+                <label htmlFor="modification">追加修改需求</label>
+                <textarea id="modification" value={modification} onChange={event => setModification(event.target.value)} maxLength={MAX_REQUIREMENT_LENGTH} disabled={busy} placeholder="例如：增加任务优先级与筛选" required />
+                <div className="composer-footer"><span>{candidate ? "基于最新候选继续修改" : "基于已采用应用修改"}</span><button className="primary-button" disabled={busy || !modification.trim()} type="submit">{modifying ? "正在生成候选…" : "生成候选"}</button></div>
+              </form>
+              {!candidate && modificationError && <button className="text-button" disabled={busy} onClick={discardChanges}>放弃本轮修改</button>}
+            </section>}
           </aside>
           {task?.status === "complete" && projectSave !== "saving" ? (
             <AppPreview
               key={project.id + task.result.generatedAt + (candidate ? `:trial:${candidate.revision}` : ":adopted")}
               html={(candidate?.result ?? task.result).html}
               trial={candidate?.trial}
+              actions={candidate && <div className="candidate-actions" aria-label="候选操作">
+                <div className="candidate-action-row"><strong>第 {candidate.revision} 轮候选 · 等待采用</strong><div>
+                  <button className="text-button" disabled={busy} onClick={discardChanges}>放弃本轮修改</button>
+                  <button className="primary-button" disabled={busy} onClick={() => void adopt()}>{adopting ? "正在保存采用…" : "采用修改"}</button>
+                </div></div>
+                <p>采用只保存代码与修改记录，试用数据不会写回正式数据。</p>
+                <p>候选、试用数据和本轮对话仅在当前会话保留；放弃、离开项目、刷新或关闭后会丢失。</p>
+                {adopting && <p role="status">正在保存代码与修改记录，完成前仍为未采用候选。请等待保存成功再离开。</p>}
+                {adoptionError && <p className="save-error" role="alert">{adoptionError}</p>}
+              </div>}
               projectId={project.id}
               projectSaved={projectSave === "saved"}
               onRetry={() => {
