@@ -82,9 +82,11 @@ test("失败后保留需求并允许手动重新生成", async ({ page }) => {
 });
 
 test("浏览器等待超时后结束等待并提供重试", async ({ page }) => {
-  await page.clock.install();
   await page.route("**/api/generate", () => {});
   await page.goto("/");
+  // Wait for hydration and IndexedDB initialization before taking over timers.
+  await expect(page.getByRole("heading", { name: "还没有已保存的项目" })).toBeVisible();
+  await page.clock.install();
   await page.getByLabel("你想做什么？").fill("超时验证");
   await page.getByRole("button", { name: "开始生成" }).click();
   await expect(

@@ -1,0 +1,13 @@
+{
+  "id": "dpl_98ybMX8Q9MdAvjKSPSU6FocaeL4P",
+  "url": "https://v0-test0-l5zm5773h-lnisres-projects.vercel.app/qa",
+  "readyState": "READY",
+  "target": null,
+  "productionId": "dpl_68LXQuH7oBNajTAM7JJKZMpVAJRH",
+  "productionUnchanged": true,
+  "anonymousStatus": 302,
+  "redirectHost": "vercel.com",
+  "existingAutomationAccess": false,
+  "roundTrip": "unverified: deployment authentication; no bypass created",
+  "observedAt": "2026-09-30T13:51:48.913Z"
+}

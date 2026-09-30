@@ -1,0 +1,5954 @@
+[
+  {
+    "case": "todo",
+    "url": "http://localhost:3100/qa",
+    "observedAt": "2026-09-30T13:51:05.921Z",
+    "codeHash": "8d653c7127ffc28673aafef61588cd9b1d10a1a33a39278b3eee08124c03086d",
+    "planHash": "24880f1481dd5f87017d00a0efe180e57d1c9241ba43bda3cfe9dddd3fa75449",
+    "result": {
+      "protocol": "atoms-qa/1",
+      "taskId": "77561b2e-8611-4d75-a398-2249492f6b44",
+      "requestId": "f918f909-cde7-46e8-84fd-360ba8073cf6",
+      "codeHash": "8d653c7127ffc28673aafef61588cd9b1d10a1a33a39278b3eee08124c03086d",
+      "planHash": "24880f1481dd5f87017d00a0efe180e57d1c9241ba43bda3cfe9dddd3fa75449",
+      "status": "passed",
+      "results": [
+        {
+          "scenarioId": "normal-and-timing",
+          "checkId": "3",
+          "command": {
+            "op": "assert",
+            "selector": "#task-title",
+            "property": "disabled",
+            "equals": true
+          },
+          "expected": true,
+          "actual": true,
+          "status": "passed",
+          "startedAt": 1790776263075,
+          "endedAt": 1790776263107
+        },
+        {
+          "scenarioId": "normal-and-timing",
+          "checkId": "4",
+          "command": {
+            "op": "assert",
+            "selector": "#add-task",
+            "property": "disabled",
+            "equals": true
+          },
+          "expected": true,
+          "actual": true,
+          "status": "passed",
+          "startedAt": 1790776263107,
+          "endedAt": 1790776263109
+        },
+        {
+          "scenarioId": "normal-and-timing",
+          "checkId": "5",
+          "command": {
+            "op": "wait",
+            "ms": 600
+          },
+          "expected": 600,
+          "actual": 600,
+          "status": "passed",
+          "startedAt": 1790776263109,
+          "endedAt": 1790776263711
+        },
+        {
+          "scenarioId": "normal-and-timing",
+          "checkId": "6",
+          "command": {
+            "op": "observe",
+            "selector": "#records",
+            "property": "text"
+          },
+          "expected": "executed",
+          "actual": "旧待办 · 待办完成",
+          "status": "passed",
+          "startedAt": 1790776263712,
+          "endedAt": 1790776263712
+        },
+        {
+          "scenarioId": "normal-and-timing",
+          "checkId": "7",
+          "command": {
+            "op": "assert",
+            "selector": "#records li",
+            "property": "count",
+            "equals": 1
+          },
+          "expected": 1,
+          "actual": 1,
+          "status": "passed",
+          "startedAt": 1790776263712,
+          "endedAt": 1790776263714
+        },
+        {
+          "scenarioId": "normal-and-timing",
+          "checkId": "1",
+          "command": {
+            "op": "input",
+            "selector": "#task-title",
+            "value": "检查待办"
+          },
+          "expected": "检查待办",
+          "actual": "检查待办",
+          "status": "passed",
+          "startedAt": 1790776263714,
+          "endedAt": 1790776263715
+        },
+        {
+          "scenarioId": "normal-and-timing",
+          "checkId": "2",
+          "command": {
+            "op": "click",
+            "selector": "#add-task"
+          },
+          "expected": "executed",
+          "actual": "executed",
+          "status": "passed",
+          "startedAt": 1790776263715,
+          "endedAt": 1790776263716
+        },
+        {
+          "scenarioId": "normal-and-timing",
+          "checkId": "8",
+          "command": {
+            "op": "assert",
+            "selector": "body",
+            "property": "inert",
+            "equals": true
+          },
+          "expected": true,
+          "actual": true,
+          "status": "passed",
+          "startedAt": 1790776263716,
+          "endedAt": 1790776263717
+        },
+        {
+          "scenarioId": "normal-and-timing",
+          "checkId": "9",
+          "command": {
+            "op": "assert",
+            "selector": "#feedback",
+            "property": "text",
+            "equals": "正在保存"
+          },
+          "expected": "正在保存",
+          "actual": "正在保存",
+          "status": "passed",
+          "startedAt": 1790776263717,
+          "endedAt": 1790776263718
+        },
+        {
+          "scenarioId": "normal-and-timing",
+          "checkId": "10",
+          "command": {
+            "op": "click",
+            "selector": "#add-task",
+            "probeWhileInert": true
+          },
+          "expected": "executed",
+          "actual": "executed",
+          "status": "passed",
+          "startedAt": 1790776263718,
+          "endedAt": 1790776263718
+        },
+        {
+          "scenarioId": "normal-and-timing",
+          "checkId": "11",
+          "command": {
+            "op": "data",
+            "path": [
+              "tasks",
+              "length"
+            ],
+            "equals": 1
+          },
+          "expected": 1,
+          "actual": 1,
+          "status": "passed",
+          "startedAt": 1790776263719,
+          "endedAt": 1790776263719
+        },
+        {
+          "scenarioId": "normal-and-timing",
+          "checkId": "12",
+          "command": {
+            "op": "wait",
+            "ms": 600
+          },
+          "expected": 600,
+          "actual": 600,
+          "status": "passed",
+          "startedAt": 1790776263719,
+          "endedAt": 1790776264321
+        },
+        {
+          "scenarioId": "normal-and-timing",
+          "checkId": "13",
+          "command": {
+            "op": "assert",
+            "selector": "#feedback",
+            "property": "text",
+            "equals": "已保存"
+          },
+          "expected": "已保存",
+          "actual": "已保存",
+          "status": "passed",
+          "startedAt": 1790776264321,
+          "endedAt": 1790776264322
+        },
+        {
+          "scenarioId": "normal-and-timing",
+          "checkId": "14",
+          "command": {
+            "op": "assert",
+            "selector": "body",
+            "property": "inert",
+            "equals": false
+          },
+          "expected": false,
+          "actual": false,
+          "status": "passed",
+          "startedAt": 1790776264322,
+          "endedAt": 1790776264324
+        },
+        {
+          "scenarioId": "normal-and-timing",
+          "checkId": "15",
+          "command": {
+            "op": "data",
+            "path": [
+              "tasks",
+              "1",
+              "title"
+            ],
+            "equals": "检查待办"
+          },
+          "expected": "检查待办",
+          "actual": "检查待办",
+          "status": "passed",
+          "startedAt": 1790776264324,
+          "endedAt": 1790776264324
+        },
+        {
+          "scenarioId": "normal-and-timing",
+          "checkId": "16",
+          "command": {
+            "op": "data",
+            "path": [
+              "tasks",
+              "length"
+            ],
+            "equals": 2
+          },
+          "expected": 2,
+          "actual": 2,
+          "status": "passed",
+          "startedAt": 1790776264324,
+          "endedAt": 1790776264324
+        },
+        {
+          "scenarioId": "normal-and-timing",
+          "checkId": "17",
+          "command": {
+            "op": "bridge",
+            "property": "saveAttempts",
+            "equals": 1
+          },
+          "expected": 1,
+          "actual": 1,
+          "status": "passed",
+          "startedAt": 1790776264324,
+          "endedAt": 1790776264324
+        },
+        {
+          "scenarioId": "normal-and-timing",
+          "checkId": "18",
+          "command": {
+            "op": "click",
+            "selector": "#records li:first-child .change"
+          },
+          "expected": "executed",
+          "actual": "executed",
+          "status": "passed",
+          "startedAt": 1790776264324,
+          "endedAt": 1790776264325
+        },
+        {
+          "scenarioId": "normal-and-timing",
+          "checkId": "19",
+          "command": {
+            "op": "wait",
+            "ms": 600
+          },
+          "expected": 600,
+          "actual": 600,
+          "status": "passed",
+          "startedAt": 1790776264325,
+          "endedAt": 1790776264926
+        },
+        {
+          "scenarioId": "normal-and-timing",
+          "checkId": "20",
+          "command": {
+            "op": "data",
+            "path": [
+              "tasks",
+              "0",
+              "done"
+            ],
+            "equals": true
+          },
+          "expected": true,
+          "actual": true,
+          "status": "passed",
+          "startedAt": 1790776264926,
+          "endedAt": 1790776264926
+        },
+        {
+          "scenarioId": "normal-and-timing",
+          "checkId": "21",
+          "command": {
+            "op": "bridge",
+            "property": "commits",
+            "equals": 2
+          },
+          "expected": 2,
+          "actual": 2,
+          "status": "passed",
+          "startedAt": 1790776264926,
+          "endedAt": 1790776264926
+        },
+        {
+          "scenarioId": "read-failure",
+          "checkId": "22",
+          "command": {
+            "op": "wait",
+            "ms": 100
+          },
+          "expected": 100,
+          "actual": 100,
+          "status": "passed",
+          "startedAt": 1790776264950,
+          "endedAt": 1790776265067
+        },
+        {
+          "scenarioId": "read-failure",
+          "checkId": "23",
+          "command": {
+            "op": "assert",
+            "selector": "#feedback",
+            "property": "text",
+            "equals": "读取失败"
+          },
+          "expected": "读取失败",
+          "actual": "读取失败",
+          "status": "passed",
+          "startedAt": 1790776265067,
+          "endedAt": 1790776265068
+        },
+        {
+          "scenarioId": "read-failure",
+          "checkId": "24",
+          "command": {
+            "op": "assert",
+            "selector": "#task-title",
+            "property": "disabled",
+            "equals": true
+          },
+          "expected": true,
+          "actual": true,
+          "status": "passed",
+          "startedAt": 1790776265068,
+          "endedAt": 1790776265070
+        },
+        {
+          "scenarioId": "read-failure",
+          "checkId": "25",
+          "command": {
+            "op": "assert",
+            "selector": "#add-task",
+            "property": "disabled",
+            "equals": true
+          },
+          "expected": true,
+          "actual": true,
+          "status": "passed",
+          "startedAt": 1790776265070,
+          "endedAt": 1790776265070
+        },
+        {
+          "scenarioId": "read-failure",
+          "checkId": "26",
+          "command": {
+            "op": "bridge",
+            "property": "saveAttempts",
+            "equals": 0
+          },
+          "expected": 0,
+          "actual": 0,
+          "status": "passed",
+          "startedAt": 1790776265070,
+          "endedAt": 1790776265070
+        },
+        {
+          "scenarioId": "read-failure",
+          "checkId": "27",
+          "command": {
+            "op": "bridge",
+            "property": "rejectedSaves",
+            "equals": 0
+          },
+          "expected": 0,
+          "actual": 0,
+          "status": "passed",
+          "startedAt": 1790776265070,
+          "endedAt": 1790776265070
+        },
+        {
+          "scenarioId": "read-failure",
+          "checkId": "28",
+          "command": {
+            "op": "data",
+            "path": [
+              "tasks",
+              "0",
+              "title"
+            ],
+            "equals": "旧待办"
+          },
+          "expected": "旧待办",
+          "actual": "旧待办",
+          "status": "passed",
+          "startedAt": 1790776265070,
+          "endedAt": 1790776265070
+        },
+        {
+          "scenarioId": "read-failure",
+          "checkId": "29",
+          "command": {
+            "op": "bridge",
+            "property": "commits",
+            "equals": 0
+          },
+          "expected": 0,
+          "actual": 0,
+          "status": "passed",
+          "startedAt": 1790776265070,
+          "endedAt": 1790776265070
+        },
+        {
+          "scenarioId": "save-failure",
+          "checkId": "30",
+          "command": {
+            "op": "wait",
+            "ms": 100
+          },
+          "expected": 100,
+          "actual": 100,
+          "status": "passed",
+          "startedAt": 1790776265090,
+          "endedAt": 1790776265193
+        },
+        {
+          "scenarioId": "save-failure",
+          "checkId": "1",
+          "command": {
+            "op": "input",
+            "selector": "#task-title",
+            "value": "检查待办"
+          },
+          "expected": "检查待办",
+          "actual": "检查待办",
+          "status": "passed",
+          "startedAt": 1790776265193,
+          "endedAt": 1790776265194
+        },
+        {
+          "scenarioId": "save-failure",
+          "checkId": "2",
+          "command": {
+            "op": "click",
+            "selector": "#add-task"
+          },
+          "expected": "executed",
+          "actual": "executed",
+          "status": "passed",
+          "startedAt": 1790776265194,
+          "endedAt": 1790776265196
+        },
+        {
+          "scenarioId": "save-failure",
+          "checkId": "31",
+          "command": {
+            "op": "assert",
+            "selector": "body",
+            "property": "inert",
+            "equals": true
+          },
+          "expected": true,
+          "actual": true,
+          "status": "passed",
+          "startedAt": 1790776265196,
+          "endedAt": 1790776265196
+        },
+        {
+          "scenarioId": "save-failure",
+          "checkId": "32",
+          "command": {
+            "op": "wait",
+            "ms": 600
+          },
+          "expected": 600,
+          "actual": 600,
+          "status": "passed",
+          "startedAt": 1790776265196,
+          "endedAt": 1790776265798
+        },
+        {
+          "scenarioId": "save-failure",
+          "checkId": "33",
+          "command": {
+            "op": "assert",
+            "selector": "#feedback",
+            "property": "text",
+            "equals": "保存失败"
+          },
+          "expected": "保存失败",
+          "actual": "保存失败",
+          "status": "passed",
+          "startedAt": 1790776265798,
+          "endedAt": 1790776265799
+        },
+        {
+          "scenarioId": "save-failure",
+          "checkId": "34",
+          "command": {
+            "op": "assert",
+            "selector": "#records li",
+            "property": "count",
+            "equals": 1
+          },
+          "expected": 1,
+          "actual": 1,
+          "status": "passed",
+          "startedAt": 1790776265799,
+          "endedAt": 1790776265800
+        },
+        {
+          "scenarioId": "save-failure",
+          "checkId": "35",
+          "command": {
+            "op": "data",
+            "path": [
+              "tasks",
+              "length"
+            ],
+            "equals": 1
+          },
+          "expected": 1,
+          "actual": 1,
+          "status": "passed",
+          "startedAt": 1790776265800,
+          "endedAt": 1790776265800
+        },
+        {
+          "scenarioId": "save-failure",
+          "checkId": "36",
+          "command": {
+            "op": "bridge",
+            "property": "rejectedSaves",
+            "equals": 1
+          },
+          "expected": 1,
+          "actual": 1,
+          "status": "passed",
+          "startedAt": 1790776265800,
+          "endedAt": 1790776265800
+        },
+        {
+          "scenarioId": "save-failure",
+          "checkId": "37",
+          "command": {
+            "op": "bridge",
+            "property": "commits",
+            "equals": 0
+          },
+          "expected": 0,
+          "actual": 0,
+          "status": "passed",
+          "startedAt": 1790776265800,
+          "endedAt": 1790776265800
+        }
+      ],
+      "detail": "所有计划项实际执行完成。"
+    }
+  },
+  {
+    "case": "reading",
+    "url": "http://localhost:3100/qa",
+    "observedAt": "2026-09-30T13:51:09.940Z",
+    "codeHash": "1b1960236e2b189171f8df9f48b5fa092085fc69c625be6d5f229e8a9d292eea",
+    "planHash": "d85af4783f3eaa06a23a4b1a12f0779c3d5ae140e4afe244fe7c4d3c002e0a12",
+    "result": {
+      "protocol": "atoms-qa/1",
+      "taskId": "873b9ed6-7de1-46ac-a14a-afbef5f77609",
+      "requestId": "87b65c5c-1967-4d42-8be1-44e025c3ca96",
+      "codeHash": "1b1960236e2b189171f8df9f48b5fa092085fc69c625be6d5f229e8a9d292eea",
+      "planHash": "d85af4783f3eaa06a23a4b1a12f0779c3d5ae140e4afe244fe7c4d3c002e0a12",
+      "status": "passed",
+      "results": [
+        {
+          "scenarioId": "normal-and-timing",
+          "checkId": "3",
+          "command": {
+            "op": "assert",
+            "selector": "#book-name",
+            "property": "disabled",
+            "equals": true
+          },
+          "expected": true,
+          "actual": true,
+          "status": "passed",
+          "startedAt": 1790776267140,
+          "endedAt": 1790776267166
+        },
+        {
+          "scenarioId": "normal-and-timing",
+          "checkId": "4",
+          "command": {
+            "op": "assert",
+            "selector": "#record-book",
+            "property": "disabled",
+            "equals": true
+          },
+          "expected": true,
+          "actual": true,
+          "status": "passed",
+          "startedAt": 1790776267166,
+          "endedAt": 1790776267168
+        },
+        {
+          "scenarioId": "normal-and-timing",
+          "checkId": "5",
+          "command": {
+            "op": "wait",
+            "ms": 600
+          },
+          "expected": 600,
+          "actual": 600,
+          "status": "passed",
+          "startedAt": 1790776267168,
+          "endedAt": 1790776267770
+        },
+        {
+          "scenarioId": "normal-and-timing",
+          "checkId": "6",
+          "command": {
+            "op": "observe",
+            "selector": "#records",
+            "property": "text"
+          },
+          "expected": "executed",
+          "actual": "旧书 · reading · 0读完",
+          "status": "passed",
+          "startedAt": 1790776267770,
+          "endedAt": 1790776267771
+        },
+        {
+          "scenarioId": "normal-and-timing",
+          "checkId": "7",
+          "command": {
+            "op": "assert",
+            "selector": "#records li",
+            "property": "count",
+            "equals": 1
+          },
+          "expected": 1,
+          "actual": 1,
+          "status": "passed",
+          "startedAt": 1790776267771,
+          "endedAt": 1790776267772
+        },
+        {
+          "scenarioId": "normal-and-timing",
+          "checkId": "1",
+          "command": {
+            "op": "input",
+            "selector": "#book-name",
+            "value": "合成书名"
+          },
+          "expected": "合成书名",
+          "actual": "合成书名",
+          "status": "passed",
+          "startedAt": 1790776267772,
+          "endedAt": 1790776267773
+        },
+        {
+          "scenarioId": "normal-and-timing",
+          "checkId": "2",
+          "command": {
+            "op": "click",
+            "selector": "#record-book"
+          },
+          "expected": "executed",
+          "actual": "executed",
+          "status": "passed",
+          "startedAt": 1790776267773,
+          "endedAt": 1790776267774
+        },
+        {
+          "scenarioId": "normal-and-timing",
+          "checkId": "8",
+          "command": {
+            "op": "assert",
+            "selector": "body",
+            "property": "inert",
+            "equals": true
+          },
+          "expected": true,
+          "actual": true,
+          "status": "passed",
+          "startedAt": 1790776267774,
+          "endedAt": 1790776267775
+        },
+        {
+          "scenarioId": "normal-and-timing",
+          "checkId": "9",
+          "command": {
+            "op": "assert",
+            "selector": "#feedback",
+            "property": "text",
+            "equals": "正在保存"
+          },
+          "expected": "正在保存",
+          "actual": "正在保存",
+          "status": "passed",
+          "startedAt": 1790776267775,
+          "endedAt": 1790776267775
+        },
+        {
+          "scenarioId": "normal-and-timing",
+          "checkId": "10",
+          "command": {
+            "op": "click",
+            "selector": "#record-book",
+            "probeWhileInert": true
+          },
+          "expected": "executed",
+          "actual": "executed",
+          "status": "passed",
+          "startedAt": 1790776267775,
+          "endedAt": 1790776267775
+        },
+        {
+          "scenarioId": "normal-and-timing",
+          "checkId": "11",
+          "command": {
+            "op": "data",
+            "path": [
+              "books",
+              "length"
+            ],
+            "equals": 1
+          },
+          "expected": 1,
+          "actual": 1,
+          "status": "passed",
+          "startedAt": 1790776267775,
+          "endedAt": 1790776267775
+        },
+        {
+          "scenarioId": "normal-and-timing",
+          "checkId": "12",
+          "command": {
+            "op": "wait",
+            "ms": 600
+          },
+          "expected": 600,
+          "actual": 600,
+          "status": "passed",
+          "startedAt": 1790776267775,
+          "endedAt": 1790776268377
+        },
+        {
+          "scenarioId": "normal-and-timing",
+          "checkId": "13",
+          "command": {
+            "op": "assert",
+            "selector": "#feedback",
+            "property": "text",
+            "equals": "已保存"
+          },
+          "expected": "已保存",
+          "actual": "已保存",
+          "status": "passed",
+          "startedAt": 1790776268377,
+          "endedAt": 1790776268378
+        },
+        {
+          "scenarioId": "normal-and-timing",
+          "checkId": "14",
+          "command": {
+            "op": "assert",
+            "selector": "body",
+            "property": "inert",
+            "equals": false
+          },
+          "expected": false,
+          "actual": false,
+          "status": "passed",
+          "startedAt": 1790776268378,
+          "endedAt": 1790776268379
+        },
+        {
+          "scenarioId": "normal-and-timing",
+          "checkId": "15",
+          "command": {
+            "op": "data",
+            "path": [
+              "books",
+              "1",
+              "name"
+            ],
+            "equals": "合成书名"
+          },
+          "expected": "合成书名",
+          "actual": "合成书名",
+          "status": "passed",
+          "startedAt": 1790776268379,
+          "endedAt": 1790776268379
+        },
+        {
+          "scenarioId": "normal-and-timing",
+          "checkId": "16",
+          "command": {
+            "op": "data",
+            "path": [
+              "books",
+              "length"
+            ],
+            "equals": 2
+          },
+          "expected": 2,
+          "actual": 2,
+          "status": "passed",
+          "startedAt": 1790776268379,
+          "endedAt": 1790776268379
+        },
+        {
+          "scenarioId": "normal-and-timing",
+          "checkId": "17",
+          "command": {
+            "op": "bridge",
+            "property": "saveAttempts",
+            "equals": 1
+          },
+          "expected": 1,
+          "actual": 1,
+          "status": "passed",
+          "startedAt": 1790776268379,
+          "endedAt": 1790776268379
+        },
+        {
+          "scenarioId": "normal-and-timing",
+          "checkId": "18",
+          "command": {
+            "op": "click",
+            "selector": "#records li:first-child .change"
+          },
+          "expected": "executed",
+          "actual": "executed",
+          "status": "passed",
+          "startedAt": 1790776268379,
+          "endedAt": 1790776268379
+        },
+        {
+          "scenarioId": "normal-and-timing",
+          "checkId": "19",
+          "command": {
+            "op": "wait",
+            "ms": 600
+          },
+          "expected": 600,
+          "actual": 600,
+          "status": "passed",
+          "startedAt": 1790776268379,
+          "endedAt": 1790776268982
+        },
+        {
+          "scenarioId": "normal-and-timing",
+          "checkId": "20",
+          "command": {
+            "op": "data",
+            "path": [
+              "books",
+              "0",
+              "status"
+            ],
+            "equals": "finished"
+          },
+          "expected": "finished",
+          "actual": "finished",
+          "status": "passed",
+          "startedAt": 1790776268982,
+          "endedAt": 1790776268982
+        },
+        {
+          "scenarioId": "normal-and-timing",
+          "checkId": "21",
+          "command": {
+            "op": "data",
+            "path": [
+              "books",
+              "0",
+              "rating"
+            ],
+            "equals": 5
+          },
+          "expected": 5,
+          "actual": 5,
+          "status": "passed",
+          "startedAt": 1790776268982,
+          "endedAt": 1790776268982
+        },
+        {
+          "scenarioId": "normal-and-timing",
+          "checkId": "22",
+          "command": {
+            "op": "bridge",
+            "property": "commits",
+            "equals": 2
+          },
+          "expected": 2,
+          "actual": 2,
+          "status": "passed",
+          "startedAt": 1790776268982,
+          "endedAt": 1790776268982
+        },
+        {
+          "scenarioId": "read-failure",
+          "checkId": "23",
+          "command": {
+            "op": "wait",
+            "ms": 100
+          },
+          "expected": 100,
+          "actual": 100,
+          "status": "passed",
+          "startedAt": 1790776268997,
+          "endedAt": 1790776269112
+        },
+        {
+          "scenarioId": "read-failure",
+          "checkId": "24",
+          "command": {
+            "op": "assert",
+            "selector": "#feedback",
+            "property": "text",
+            "equals": "读取失败"
+          },
+          "expected": "读取失败",
+          "actual": "读取失败",
+          "status": "passed",
+          "startedAt": 1790776269112,
+          "endedAt": 1790776269113
+        },
+        {
+          "scenarioId": "read-failure",
+          "checkId": "25",
+          "command": {
+            "op": "assert",
+            "selector": "#book-name",
+            "property": "disabled",
+            "equals": true
+          },
+          "expected": true,
+          "actual": true,
+          "status": "passed",
+          "startedAt": 1790776269113,
+          "endedAt": 1790776269114
+        },
+        {
+          "scenarioId": "read-failure",
+          "checkId": "26",
+          "command": {
+            "op": "assert",
+            "selector": "#record-book",
+            "property": "disabled",
+            "equals": true
+          },
+          "expected": true,
+          "actual": true,
+          "status": "passed",
+          "startedAt": 1790776269114,
+          "endedAt": 1790776269114
+        },
+        {
+          "scenarioId": "read-failure",
+          "checkId": "27",
+          "command": {
+            "op": "bridge",
+            "property": "saveAttempts",
+            "equals": 0
+          },
+          "expected": 0,
+          "actual": 0,
+          "status": "passed",
+          "startedAt": 1790776269114,
+          "endedAt": 1790776269114
+        },
+        {
+          "scenarioId": "read-failure",
+          "checkId": "28",
+          "command": {
+            "op": "bridge",
+            "property": "rejectedSaves",
+            "equals": 0
+          },
+          "expected": 0,
+          "actual": 0,
+          "status": "passed",
+          "startedAt": 1790776269114,
+          "endedAt": 1790776269114
+        },
+        {
+          "scenarioId": "read-failure",
+          "checkId": "29",
+          "command": {
+            "op": "data",
+            "path": [
+              "books",
+              "0",
+              "name"
+            ],
+            "equals": "旧书"
+          },
+          "expected": "旧书",
+          "actual": "旧书",
+          "status": "passed",
+          "startedAt": 1790776269114,
+          "endedAt": 1790776269114
+        },
+        {
+          "scenarioId": "read-failure",
+          "checkId": "30",
+          "command": {
+            "op": "bridge",
+            "property": "commits",
+            "equals": 0
+          },
+          "expected": 0,
+          "actual": 0,
+          "status": "passed",
+          "startedAt": 1790776269114,
+          "endedAt": 1790776269114
+        },
+        {
+          "scenarioId": "save-failure",
+          "checkId": "31",
+          "command": {
+            "op": "wait",
+            "ms": 100
+          },
+          "expected": 100,
+          "actual": 100,
+          "status": "passed",
+          "startedAt": 1790776269128,
+          "endedAt": 1790776269230
+        },
+        {
+          "scenarioId": "save-failure",
+          "checkId": "1",
+          "command": {
+            "op": "input",
+            "selector": "#book-name",
+            "value": "合成书名"
+          },
+          "expected": "合成书名",
+          "actual": "合成书名",
+          "status": "passed",
+          "startedAt": 1790776269230,
+          "endedAt": 1790776269230
+        },
+        {
+          "scenarioId": "save-failure",
+          "checkId": "2",
+          "command": {
+            "op": "click",
+            "selector": "#record-book"
+          },
+          "expected": "executed",
+          "actual": "executed",
+          "status": "passed",
+          "startedAt": 1790776269230,
+          "endedAt": 1790776269232
+        },
+        {
+          "scenarioId": "save-failure",
+          "checkId": "32",
+          "command": {
+            "op": "assert",
+            "selector": "body",
+            "property": "inert",
+            "equals": true
+          },
+          "expected": true,
+          "actual": true,
+          "status": "passed",
+          "startedAt": 1790776269232,
+          "endedAt": 1790776269232
+        },
+        {
+          "scenarioId": "save-failure",
+          "checkId": "33",
+          "command": {
+            "op": "wait",
+            "ms": 600
+          },
+          "expected": 600,
+          "actual": 600,
+          "status": "passed",
+          "startedAt": 1790776269232,
+          "endedAt": 1790776269833
+        },
+        {
+          "scenarioId": "save-failure",
+          "checkId": "34",
+          "command": {
+            "op": "assert",
+            "selector": "#feedback",
+            "property": "text",
+            "equals": "保存失败"
+          },
+          "expected": "保存失败",
+          "actual": "保存失败",
+          "status": "passed",
+          "startedAt": 1790776269834,
+          "endedAt": 1790776269834
+        },
+        {
+          "scenarioId": "save-failure",
+          "checkId": "35",
+          "command": {
+            "op": "assert",
+            "selector": "#records li",
+            "property": "count",
+            "equals": 1
+          },
+          "expected": 1,
+          "actual": 1,
+          "status": "passed",
+          "startedAt": 1790776269834,
+          "endedAt": 1790776269835
+        },
+        {
+          "scenarioId": "save-failure",
+          "checkId": "36",
+          "command": {
+            "op": "data",
+            "path": [
+              "books",
+              "length"
+            ],
+            "equals": 1
+          },
+          "expected": 1,
+          "actual": 1,
+          "status": "passed",
+          "startedAt": 1790776269835,
+          "endedAt": 1790776269835
+        },
+        {
+          "scenarioId": "save-failure",
+          "checkId": "37",
+          "command": {
+            "op": "bridge",
+            "property": "rejectedSaves",
+            "equals": 1
+          },
+          "expected": 1,
+          "actual": 1,
+          "status": "passed",
+          "startedAt": 1790776269835,
+          "endedAt": 1790776269835
+        },
+        {
+          "scenarioId": "save-failure",
+          "checkId": "38",
+          "command": {
+            "op": "bridge",
+            "property": "commits",
+            "equals": 0
+          },
+          "expected": 0,
+          "actual": 0,
+          "status": "passed",
+          "startedAt": 1790776269835,
+          "endedAt": 1790776269835
+        }
+      ],
+      "detail": "所有计划项实际执行完成。"
+    }
+  },
+  {
+    "case": "read-bug",
+    "url": "http://localhost:3100/qa",
+    "observedAt": "2026-09-30T13:51:13.446Z",
+    "codeHash": "ab39207065a64bcf889d40e21445a1f3b6fda700f4668e09e896ab382b376551",
+    "planHash": "24880f1481dd5f87017d00a0efe180e57d1c9241ba43bda3cfe9dddd3fa75449",
+    "result": {
+      "protocol": "atoms-qa/1",
+      "taskId": "8fef25a5-acf3-49ac-a460-55dbe0b3733a",
+      "requestId": "2ec70d78-4274-498e-95cd-e40d5d5cfc16",
+      "codeHash": "ab39207065a64bcf889d40e21445a1f3b6fda700f4668e09e896ab382b376551",
+      "planHash": "24880f1481dd5f87017d00a0efe180e57d1c9241ba43bda3cfe9dddd3fa75449",
+      "status": "failed",
+      "results": [
+        {
+          "scenarioId": "normal-and-timing",
+          "checkId": "3",
+          "command": {
+            "op": "assert",
+            "selector": "#task-title",
+            "property": "disabled",
+            "equals": true
+          },
+          "expected": true,
+          "actual": true,
+          "status": "passed",
+          "startedAt": 1790776270641,
+          "endedAt": 1790776270659
+        },
+        {
+          "scenarioId": "normal-and-timing",
+          "checkId": "4",
+          "command": {
+            "op": "assert",
+            "selector": "#add-task",
+            "property": "disabled",
+            "equals": true
+          },
+          "expected": true,
+          "actual": true,
+          "status": "passed",
+          "startedAt": 1790776270659,
+          "endedAt": 1790776270661
+        },
+        {
+          "scenarioId": "normal-and-timing",
+          "checkId": "5",
+          "command": {
+            "op": "wait",
+            "ms": 600
+          },
+          "expected": 600,
+          "actual": 600,
+          "status": "passed",
+          "startedAt": 1790776270661,
+          "endedAt": 1790776271263
+        },
+        {
+          "scenarioId": "normal-and-timing",
+          "checkId": "6",
+          "command": {
+            "op": "observe",
+            "selector": "#records",
+            "property": "text"
+          },
+          "expected": "executed",
+          "actual": "旧待办 · 待办完成",
+          "status": "passed",
+          "startedAt": 1790776271263,
+          "endedAt": 1790776271264
+        },
+        {
+          "scenarioId": "normal-and-timing",
+          "checkId": "7",
+          "command": {
+            "op": "assert",
+            "selector": "#records li",
+            "property": "count",
+            "equals": 1
+          },
+          "expected": 1,
+          "actual": 1,
+          "status": "passed",
+          "startedAt": 1790776271264,
+          "endedAt": 1790776271266
+        },
+        {
+          "scenarioId": "normal-and-timing",
+          "checkId": "1",
+          "command": {
+            "op": "input",
+            "selector": "#task-title",
+            "value": "检查待办"
+          },
+          "expected": "检查待办",
+          "actual": "检查待办",
+          "status": "passed",
+          "startedAt": 1790776271266,
+          "endedAt": 1790776271267
+        },
+        {
+          "scenarioId": "normal-and-timing",
+          "checkId": "2",
+          "command": {
+            "op": "click",
+            "selector": "#add-task"
+          },
+          "expected": "executed",
+          "actual": "executed",
+          "status": "passed",
+          "startedAt": 1790776271267,
+          "endedAt": 1790776271269
+        },
+        {
+          "scenarioId": "normal-and-timing",
+          "checkId": "8",
+          "command": {
+            "op": "assert",
+            "selector": "body",
+            "property": "inert",
+            "equals": true
+          },
+          "expected": true,
+          "actual": true,
+          "status": "passed",
+          "startedAt": 1790776271269,
+          "endedAt": 1790776271270
+        },
+        {
+          "scenarioId": "normal-and-timing",
+          "checkId": "9",
+          "command": {
+            "op": "assert",
+            "selector": "#feedback",
+            "property": "text",
+            "equals": "正在保存"
+          },
+          "expected": "正在保存",
+          "actual": "正在保存",
+          "status": "passed",
+          "startedAt": 1790776271270,
+          "endedAt": 1790776271270
+        },
+        {
+          "scenarioId": "normal-and-timing",
+          "checkId": "10",
+          "command": {
+            "op": "click",
+            "selector": "#add-task",
+            "probeWhileInert": true
+          },
+          "expected": "executed",
+          "actual": "executed",
+          "status": "passed",
+          "startedAt": 1790776271270,
+          "endedAt": 1790776271271
+        },
+        {
+          "scenarioId": "normal-and-timing",
+          "checkId": "11",
+          "command": {
+            "op": "data",
+            "path": [
+              "tasks",
+              "length"
+            ],
+            "equals": 1
+          },
+          "expected": 1,
+          "actual": 1,
+          "status": "passed",
+          "startedAt": 1790776271271,
+          "endedAt": 1790776271271
+        },
+        {
+          "scenarioId": "normal-and-timing",
+          "checkId": "12",
+          "command": {
+            "op": "wait",
+            "ms": 600
+          },
+          "expected": 600,
+          "actual": 600,
+          "status": "passed",
+          "startedAt": 1790776271271,
+          "endedAt": 1790776271873
+        },
+        {
+          "scenarioId": "normal-and-timing",
+          "checkId": "13",
+          "command": {
+            "op": "assert",
+            "selector": "#feedback",
+            "property": "text",
+            "equals": "已保存"
+          },
+          "expected": "已保存",
+          "actual": "已保存",
+          "status": "passed",
+          "startedAt": 1790776271873,
+          "endedAt": 1790776271874
+        },
+        {
+          "scenarioId": "normal-and-timing",
+          "checkId": "14",
+          "command": {
+            "op": "assert",
+            "selector": "body",
+            "property": "inert",
+            "equals": false
+          },
+          "expected": false,
+          "actual": false,
+          "status": "passed",
+          "startedAt": 1790776271874,
+          "endedAt": 1790776271875
+        },
+        {
+          "scenarioId": "normal-and-timing",
+          "checkId": "15",
+          "command": {
+            "op": "data",
+            "path": [
+              "tasks",
+              "1",
+              "title"
+            ],
+            "equals": "检查待办"
+          },
+          "expected": "检查待办",
+          "actual": "检查待办",
+          "status": "passed",
+          "startedAt": 1790776271875,
+          "endedAt": 1790776271875
+        },
+        {
+          "scenarioId": "normal-and-timing",
+          "checkId": "16",
+          "command": {
+            "op": "data",
+            "path": [
+              "tasks",
+              "length"
+            ],
+            "equals": 2
+          },
+          "expected": 2,
+          "actual": 2,
+          "status": "passed",
+          "startedAt": 1790776271875,
+          "endedAt": 1790776271875
+        },
+        {
+          "scenarioId": "normal-and-timing",
+          "checkId": "17",
+          "command": {
+            "op": "bridge",
+            "property": "saveAttempts",
+            "equals": 1
+          },
+          "expected": 1,
+          "actual": 1,
+          "status": "passed",
+          "startedAt": 1790776271875,
+          "endedAt": 1790776271875
+        },
+        {
+          "scenarioId": "normal-and-timing",
+          "checkId": "18",
+          "command": {
+            "op": "click",
+            "selector": "#records li:first-child .change"
+          },
+          "expected": "executed",
+          "actual": "executed",
+          "status": "passed",
+          "startedAt": 1790776271875,
+          "endedAt": 1790776271876
+        },
+        {
+          "scenarioId": "normal-and-timing",
+          "checkId": "19",
+          "command": {
+            "op": "wait",
+            "ms": 600
+          },
+          "expected": 600,
+          "actual": 600,
+          "status": "passed",
+          "startedAt": 1790776271876,
+          "endedAt": 1790776272477
+        },
+        {
+          "scenarioId": "normal-and-timing",
+          "checkId": "20",
+          "command": {
+            "op": "data",
+            "path": [
+              "tasks",
+              "0",
+              "done"
+            ],
+            "equals": true
+          },
+          "expected": true,
+          "actual": true,
+          "status": "passed",
+          "startedAt": 1790776272477,
+          "endedAt": 1790776272477
+        },
+        {
+          "scenarioId": "normal-and-timing",
+          "checkId": "21",
+          "command": {
+            "op": "bridge",
+            "property": "commits",
+            "equals": 2
+          },
+          "expected": 2,
+          "actual": 2,
+          "status": "passed",
+          "startedAt": 1790776272477,
+          "endedAt": 1790776272477
+        },
+        {
+          "scenarioId": "read-failure",
+          "checkId": "22",
+          "command": {
+            "op": "wait",
+            "ms": 100
+          },
+          "expected": 100,
+          "actual": 100,
+          "status": "passed",
+          "startedAt": 1790776272504,
+          "endedAt": 1790776272622
+        },
+        {
+          "scenarioId": "read-failure",
+          "checkId": "23",
+          "command": {
+            "op": "assert",
+            "selector": "#feedback",
+            "property": "text",
+            "equals": "读取失败"
+          },
+          "expected": "读取失败",
+          "actual": "读取失败",
+          "status": "passed",
+          "startedAt": 1790776272622,
+          "endedAt": 1790776272622
+        },
+        {
+          "scenarioId": "read-failure",
+          "checkId": "24",
+          "command": {
+            "op": "assert",
+            "selector": "#task-title",
+            "property": "disabled",
+            "equals": true
+          },
+          "expected": true,
+          "actual": false,
+          "status": "failed",
+          "startedAt": 1790776272622,
+          "endedAt": 1790776272624
+        },
+        {
+          "scenarioId": "read-failure",
+          "checkId": "25",
+          "command": {
+            "op": "assert",
+            "selector": "#add-task",
+            "property": "disabled",
+            "equals": true
+          },
+          "expected": true,
+          "actual": false,
+          "status": "failed",
+          "startedAt": 1790776272624,
+          "endedAt": 1790776272624
+        },
+        {
+          "scenarioId": "read-failure",
+          "checkId": "26",
+          "command": {
+            "op": "bridge",
+            "property": "saveAttempts",
+            "equals": 0
+          },
+          "expected": 0,
+          "actual": 1,
+          "status": "failed",
+          "startedAt": 1790776272624,
+          "endedAt": 1790776272624
+        },
+        {
+          "scenarioId": "read-failure",
+          "checkId": "27",
+          "command": {
+            "op": "bridge",
+            "property": "rejectedSaves",
+            "equals": 0
+          },
+          "expected": 0,
+          "actual": 1,
+          "status": "failed",
+          "startedAt": 1790776272624,
+          "endedAt": 1790776272624
+        },
+        {
+          "scenarioId": "read-failure",
+          "checkId": "28",
+          "command": {
+            "op": "data",
+            "path": [
+              "tasks",
+              "0",
+              "title"
+            ],
+            "equals": "旧待办"
+          },
+          "expected": "旧待办",
+          "actual": "旧待办",
+          "status": "passed",
+          "startedAt": 1790776272624,
+          "endedAt": 1790776272624
+        },
+        {
+          "scenarioId": "read-failure",
+          "checkId": "29",
+          "command": {
+            "op": "bridge",
+            "property": "commits",
+            "equals": 0
+          },
+          "expected": 0,
+          "actual": 0,
+          "status": "passed",
+          "startedAt": 1790776272624,
+          "endedAt": 1790776272624
+        },
+        {
+          "scenarioId": "save-failure",
+          "checkId": "30",
+          "command": {
+            "op": "wait",
+            "ms": 100
+          },
+          "expected": 100,
+          "actual": 100,
+          "status": "passed",
+          "startedAt": 1790776272639,
+          "endedAt": 1790776272741
+        },
+        {
+          "scenarioId": "save-failure",
+          "checkId": "1",
+          "command": {
+            "op": "input",
+            "selector": "#task-title",
+            "value": "检查待办"
+          },
+          "expected": "检查待办",
+          "actual": "检查待办",
+          "status": "passed",
+          "startedAt": 1790776272741,
+          "endedAt": 1790776272742
+        },
+        {
+          "scenarioId": "save-failure",
+          "checkId": "2",
+          "command": {
+            "op": "click",
+            "selector": "#add-task"
+          },
+          "expected": "executed",
+          "actual": "executed",
+          "status": "passed",
+          "startedAt": 1790776272742,
+          "endedAt": 1790776272743
+        },
+        {
+          "scenarioId": "save-failure",
+          "checkId": "31",
+          "command": {
+            "op": "assert",
+            "selector": "body",
+            "property": "inert",
+            "equals": true
+          },
+          "expected": true,
+          "actual": true,
+          "status": "passed",
+          "startedAt": 1790776272743,
+          "endedAt": 1790776272743
+        },
+        {
+          "scenarioId": "save-failure",
+          "checkId": "32",
+          "command": {
+            "op": "wait",
+            "ms": 600
+          },
+          "expected": 600,
+          "actual": 600,
+          "status": "passed",
+          "startedAt": 1790776272743,
+          "endedAt": 1790776273345
+        },
+        {
+          "scenarioId": "save-failure",
+          "checkId": "33",
+          "command": {
+            "op": "assert",
+            "selector": "#feedback",
+            "property": "text",
+            "equals": "保存失败"
+          },
+          "expected": "保存失败",
+          "actual": "保存失败",
+          "status": "passed",
+          "startedAt": 1790776273345,
+          "endedAt": 1790776273346
+        },
+        {
+          "scenarioId": "save-failure",
+          "checkId": "34",
+          "command": {
+            "op": "assert",
+            "selector": "#records li",
+            "property": "count",
+            "equals": 1
+          },
+          "expected": 1,
+          "actual": 1,
+          "status": "passed",
+          "startedAt": 1790776273346,
+          "endedAt": 1790776273347
+        },
+        {
+          "scenarioId": "save-failure",
+          "checkId": "35",
+          "command": {
+            "op": "data",
+            "path": [
+              "tasks",
+              "length"
+            ],
+            "equals": 1
+          },
+          "expected": 1,
+          "actual": 1,
+          "status": "passed",
+          "startedAt": 1790776273347,
+          "endedAt": 1790776273347
+        },
+        {
+          "scenarioId": "save-failure",
+          "checkId": "36",
+          "command": {
+            "op": "bridge",
+            "property": "rejectedSaves",
+            "equals": 1
+          },
+          "expected": 1,
+          "actual": 1,
+          "status": "passed",
+          "startedAt": 1790776273347,
+          "endedAt": 1790776273347
+        },
+        {
+          "scenarioId": "save-failure",
+          "checkId": "37",
+          "command": {
+            "op": "bridge",
+            "property": "commits",
+            "equals": 0
+          },
+          "expected": 0,
+          "actual": 0,
+          "status": "passed",
+          "startedAt": 1790776273347,
+          "endedAt": 1790776273347
+        }
+      ],
+      "detail": "实际检查存在失败；未交付应用。"
+    }
+  },
+  {
+    "case": "save-bug",
+    "url": "http://localhost:3100/qa",
+    "observedAt": "2026-09-30T13:51:16.941Z",
+    "codeHash": "c0bab6169a041bb28acb9f66271e1b2ba35bef0395d594438bbee916743e1404",
+    "planHash": "24880f1481dd5f87017d00a0efe180e57d1c9241ba43bda3cfe9dddd3fa75449",
+    "result": {
+      "protocol": "atoms-qa/1",
+      "taskId": "64133e62-1494-47f3-a133-ceefd60f5378",
+      "requestId": "756a9487-71da-4500-ac23-4dfae6c7eae5",
+      "codeHash": "c0bab6169a041bb28acb9f66271e1b2ba35bef0395d594438bbee916743e1404",
+      "planHash": "24880f1481dd5f87017d00a0efe180e57d1c9241ba43bda3cfe9dddd3fa75449",
+      "status": "failed",
+      "results": [
+        {
+          "scenarioId": "normal-and-timing",
+          "checkId": "3",
+          "command": {
+            "op": "assert",
+            "selector": "#task-title",
+            "property": "disabled",
+            "equals": true
+          },
+          "expected": true,
+          "actual": true,
+          "status": "passed",
+          "startedAt": 1790776274143,
+          "endedAt": 1790776274164
+        },
+        {
+          "scenarioId": "normal-and-timing",
+          "checkId": "4",
+          "command": {
+            "op": "assert",
+            "selector": "#add-task",
+            "property": "disabled",
+            "equals": true
+          },
+          "expected": true,
+          "actual": true,
+          "status": "passed",
+          "startedAt": 1790776274165,
+          "endedAt": 1790776274166
+        },
+        {
+          "scenarioId": "normal-and-timing",
+          "checkId": "5",
+          "command": {
+            "op": "wait",
+            "ms": 600
+          },
+          "expected": 600,
+          "actual": 600,
+          "status": "passed",
+          "startedAt": 1790776274166,
+          "endedAt": 1790776274768
+        },
+        {
+          "scenarioId": "normal-and-timing",
+          "checkId": "6",
+          "command": {
+            "op": "observe",
+            "selector": "#records",
+            "property": "text"
+          },
+          "expected": "executed",
+          "actual": "旧待办 · 待办完成",
+          "status": "passed",
+          "startedAt": 1790776274768,
+          "endedAt": 1790776274769
+        },
+        {
+          "scenarioId": "normal-and-timing",
+          "checkId": "7",
+          "command": {
+            "op": "assert",
+            "selector": "#records li",
+            "property": "count",
+            "equals": 1
+          },
+          "expected": 1,
+          "actual": 1,
+          "status": "passed",
+          "startedAt": 1790776274769,
+          "endedAt": 1790776274770
+        },
+        {
+          "scenarioId": "normal-and-timing",
+          "checkId": "1",
+          "command": {
+            "op": "input",
+            "selector": "#task-title",
+            "value": "检查待办"
+          },
+          "expected": "检查待办",
+          "actual": "检查待办",
+          "status": "passed",
+          "startedAt": 1790776274770,
+          "endedAt": 1790776274771
+        },
+        {
+          "scenarioId": "normal-and-timing",
+          "checkId": "2",
+          "command": {
+            "op": "click",
+            "selector": "#add-task"
+          },
+          "expected": "executed",
+          "actual": "executed",
+          "status": "passed",
+          "startedAt": 1790776274771,
+          "endedAt": 1790776274772
+        },
+        {
+          "scenarioId": "normal-and-timing",
+          "checkId": "8",
+          "command": {
+            "op": "assert",
+            "selector": "body",
+            "property": "inert",
+            "equals": true
+          },
+          "expected": true,
+          "actual": true,
+          "status": "passed",
+          "startedAt": 1790776274772,
+          "endedAt": 1790776274772
+        },
+        {
+          "scenarioId": "normal-and-timing",
+          "checkId": "9",
+          "command": {
+            "op": "assert",
+            "selector": "#feedback",
+            "property": "text",
+            "equals": "正在保存"
+          },
+          "expected": "正在保存",
+          "actual": "正在保存",
+          "status": "passed",
+          "startedAt": 1790776274772,
+          "endedAt": 1790776274773
+        },
+        {
+          "scenarioId": "normal-and-timing",
+          "checkId": "10",
+          "command": {
+            "op": "click",
+            "selector": "#add-task",
+            "probeWhileInert": true
+          },
+          "expected": "executed",
+          "actual": "executed",
+          "status": "passed",
+          "startedAt": 1790776274773,
+          "endedAt": 1790776274773
+        },
+        {
+          "scenarioId": "normal-and-timing",
+          "checkId": "11",
+          "command": {
+            "op": "data",
+            "path": [
+              "tasks",
+              "length"
+            ],
+            "equals": 1
+          },
+          "expected": 1,
+          "actual": 1,
+          "status": "passed",
+          "startedAt": 1790776274773,
+          "endedAt": 1790776274773
+        },
+        {
+          "scenarioId": "normal-and-timing",
+          "checkId": "12",
+          "command": {
+            "op": "wait",
+            "ms": 600
+          },
+          "expected": 600,
+          "actual": 600,
+          "status": "passed",
+          "startedAt": 1790776274773,
+          "endedAt": 1790776275375
+        },
+        {
+          "scenarioId": "normal-and-timing",
+          "checkId": "13",
+          "command": {
+            "op": "assert",
+            "selector": "#feedback",
+            "property": "text",
+            "equals": "已保存"
+          },
+          "expected": "已保存",
+          "actual": "已保存",
+          "status": "passed",
+          "startedAt": 1790776275375,
+          "endedAt": 1790776275376
+        },
+        {
+          "scenarioId": "normal-and-timing",
+          "checkId": "14",
+          "command": {
+            "op": "assert",
+            "selector": "body",
+            "property": "inert",
+            "equals": false
+          },
+          "expected": false,
+          "actual": false,
+          "status": "passed",
+          "startedAt": 1790776275376,
+          "endedAt": 1790776275377
+        },
+        {
+          "scenarioId": "normal-and-timing",
+          "checkId": "15",
+          "command": {
+            "op": "data",
+            "path": [
+              "tasks",
+              "1",
+              "title"
+            ],
+            "equals": "检查待办"
+          },
+          "expected": "检查待办",
+          "actual": "检查待办",
+          "status": "passed",
+          "startedAt": 1790776275377,
+          "endedAt": 1790776275377
+        },
+        {
+          "scenarioId": "normal-and-timing",
+          "checkId": "16",
+          "command": {
+            "op": "data",
+            "path": [
+              "tasks",
+              "length"
+            ],
+            "equals": 2
+          },
+          "expected": 2,
+          "actual": 2,
+          "status": "passed",
+          "startedAt": 1790776275377,
+          "endedAt": 1790776275377
+        },
+        {
+          "scenarioId": "normal-and-timing",
+          "checkId": "17",
+          "command": {
+            "op": "bridge",
+            "property": "saveAttempts",
+            "equals": 1
+          },
+          "expected": 1,
+          "actual": 1,
+          "status": "passed",
+          "startedAt": 1790776275377,
+          "endedAt": 1790776275377
+        },
+        {
+          "scenarioId": "normal-and-timing",
+          "checkId": "18",
+          "command": {
+            "op": "click",
+            "selector": "#records li:first-child .change"
+          },
+          "expected": "executed",
+          "actual": "executed",
+          "status": "passed",
+          "startedAt": 1790776275377,
+          "endedAt": 1790776275377
+        },
+        {
+          "scenarioId": "normal-and-timing",
+          "checkId": "19",
+          "command": {
+            "op": "wait",
+            "ms": 600
+          },
+          "expected": 600,
+          "actual": 600,
+          "status": "passed",
+          "startedAt": 1790776275377,
+          "endedAt": 1790776275979
+        },
+        {
+          "scenarioId": "normal-and-timing",
+          "checkId": "20",
+          "command": {
+            "op": "data",
+            "path": [
+              "tasks",
+              "0",
+              "done"
+            ],
+            "equals": true
+          },
+          "expected": true,
+          "actual": true,
+          "status": "passed",
+          "startedAt": 1790776275979,
+          "endedAt": 1790776275979
+        },
+        {
+          "scenarioId": "normal-and-timing",
+          "checkId": "21",
+          "command": {
+            "op": "bridge",
+            "property": "commits",
+            "equals": 2
+          },
+          "expected": 2,
+          "actual": 2,
+          "status": "passed",
+          "startedAt": 1790776275979,
+          "endedAt": 1790776275979
+        },
+        {
+          "scenarioId": "read-failure",
+          "checkId": "22",
+          "command": {
+            "op": "wait",
+            "ms": 100
+          },
+          "expected": 100,
+          "actual": 100,
+          "status": "passed",
+          "startedAt": 1790776275998,
+          "endedAt": 1790776276117
+        },
+        {
+          "scenarioId": "read-failure",
+          "checkId": "23",
+          "command": {
+            "op": "assert",
+            "selector": "#feedback",
+            "property": "text",
+            "equals": "读取失败"
+          },
+          "expected": "读取失败",
+          "actual": "读取失败",
+          "status": "passed",
+          "startedAt": 1790776276117,
+          "endedAt": 1790776276118
+        },
+        {
+          "scenarioId": "read-failure",
+          "checkId": "24",
+          "command": {
+            "op": "assert",
+            "selector": "#task-title",
+            "property": "disabled",
+            "equals": true
+          },
+          "expected": true,
+          "actual": true,
+          "status": "passed",
+          "startedAt": 1790776276118,
+          "endedAt": 1790776276120
+        },
+        {
+          "scenarioId": "read-failure",
+          "checkId": "25",
+          "command": {
+            "op": "assert",
+            "selector": "#add-task",
+            "property": "disabled",
+            "equals": true
+          },
+          "expected": true,
+          "actual": true,
+          "status": "passed",
+          "startedAt": 1790776276120,
+          "endedAt": 1790776276120
+        },
+        {
+          "scenarioId": "read-failure",
+          "checkId": "26",
+          "command": {
+            "op": "bridge",
+            "property": "saveAttempts",
+            "equals": 0
+          },
+          "expected": 0,
+          "actual": 0,
+          "status": "passed",
+          "startedAt": 1790776276120,
+          "endedAt": 1790776276120
+        },
+        {
+          "scenarioId": "read-failure",
+          "checkId": "27",
+          "command": {
+            "op": "bridge",
+            "property": "rejectedSaves",
+            "equals": 0
+          },
+          "expected": 0,
+          "actual": 0,
+          "status": "passed",
+          "startedAt": 1790776276120,
+          "endedAt": 1790776276120
+        },
+        {
+          "scenarioId": "read-failure",
+          "checkId": "28",
+          "command": {
+            "op": "data",
+            "path": [
+              "tasks",
+              "0",
+              "title"
+            ],
+            "equals": "旧待办"
+          },
+          "expected": "旧待办",
+          "actual": "旧待办",
+          "status": "passed",
+          "startedAt": 1790776276120,
+          "endedAt": 1790776276120
+        },
+        {
+          "scenarioId": "read-failure",
+          "checkId": "29",
+          "command": {
+            "op": "bridge",
+            "property": "commits",
+            "equals": 0
+          },
+          "expected": 0,
+          "actual": 0,
+          "status": "passed",
+          "startedAt": 1790776276120,
+          "endedAt": 1790776276120
+        },
+        {
+          "scenarioId": "save-failure",
+          "checkId": "30",
+          "command": {
+            "op": "wait",
+            "ms": 100
+          },
+          "expected": 100,
+          "actual": 100,
+          "status": "passed",
+          "startedAt": 1790776276139,
+          "endedAt": 1790776276255
+        },
+        {
+          "scenarioId": "save-failure",
+          "checkId": "1",
+          "command": {
+            "op": "input",
+            "selector": "#task-title",
+            "value": "检查待办"
+          },
+          "expected": "检查待办",
+          "actual": "检查待办",
+          "status": "passed",
+          "startedAt": 1790776276255,
+          "endedAt": 1790776276255
+        },
+        {
+          "scenarioId": "save-failure",
+          "checkId": "2",
+          "command": {
+            "op": "click",
+            "selector": "#add-task"
+          },
+          "expected": "executed",
+          "actual": "executed",
+          "status": "passed",
+          "startedAt": 1790776276255,
+          "endedAt": 1790776276257
+        },
+        {
+          "scenarioId": "save-failure",
+          "checkId": "31",
+          "command": {
+            "op": "assert",
+            "selector": "body",
+            "property": "inert",
+            "equals": true
+          },
+          "expected": true,
+          "actual": true,
+          "status": "passed",
+          "startedAt": 1790776276257,
+          "endedAt": 1790776276258
+        },
+        {
+          "scenarioId": "save-failure",
+          "checkId": "32",
+          "command": {
+            "op": "wait",
+            "ms": 600
+          },
+          "expected": 600,
+          "actual": 600,
+          "status": "passed",
+          "startedAt": 1790776276258,
+          "endedAt": 1790776276860
+        },
+        {
+          "scenarioId": "save-failure",
+          "checkId": "33",
+          "command": {
+            "op": "assert",
+            "selector": "#feedback",
+            "property": "text",
+            "equals": "保存失败"
+          },
+          "expected": "保存失败",
+          "actual": "已保存",
+          "status": "failed",
+          "startedAt": 1790776276860,
+          "endedAt": 1790776276860
+        },
+        {
+          "scenarioId": "save-failure",
+          "checkId": "34",
+          "command": {
+            "op": "assert",
+            "selector": "#records li",
+            "property": "count",
+            "equals": 1
+          },
+          "expected": 1,
+          "actual": 1,
+          "status": "passed",
+          "startedAt": 1790776276860,
+          "endedAt": 1790776276862
+        },
+        {
+          "scenarioId": "save-failure",
+          "checkId": "35",
+          "command": {
+            "op": "data",
+            "path": [
+              "tasks",
+              "length"
+            ],
+            "equals": 1
+          },
+          "expected": 1,
+          "actual": 1,
+          "status": "passed",
+          "startedAt": 1790776276862,
+          "endedAt": 1790776276862
+        },
+        {
+          "scenarioId": "save-failure",
+          "checkId": "36",
+          "command": {
+            "op": "bridge",
+            "property": "rejectedSaves",
+            "equals": 1
+          },
+          "expected": 1,
+          "actual": 1,
+          "status": "passed",
+          "startedAt": 1790776276862,
+          "endedAt": 1790776276862
+        },
+        {
+          "scenarioId": "save-failure",
+          "checkId": "37",
+          "command": {
+            "op": "bridge",
+            "property": "commits",
+            "equals": 0
+          },
+          "expected": 0,
+          "actual": 0,
+          "status": "passed",
+          "startedAt": 1790776276862,
+          "endedAt": 1790776276862
+        }
+      ],
+      "detail": "实际检查存在失败；未交付应用。"
+    }
+  },
+  {
+    "case": "tamper",
+    "url": "http://localhost:3100/qa",
+    "observedAt": "2026-09-30T13:51:20.685Z",
+    "codeHash": "ed69ca154c16abf762ccb9291824e4df553f145e3cbde080f7966ff1a75e6955",
+    "planHash": "24880f1481dd5f87017d00a0efe180e57d1c9241ba43bda3cfe9dddd3fa75449",
+    "result": {
+      "protocol": "atoms-qa/1",
+      "taskId": "6584beea-5479-49b9-b5d9-5d8866aa3ce4",
+      "requestId": "adbc1be3-dfdc-490c-b2ab-e1dcc8236f05",
+      "codeHash": "ed69ca154c16abf762ccb9291824e4df553f145e3cbde080f7966ff1a75e6955",
+      "planHash": "24880f1481dd5f87017d00a0efe180e57d1c9241ba43bda3cfe9dddd3fa75449",
+      "status": "passed",
+      "results": [
+        {
+          "scenarioId": "normal-and-timing",
+          "checkId": "3",
+          "command": {
+            "op": "assert",
+            "selector": "#task-title",
+            "property": "disabled",
+            "equals": true
+          },
+          "expected": true,
+          "actual": true,
+          "status": "passed",
+          "startedAt": 1790776277878,
+          "endedAt": 1790776277898
+        },
+        {
+          "scenarioId": "normal-and-timing",
+          "checkId": "4",
+          "command": {
+            "op": "assert",
+            "selector": "#add-task",
+            "property": "disabled",
+            "equals": true
+          },
+          "expected": true,
+          "actual": true,
+          "status": "passed",
+          "startedAt": 1790776277898,
+          "endedAt": 1790776277899
+        },
+        {
+          "scenarioId": "normal-and-timing",
+          "checkId": "5",
+          "command": {
+            "op": "wait",
+            "ms": 600
+          },
+          "expected": 600,
+          "actual": 600,
+          "status": "passed",
+          "startedAt": 1790776277899,
+          "endedAt": 1790776278501
+        },
+        {
+          "scenarioId": "normal-and-timing",
+          "checkId": "6",
+          "command": {
+            "op": "observe",
+            "selector": "#records",
+            "property": "text"
+          },
+          "expected": "executed",
+          "actual": "旧待办 · 待办完成",
+          "status": "passed",
+          "startedAt": 1790776278501,
+          "endedAt": 1790776278501
+        },
+        {
+          "scenarioId": "normal-and-timing",
+          "checkId": "7",
+          "command": {
+            "op": "assert",
+            "selector": "#records li",
+            "property": "count",
+            "equals": 1
+          },
+          "expected": 1,
+          "actual": 1,
+          "status": "passed",
+          "startedAt": 1790776278501,
+          "endedAt": 1790776278503
+        },
+        {
+          "scenarioId": "normal-and-timing",
+          "checkId": "1",
+          "command": {
+            "op": "input",
+            "selector": "#task-title",
+            "value": "检查待办"
+          },
+          "expected": "检查待办",
+          "actual": "检查待办",
+          "status": "passed",
+          "startedAt": 1790776278503,
+          "endedAt": 1790776278504
+        },
+        {
+          "scenarioId": "normal-and-timing",
+          "checkId": "2",
+          "command": {
+            "op": "click",
+            "selector": "#add-task"
+          },
+          "expected": "executed",
+          "actual": "executed",
+          "status": "passed",
+          "startedAt": 1790776278504,
+          "endedAt": 1790776278505
+        },
+        {
+          "scenarioId": "normal-and-timing",
+          "checkId": "8",
+          "command": {
+            "op": "assert",
+            "selector": "body",
+            "property": "inert",
+            "equals": true
+          },
+          "expected": true,
+          "actual": true,
+          "status": "passed",
+          "startedAt": 1790776278505,
+          "endedAt": 1790776278505
+        },
+        {
+          "scenarioId": "normal-and-timing",
+          "checkId": "9",
+          "command": {
+            "op": "assert",
+            "selector": "#feedback",
+            "property": "text",
+            "equals": "正在保存"
+          },
+          "expected": "正在保存",
+          "actual": "正在保存",
+          "status": "passed",
+          "startedAt": 1790776278505,
+          "endedAt": 1790776278506
+        },
+        {
+          "scenarioId": "normal-and-timing",
+          "checkId": "10",
+          "command": {
+            "op": "click",
+            "selector": "#add-task",
+            "probeWhileInert": true
+          },
+          "expected": "executed",
+          "actual": "executed",
+          "status": "passed",
+          "startedAt": 1790776278506,
+          "endedAt": 1790776278506
+        },
+        {
+          "scenarioId": "normal-and-timing",
+          "checkId": "11",
+          "command": {
+            "op": "data",
+            "path": [
+              "tasks",
+              "length"
+            ],
+            "equals": 1
+          },
+          "expected": 1,
+          "actual": 1,
+          "status": "passed",
+          "startedAt": 1790776278506,
+          "endedAt": 1790776278506
+        },
+        {
+          "scenarioId": "normal-and-timing",
+          "checkId": "12",
+          "command": {
+            "op": "wait",
+            "ms": 600
+          },
+          "expected": 600,
+          "actual": 600,
+          "status": "passed",
+          "startedAt": 1790776278506,
+          "endedAt": 1790776279108
+        },
+        {
+          "scenarioId": "normal-and-timing",
+          "checkId": "13",
+          "command": {
+            "op": "assert",
+            "selector": "#feedback",
+            "property": "text",
+            "equals": "已保存"
+          },
+          "expected": "已保存",
+          "actual": "已保存",
+          "status": "passed",
+          "startedAt": 1790776279108,
+          "endedAt": 1790776279108
+        },
+        {
+          "scenarioId": "normal-and-timing",
+          "checkId": "14",
+          "command": {
+            "op": "assert",
+            "selector": "body",
+            "property": "inert",
+            "equals": false
+          },
+          "expected": false,
+          "actual": false,
+          "status": "passed",
+          "startedAt": 1790776279108,
+          "endedAt": 1790776279110
+        },
+        {
+          "scenarioId": "normal-and-timing",
+          "checkId": "15",
+          "command": {
+            "op": "data",
+            "path": [
+              "tasks",
+              "1",
+              "title"
+            ],
+            "equals": "检查待办"
+          },
+          "expected": "检查待办",
+          "actual": "检查待办",
+          "status": "passed",
+          "startedAt": 1790776279110,
+          "endedAt": 1790776279110
+        },
+        {
+          "scenarioId": "normal-and-timing",
+          "checkId": "16",
+          "command": {
+            "op": "data",
+            "path": [
+              "tasks",
+              "length"
+            ],
+            "equals": 2
+          },
+          "expected": 2,
+          "actual": 2,
+          "status": "passed",
+          "startedAt": 1790776279110,
+          "endedAt": 1790776279110
+        },
+        {
+          "scenarioId": "normal-and-timing",
+          "checkId": "17",
+          "command": {
+            "op": "bridge",
+            "property": "saveAttempts",
+            "equals": 1
+          },
+          "expected": 1,
+          "actual": 1,
+          "status": "passed",
+          "startedAt": 1790776279110,
+          "endedAt": 1790776279110
+        },
+        {
+          "scenarioId": "normal-and-timing",
+          "checkId": "18",
+          "command": {
+            "op": "click",
+            "selector": "#records li:first-child .change"
+          },
+          "expected": "executed",
+          "actual": "executed",
+          "status": "passed",
+          "startedAt": 1790776279110,
+          "endedAt": 1790776279110
+        },
+        {
+          "scenarioId": "normal-and-timing",
+          "checkId": "19",
+          "command": {
+            "op": "wait",
+            "ms": 600
+          },
+          "expected": 600,
+          "actual": 600,
+          "status": "passed",
+          "startedAt": 1790776279110,
+          "endedAt": 1790776279711
+        },
+        {
+          "scenarioId": "normal-and-timing",
+          "checkId": "20",
+          "command": {
+            "op": "data",
+            "path": [
+              "tasks",
+              "0",
+              "done"
+            ],
+            "equals": true
+          },
+          "expected": true,
+          "actual": true,
+          "status": "passed",
+          "startedAt": 1790776279711,
+          "endedAt": 1790776279711
+        },
+        {
+          "scenarioId": "normal-and-timing",
+          "checkId": "21",
+          "command": {
+            "op": "bridge",
+            "property": "commits",
+            "equals": 2
+          },
+          "expected": 2,
+          "actual": 2,
+          "status": "passed",
+          "startedAt": 1790776279711,
+          "endedAt": 1790776279711
+        },
+        {
+          "scenarioId": "read-failure",
+          "checkId": "22",
+          "command": {
+            "op": "wait",
+            "ms": 100
+          },
+          "expected": 100,
+          "actual": 100,
+          "status": "passed",
+          "startedAt": 1790776279738,
+          "endedAt": 1790776279853
+        },
+        {
+          "scenarioId": "read-failure",
+          "checkId": "23",
+          "command": {
+            "op": "assert",
+            "selector": "#feedback",
+            "property": "text",
+            "equals": "读取失败"
+          },
+          "expected": "读取失败",
+          "actual": "读取失败",
+          "status": "passed",
+          "startedAt": 1790776279853,
+          "endedAt": 1790776279853
+        },
+        {
+          "scenarioId": "read-failure",
+          "checkId": "24",
+          "command": {
+            "op": "assert",
+            "selector": "#task-title",
+            "property": "disabled",
+            "equals": true
+          },
+          "expected": true,
+          "actual": true,
+          "status": "passed",
+          "startedAt": 1790776279853,
+          "endedAt": 1790776279854
+        },
+        {
+          "scenarioId": "read-failure",
+          "checkId": "25",
+          "command": {
+            "op": "assert",
+            "selector": "#add-task",
+            "property": "disabled",
+            "equals": true
+          },
+          "expected": true,
+          "actual": true,
+          "status": "passed",
+          "startedAt": 1790776279854,
+          "endedAt": 1790776279855
+        },
+        {
+          "scenarioId": "read-failure",
+          "checkId": "26",
+          "command": {
+            "op": "bridge",
+            "property": "saveAttempts",
+            "equals": 0
+          },
+          "expected": 0,
+          "actual": 0,
+          "status": "passed",
+          "startedAt": 1790776279855,
+          "endedAt": 1790776279855
+        },
+        {
+          "scenarioId": "read-failure",
+          "checkId": "27",
+          "command": {
+            "op": "bridge",
+            "property": "rejectedSaves",
+            "equals": 0
+          },
+          "expected": 0,
+          "actual": 0,
+          "status": "passed",
+          "startedAt": 1790776279855,
+          "endedAt": 1790776279855
+        },
+        {
+          "scenarioId": "read-failure",
+          "checkId": "28",
+          "command": {
+            "op": "data",
+            "path": [
+              "tasks",
+              "0",
+              "title"
+            ],
+            "equals": "旧待办"
+          },
+          "expected": "旧待办",
+          "actual": "旧待办",
+          "status": "passed",
+          "startedAt": 1790776279855,
+          "endedAt": 1790776279855
+        },
+        {
+          "scenarioId": "read-failure",
+          "checkId": "29",
+          "command": {
+            "op": "bridge",
+            "property": "commits",
+            "equals": 0
+          },
+          "expected": 0,
+          "actual": 0,
+          "status": "passed",
+          "startedAt": 1790776279855,
+          "endedAt": 1790776279855
+        },
+        {
+          "scenarioId": "save-failure",
+          "checkId": "30",
+          "command": {
+            "op": "wait",
+            "ms": 100
+          },
+          "expected": 100,
+          "actual": 100,
+          "status": "passed",
+          "startedAt": 1790776279869,
+          "endedAt": 1790776279971
+        },
+        {
+          "scenarioId": "save-failure",
+          "checkId": "1",
+          "command": {
+            "op": "input",
+            "selector": "#task-title",
+            "value": "检查待办"
+          },
+          "expected": "检查待办",
+          "actual": "检查待办",
+          "status": "passed",
+          "startedAt": 1790776279971,
+          "endedAt": 1790776279972
+        },
+        {
+          "scenarioId": "save-failure",
+          "checkId": "2",
+          "command": {
+            "op": "click",
+            "selector": "#add-task"
+          },
+          "expected": "executed",
+          "actual": "executed",
+          "status": "passed",
+          "startedAt": 1790776279972,
+          "endedAt": 1790776279973
+        },
+        {
+          "scenarioId": "save-failure",
+          "checkId": "31",
+          "command": {
+            "op": "assert",
+            "selector": "body",
+            "property": "inert",
+            "equals": true
+          },
+          "expected": true,
+          "actual": true,
+          "status": "passed",
+          "startedAt": 1790776279973,
+          "endedAt": 1790776279974
+        },
+        {
+          "scenarioId": "save-failure",
+          "checkId": "32",
+          "command": {
+            "op": "wait",
+            "ms": 600
+          },
+          "expected": 600,
+          "actual": 600,
+          "status": "passed",
+          "startedAt": 1790776279974,
+          "endedAt": 1790776280576
+        },
+        {
+          "scenarioId": "save-failure",
+          "checkId": "33",
+          "command": {
+            "op": "assert",
+            "selector": "#feedback",
+            "property": "text",
+            "equals": "保存失败"
+          },
+          "expected": "保存失败",
+          "actual": "保存失败",
+          "status": "passed",
+          "startedAt": 1790776280576,
+          "endedAt": 1790776280576
+        },
+        {
+          "scenarioId": "save-failure",
+          "checkId": "34",
+          "command": {
+            "op": "assert",
+            "selector": "#records li",
+            "property": "count",
+            "equals": 1
+          },
+          "expected": 1,
+          "actual": 1,
+          "status": "passed",
+          "startedAt": 1790776280576,
+          "endedAt": 1790776280578
+        },
+        {
+          "scenarioId": "save-failure",
+          "checkId": "35",
+          "command": {
+            "op": "data",
+            "path": [
+              "tasks",
+              "length"
+            ],
+            "equals": 1
+          },
+          "expected": 1,
+          "actual": 1,
+          "status": "passed",
+          "startedAt": 1790776280578,
+          "endedAt": 1790776280578
+        },
+        {
+          "scenarioId": "save-failure",
+          "checkId": "36",
+          "command": {
+            "op": "bridge",
+            "property": "rejectedSaves",
+            "equals": 1
+          },
+          "expected": 1,
+          "actual": 1,
+          "status": "passed",
+          "startedAt": 1790776280578,
+          "endedAt": 1790776280578
+        },
+        {
+          "scenarioId": "save-failure",
+          "checkId": "37",
+          "command": {
+            "op": "bridge",
+            "property": "commits",
+            "equals": 0
+          },
+          "expected": 0,
+          "actual": 0,
+          "status": "passed",
+          "startedAt": 1790776280578,
+          "endedAt": 1790776280578
+        }
+      ],
+      "detail": "所有计划项实际执行完成。"
+    }
+  },
+  {
+    "case": "no-result",
+    "url": "http://localhost:3100/qa",
+    "observedAt": "2026-09-30T13:51:24.692Z",
+    "codeHash": "8d653c7127ffc28673aafef61588cd9b1d10a1a33a39278b3eee08124c03086d",
+    "planHash": "f815976828cfb028d8ce55ffde761fb9c6f27897f7c53a79bb2415a6bd028751",
+    "result": {
+      "protocol": "atoms-qa/1",
+      "taskId": "394fa221-85d7-4757-90e4-8ab8bbd99c24",
+      "requestId": "f5fed1d6-c98e-4b48-9f96-9fec4a6ff550",
+      "codeHash": "8d653c7127ffc28673aafef61588cd9b1d10a1a33a39278b3eee08124c03086d",
+      "planHash": "f815976828cfb028d8ce55ffde761fb9c6f27897f7c53a79bb2415a6bd028751",
+      "status": "tool-error",
+      "results": [
+        {
+          "scenarioId": "normal-and-timing",
+          "checkId": "3",
+          "command": {
+            "op": "assert",
+            "selector": "#task-title",
+            "property": "disabled",
+            "equals": true
+          },
+          "expected": true,
+          "actual": null,
+          "status": "not-run",
+          "startedAt": 0,
+          "endedAt": 0
+        },
+        {
+          "scenarioId": "normal-and-timing",
+          "checkId": "4",
+          "command": {
+            "op": "assert",
+            "selector": "#add-task",
+            "property": "disabled",
+            "equals": true
+          },
+          "expected": true,
+          "actual": null,
+          "status": "not-run",
+          "startedAt": 0,
+          "endedAt": 0
+        },
+        {
+          "scenarioId": "normal-and-timing",
+          "checkId": "5",
+          "command": {
+            "op": "wait",
+            "ms": 600
+          },
+          "expected": 600,
+          "actual": null,
+          "status": "not-run",
+          "startedAt": 0,
+          "endedAt": 0
+        },
+        {
+          "scenarioId": "normal-and-timing",
+          "checkId": "6",
+          "command": {
+            "op": "observe",
+            "selector": "#records",
+            "property": "text"
+          },
+          "expected": "executed",
+          "actual": null,
+          "status": "not-run",
+          "startedAt": 0,
+          "endedAt": 0
+        },
+        {
+          "scenarioId": "normal-and-timing",
+          "checkId": "7",
+          "command": {
+            "op": "assert",
+            "selector": "#records li",
+            "property": "count",
+            "equals": 1
+          },
+          "expected": 1,
+          "actual": null,
+          "status": "not-run",
+          "startedAt": 0,
+          "endedAt": 0
+        },
+        {
+          "scenarioId": "normal-and-timing",
+          "checkId": "1",
+          "command": {
+            "op": "input",
+            "selector": "#task-title",
+            "value": "检查待办"
+          },
+          "expected": "检查待办",
+          "actual": null,
+          "status": "not-run",
+          "startedAt": 0,
+          "endedAt": 0
+        },
+        {
+          "scenarioId": "normal-and-timing",
+          "checkId": "2",
+          "command": {
+            "op": "click",
+            "selector": "#add-task"
+          },
+          "expected": "executed",
+          "actual": null,
+          "status": "not-run",
+          "startedAt": 0,
+          "endedAt": 0
+        },
+        {
+          "scenarioId": "normal-and-timing",
+          "checkId": "8",
+          "command": {
+            "op": "assert",
+            "selector": "body",
+            "property": "inert",
+            "equals": true
+          },
+          "expected": true,
+          "actual": null,
+          "status": "not-run",
+          "startedAt": 0,
+          "endedAt": 0
+        },
+        {
+          "scenarioId": "normal-and-timing",
+          "checkId": "9",
+          "command": {
+            "op": "assert",
+            "selector": "#feedback",
+            "property": "text",
+            "equals": "正在保存"
+          },
+          "expected": "正在保存",
+          "actual": null,
+          "status": "not-run",
+          "startedAt": 0,
+          "endedAt": 0
+        },
+        {
+          "scenarioId": "normal-and-timing",
+          "checkId": "10",
+          "command": {
+            "op": "click",
+            "selector": "#add-task",
+            "probeWhileInert": true
+          },
+          "expected": "executed",
+          "actual": null,
+          "status": "not-run",
+          "startedAt": 0,
+          "endedAt": 0
+        },
+        {
+          "scenarioId": "normal-and-timing",
+          "checkId": "11",
+          "command": {
+            "op": "data",
+            "path": [
+              "tasks",
+              "length"
+            ],
+            "equals": 1
+          },
+          "expected": 1,
+          "actual": null,
+          "status": "not-run",
+          "startedAt": 0,
+          "endedAt": 0
+        },
+        {
+          "scenarioId": "normal-and-timing",
+          "checkId": "12",
+          "command": {
+            "op": "wait",
+            "ms": 600
+          },
+          "expected": 600,
+          "actual": null,
+          "status": "not-run",
+          "startedAt": 0,
+          "endedAt": 0
+        },
+        {
+          "scenarioId": "normal-and-timing",
+          "checkId": "13",
+          "command": {
+            "op": "assert",
+            "selector": "#feedback",
+            "property": "text",
+            "equals": "已保存"
+          },
+          "expected": "已保存",
+          "actual": null,
+          "status": "not-run",
+          "startedAt": 0,
+          "endedAt": 0
+        },
+        {
+          "scenarioId": "normal-and-timing",
+          "checkId": "14",
+          "command": {
+            "op": "assert",
+            "selector": "body",
+            "property": "inert",
+            "equals": false
+          },
+          "expected": false,
+          "actual": null,
+          "status": "not-run",
+          "startedAt": 0,
+          "endedAt": 0
+        },
+        {
+          "scenarioId": "normal-and-timing",
+          "checkId": "15",
+          "command": {
+            "op": "data",
+            "path": [
+              "tasks",
+              "1",
+              "title"
+            ],
+            "equals": "检查待办"
+          },
+          "expected": "检查待办",
+          "actual": null,
+          "status": "not-run",
+          "startedAt": 0,
+          "endedAt": 0
+        },
+        {
+          "scenarioId": "normal-and-timing",
+          "checkId": "16",
+          "command": {
+            "op": "data",
+            "path": [
+              "tasks",
+              "length"
+            ],
+            "equals": 2
+          },
+          "expected": 2,
+          "actual": null,
+          "status": "not-run",
+          "startedAt": 0,
+          "endedAt": 0
+        },
+        {
+          "scenarioId": "normal-and-timing",
+          "checkId": "17",
+          "command": {
+            "op": "bridge",
+            "property": "saveAttempts",
+            "equals": 1
+          },
+          "expected": 1,
+          "actual": null,
+          "status": "not-run",
+          "startedAt": 0,
+          "endedAt": 0
+        },
+        {
+          "scenarioId": "normal-and-timing",
+          "checkId": "18",
+          "command": {
+            "op": "click",
+            "selector": "#records li:first-child .change"
+          },
+          "expected": "executed",
+          "actual": null,
+          "status": "not-run",
+          "startedAt": 0,
+          "endedAt": 0
+        },
+        {
+          "scenarioId": "normal-and-timing",
+          "checkId": "19",
+          "command": {
+            "op": "wait",
+            "ms": 600
+          },
+          "expected": 600,
+          "actual": null,
+          "status": "not-run",
+          "startedAt": 0,
+          "endedAt": 0
+        },
+        {
+          "scenarioId": "normal-and-timing",
+          "checkId": "20",
+          "command": {
+            "op": "data",
+            "path": [
+              "tasks",
+              "0",
+              "done"
+            ],
+            "equals": true
+          },
+          "expected": true,
+          "actual": null,
+          "status": "not-run",
+          "startedAt": 0,
+          "endedAt": 0
+        },
+        {
+          "scenarioId": "normal-and-timing",
+          "checkId": "21",
+          "command": {
+            "op": "bridge",
+            "property": "commits",
+            "equals": 2
+          },
+          "expected": 2,
+          "actual": null,
+          "status": "not-run",
+          "startedAt": 0,
+          "endedAt": 0
+        },
+        {
+          "scenarioId": "read-failure",
+          "checkId": "22",
+          "command": {
+            "op": "wait",
+            "ms": 100
+          },
+          "expected": 100,
+          "actual": null,
+          "status": "not-run",
+          "startedAt": 0,
+          "endedAt": 0
+        },
+        {
+          "scenarioId": "read-failure",
+          "checkId": "23",
+          "command": {
+            "op": "assert",
+            "selector": "#feedback",
+            "property": "text",
+            "equals": "读取失败"
+          },
+          "expected": "读取失败",
+          "actual": null,
+          "status": "not-run",
+          "startedAt": 0,
+          "endedAt": 0
+        },
+        {
+          "scenarioId": "read-failure",
+          "checkId": "24",
+          "command": {
+            "op": "assert",
+            "selector": "#task-title",
+            "property": "disabled",
+            "equals": true
+          },
+          "expected": true,
+          "actual": null,
+          "status": "not-run",
+          "startedAt": 0,
+          "endedAt": 0
+        },
+        {
+          "scenarioId": "read-failure",
+          "checkId": "25",
+          "command": {
+            "op": "assert",
+            "selector": "#add-task",
+            "property": "disabled",
+            "equals": true
+          },
+          "expected": true,
+          "actual": null,
+          "status": "not-run",
+          "startedAt": 0,
+          "endedAt": 0
+        },
+        {
+          "scenarioId": "read-failure",
+          "checkId": "26",
+          "command": {
+            "op": "bridge",
+            "property": "saveAttempts",
+            "equals": 0
+          },
+          "expected": 0,
+          "actual": null,
+          "status": "not-run",
+          "startedAt": 0,
+          "endedAt": 0
+        },
+        {
+          "scenarioId": "read-failure",
+          "checkId": "27",
+          "command": {
+            "op": "bridge",
+            "property": "rejectedSaves",
+            "equals": 0
+          },
+          "expected": 0,
+          "actual": null,
+          "status": "not-run",
+          "startedAt": 0,
+          "endedAt": 0
+        },
+        {
+          "scenarioId": "read-failure",
+          "checkId": "28",
+          "command": {
+            "op": "data",
+            "path": [
+              "tasks",
+              "0",
+              "title"
+            ],
+            "equals": "旧待办"
+          },
+          "expected": "旧待办",
+          "actual": null,
+          "status": "not-run",
+          "startedAt": 0,
+          "endedAt": 0
+        },
+        {
+          "scenarioId": "read-failure",
+          "checkId": "29",
+          "command": {
+            "op": "bridge",
+            "property": "commits",
+            "equals": 0
+          },
+          "expected": 0,
+          "actual": null,
+          "status": "not-run",
+          "startedAt": 0,
+          "endedAt": 0
+        },
+        {
+          "scenarioId": "save-failure",
+          "checkId": "30",
+          "command": {
+            "op": "wait",
+            "ms": 100
+          },
+          "expected": 100,
+          "actual": null,
+          "status": "not-run",
+          "startedAt": 0,
+          "endedAt": 0
+        },
+        {
+          "scenarioId": "save-failure",
+          "checkId": "1",
+          "command": {
+            "op": "input",
+            "selector": "#task-title",
+            "value": "检查待办"
+          },
+          "expected": "检查待办",
+          "actual": null,
+          "status": "not-run",
+          "startedAt": 0,
+          "endedAt": 0
+        },
+        {
+          "scenarioId": "save-failure",
+          "checkId": "2",
+          "command": {
+            "op": "click",
+            "selector": "#add-task"
+          },
+          "expected": "executed",
+          "actual": null,
+          "status": "not-run",
+          "startedAt": 0,
+          "endedAt": 0
+        },
+        {
+          "scenarioId": "save-failure",
+          "checkId": "31",
+          "command": {
+            "op": "assert",
+            "selector": "body",
+            "property": "inert",
+            "equals": true
+          },
+          "expected": true,
+          "actual": null,
+          "status": "not-run",
+          "startedAt": 0,
+          "endedAt": 0
+        },
+        {
+          "scenarioId": "save-failure",
+          "checkId": "32",
+          "command": {
+            "op": "wait",
+            "ms": 600
+          },
+          "expected": 600,
+          "actual": null,
+          "status": "not-run",
+          "startedAt": 0,
+          "endedAt": 0
+        },
+        {
+          "scenarioId": "save-failure",
+          "checkId": "33",
+          "command": {
+            "op": "assert",
+            "selector": "#feedback",
+            "property": "text",
+            "equals": "保存失败"
+          },
+          "expected": "保存失败",
+          "actual": null,
+          "status": "not-run",
+          "startedAt": 0,
+          "endedAt": 0
+        },
+        {
+          "scenarioId": "save-failure",
+          "checkId": "34",
+          "command": {
+            "op": "assert",
+            "selector": "#records li",
+            "property": "count",
+            "equals": 1
+          },
+          "expected": 1,
+          "actual": null,
+          "status": "not-run",
+          "startedAt": 0,
+          "endedAt": 0
+        },
+        {
+          "scenarioId": "save-failure",
+          "checkId": "35",
+          "command": {
+            "op": "data",
+            "path": [
+              "tasks",
+              "length"
+            ],
+            "equals": 1
+          },
+          "expected": 1,
+          "actual": null,
+          "status": "not-run",
+          "startedAt": 0,
+          "endedAt": 0
+        },
+        {
+          "scenarioId": "save-failure",
+          "checkId": "36",
+          "command": {
+            "op": "bridge",
+            "property": "rejectedSaves",
+            "equals": 1
+          },
+          "expected": 1,
+          "actual": null,
+          "status": "not-run",
+          "startedAt": 0,
+          "endedAt": 0
+        },
+        {
+          "scenarioId": "save-failure",
+          "checkId": "37",
+          "command": {
+            "op": "bridge",
+            "property": "commits",
+            "equals": 0
+          },
+          "expected": 0,
+          "actual": null,
+          "status": "not-run",
+          "startedAt": 0,
+          "endedAt": 0
+        }
+      ],
+      "detail": "no-result"
+    }
+  },
+  {
+    "case": "timeout",
+    "url": "http://localhost:3100/qa",
+    "observedAt": "2026-09-30T13:51:25.693Z",
+    "codeHash": "8d653c7127ffc28673aafef61588cd9b1d10a1a33a39278b3eee08124c03086d",
+    "planHash": "dbed27a1f0352ba4827f54b5d12d45851900b6a4e048075d294c654b901e2dc5",
+    "result": {
+      "protocol": "atoms-qa/1",
+      "taskId": "0521063d-2a35-4141-b4a5-9e1d1f4e18a5",
+      "requestId": "78dc4aa3-d324-44d1-a37c-4a4ff6278f80",
+      "codeHash": "8d653c7127ffc28673aafef61588cd9b1d10a1a33a39278b3eee08124c03086d",
+      "planHash": "dbed27a1f0352ba4827f54b5d12d45851900b6a4e048075d294c654b901e2dc5",
+      "status": "timeout",
+      "results": [
+        {
+          "scenarioId": "normal-and-timing",
+          "checkId": "38",
+          "command": {
+            "op": "wait",
+            "ms": 2500
+          },
+          "expected": 2500,
+          "actual": null,
+          "status": "not-run",
+          "startedAt": 0,
+          "endedAt": 0
+        },
+        {
+          "scenarioId": "normal-and-timing",
+          "checkId": "3",
+          "command": {
+            "op": "assert",
+            "selector": "#task-title",
+            "property": "disabled",
+            "equals": true
+          },
+          "expected": true,
+          "actual": null,
+          "status": "not-run",
+          "startedAt": 0,
+          "endedAt": 0
+        },
+        {
+          "scenarioId": "normal-and-timing",
+          "checkId": "4",
+          "command": {
+            "op": "assert",
+            "selector": "#add-task",
+            "property": "disabled",
+            "equals": true
+          },
+          "expected": true,
+          "actual": null,
+          "status": "not-run",
+          "startedAt": 0,
+          "endedAt": 0
+        },
+        {
+          "scenarioId": "normal-and-timing",
+          "checkId": "5",
+          "command": {
+            "op": "wait",
+            "ms": 600
+          },
+          "expected": 600,
+          "actual": null,
+          "status": "not-run",
+          "startedAt": 0,
+          "endedAt": 0
+        },
+        {
+          "scenarioId": "normal-and-timing",
+          "checkId": "6",
+          "command": {
+            "op": "observe",
+            "selector": "#records",
+            "property": "text"
+          },
+          "expected": "executed",
+          "actual": null,
+          "status": "not-run",
+          "startedAt": 0,
+          "endedAt": 0
+        },
+        {
+          "scenarioId": "normal-and-timing",
+          "checkId": "7",
+          "command": {
+            "op": "assert",
+            "selector": "#records li",
+            "property": "count",
+            "equals": 1
+          },
+          "expected": 1,
+          "actual": null,
+          "status": "not-run",
+          "startedAt": 0,
+          "endedAt": 0
+        },
+        {
+          "scenarioId": "normal-and-timing",
+          "checkId": "1",
+          "command": {
+            "op": "input",
+            "selector": "#task-title",
+            "value": "检查待办"
+          },
+          "expected": "检查待办",
+          "actual": null,
+          "status": "not-run",
+          "startedAt": 0,
+          "endedAt": 0
+        },
+        {
+          "scenarioId": "normal-and-timing",
+          "checkId": "2",
+          "command": {
+            "op": "click",
+            "selector": "#add-task"
+          },
+          "expected": "executed",
+          "actual": null,
+          "status": "not-run",
+          "startedAt": 0,
+          "endedAt": 0
+        },
+        {
+          "scenarioId": "normal-and-timing",
+          "checkId": "8",
+          "command": {
+            "op": "assert",
+            "selector": "body",
+            "property": "inert",
+            "equals": true
+          },
+          "expected": true,
+          "actual": null,
+          "status": "not-run",
+          "startedAt": 0,
+          "endedAt": 0
+        },
+        {
+          "scenarioId": "normal-and-timing",
+          "checkId": "9",
+          "command": {
+            "op": "assert",
+            "selector": "#feedback",
+            "property": "text",
+            "equals": "正在保存"
+          },
+          "expected": "正在保存",
+          "actual": null,
+          "status": "not-run",
+          "startedAt": 0,
+          "endedAt": 0
+        },
+        {
+          "scenarioId": "normal-and-timing",
+          "checkId": "10",
+          "command": {
+            "op": "click",
+            "selector": "#add-task",
+            "probeWhileInert": true
+          },
+          "expected": "executed",
+          "actual": null,
+          "status": "not-run",
+          "startedAt": 0,
+          "endedAt": 0
+        },
+        {
+          "scenarioId": "normal-and-timing",
+          "checkId": "11",
+          "command": {
+            "op": "data",
+            "path": [
+              "tasks",
+              "length"
+            ],
+            "equals": 1
+          },
+          "expected": 1,
+          "actual": null,
+          "status": "not-run",
+          "startedAt": 0,
+          "endedAt": 0
+        },
+        {
+          "scenarioId": "normal-and-timing",
+          "checkId": "12",
+          "command": {
+            "op": "wait",
+            "ms": 600
+          },
+          "expected": 600,
+          "actual": null,
+          "status": "not-run",
+          "startedAt": 0,
+          "endedAt": 0
+        },
+        {
+          "scenarioId": "normal-and-timing",
+          "checkId": "13",
+          "command": {
+            "op": "assert",
+            "selector": "#feedback",
+            "property": "text",
+            "equals": "已保存"
+          },
+          "expected": "已保存",
+          "actual": null,
+          "status": "not-run",
+          "startedAt": 0,
+          "endedAt": 0
+        },
+        {
+          "scenarioId": "normal-and-timing",
+          "checkId": "14",
+          "command": {
+            "op": "assert",
+            "selector": "body",
+            "property": "inert",
+            "equals": false
+          },
+          "expected": false,
+          "actual": null,
+          "status": "not-run",
+          "startedAt": 0,
+          "endedAt": 0
+        },
+        {
+          "scenarioId": "normal-and-timing",
+          "checkId": "15",
+          "command": {
+            "op": "data",
+            "path": [
+              "tasks",
+              "1",
+              "title"
+            ],
+            "equals": "检查待办"
+          },
+          "expected": "检查待办",
+          "actual": null,
+          "status": "not-run",
+          "startedAt": 0,
+          "endedAt": 0
+        },
+        {
+          "scenarioId": "normal-and-timing",
+          "checkId": "16",
+          "command": {
+            "op": "data",
+            "path": [
+              "tasks",
+              "length"
+            ],
+            "equals": 2
+          },
+          "expected": 2,
+          "actual": null,
+          "status": "not-run",
+          "startedAt": 0,
+          "endedAt": 0
+        },
+        {
+          "scenarioId": "normal-and-timing",
+          "checkId": "17",
+          "command": {
+            "op": "bridge",
+            "property": "saveAttempts",
+            "equals": 1
+          },
+          "expected": 1,
+          "actual": null,
+          "status": "not-run",
+          "startedAt": 0,
+          "endedAt": 0
+        },
+        {
+          "scenarioId": "normal-and-timing",
+          "checkId": "18",
+          "command": {
+            "op": "click",
+            "selector": "#records li:first-child .change"
+          },
+          "expected": "executed",
+          "actual": null,
+          "status": "not-run",
+          "startedAt": 0,
+          "endedAt": 0
+        },
+        {
+          "scenarioId": "normal-and-timing",
+          "checkId": "19",
+          "command": {
+            "op": "wait",
+            "ms": 600
+          },
+          "expected": 600,
+          "actual": null,
+          "status": "not-run",
+          "startedAt": 0,
+          "endedAt": 0
+        },
+        {
+          "scenarioId": "normal-and-timing",
+          "checkId": "20",
+          "command": {
+            "op": "data",
+            "path": [
+              "tasks",
+              "0",
+              "done"
+            ],
+            "equals": true
+          },
+          "expected": true,
+          "actual": null,
+          "status": "not-run",
+          "startedAt": 0,
+          "endedAt": 0
+        },
+        {
+          "scenarioId": "normal-and-timing",
+          "checkId": "21",
+          "command": {
+            "op": "bridge",
+            "property": "commits",
+            "equals": 2
+          },
+          "expected": 2,
+          "actual": null,
+          "status": "not-run",
+          "startedAt": 0,
+          "endedAt": 0
+        },
+        {
+          "scenarioId": "read-failure",
+          "checkId": "22",
+          "command": {
+            "op": "wait",
+            "ms": 100
+          },
+          "expected": 100,
+          "actual": null,
+          "status": "not-run",
+          "startedAt": 0,
+          "endedAt": 0
+        },
+        {
+          "scenarioId": "read-failure",
+          "checkId": "23",
+          "command": {
+            "op": "assert",
+            "selector": "#feedback",
+            "property": "text",
+            "equals": "读取失败"
+          },
+          "expected": "读取失败",
+          "actual": null,
+          "status": "not-run",
+          "startedAt": 0,
+          "endedAt": 0
+        },
+        {
+          "scenarioId": "read-failure",
+          "checkId": "24",
+          "command": {
+            "op": "assert",
+            "selector": "#task-title",
+            "property": "disabled",
+            "equals": true
+          },
+          "expected": true,
+          "actual": null,
+          "status": "not-run",
+          "startedAt": 0,
+          "endedAt": 0
+        },
+        {
+          "scenarioId": "read-failure",
+          "checkId": "25",
+          "command": {
+            "op": "assert",
+            "selector": "#add-task",
+            "property": "disabled",
+            "equals": true
+          },
+          "expected": true,
+          "actual": null,
+          "status": "not-run",
+          "startedAt": 0,
+          "endedAt": 0
+        },
+        {
+          "scenarioId": "read-failure",
+          "checkId": "26",
+          "command": {
+            "op": "bridge",
+            "property": "saveAttempts",
+            "equals": 0
+          },
+          "expected": 0,
+          "actual": null,
+          "status": "not-run",
+          "startedAt": 0,
+          "endedAt": 0
+        },
+        {
+          "scenarioId": "read-failure",
+          "checkId": "27",
+          "command": {
+            "op": "bridge",
+            "property": "rejectedSaves",
+            "equals": 0
+          },
+          "expected": 0,
+          "actual": null,
+          "status": "not-run",
+          "startedAt": 0,
+          "endedAt": 0
+        },
+        {
+          "scenarioId": "read-failure",
+          "checkId": "28",
+          "command": {
+            "op": "data",
+            "path": [
+              "tasks",
+              "0",
+              "title"
+            ],
+            "equals": "旧待办"
+          },
+          "expected": "旧待办",
+          "actual": null,
+          "status": "not-run",
+          "startedAt": 0,
+          "endedAt": 0
+        },
+        {
+          "scenarioId": "read-failure",
+          "checkId": "29",
+          "command": {
+            "op": "bridge",
+            "property": "commits",
+            "equals": 0
+          },
+          "expected": 0,
+          "actual": null,
+          "status": "not-run",
+          "startedAt": 0,
+          "endedAt": 0
+        },
+        {
+          "scenarioId": "save-failure",
+          "checkId": "30",
+          "command": {
+            "op": "wait",
+            "ms": 100
+          },
+          "expected": 100,
+          "actual": null,
+          "status": "not-run",
+          "startedAt": 0,
+          "endedAt": 0
+        },
+        {
+          "scenarioId": "save-failure",
+          "checkId": "1",
+          "command": {
+            "op": "input",
+            "selector": "#task-title",
+            "value": "检查待办"
+          },
+          "expected": "检查待办",
+          "actual": null,
+          "status": "not-run",
+          "startedAt": 0,
+          "endedAt": 0
+        },
+        {
+          "scenarioId": "save-failure",
+          "checkId": "2",
+          "command": {
+            "op": "click",
+            "selector": "#add-task"
+          },
+          "expected": "executed",
+          "actual": null,
+          "status": "not-run",
+          "startedAt": 0,
+          "endedAt": 0
+        },
+        {
+          "scenarioId": "save-failure",
+          "checkId": "31",
+          "command": {
+            "op": "assert",
+            "selector": "body",
+            "property": "inert",
+            "equals": true
+          },
+          "expected": true,
+          "actual": null,
+          "status": "not-run",
+          "startedAt": 0,
+          "endedAt": 0
+        },
+        {
+          "scenarioId": "save-failure",
+          "checkId": "32",
+          "command": {
+            "op": "wait",
+            "ms": 600
+          },
+          "expected": 600,
+          "actual": null,
+          "status": "not-run",
+          "startedAt": 0,
+          "endedAt": 0
+        },
+        {
+          "scenarioId": "save-failure",
+          "checkId": "33",
+          "command": {
+            "op": "assert",
+            "selector": "#feedback",
+            "property": "text",
+            "equals": "保存失败"
+          },
+          "expected": "保存失败",
+          "actual": null,
+          "status": "not-run",
+          "startedAt": 0,
+          "endedAt": 0
+        },
+        {
+          "scenarioId": "save-failure",
+          "checkId": "34",
+          "command": {
+            "op": "assert",
+            "selector": "#records li",
+            "property": "count",
+            "equals": 1
+          },
+          "expected": 1,
+          "actual": null,
+          "status": "not-run",
+          "startedAt": 0,
+          "endedAt": 0
+        },
+        {
+          "scenarioId": "save-failure",
+          "checkId": "35",
+          "command": {
+            "op": "data",
+            "path": [
+              "tasks",
+              "length"
+            ],
+            "equals": 1
+          },
+          "expected": 1,
+          "actual": null,
+          "status": "not-run",
+          "startedAt": 0,
+          "endedAt": 0
+        },
+        {
+          "scenarioId": "save-failure",
+          "checkId": "36",
+          "command": {
+            "op": "bridge",
+            "property": "rejectedSaves",
+            "equals": 1
+          },
+          "expected": 1,
+          "actual": null,
+          "status": "not-run",
+          "startedAt": 0,
+          "endedAt": 0
+        },
+        {
+          "scenarioId": "save-failure",
+          "checkId": "37",
+          "command": {
+            "op": "bridge",
+            "property": "commits",
+            "equals": 0
+          },
+          "expected": 0,
+          "actual": null,
+          "status": "not-run",
+          "startedAt": 0,
+          "endedAt": 0
+        }
+      ],
+      "detail": "timeout"
+    }
+  },
+  {
+    "case": "cancelled",
+    "url": "http://localhost:3100/qa",
+    "observedAt": "2026-09-30T13:51:26.763Z",
+    "codeHash": "8d653c7127ffc28673aafef61588cd9b1d10a1a33a39278b3eee08124c03086d",
+    "planHash": "dbed27a1f0352ba4827f54b5d12d45851900b6a4e048075d294c654b901e2dc5",
+    "result": {
+      "protocol": "atoms-qa/1",
+      "taskId": "151df380-7c13-4fc9-b845-0ca5e099070f",
+      "requestId": "dc9e89cc-35ce-470b-97b1-d9a263334db4",
+      "codeHash": "8d653c7127ffc28673aafef61588cd9b1d10a1a33a39278b3eee08124c03086d",
+      "planHash": "dbed27a1f0352ba4827f54b5d12d45851900b6a4e048075d294c654b901e2dc5",
+      "status": "cancelled",
+      "results": [
+        {
+          "scenarioId": "normal-and-timing",
+          "checkId": "38",
+          "command": {
+            "op": "wait",
+            "ms": 2500
+          },
+          "expected": 2500,
+          "actual": null,
+          "status": "not-run",
+          "startedAt": 0,
+          "endedAt": 0
+        },
+        {
+          "scenarioId": "normal-and-timing",
+          "checkId": "3",
+          "command": {
+            "op": "assert",
+            "selector": "#task-title",
+            "property": "disabled",
+            "equals": true
+          },
+          "expected": true,
+          "actual": null,
+          "status": "not-run",
+          "startedAt": 0,
+          "endedAt": 0
+        },
+        {
+          "scenarioId": "normal-and-timing",
+          "checkId": "4",
+          "command": {
+            "op": "assert",
+            "selector": "#add-task",
+            "property": "disabled",
+            "equals": true
+          },
+          "expected": true,
+          "actual": null,
+          "status": "not-run",
+          "startedAt": 0,
+          "endedAt": 0
+        },
+        {
+          "scenarioId": "normal-and-timing",
+          "checkId": "5",
+          "command": {
+            "op": "wait",
+            "ms": 600
+          },
+          "expected": 600,
+          "actual": null,
+          "status": "not-run",
+          "startedAt": 0,
+          "endedAt": 0
+        },
+        {
+          "scenarioId": "normal-and-timing",
+          "checkId": "6",
+          "command": {
+            "op": "observe",
+            "selector": "#records",
+            "property": "text"
+          },
+          "expected": "executed",
+          "actual": null,
+          "status": "not-run",
+          "startedAt": 0,
+          "endedAt": 0
+        },
+        {
+          "scenarioId": "normal-and-timing",
+          "checkId": "7",
+          "command": {
+            "op": "assert",
+            "selector": "#records li",
+            "property": "count",
+            "equals": 1
+          },
+          "expected": 1,
+          "actual": null,
+          "status": "not-run",
+          "startedAt": 0,
+          "endedAt": 0
+        },
+        {
+          "scenarioId": "normal-and-timing",
+          "checkId": "1",
+          "command": {
+            "op": "input",
+            "selector": "#task-title",
+            "value": "检查待办"
+          },
+          "expected": "检查待办",
+          "actual": null,
+          "status": "not-run",
+          "startedAt": 0,
+          "endedAt": 0
+        },
+        {
+          "scenarioId": "normal-and-timing",
+          "checkId": "2",
+          "command": {
+            "op": "click",
+            "selector": "#add-task"
+          },
+          "expected": "executed",
+          "actual": null,
+          "status": "not-run",
+          "startedAt": 0,
+          "endedAt": 0
+        },
+        {
+          "scenarioId": "normal-and-timing",
+          "checkId": "8",
+          "command": {
+            "op": "assert",
+            "selector": "body",
+            "property": "inert",
+            "equals": true
+          },
+          "expected": true,
+          "actual": null,
+          "status": "not-run",
+          "startedAt": 0,
+          "endedAt": 0
+        },
+        {
+          "scenarioId": "normal-and-timing",
+          "checkId": "9",
+          "command": {
+            "op": "assert",
+            "selector": "#feedback",
+            "property": "text",
+            "equals": "正在保存"
+          },
+          "expected": "正在保存",
+          "actual": null,
+          "status": "not-run",
+          "startedAt": 0,
+          "endedAt": 0
+        },
+        {
+          "scenarioId": "normal-and-timing",
+          "checkId": "10",
+          "command": {
+            "op": "click",
+            "selector": "#add-task",
+            "probeWhileInert": true
+          },
+          "expected": "executed",
+          "actual": null,
+          "status": "not-run",
+          "startedAt": 0,
+          "endedAt": 0
+        },
+        {
+          "scenarioId": "normal-and-timing",
+          "checkId": "11",
+          "command": {
+            "op": "data",
+            "path": [
+              "tasks",
+              "length"
+            ],
+            "equals": 1
+          },
+          "expected": 1,
+          "actual": null,
+          "status": "not-run",
+          "startedAt": 0,
+          "endedAt": 0
+        },
+        {
+          "scenarioId": "normal-and-timing",
+          "checkId": "12",
+          "command": {
+            "op": "wait",
+            "ms": 600
+          },
+          "expected": 600,
+          "actual": null,
+          "status": "not-run",
+          "startedAt": 0,
+          "endedAt": 0
+        },
+        {
+          "scenarioId": "normal-and-timing",
+          "checkId": "13",
+          "command": {
+            "op": "assert",
+            "selector": "#feedback",
+            "property": "text",
+            "equals": "已保存"
+          },
+          "expected": "已保存",
+          "actual": null,
+          "status": "not-run",
+          "startedAt": 0,
+          "endedAt": 0
+        },
+        {
+          "scenarioId": "normal-and-timing",
+          "checkId": "14",
+          "command": {
+            "op": "assert",
+            "selector": "body",
+            "property": "inert",
+            "equals": false
+          },
+          "expected": false,
+          "actual": null,
+          "status": "not-run",
+          "startedAt": 0,
+          "endedAt": 0
+        },
+        {
+          "scenarioId": "normal-and-timing",
+          "checkId": "15",
+          "command": {
+            "op": "data",
+            "path": [
+              "tasks",
+              "1",
+              "title"
+            ],
+            "equals": "检查待办"
+          },
+          "expected": "检查待办",
+          "actual": null,
+          "status": "not-run",
+          "startedAt": 0,
+          "endedAt": 0
+        },
+        {
+          "scenarioId": "normal-and-timing",
+          "checkId": "16",
+          "command": {
+            "op": "data",
+            "path": [
+              "tasks",
+              "length"
+            ],
+            "equals": 2
+          },
+          "expected": 2,
+          "actual": null,
+          "status": "not-run",
+          "startedAt": 0,
+          "endedAt": 0
+        },
+        {
+          "scenarioId": "normal-and-timing",
+          "checkId": "17",
+          "command": {
+            "op": "bridge",
+            "property": "saveAttempts",
+            "equals": 1
+          },
+          "expected": 1,
+          "actual": null,
+          "status": "not-run",
+          "startedAt": 0,
+          "endedAt": 0
+        },
+        {
+          "scenarioId": "normal-and-timing",
+          "checkId": "18",
+          "command": {
+            "op": "click",
+            "selector": "#records li:first-child .change"
+          },
+          "expected": "executed",
+          "actual": null,
+          "status": "not-run",
+          "startedAt": 0,
+          "endedAt": 0
+        },
+        {
+          "scenarioId": "normal-and-timing",
+          "checkId": "19",
+          "command": {
+            "op": "wait",
+            "ms": 600
+          },
+          "expected": 600,
+          "actual": null,
+          "status": "not-run",
+          "startedAt": 0,
+          "endedAt": 0
+        },
+        {
+          "scenarioId": "normal-and-timing",
+          "checkId": "20",
+          "command": {
+            "op": "data",
+            "path": [
+              "tasks",
+              "0",
+              "done"
+            ],
+            "equals": true
+          },
+          "expected": true,
+          "actual": null,
+          "status": "not-run",
+          "startedAt": 0,
+          "endedAt": 0
+        },
+        {
+          "scenarioId": "normal-and-timing",
+          "checkId": "21",
+          "command": {
+            "op": "bridge",
+            "property": "commits",
+            "equals": 2
+          },
+          "expected": 2,
+          "actual": null,
+          "status": "not-run",
+          "startedAt": 0,
+          "endedAt": 0
+        },
+        {
+          "scenarioId": "read-failure",
+          "checkId": "22",
+          "command": {
+            "op": "wait",
+            "ms": 100
+          },
+          "expected": 100,
+          "actual": null,
+          "status": "not-run",
+          "startedAt": 0,
+          "endedAt": 0
+        },
+        {
+          "scenarioId": "read-failure",
+          "checkId": "23",
+          "command": {
+            "op": "assert",
+            "selector": "#feedback",
+            "property": "text",
+            "equals": "读取失败"
+          },
+          "expected": "读取失败",
+          "actual": null,
+          "status": "not-run",
+          "startedAt": 0,
+          "endedAt": 0
+        },
+        {
+          "scenarioId": "read-failure",
+          "checkId": "24",
+          "command": {
+            "op": "assert",
+            "selector": "#task-title",
+            "property": "disabled",
+            "equals": true
+          },
+          "expected": true,
+          "actual": null,
+          "status": "not-run",
+          "startedAt": 0,
+          "endedAt": 0
+        },
+        {
+          "scenarioId": "read-failure",
+          "checkId": "25",
+          "command": {
+            "op": "assert",
+            "selector": "#add-task",
+            "property": "disabled",
+            "equals": true
+          },
+          "expected": true,
+          "actual": null,
+          "status": "not-run",
+          "startedAt": 0,
+          "endedAt": 0
+        },
+        {
+          "scenarioId": "read-failure",
+          "checkId": "26",
+          "command": {
+            "op": "bridge",
+            "property": "saveAttempts",
+            "equals": 0
+          },
+          "expected": 0,
+          "actual": null,
+          "status": "not-run",
+          "startedAt": 0,
+          "endedAt": 0
+        },
+        {
+          "scenarioId": "read-failure",
+          "checkId": "27",
+          "command": {
+            "op": "bridge",
+            "property": "rejectedSaves",
+            "equals": 0
+          },
+          "expected": 0,
+          "actual": null,
+          "status": "not-run",
+          "startedAt": 0,
+          "endedAt": 0
+        },
+        {
+          "scenarioId": "read-failure",
+          "checkId": "28",
+          "command": {
+            "op": "data",
+            "path": [
+              "tasks",
+              "0",
+              "title"
+            ],
+            "equals": "旧待办"
+          },
+          "expected": "旧待办",
+          "actual": null,
+          "status": "not-run",
+          "startedAt": 0,
+          "endedAt": 0
+        },
+        {
+          "scenarioId": "read-failure",
+          "checkId": "29",
+          "command": {
+            "op": "bridge",
+            "property": "commits",
+            "equals": 0
+          },
+          "expected": 0,
+          "actual": null,
+          "status": "not-run",
+          "startedAt": 0,
+          "endedAt": 0
+        },
+        {
+          "scenarioId": "save-failure",
+          "checkId": "30",
+          "command": {
+            "op": "wait",
+            "ms": 100
+          },
+          "expected": 100,
+          "actual": null,
+          "status": "not-run",
+          "startedAt": 0,
+          "endedAt": 0
+        },
+        {
+          "scenarioId": "save-failure",
+          "checkId": "1",
+          "command": {
+            "op": "input",
+            "selector": "#task-title",
+            "value": "检查待办"
+          },
+          "expected": "检查待办",
+          "actual": null,
+          "status": "not-run",
+          "startedAt": 0,
+          "endedAt": 0
+        },
+        {
+          "scenarioId": "save-failure",
+          "checkId": "2",
+          "command": {
+            "op": "click",
+            "selector": "#add-task"
+          },
+          "expected": "executed",
+          "actual": null,
+          "status": "not-run",
+          "startedAt": 0,
+          "endedAt": 0
+        },
+        {
+          "scenarioId": "save-failure",
+          "checkId": "31",
+          "command": {
+            "op": "assert",
+            "selector": "body",
+            "property": "inert",
+            "equals": true
+          },
+          "expected": true,
+          "actual": null,
+          "status": "not-run",
+          "startedAt": 0,
+          "endedAt": 0
+        },
+        {
+          "scenarioId": "save-failure",
+          "checkId": "32",
+          "command": {
+            "op": "wait",
+            "ms": 600
+          },
+          "expected": 600,
+          "actual": null,
+          "status": "not-run",
+          "startedAt": 0,
+          "endedAt": 0
+        },
+        {
+          "scenarioId": "save-failure",
+          "checkId": "33",
+          "command": {
+            "op": "assert",
+            "selector": "#feedback",
+            "property": "text",
+            "equals": "保存失败"
+          },
+          "expected": "保存失败",
+          "actual": null,
+          "status": "not-run",
+          "startedAt": 0,
+          "endedAt": 0
+        },
+        {
+          "scenarioId": "save-failure",
+          "checkId": "34",
+          "command": {
+            "op": "assert",
+            "selector": "#records li",
+            "property": "count",
+            "equals": 1
+          },
+          "expected": 1,
+          "actual": null,
+          "status": "not-run",
+          "startedAt": 0,
+          "endedAt": 0
+        },
+        {
+          "scenarioId": "save-failure",
+          "checkId": "35",
+          "command": {
+            "op": "data",
+            "path": [
+              "tasks",
+              "length"
+            ],
+            "equals": 1
+          },
+          "expected": 1,
+          "actual": null,
+          "status": "not-run",
+          "startedAt": 0,
+          "endedAt": 0
+        },
+        {
+          "scenarioId": "save-failure",
+          "checkId": "36",
+          "command": {
+            "op": "bridge",
+            "property": "rejectedSaves",
+            "equals": 1
+          },
+          "expected": 1,
+          "actual": null,
+          "status": "not-run",
+          "startedAt": 0,
+          "endedAt": 0
+        },
+        {
+          "scenarioId": "save-failure",
+          "checkId": "37",
+          "command": {
+            "op": "bridge",
+            "property": "commits",
+            "equals": 0
+          },
+          "expected": 0,
+          "actual": null,
+          "status": "not-run",
+          "startedAt": 0,
+          "endedAt": 0
+        }
+      ],
+      "detail": "cancelled"
+    }
+  },
+  {
+    "case": "after-cancel",
+    "url": "http://localhost:3100/qa",
+    "observedAt": "2026-09-30T13:51:29.627Z",
+    "codeHash": "8d653c7127ffc28673aafef61588cd9b1d10a1a33a39278b3eee08124c03086d",
+    "planHash": "24880f1481dd5f87017d00a0efe180e57d1c9241ba43bda3cfe9dddd3fa75449",
+    "result": {
+      "protocol": "atoms-qa/1",
+      "taskId": "f92f65f7-edae-4b39-aa93-3a4ac70420bd",
+      "requestId": "fb7bf2e1-f669-4143-9263-369925081bbb",
+      "codeHash": "8d653c7127ffc28673aafef61588cd9b1d10a1a33a39278b3eee08124c03086d",
+      "planHash": "24880f1481dd5f87017d00a0efe180e57d1c9241ba43bda3cfe9dddd3fa75449",
+      "status": "passed",
+      "results": [
+        {
+          "scenarioId": "normal-and-timing",
+          "checkId": "3",
+          "command": {
+            "op": "assert",
+            "selector": "#task-title",
+            "property": "disabled",
+            "equals": true
+          },
+          "expected": true,
+          "actual": true,
+          "status": "passed",
+          "startedAt": 1790776286845,
+          "endedAt": 1790776286866
+        },
+        {
+          "scenarioId": "normal-and-timing",
+          "checkId": "4",
+          "command": {
+            "op": "assert",
+            "selector": "#add-task",
+            "property": "disabled",
+            "equals": true
+          },
+          "expected": true,
+          "actual": true,
+          "status": "passed",
+          "startedAt": 1790776286866,
+          "endedAt": 1790776286869
+        },
+        {
+          "scenarioId": "normal-and-timing",
+          "checkId": "5",
+          "command": {
+            "op": "wait",
+            "ms": 600
+          },
+          "expected": 600,
+          "actual": 600,
+          "status": "passed",
+          "startedAt": 1790776286869,
+          "endedAt": 1790776287471
+        },
+        {
+          "scenarioId": "normal-and-timing",
+          "checkId": "6",
+          "command": {
+            "op": "observe",
+            "selector": "#records",
+            "property": "text"
+          },
+          "expected": "executed",
+          "actual": "旧待办 · 待办完成",
+          "status": "passed",
+          "startedAt": 1790776287471,
+          "endedAt": 1790776287471
+        },
+        {
+          "scenarioId": "normal-and-timing",
+          "checkId": "7",
+          "command": {
+            "op": "assert",
+            "selector": "#records li",
+            "property": "count",
+            "equals": 1
+          },
+          "expected": 1,
+          "actual": 1,
+          "status": "passed",
+          "startedAt": 1790776287471,
+          "endedAt": 1790776287472
+        },
+        {
+          "scenarioId": "normal-and-timing",
+          "checkId": "1",
+          "command": {
+            "op": "input",
+            "selector": "#task-title",
+            "value": "检查待办"
+          },
+          "expected": "检查待办",
+          "actual": "检查待办",
+          "status": "passed",
+          "startedAt": 1790776287472,
+          "endedAt": 1790776287473
+        },
+        {
+          "scenarioId": "normal-and-timing",
+          "checkId": "2",
+          "command": {
+            "op": "click",
+            "selector": "#add-task"
+          },
+          "expected": "executed",
+          "actual": "executed",
+          "status": "passed",
+          "startedAt": 1790776287473,
+          "endedAt": 1790776287474
+        },
+        {
+          "scenarioId": "normal-and-timing",
+          "checkId": "8",
+          "command": {
+            "op": "assert",
+            "selector": "body",
+            "property": "inert",
+            "equals": true
+          },
+          "expected": true,
+          "actual": true,
+          "status": "passed",
+          "startedAt": 1790776287474,
+          "endedAt": 1790776287474
+        },
+        {
+          "scenarioId": "normal-and-timing",
+          "checkId": "9",
+          "command": {
+            "op": "assert",
+            "selector": "#feedback",
+            "property": "text",
+            "equals": "正在保存"
+          },
+          "expected": "正在保存",
+          "actual": "正在保存",
+          "status": "passed",
+          "startedAt": 1790776287474,
+          "endedAt": 1790776287475
+        },
+        {
+          "scenarioId": "normal-and-timing",
+          "checkId": "10",
+          "command": {
+            "op": "click",
+            "selector": "#add-task",
+            "probeWhileInert": true
+          },
+          "expected": "executed",
+          "actual": "executed",
+          "status": "passed",
+          "startedAt": 1790776287475,
+          "endedAt": 1790776287475
+        },
+        {
+          "scenarioId": "normal-and-timing",
+          "checkId": "11",
+          "command": {
+            "op": "data",
+            "path": [
+              "tasks",
+              "length"
+            ],
+            "equals": 1
+          },
+          "expected": 1,
+          "actual": 1,
+          "status": "passed",
+          "startedAt": 1790776287475,
+          "endedAt": 1790776287475
+        },
+        {
+          "scenarioId": "normal-and-timing",
+          "checkId": "12",
+          "command": {
+            "op": "wait",
+            "ms": 600
+          },
+          "expected": 600,
+          "actual": 600,
+          "status": "passed",
+          "startedAt": 1790776287475,
+          "endedAt": 1790776288077
+        },
+        {
+          "scenarioId": "normal-and-timing",
+          "checkId": "13",
+          "command": {
+            "op": "assert",
+            "selector": "#feedback",
+            "property": "text",
+            "equals": "已保存"
+          },
+          "expected": "已保存",
+          "actual": "已保存",
+          "status": "passed",
+          "startedAt": 1790776288077,
+          "endedAt": 1790776288078
+        },
+        {
+          "scenarioId": "normal-and-timing",
+          "checkId": "14",
+          "command": {
+            "op": "assert",
+            "selector": "body",
+            "property": "inert",
+            "equals": false
+          },
+          "expected": false,
+          "actual": false,
+          "status": "passed",
+          "startedAt": 1790776288078,
+          "endedAt": 1790776288079
+        },
+        {
+          "scenarioId": "normal-and-timing",
+          "checkId": "15",
+          "command": {
+            "op": "data",
+            "path": [
+              "tasks",
+              "1",
+              "title"
+            ],
+            "equals": "检查待办"
+          },
+          "expected": "检查待办",
+          "actual": "检查待办",
+          "status": "passed",
+          "startedAt": 1790776288079,
+          "endedAt": 1790776288079
+        },
+        {
+          "scenarioId": "normal-and-timing",
+          "checkId": "16",
+          "command": {
+            "op": "data",
+            "path": [
+              "tasks",
+              "length"
+            ],
+            "equals": 2
+          },
+          "expected": 2,
+          "actual": 2,
+          "status": "passed",
+          "startedAt": 1790776288079,
+          "endedAt": 1790776288079
+        },
+        {
+          "scenarioId": "normal-and-timing",
+          "checkId": "17",
+          "command": {
+            "op": "bridge",
+            "property": "saveAttempts",
+            "equals": 1
+          },
+          "expected": 1,
+          "actual": 1,
+          "status": "passed",
+          "startedAt": 1790776288079,
+          "endedAt": 1790776288079
+        },
+        {
+          "scenarioId": "normal-and-timing",
+          "checkId": "18",
+          "command": {
+            "op": "click",
+            "selector": "#records li:first-child .change"
+          },
+          "expected": "executed",
+          "actual": "executed",
+          "status": "passed",
+          "startedAt": 1790776288079,
+          "endedAt": 1790776288080
+        },
+        {
+          "scenarioId": "normal-and-timing",
+          "checkId": "19",
+          "command": {
+            "op": "wait",
+            "ms": 600
+          },
+          "expected": 600,
+          "actual": 600,
+          "status": "passed",
+          "startedAt": 1790776288080,
+          "endedAt": 1790776288682
+        },
+        {
+          "scenarioId": "normal-and-timing",
+          "checkId": "20",
+          "command": {
+            "op": "data",
+            "path": [
+              "tasks",
+              "0",
+              "done"
+            ],
+            "equals": true
+          },
+          "expected": true,
+          "actual": true,
+          "status": "passed",
+          "startedAt": 1790776288682,
+          "endedAt": 1790776288682
+        },
+        {
+          "scenarioId": "normal-and-timing",
+          "checkId": "21",
+          "command": {
+            "op": "bridge",
+            "property": "commits",
+            "equals": 2
+          },
+          "expected": 2,
+          "actual": 2,
+          "status": "passed",
+          "startedAt": 1790776288682,
+          "endedAt": 1790776288682
+        },
+        {
+          "scenarioId": "read-failure",
+          "checkId": "22",
+          "command": {
+            "op": "wait",
+            "ms": 100
+          },
+          "expected": 100,
+          "actual": 100,
+          "status": "passed",
+          "startedAt": 1790776288696,
+          "endedAt": 1790776288809
+        },
+        {
+          "scenarioId": "read-failure",
+          "checkId": "23",
+          "command": {
+            "op": "assert",
+            "selector": "#feedback",
+            "property": "text",
+            "equals": "读取失败"
+          },
+          "expected": "读取失败",
+          "actual": "读取失败",
+          "status": "passed",
+          "startedAt": 1790776288809,
+          "endedAt": 1790776288809
+        },
+        {
+          "scenarioId": "read-failure",
+          "checkId": "24",
+          "command": {
+            "op": "assert",
+            "selector": "#task-title",
+            "property": "disabled",
+            "equals": true
+          },
+          "expected": true,
+          "actual": true,
+          "status": "passed",
+          "startedAt": 1790776288809,
+          "endedAt": 1790776288810
+        },
+        {
+          "scenarioId": "read-failure",
+          "checkId": "25",
+          "command": {
+            "op": "assert",
+            "selector": "#add-task",
+            "property": "disabled",
+            "equals": true
+          },
+          "expected": true,
+          "actual": true,
+          "status": "passed",
+          "startedAt": 1790776288810,
+          "endedAt": 1790776288811
+        },
+        {
+          "scenarioId": "read-failure",
+          "checkId": "26",
+          "command": {
+            "op": "bridge",
+            "property": "saveAttempts",
+            "equals": 0
+          },
+          "expected": 0,
+          "actual": 0,
+          "status": "passed",
+          "startedAt": 1790776288811,
+          "endedAt": 1790776288811
+        },
+        {
+          "scenarioId": "read-failure",
+          "checkId": "27",
+          "command": {
+            "op": "bridge",
+            "property": "rejectedSaves",
+            "equals": 0
+          },
+          "expected": 0,
+          "actual": 0,
+          "status": "passed",
+          "startedAt": 1790776288811,
+          "endedAt": 1790776288811
+        },
+        {
+          "scenarioId": "read-failure",
+          "checkId": "28",
+          "command": {
+            "op": "data",
+            "path": [
+              "tasks",
+              "0",
+              "title"
+            ],
+            "equals": "旧待办"
+          },
+          "expected": "旧待办",
+          "actual": "旧待办",
+          "status": "passed",
+          "startedAt": 1790776288811,
+          "endedAt": 1790776288811
+        },
+        {
+          "scenarioId": "read-failure",
+          "checkId": "29",
+          "command": {
+            "op": "bridge",
+            "property": "commits",
+            "equals": 0
+          },
+          "expected": 0,
+          "actual": 0,
+          "status": "passed",
+          "startedAt": 1790776288811,
+          "endedAt": 1790776288811
+        },
+        {
+          "scenarioId": "save-failure",
+          "checkId": "30",
+          "command": {
+            "op": "wait",
+            "ms": 100
+          },
+          "expected": 100,
+          "actual": 100,
+          "status": "passed",
+          "startedAt": 1790776288824,
+          "endedAt": 1790776288935
+        },
+        {
+          "scenarioId": "save-failure",
+          "checkId": "1",
+          "command": {
+            "op": "input",
+            "selector": "#task-title",
+            "value": "检查待办"
+          },
+          "expected": "检查待办",
+          "actual": "检查待办",
+          "status": "passed",
+          "startedAt": 1790776288935,
+          "endedAt": 1790776288936
+        },
+        {
+          "scenarioId": "save-failure",
+          "checkId": "2",
+          "command": {
+            "op": "click",
+            "selector": "#add-task"
+          },
+          "expected": "executed",
+          "actual": "executed",
+          "status": "passed",
+          "startedAt": 1790776288936,
+          "endedAt": 1790776288937
+        },
+        {
+          "scenarioId": "save-failure",
+          "checkId": "31",
+          "command": {
+            "op": "assert",
+            "selector": "body",
+            "property": "inert",
+            "equals": true
+          },
+          "expected": true,
+          "actual": true,
+          "status": "passed",
+          "startedAt": 1790776288937,
+          "endedAt": 1790776288937
+        },
+        {
+          "scenarioId": "save-failure",
+          "checkId": "32",
+          "command": {
+            "op": "wait",
+            "ms": 600
+          },
+          "expected": 600,
+          "actual": 600,
+          "status": "passed",
+          "startedAt": 1790776288937,
+          "endedAt": 1790776289539
+        },
+        {
+          "scenarioId": "save-failure",
+          "checkId": "33",
+          "command": {
+            "op": "assert",
+            "selector": "#feedback",
+            "property": "text",
+            "equals": "保存失败"
+          },
+          "expected": "保存失败",
+          "actual": "保存失败",
+          "status": "passed",
+          "startedAt": 1790776289539,
+          "endedAt": 1790776289539
+        },
+        {
+          "scenarioId": "save-failure",
+          "checkId": "34",
+          "command": {
+            "op": "assert",
+            "selector": "#records li",
+            "property": "count",
+            "equals": 1
+          },
+          "expected": 1,
+          "actual": 1,
+          "status": "passed",
+          "startedAt": 1790776289539,
+          "endedAt": 1790776289540
+        },
+        {
+          "scenarioId": "save-failure",
+          "checkId": "35",
+          "command": {
+            "op": "data",
+            "path": [
+              "tasks",
+              "length"
+            ],
+            "equals": 1
+          },
+          "expected": 1,
+          "actual": 1,
+          "status": "passed",
+          "startedAt": 1790776289540,
+          "endedAt": 1790776289540
+        },
+        {
+          "scenarioId": "save-failure",
+          "checkId": "36",
+          "command": {
+            "op": "bridge",
+            "property": "rejectedSaves",
+            "equals": 1
+          },
+          "expected": 1,
+          "actual": 1,
+          "status": "passed",
+          "startedAt": 1790776289540,
+          "endedAt": 1790776289540
+        },
+        {
+          "scenarioId": "save-failure",
+          "checkId": "37",
+          "command": {
+            "op": "bridge",
+            "property": "commits",
+            "equals": 0
+          },
+          "expected": 0,
+          "actual": 0,
+          "status": "passed",
+          "startedAt": 1790776289540,
+          "endedAt": 1790776289540
+        }
+      ],
+      "detail": "所有计划项实际执行完成。"
+    }
+  },
+  {
+    "case": "isolation",
+    "url": "http://localhost:3100/qa",
+    "observedAt": "2026-09-30T13:51:39.014Z",
+    "codeHash": "1b1960236e2b189171f8df9f48b5fa092085fc69c625be6d5f229e8a9d292eea",
+    "planHash": "d85af4783f3eaa06a23a4b1a12f0779c3d5ae140e4afe244fe7c4d3c002e0a12",
+    "result": {
+      "protocol": "atoms-qa/1",
+      "taskId": "f3c7b373-c775-4ba8-9c78-f49485a4c0df",
+      "requestId": "2d9814d4-8ea1-430e-96f9-fef7b6c15b3b",
+      "codeHash": "1b1960236e2b189171f8df9f48b5fa092085fc69c625be6d5f229e8a9d292eea",
+      "planHash": "d85af4783f3eaa06a23a4b1a12f0779c3d5ae140e4afe244fe7c4d3c002e0a12",
+      "status": "passed",
+      "results": [
+        {
+          "scenarioId": "normal-and-timing",
+          "checkId": "3",
+          "command": {
+            "op": "assert",
+            "selector": "#book-name",
+            "property": "disabled",
+            "equals": true
+          },
+          "expected": true,
+          "actual": true,
+          "status": "passed",
+          "startedAt": 1790776296191,
+          "endedAt": 1790776296215
+        },
+        {
+          "scenarioId": "normal-and-timing",
+          "checkId": "4",
+          "command": {
+            "op": "assert",
+            "selector": "#record-book",
+            "property": "disabled",
+            "equals": true
+          },
+          "expected": true,
+          "actual": true,
+          "status": "passed",
+          "startedAt": 1790776296215,
+          "endedAt": 1790776296218
+        },
+        {
+          "scenarioId": "normal-and-timing",
+          "checkId": "5",
+          "command": {
+            "op": "wait",
+            "ms": 600
+          },
+          "expected": 600,
+          "actual": 600,
+          "status": "passed",
+          "startedAt": 1790776296218,
+          "endedAt": 1790776296821
+        },
+        {
+          "scenarioId": "normal-and-timing",
+          "checkId": "6",
+          "command": {
+            "op": "observe",
+            "selector": "#records",
+            "property": "text"
+          },
+          "expected": "executed",
+          "actual": "旧书 · reading · 0读完",
+          "status": "passed",
+          "startedAt": 1790776296821,
+          "endedAt": 1790776296822
+        },
+        {
+          "scenarioId": "normal-and-timing",
+          "checkId": "7",
+          "command": {
+            "op": "assert",
+            "selector": "#records li",
+            "property": "count",
+            "equals": 1
+          },
+          "expected": 1,
+          "actual": 1,
+          "status": "passed",
+          "startedAt": 1790776296822,
+          "endedAt": 1790776296826
+        },
+        {
+          "scenarioId": "normal-and-timing",
+          "checkId": "1",
+          "command": {
+            "op": "input",
+            "selector": "#book-name",
+            "value": "合成书名"
+          },
+          "expected": "合成书名",
+          "actual": "合成书名",
+          "status": "passed",
+          "startedAt": 1790776296826,
+          "endedAt": 1790776296827
+        },
+        {
+          "scenarioId": "normal-and-timing",
+          "checkId": "2",
+          "command": {
+            "op": "click",
+            "selector": "#record-book"
+          },
+          "expected": "executed",
+          "actual": "executed",
+          "status": "passed",
+          "startedAt": 1790776296827,
+          "endedAt": 1790776296830
+        },
+        {
+          "scenarioId": "normal-and-timing",
+          "checkId": "8",
+          "command": {
+            "op": "assert",
+            "selector": "body",
+            "property": "inert",
+            "equals": true
+          },
+          "expected": true,
+          "actual": true,
+          "status": "passed",
+          "startedAt": 1790776296830,
+          "endedAt": 1790776296831
+        },
+        {
+          "scenarioId": "normal-and-timing",
+          "checkId": "9",
+          "command": {
+            "op": "assert",
+            "selector": "#feedback",
+            "property": "text",
+            "equals": "正在保存"
+          },
+          "expected": "正在保存",
+          "actual": "正在保存",
+          "status": "passed",
+          "startedAt": 1790776296831,
+          "endedAt": 1790776296831
+        },
+        {
+          "scenarioId": "normal-and-timing",
+          "checkId": "10",
+          "command": {
+            "op": "click",
+            "selector": "#record-book",
+            "probeWhileInert": true
+          },
+          "expected": "executed",
+          "actual": "executed",
+          "status": "passed",
+          "startedAt": 1790776296831,
+          "endedAt": 1790776296832
+        },
+        {
+          "scenarioId": "normal-and-timing",
+          "checkId": "11",
+          "command": {
+            "op": "data",
+            "path": [
+              "books",
+              "length"
+            ],
+            "equals": 1
+          },
+          "expected": 1,
+          "actual": 1,
+          "status": "passed",
+          "startedAt": 1790776296832,
+          "endedAt": 1790776296832
+        },
+        {
+          "scenarioId": "normal-and-timing",
+          "checkId": "12",
+          "command": {
+            "op": "wait",
+            "ms": 600
+          },
+          "expected": 600,
+          "actual": 600,
+          "status": "passed",
+          "startedAt": 1790776296832,
+          "endedAt": 1790776297434
+        },
+        {
+          "scenarioId": "normal-and-timing",
+          "checkId": "13",
+          "command": {
+            "op": "assert",
+            "selector": "#feedback",
+            "property": "text",
+            "equals": "已保存"
+          },
+          "expected": "已保存",
+          "actual": "已保存",
+          "status": "passed",
+          "startedAt": 1790776297434,
+          "endedAt": 1790776297435
+        },
+        {
+          "scenarioId": "normal-and-timing",
+          "checkId": "14",
+          "command": {
+            "op": "assert",
+            "selector": "body",
+            "property": "inert",
+            "equals": false
+          },
+          "expected": false,
+          "actual": false,
+          "status": "passed",
+          "startedAt": 1790776297435,
+          "endedAt": 1790776297436
+        },
+        {
+          "scenarioId": "normal-and-timing",
+          "checkId": "15",
+          "command": {
+            "op": "data",
+            "path": [
+              "books",
+              "1",
+              "name"
+            ],
+            "equals": "合成书名"
+          },
+          "expected": "合成书名",
+          "actual": "合成书名",
+          "status": "passed",
+          "startedAt": 1790776297436,
+          "endedAt": 1790776297436
+        },
+        {
+          "scenarioId": "normal-and-timing",
+          "checkId": "16",
+          "command": {
+            "op": "data",
+            "path": [
+              "books",
+              "length"
+            ],
+            "equals": 2
+          },
+          "expected": 2,
+          "actual": 2,
+          "status": "passed",
+          "startedAt": 1790776297436,
+          "endedAt": 1790776297436
+        },
+        {
+          "scenarioId": "normal-and-timing",
+          "checkId": "17",
+          "command": {
+            "op": "bridge",
+            "property": "saveAttempts",
+            "equals": 1
+          },
+          "expected": 1,
+          "actual": 1,
+          "status": "passed",
+          "startedAt": 1790776297436,
+          "endedAt": 1790776297436
+        },
+        {
+          "scenarioId": "normal-and-timing",
+          "checkId": "18",
+          "command": {
+            "op": "click",
+            "selector": "#records li:first-child .change"
+          },
+          "expected": "executed",
+          "actual": "executed",
+          "status": "passed",
+          "startedAt": 1790776297436,
+          "endedAt": 1790776297437
+        },
+        {
+          "scenarioId": "normal-and-timing",
+          "checkId": "19",
+          "command": {
+            "op": "wait",
+            "ms": 600
+          },
+          "expected": 600,
+          "actual": 600,
+          "status": "passed",
+          "startedAt": 1790776297437,
+          "endedAt": 1790776298039
+        },
+        {
+          "scenarioId": "normal-and-timing",
+          "checkId": "20",
+          "command": {
+            "op": "data",
+            "path": [
+              "books",
+              "0",
+              "status"
+            ],
+            "equals": "finished"
+          },
+          "expected": "finished",
+          "actual": "finished",
+          "status": "passed",
+          "startedAt": 1790776298039,
+          "endedAt": 1790776298039
+        },
+        {
+          "scenarioId": "normal-and-timing",
+          "checkId": "21",
+          "command": {
+            "op": "data",
+            "path": [
+              "books",
+              "0",
+              "rating"
+            ],
+            "equals": 5
+          },
+          "expected": 5,
+          "actual": 5,
+          "status": "passed",
+          "startedAt": 1790776298039,
+          "endedAt": 1790776298039
+        },
+        {
+          "scenarioId": "normal-and-timing",
+          "checkId": "22",
+          "command": {
+            "op": "bridge",
+            "property": "commits",
+            "equals": 2
+          },
+          "expected": 2,
+          "actual": 2,
+          "status": "passed",
+          "startedAt": 1790776298039,
+          "endedAt": 1790776298039
+        },
+        {
+          "scenarioId": "read-failure",
+          "checkId": "23",
+          "command": {
+            "op": "wait",
+            "ms": 100
+          },
+          "expected": 100,
+          "actual": 100,
+          "status": "passed",
+          "startedAt": 1790776298065,
+          "endedAt": 1790776298182
+        },
+        {
+          "scenarioId": "read-failure",
+          "checkId": "24",
+          "command": {
+            "op": "assert",
+            "selector": "#feedback",
+            "property": "text",
+            "equals": "读取失败"
+          },
+          "expected": "读取失败",
+          "actual": "读取失败",
+          "status": "passed",
+          "startedAt": 1790776298183,
+          "endedAt": 1790776298183
+        },
+        {
+          "scenarioId": "read-failure",
+          "checkId": "25",
+          "command": {
+            "op": "assert",
+            "selector": "#book-name",
+            "property": "disabled",
+            "equals": true
+          },
+          "expected": true,
+          "actual": true,
+          "status": "passed",
+          "startedAt": 1790776298183,
+          "endedAt": 1790776298184
+        },
+        {
+          "scenarioId": "read-failure",
+          "checkId": "26",
+          "command": {
+            "op": "assert",
+            "selector": "#record-book",
+            "property": "disabled",
+            "equals": true
+          },
+          "expected": true,
+          "actual": true,
+          "status": "passed",
+          "startedAt": 1790776298184,
+          "endedAt": 1790776298185
+        },
+        {
+          "scenarioId": "read-failure",
+          "checkId": "27",
+          "command": {
+            "op": "bridge",
+            "property": "saveAttempts",
+            "equals": 0
+          },
+          "expected": 0,
+          "actual": 0,
+          "status": "passed",
+          "startedAt": 1790776298185,
+          "endedAt": 1790776298185
+        },
+        {
+          "scenarioId": "read-failure",
+          "checkId": "28",
+          "command": {
+            "op": "bridge",
+            "property": "rejectedSaves",
+            "equals": 0
+          },
+          "expected": 0,
+          "actual": 0,
+          "status": "passed",
+          "startedAt": 1790776298185,
+          "endedAt": 1790776298185
+        },
+        {
+          "scenarioId": "read-failure",
+          "checkId": "29",
+          "command": {
+            "op": "data",
+            "path": [
+              "books",
+              "0",
+              "name"
+            ],
+            "equals": "旧书"
+          },
+          "expected": "旧书",
+          "actual": "旧书",
+          "status": "passed",
+          "startedAt": 1790776298185,
+          "endedAt": 1790776298185
+        },
+        {
+          "scenarioId": "read-failure",
+          "checkId": "30",
+          "command": {
+            "op": "bridge",
+            "property": "commits",
+            "equals": 0
+          },
+          "expected": 0,
+          "actual": 0,
+          "status": "passed",
+          "startedAt": 1790776298185,
+          "endedAt": 1790776298185
+        },
+        {
+          "scenarioId": "save-failure",
+          "checkId": "31",
+          "command": {
+            "op": "wait",
+            "ms": 100
+          },
+          "expected": 100,
+          "actual": 100,
+          "status": "passed",
+          "startedAt": 1790776298200,
+          "endedAt": 1790776298314
+        },
+        {
+          "scenarioId": "save-failure",
+          "checkId": "1",
+          "command": {
+            "op": "input",
+            "selector": "#book-name",
+            "value": "合成书名"
+          },
+          "expected": "合成书名",
+          "actual": "合成书名",
+          "status": "passed",
+          "startedAt": 1790776298314,
+          "endedAt": 1790776298314
+        },
+        {
+          "scenarioId": "save-failure",
+          "checkId": "2",
+          "command": {
+            "op": "click",
+            "selector": "#record-book"
+          },
+          "expected": "executed",
+          "actual": "executed",
+          "status": "passed",
+          "startedAt": 1790776298314,
+          "endedAt": 1790776298316
+        },
+        {
+          "scenarioId": "save-failure",
+          "checkId": "32",
+          "command": {
+            "op": "assert",
+            "selector": "body",
+            "property": "inert",
+            "equals": true
+          },
+          "expected": true,
+          "actual": true,
+          "status": "passed",
+          "startedAt": 1790776298316,
+          "endedAt": 1790776298316
+        },
+        {
+          "scenarioId": "save-failure",
+          "checkId": "33",
+          "command": {
+            "op": "wait",
+            "ms": 600
+          },
+          "expected": 600,
+          "actual": 600,
+          "status": "passed",
+          "startedAt": 1790776298316,
+          "endedAt": 1790776298919
+        },
+        {
+          "scenarioId": "save-failure",
+          "checkId": "34",
+          "command": {
+            "op": "assert",
+            "selector": "#feedback",
+            "property": "text",
+            "equals": "保存失败"
+          },
+          "expected": "保存失败",
+          "actual": "保存失败",
+          "status": "passed",
+          "startedAt": 1790776298919,
+          "endedAt": 1790776298919
+        },
+        {
+          "scenarioId": "save-failure",
+          "checkId": "35",
+          "command": {
+            "op": "assert",
+            "selector": "#records li",
+            "property": "count",
+            "equals": 1
+          },
+          "expected": 1,
+          "actual": 1,
+          "status": "passed",
+          "startedAt": 1790776298919,
+          "endedAt": 1790776298921
+        },
+        {
+          "scenarioId": "save-failure",
+          "checkId": "36",
+          "command": {
+            "op": "data",
+            "path": [
+              "books",
+              "length"
+            ],
+            "equals": 1
+          },
+          "expected": 1,
+          "actual": 1,
+          "status": "passed",
+          "startedAt": 1790776298921,
+          "endedAt": 1790776298921
+        },
+        {
+          "scenarioId": "save-failure",
+          "checkId": "37",
+          "command": {
+            "op": "bridge",
+            "property": "rejectedSaves",
+            "equals": 1
+          },
+          "expected": 1,
+          "actual": 1,
+          "status": "passed",
+          "startedAt": 1790776298921,
+          "endedAt": 1790776298921
+        },
+        {
+          "scenarioId": "save-failure",
+          "checkId": "38",
+          "command": {
+            "op": "bridge",
+            "property": "commits",
+            "equals": 0
+          },
+          "expected": 0,
+          "actual": 0,
+          "status": "passed",
+          "startedAt": 1790776298921,
+          "endedAt": 1790776298921
+        }
+      ],
+      "detail": "所有计划项实际执行完成。"
+    }
+  }
+]
