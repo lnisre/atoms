@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>入口验收计数器</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+      background-color: #ffffff;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1.5rem;
+    }
+    .app {
+      width: 100%;
+      max-width: 480px;
+      background: #ffffff;
+      border-radius: 24px;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.04), 0 2px 8px rgba(0, 0, 0, 0.02);
+      padding: 2rem 1.5rem 2.25rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      transition: opacity 0.2s ease;
+    }
+    h1 {
+      font-size: 1.5rem;
+      font-weight: 500;
+      color: #1e293b;
+      letter-spacing: 0.5px;
+      margin-bottom: 0.5rem;
+      text-align: center;
+    }
+    .sub {
+      font-size: 0.875rem;
+      color: #64748b;
+      margin-bottom: 2rem;
+      text-align: center;
+    }
+    .counter-display {
+      width: 100%;
+      background: #f8fafc;
+      border-radius: 20px;
+      padding: 2rem 1rem;
+      margin-bottom: 1.75rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid #e2e8f0;
+    }
+    .counter-label {
+      font-size: 0.9rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: #475569;
+      margin-bottom: 0.5rem;
+      font-weight: 500;
+    }
+    .counter-value {
+      font-size: 5rem;
+      font-weight: 600;
+      line-height: 1;
+      color: #0f172a;
+      font-variant-numeric: tabular-nums;
+      transition: color 0.2s;
+      word-break: break-word;
+    }
+    .button-group {
+      display: flex;
+      gap: 1rem;
+      width: 100%;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .btn {
+      flex: 1 1 140px;
+      min-width: 120px;
+      font-size: 1rem;
+      font-weight: 500;
+      padding: 0.9rem 1.2rem;
+      border-radius: 40px;
+      border: none;
+      background: #ffffff;
+      color: #1e293b;
+      cursor: pointer;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04), 0 2px 4px rgba(0, 0, 0, 0.02);
+      border: 1px solid #e2e8f0;
+      transition: background 0.15s, box-shadow 0.15s, transform 0.1s, opacity 0.2s;
+      font-family: inherit;
+      letter-spacing: 0.3px;
+      background-color: #2563eb;
+      color: #ffffff;
+      border: 1px solid #2563eb;
+    }
+    .btn:active {
+      transform: scale(0.97);
+    }
+    .btn:focus-visible {
+      outline: 3px solid #93c5fd;
+      outline-offset: 2px;
+    }
+    .btn.secondary {
+      background: #ffffff;
+      color: #2563eb;
+      border: 1px solid #2563eb;
+    }
+    .btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none;
+    }
+    .status {
+      margin-top: 1.5rem;
+      font-size: 0.85rem;
+      min-height: 1.5rem;
+      color: #64748b;
+      text-align: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.4rem;
+    }
+    .status.error {
+      color: #dc2626;
+    }
+    .status.saved {
+      color: #15803d;
+    }
+    .loading-placeholder {
+      font-size: 1rem;
+      color: #94a3b8;
+      padding: 2rem 0;
+      text-align: center;
+    }
+    .disabled-interaction {
+      opacity: 0.6;
+      pointer-events: none;
+    }
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0,0,0,0);
+      border: 0;
+    }
+  </style>
+</head>
+<body>
+  <main class="app" id="app">
+    <h1>入口验收计数器</h1>
+    <p class="sub">每次操作自动保存</p>
+
+    <div class="counter-display">
+      <div class="counter-label">当前次数</div>
+      <div class="counter-value" id="counterValue" aria-live="polite" aria-atomic="true">—</div>
+    </div>
+
+    <div class="button-group">
+      <button type="button" class="btn" id="incrementBtn" disabled aria-label="增加一次">增加一次</button>
+      <button type="button" class="btn secondary" id="resetBtn" disabled aria-label="归零">归零</button>
+    </div>
+
+    <div class="status" id="statusMessage" role="status">正在加载...</div>
+    <p class="sr-only" id="saveStatusAnnounce"></p>
+  </main>
+
+  <script>
+    (function() {
+      'use strict';
+
+      // ---------- DOM 元素 ----------
+      const counterValueEl = document.getElementById('counterValue');
+      const incrementBtn = document.getElementById('incrementBtn');
+      const resetBtn = document.getElementById('resetBtn');
+      const statusMessage = document.getElementById('statusMessage');
+      const announcer = document.getElementById('saveStatusAnnounce');
+
+      // ---------- 应用状态 ----------
+      let count = 0;               // 当前计数
+      let isReady = false;         // 是否已成功加载数据，可以交互
+      let isProcessing = false;    // 防止重叠的保存操作（仅视觉与简单防抖，不绕过保存）
+
+      // ---------- 工具: 更新显示、状态 ----------
+      function renderCount() {
+        counterValueEl.textContent = String(count);
+      }
+
+      function setStatus(text, isError = false) {
+        statusMessage.textContent = text;
+        if (isError) {
+          statusMessage.classList.add('error');
+          statusMessage.classList.remove('saved');
+        } else {
+          statusMessage.classList.remove('error');
+          statusMessage.classList.remove('saved');
+        }
+      }
+
+      function setSavedStatus() {
+        statusMessage.textContent = '已保存';
+        statusMessage.classList.remove('error');
+        statusMessage.classList.add('saved');
+      }
+
+      function setErrorStatus(message) {
+        statusMessage.textContent = message || '保存失败，请重试';
+        statusMessage.classList.add('error');
+        statusMessage.classList.remove('saved');
+      }
+
+      // 仅用于视觉反馈，不参与业务逻辑
+      function setControlsDisabled(disabled) {
+        incrementBtn.disabled = disabled;
+        resetBtn.disabled = disabled;
+        if (disabled) {
+          incrementBtn.setAttribute('aria-disabled', 'true');
+          resetBtn.setAttribute('aria-disabled', 'true');
+        } else {
+          incrementBtn.removeAttribute('aria-disabled');
+          resetBtn.removeAttribute('aria-disabled');
+        }
+      }
+
+      // 保存过程中的临时视觉锁定
+      function lockUIWhileSaving() {
+        // 不直接禁用按钮，因为平台会锁；但为了体验明确，禁用按钮避免用户多次点击
+        // 注意：这不会绕过平台锁，只是 UI 层面的防止重复触发
+        setControlsDisabled(true);
+      }
+
+      function unlockUIAfterSaveOrError() {
+        // 只有 isReady 为 true 且没有正在进行的处理时，才启用按钮
+        if (isReady && !isProcessing) {
+          setControlsDisabled(false);
+        }
+      }
+
+      // ---------- 核心：保存状态 ----------
+      async function saveStateAndFeedback() {
+        // 本次操作已经修改了 count，快照
+        const snapshot = { count: count };
+
+        // 显示"保存中..."，锁定 UI（视觉层）
+        setStatus('保存中...');
+        lockUIWhileSaving();
+        isProcessing = true;
+
+        try {
+          await window.atoms.saveState(snapshot);
+          // 保存成功
+          setSavedStatus();
+          announcer.textContent = '已保存';
+        } catch (err) {
+          console.error('保存失败:', err);
+          setErrorStatus('保存失败，请检查后重试');
+          announcer.textContent = '保存失败';
+          // 注意：不修改 count，因为本地已更新，但保存失败不还原 —— 应该还原吗？
+          // 规范：更新状态并保存，如果保存失败，我们应该保持之前的状态吗？但之前状态已经改变。
+          // 为避免不一致，我们在 catch 中回滚状态？但回滚需要之前的值。为简单且符合"保存失败显示错误"，
+          // 我们保持当前显示的状态，但错误提示用户。然而用户可能刷新后丢失变化，这是诚实的。
+          // 但原子存储要求保存完整状态，如果失败，最好让用户知道。我们不自动重试。
+        } finally {
+          isProcessing = false;
+          // 解除 UI 锁定（如果保存成功，按钮应可用；如果失败，也重新启用按钮允许用户再次尝试）
+          if (isReady) {
+            setControlsDisabled(false);
+          }
+        }
+      }
+
+      // ---------- 用户操作（异步 mutation handler）----------
+      async function handleIncrement() {
+        if (!isReady || isProcessing) return;
+
+        // 更新业务状态
+        count = count + 1;
+        // 立即渲染
+        renderCount();
+        announcer.textContent = `次数增加至 ${count}`;
+
+        // 立即保存（在同一个事件处理器中，await 之前没有延迟）
+        await saveStateAndFeedback();
+      }
+
+      async function handleReset() {
+        if (!isReady || isProcessing) return;
+
+        // 更新业务状态
+        count = 0;
+        renderCount();
+        announcer.textContent = '已归零';
+
+        await saveStateAndFeedback();
+      }
+
+      // ---------- 键盘支持：按钮原生支持 Enter/Space，无需重复 ----------
+      // 但为了在输入框不存在的情况下，按钮本身已有键盘支持
+
+      // ---------- 初始化：加载状态 ----------
+      async function init() {
+        // 初始时禁止交互
+        setControlsDisabled(true);
+        setStatus('正在加载...');
+
+        try {
+          // 等待 atoms 准备就绪（平台保证在脚本前注入）
+          if (!window.atoms || typeof window.atoms.loadState !== 'function') {
+            throw new Error('atoms 接口不可用');
+          }
+
+          const savedState = await window.atoms.loadState();
+
+          if (savedState !== null && typeof savedState === 'object' && typeof savedState.count === 'number') {
+            // 恢复保存的状态
+            count = savedState.count;
+          } else if (savedState === null) {
+            // 全新项目，使用默认值
+            count = 0;
+          } else {
+            // 数据类型不对，抛出错误
+            throw new Error('保存的数据格式不正确');
+          }
+
+          // 更新 UI
+          renderCount();
+          isReady = true;
+          setControlsDisabled(false);
+          setStatus('就绪');
+          // 清除可能存在的错误样式
+          statusMessage.classList.remove('error');
+          statusMessage.classList.remove('saved');
+          statusMessage.textContent = '就绪';
+        } catch (err) {
+          console.error('加载失败:', err);
+          // 加载失败：保持编辑禁用，显示错误，不覆盖未读数据
+          isReady = false;
+          setControlsDisabled(true);
+          counterValueEl.textContent = '—';
+          setErrorStatus('无法加载数据，请刷新重试');
+          statusMessage.textContent = '加载失败，编辑已禁用';
+        }
+      }
+
+      // ---------- 事件绑定 ----------
+      incrementBtn.addEventListener('click', handleIncrement);
+      resetBtn.addEventListener('click', handleReset);
+
+      // 针对键盘：按钮原生支持 Enter 和 Space，并且会触发 click，无需额外处理。
+      // 但为了确保键盘用户能操作，并且如果浏览器有差异，我们也可以监听 keydown? 不必要。
+
+      // 启动
+      init();
+
+      // 暴露给调试? 不需要。
+    })();
+  </script>
+</body>
+</html>

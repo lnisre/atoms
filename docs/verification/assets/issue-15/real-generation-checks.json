@@ -1,0 +1,8 @@
+{
+  "httpStatus": 200,
+  "finalUrl": "https://v0-test0-nine.vercel.app/?project=839d8062-8e51-4ad7-8977-a18012712790",
+  "calls": 1,
+  "errors": [],
+  "requirement": "做一个名为“入口验收计数器”的极简中文应用。显示当前次数，初始值为 0。提供“增加一次”和“归零”两个按钮。每次操作通过平台提供的 atoms.loadState / atoms.saveState 接口自动保存 {count:number}，刷新后恢复。不使用 localStorage，不依赖外部资源或后端。页面用白底蓝色按钮，清楚显示数字。",
+  "snapshot": "- main:\n  - heading \"入口验收计数器\" [level=1]\n  - paragraph: 每次操作自动保存\n  - text: 当前次数 0\n  - button \"增加一次\"\n  - button \"归零\"\n  - status: 就绪\n  - paragraph"
+}

@@ -1,0 +1,41 @@
+import {chromium,expect} from '/Users/gaowenlong/Desktop/atoms/node_modules/@playwright/test/index.mjs';
+import {writeFileSync,readFileSync} from 'node:fs';
+const dir='/tmp/atoms-issue15-evidence',profile='/tmp/atoms-issue15-real-browser';
+const initial=JSON.parse(readFileSync(dir+'/real-generation-checks.json','utf8'));
+let calls=0;const errors=[];
+async function launch(){const c=await chromium.launchPersistentContext(profile,{channel:'chrome',headless:true,viewport:{width:1440,height:900}});c.on('request',r=>{if(r.url().endsWith('/api/generate'))calls++});return c}
+let c=await launch();
+try {
+ let p=c.pages()[0]??await c.newPage();p.on('pageerror',e=>errors.push(e.message));
+ await p.goto('https://v0-test0-nine.vercel.app');
+ await p.getByRole('button',{name:'我的项目',exact:true}).click();
+ await p.screenshot({path:dir+'/live-projects-1440.png'});
+ await p.getByRole('region',{name:'已有项目'}).getByRole('button',{name:/入口验收计数器/}).click();
+ await expect(p).toHaveURL(initial.finalUrl);
+ const f=p.frameLocator('iframe');await expect(f.locator('#counterValue')).toHaveText('0');
+ await f.getByRole('button',{name:'增加一次'}).click();await expect(f.locator('#counterValue')).toHaveText('1');
+ await expect(p.getByText('应用数据已保存',{exact:true})).toBeVisible();
+ await f.getByRole('button',{name:'增加一次'}).click();await expect(f.locator('#counterValue')).toHaveText('2');
+ await expect(p.getByText('应用数据已保存',{exact:true})).toBeVisible();
+ await p.screenshot({path:dir+'/live-saved.png'});
+ await p.reload();await expect(f.locator('#counterValue')).toHaveText('2');
+ await p.getByRole('button',{name:/新建项目/}).click();
+ await expect(p.getByRole('heading',{name:'我的项目',exact:true})).toBeVisible();
+ await p.setViewportSize({width:1280,height:720});await p.screenshot({path:dir+'/live-projects-1280.png'});
+ await p.getByRole('button',{name:'首页',exact:true}).click();await p.screenshot({path:dir+'/live-home-1280.png'});
+ await p.getByRole('region',{name:'最近项目'}).getByRole('button').click();await expect(f.locator('#counterValue')).toHaveText('2');
+ await c.close();c=await launch();p=c.pages()[0]??await c.newPage();
+ await p.goto('https://v0-test0-nine.vercel.app');
+ await p.getByRole('region',{name:'已有项目'}).getByRole('button',{name:/入口验收计数器/}).click();
+ await expect(p.frameLocator('iframe').locator('#counterValue')).toHaveText('2');
+ await p.frameLocator('iframe').getByRole('button',{name:'归零'}).click();await expect(p.frameLocator('iframe').locator('#counterValue')).toHaveText('0');
+ await expect(p.getByText('应用数据已保存',{exact:true})).toBeVisible();
+ await p.frameLocator('iframe').getByRole('button',{name:'增加一次'}).click();await expect(p.frameLocator('iframe').locator('#counterValue')).toHaveText('1');
+ await expect(p.getByText('应用数据已保存',{exact:true})).toBeVisible();
+ await p.reload();await expect(p.frameLocator('iframe').locator('#counterValue')).toHaveText('1');
+ const data=await p.evaluate(()=>new Promise(resolve=>{const r=indexedDB.open('atoms-projects',1);r.onsuccess=()=>{const db=r.result,tx=db.transaction('applicationData','readonly'),q=tx.objectStore('applicationData').get(new URLSearchParams(location.search).get('project'));q.onsuccess=()=>resolve(q.result);tx.oncomplete=()=>db.close()}}));
+ expect(data.state).toEqual({count:1});expect(calls).toBe(0);expect(errors).toEqual([]);
+ await p.screenshot({path:dir+'/live-reopened.png'});
+ writeFileSync(dir+'/real-final-checks.json',JSON.stringify({url:p.url(),initialCalls:initial.calls,additionalCalls:calls,finalData:data,errors,verified:['card reopen after browser close','mouse increment 0→1→2','refresh restores 2','return to previous project entry','1280 home and project view','recent entry restores 2','full browser close and card reopen restores 2','reset→0 and increment→1 after reopen','refresh and IndexedDB confirm 1']},null,2));
+ console.log(JSON.stringify({url:p.url(),initialCalls:initial.calls,additionalCalls:calls,finalState:data.state,errors,passed:true}));
+}catch(e){writeFileSync(dir+'/real-failure.txt',String(e.stack));throw e}finally{await c.close()}
