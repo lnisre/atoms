@@ -28,6 +28,9 @@ for (const viewport of [{width:1440,height:900},{width:1280,height:720}]) {
     },{html});
     await page.getByLabel('追加修改需求').fill('第二条用户需求');await page.getByRole('button',{name:'生成候选',exact:true}).click();
     await expect(page.getByText('受控实际步骤 model',{exact:true})).toBeVisible();
+    // Browser scroll events may also follow content growth; they are not user intent.
+    await scroll.evaluate(el=>el.dispatchEvent(new Event('scroll')));
+    await expect.poll(()=>scroll.evaluate(el=>el.scrollHeight-el.clientHeight-el.scrollTop)).toBeLessThan(25);
     await scroll.evaluate(el=>{el.scrollTop=100;el.dispatchEvent(new Event('scroll'))});
     const before=await scroll.evaluate(el=>el.scrollTop);
     await page.evaluate(()=>(window as unknown as {appendWorkbenchEvents:()=>void}).appendWorkbenchEvents());

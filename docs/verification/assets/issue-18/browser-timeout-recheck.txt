@@ -1,0 +1,9 @@
+
+Running 2 tests using 1 worker
+
+(node:86724) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  1 tests/browser/first-generation.spec.ts:25:5 › 完整说明安全显示，真实预览/数据步骤保存，刷新和同浏览器重开零调用 (7.9s)
+  ✓  2 tests/browser/modification-records.spec.ts:40:5 › 多轮回复和执行记录随最新代码采用，恢复零调用，首次消息和正式数据不变 (8.9s)
+
+  2 passed (24.6s)

@@ -7,13 +7,18 @@ export function ConversationScroll({ children }: { children: ReactNode }) {
   const viewport = useRef<HTMLDivElement>(null);
   const content = useRef<HTMLDivElement>(null);
   const following = useRef(true);
+  const lastTop = useRef(0);
+  const geometry = useRef({ height: 0, viewport: 0 });
   const [away, setAway] = useState(false);
   useEffect(() => {
     const pane = viewport.current!;
     const observer = new ResizeObserver(() => {
       if (following.current) pane.scrollTop = pane.scrollHeight;
+      lastTop.current = pane.scrollTop;
+      geometry.current = { height: pane.scrollHeight, viewport: pane.clientHeight };
     });
     observer.observe(content.current!);
+    observer.observe(pane);
     return () => observer.disconnect();
   }, []);
   function pause() { following.current = false; setAway(true); }
@@ -24,7 +29,15 @@ export function ConversationScroll({ children }: { children: ReactNode }) {
       onClickCapture={event => { if ((event.target as HTMLElement).closest("summary")) pause(); }}
       onScroll={() => {
         const pane = viewport.current!;
-        following.current = pane.scrollHeight - pane.scrollTop - pane.clientHeight < 24;
+        const atBottom = pane.scrollHeight - pane.scrollTop - pane.clientHeight < 24;
+        // Layout changes can fire scroll before ResizeObserver, including when
+        // the composer changes height. Only movement in unchanged geometry
+        // interrupts following; native wheel/key intent is handled immediately.
+        const resized = geometry.current.height !== pane.scrollHeight || geometry.current.viewport !== pane.clientHeight;
+        if (atBottom) following.current = true;
+        else if (!resized && pane.scrollTop < lastTop.current - 1) following.current = false;
+        geometry.current = { height: pane.scrollHeight, viewport: pane.clientHeight };
+        lastTop.current = pane.scrollTop;
         setAway(!following.current);
       }}>
       <div ref={content} className="conversation-content">{children}</div>
