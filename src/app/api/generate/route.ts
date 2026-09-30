@@ -31,7 +31,6 @@ export async function POST(request: Request) {
   const taskId = request.headers.get("x-atoms-task-id");
   if (!taskId || !/^[a-zA-Z0-9-]{1,80}$/.test(taskId)) return failure("生成任务标识无效。", 400);
   const cancellation = new AbortController();
-  const streamRequest = new Request(request, { signal: AbortSignal.any([request.signal, cancellation.signal]) });
   const encoder = new TextEncoder();
   let cancelled = false;
   const stream = new ReadableStream({
@@ -41,7 +40,7 @@ export async function POST(request: Request) {
       };
       const record = createRecorder(taskId, "server", event => send({ type: "step", event }));
       try {
-        const response = await generate(streamRequest, record);
+        const response = await generate(request, record, cancellation.signal);
         const data = await response.json();
         if (response.ok) send({ type: "result", taskId, result: data, assistantReply: data.assistantReply ?? null });
         else send({ type: "error", taskId, error: data.error });
@@ -56,7 +55,7 @@ export async function POST(request: Request) {
   return new Response(stream, { headers: { "Content-Type": "application/x-ndjson; charset=utf-8", "Cache-Control": "no-store, no-transform", "X-Accel-Buffering": "no" } });
 }
 
-async function generate(request: Request, record?: ReturnType<typeof createRecorder>) {
+async function generate(request: Request, record?: ReturnType<typeof createRecorder>, cancellation?: AbortSignal) {
   let currentStep = "context";
   let currentLabel = "准备请求与上下文";
   const start = (id: string, label: string, detail: string) => {
@@ -142,7 +141,7 @@ async function generate(request: Request, record?: ReturnType<typeof createRecor
         max_tokens: editing ? 8192 : 12288,
         stream: false,
       }),
-      signal: AbortSignal.any([timeout, request.signal]),
+      signal: AbortSignal.any([timeout, request.signal, ...(cancellation ? [cancellation] : [])]),
       cache: "no-store",
     });
     if (!response.ok) {
@@ -213,7 +212,7 @@ async function generate(request: Request, record?: ReturnType<typeof createRecor
   } catch {
     if (timeout.aborted)
       return fail("生成超过 120 秒，已结束等待。请缩小需求后重试。", 504);
-    if (request.signal.aborted) return fail("本次生成已取消。", 499);
+    if (request.signal.aborted || cancellation?.aborted) return fail("本次生成已取消。", 499);
     return fail("无法连接模型服务或读取生成结果，请稍后重试。", 502);
   }
 }
