@@ -1,0 +1,3 @@
+
+> atoms@0.1.0 lint /Users/gaowenlong/.codex/worktrees/m4-home-entry/atoms
+> eslint

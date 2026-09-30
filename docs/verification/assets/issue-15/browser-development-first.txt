@@ -1,0 +1,179 @@
+
+> atoms@0.1.0 test:e2e /Users/gaowenlong/.codex/worktrees/m4-home-entry/atoms
+> playwright test --workers\=2 --output\=/tmp/atoms-issue15-local-tests
+
+
+Running 25 tests using 2 workers
+
+(node:22116) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:22115) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓   1 tests/browser/generation.spec.ts:12:5 › 需求留在工作台，等待结束后运行隔离预览并保存项目 (17.4s)
+  ✓   3 tests/browser/generation.spec.ts:59:5 › 失败后保留需求并允许手动重新生成 (18.2s)
+  ✘   2 tests/browser/candidate.spec.ts:40:5 › 同项目多轮使用最新候选；试用增删改、失败、放弃、刷新和关闭重开均保全正式数据 (33.1s)
+(node:23591) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓   4 tests/browser/generation.spec.ts:84:5 › 浏览器等待超时后结束等待并提供重试 (3.5s)
+  ✓   6 tests/browser/generation.spec.ts:102:5 › 生成应用运行异常时提示而非宣称验证通过 (8.0s)
+  ✓   7 tests/browser/generation.spec.ts:125:5 › 手机首页不横向溢出，示例只填入需求 (8.6s)
+  ✓   5 tests/browser/candidate.spec.ts:89:5 › 复制正式数据读取失败不开始空试用；手动重试可成功 (13.5s)
+  ✓   9 tests/browser/candidate.spec.ts:106:5 › 修改超时结束等待，保留已采用应用供继续使用 (5.0s)
+  ✓   8 tests/browser/home-entry.spec.ts:9:7 › 首页与项目网格真实接线、禁用与恢复 1440×900 (19.3s)
+  ✓  10 tests/browser/candidate.spec.ts:117:5 › 明确采用最新候选只保存代码与多轮记录；旧通道失效，正式操作和重开可恢复 (18.5s)
+  ✓  11 tests/browser/home-entry.spec.ts:9:7 › 首页与项目网格真实接线、禁用与恢复 1280×720 (13.9s)
+  ✓  12 tests/browser/candidate.spec.ts:183:5 › 采用事务未完成不显示成功；中止保留候选和此前采用记录，可手动重试 (10.8s)
+  ✘  13 tests/browser/home-entry.spec.ts:90:5 › 空项目入口与存储失败反馈可达 (7.8s)
+(node:25584) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  14 tests/browser/persistence.spec.ts:45:5 › 添加、完成、删除后刷新和关闭重开，恢复需求与业务数据且不调用模型 (10.9s)
+  ✓  15 tests/browser/preview-document.spec.ts:7:7 › 真实 head 装配、数据保存恢复和运行异常反馈：普通完整 HTML (15.5s)
+  ✓  16 tests/browser/persistence.spec.ts:97:5 › 多个项目数据隔离，外部伪造的保存消息被忽略 (30.3s)
+  ✘  17 tests/browser/preview-document.spec.ts:7:7 › 真实 head 装配、数据保存恢复和运行异常反馈：<!-- example <head> --> (34.6s)
+(node:28102) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  18 tests/browser/persistence.spec.ts:136:5 › 业务数据事务中止时明确失败，不把请求成功当作保存成功 (33.8s)
+(node:28887) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  20 tests/browser/persistence.spec.ts:177:5 › 项目写入失败仍展示结果和错误，不宣称项目已保存 (7.5s)
+  ✓  19 tests/browser/preview-document.spec.ts:7:7 › 真实 head 装配、数据保存恢复和运行异常反馈：<!-- <head> --><!----><!-- <body> --> (14.7s)
+  ✓  22 tests/browser/preview-document.spec.ts:63:5 › 恢复旧的不完整 HTML 时明确显示装配失败且不运行 iframe (16.3s)
+  ✓  21 tests/browser/persistence.spec.ts:201:5 › 读取失败禁止覆盖原数据，恢复存储后仍能重开 (24.0s)
+  ✓  23 tests/browser/save-race.spec.ts:7:5 › 真实旧产物保存时禁止新修改，下一次修改确认后立即关闭可恢复 (19.9s)
+  ✓  24 tests/browser/workbench.spec.ts:17:7 › 长内容桌面路径、独立滚动与详情状态保全 1280×720 (19.1s)
+  ✓  25 tests/browser/workbench.spec.ts:17:7 › 长内容桌面路径、独立滚动与详情状态保全 1440×900 (8.9s)
+
+
+  1) tests/browser/candidate.spec.ts:40:5 › 同项目多轮使用最新候选；试用增删改、失败、放弃、刷新和关闭重开均保全正式数据 ─────────────────
+
+    Test timeout of 30000ms exceeded.
+
+    Error: page.goto: Test timeout of 30000ms exceeded.
+    Call log:
+      - navigating to "http://localhost:3115/?project=47fd7fd8-6af4-4c1e-a228-ede68bf661d4", waiting until "load"
+
+
+      61 |   await expect(page.getByText('应用数据已保存', { exact: true })).toHaveCount(0);
+      62 |   // Opening the same saved project while trial is alive proves no durable write occurred.
+    > 63 |   const check = await context.newPage(); await check.goto(url); await originalIntact(check); await check.close();
+         |                                                      ^
+      64 |   const oldChannel = await page.locator('iframe').evaluate(el => JSON.parse((el as HTMLIFrameElement).srcdoc.match(/const \{channel,origin\}=(.*?);/)![1]).channel);
+      65 |   await modify(page, '把筛选放到顶部');
+      66 |   await expect(f.getByRole('heading', { name: '候选第2轮' })).toBeVisible();
+        at /Users/gaowenlong/.codex/worktrees/m4-home-entry/atoms/tests/browser/candidate.spec.ts:63:54
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ../../../../../../tmp/atoms-issue15-local-tests/candidate-同项目多轮使用最新候选；试用增删改、失败、放弃、刷新和关闭重开均保全正式数据/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ../../../../../../tmp/atoms-issue15-local-tests/candidate-同项目多轮使用最新候选；试用增删改、失败、放弃、刷新和关闭重开均保全正式数据/test-failed-2.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../../../../../../tmp/atoms-issue15-local-tests/candidate-同项目多轮使用最新候选；试用增删改、失败、放弃、刷新和关闭重开均保全正式数据/error-context.md
+
+  2) tests/browser/home-entry.spec.ts:90:5 › 空项目入口与存储失败反馈可达 ────────────────────────────────────────
+
+    Error: expect(locator).toContainText(expected) failed
+
+    Locator: getByRole('alert')
+    Expected substring: "此浏览器中找不到该项目"
+    Error: strict mode violation: getByRole('alert') resolved to 2 elements:
+        1) <p role="alert" class="home-entry_error__sweZA">此浏览器中找不到该项目。请确认使用原浏览器和原网址，且没有清除站点数据。</p> aka getByText('此浏览器中找不到该项目。请确认使用原浏览器和原网址，且没有清除站点数据。')
+        2) <div role="alert" aria-live="assertive" id="__next-route-announcer__"></div> aka locator('[id="__next-route-announcer__"]')
+
+    Call log:
+      - Expect "toContainText" getByRole('alert') with timeout 5000ms
+      - waiting for getByRole('alert')
+
+
+      94 |   await expect(page.getByLabel('你想做什么？')).toBeVisible();
+      95 |   await page.goto('/?project=missing');
+    > 96 |   await expect(page.getByRole('alert')).toContainText('此浏览器中找不到该项目');
+         |                                         ^
+      97 |   await page.getByRole('button', { name: '我的项目', exact: true }).click();
+      98 |   await expect(page.getByRole('alert')).toBeVisible();
+      99 | });
+        at /Users/gaowenlong/.codex/worktrees/m4-home-entry/atoms/tests/browser/home-entry.spec.ts:96:41
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ../../../../../../tmp/atoms-issue15-local-tests/home-entry-空项目入口与存储失败反馈可达/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../../../../../../tmp/atoms-issue15-local-tests/home-entry-空项目入口与存储失败反馈可达/error-context.md
+
+  3) tests/browser/persistence.spec.ts:136:5 › 业务数据事务中止时明确失败，不把请求成功当作保存成功 ──────────────────────────
+
+    Test timeout of 30000ms exceeded.
+
+    Error: locator.click: Test timeout of 30000ms exceeded.
+    Call log:
+      - waiting for getByRole('button', { name: '开始生成' })
+        - locator resolved to <button title="开始生成" type="submit" aria-label="开始生成" class="home-entry_send__e2IgL">…</button>
+      - attempting click action
+        - waiting for element to be visible, enabled and stable
+        - element is visible, enabled and stable
+        - scrolling into view if needed
+
+
+      24 |   await page.goto("/");
+      25 |   await page.getByLabel("你想做什么？").fill(name);
+    > 26 |   await page.getByRole("button", { name: "开始生成" }).click();
+         |                                                    ^
+      27 |   await expect(page.getByText("项目已保存", { exact: true })).toBeVisible();
+      28 |   await expect(
+      29 |     page.frameLocator("iframe").getByLabel("任务", { exact: true }),
+        at generate (/Users/gaowenlong/.codex/worktrees/m4-home-entry/atoms/tests/browser/persistence.spec.ts:26:52)
+        at /Users/gaowenlong/.codex/worktrees/m4-home-entry/atoms/tests/browser/persistence.spec.ts:139:3
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ../../../../../../tmp/atoms-issue15-local-tests/persistence-业务数据事务中止时明确失败，不把请求成功当作保存成功/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../../../../../../tmp/atoms-issue15-local-tests/persistence-业务数据事务中止时明确失败，不把请求成功当作保存成功/error-context.md
+
+  4) tests/browser/preview-document.spec.ts:7:7 › 真实 head 装配、数据保存恢复和运行异常反馈：<!-- example <head> --> ─
+
+    Test timeout of 30000ms exceeded.
+
+    Error: locator.click: Test timeout of 30000ms exceeded.
+    Call log:
+      - waiting for getByRole('button', { name: '开始生成' })
+        - locator resolved to <button disabled title="开始生成" type="submit" aria-label="开始生成" class="home-entry_send__e2IgL">…</button>
+      - attempting click action
+        2 × waiting for element to be visible, enabled and stable
+          - element is not enabled
+        - retrying click action
+        - waiting 20ms
+        2 × waiting for element to be visible, enabled and stable
+          - element is not enabled
+        - retrying click action
+          - waiting 100ms
+        28 × waiting for element to be visible, enabled and stable
+           - element is not enabled
+         - retrying click action
+           - waiting 500ms
+
+
+      34 |     await page.goto("/");
+      35 |     await page.getByLabel("你想做什么？").fill("平台装配回归");
+    > 36 |     await page.getByRole("button", { name: "开始生成" }).click();
+         |                                                      ^
+      37 |     const frame = page.frameLocator("iframe");
+      38 |     await expect(frame.locator("#action")).toBeEnabled();
+      39 |     expect(await frame.locator("body").evaluate(() => ({
+        at /Users/gaowenlong/.codex/worktrees/m4-home-entry/atoms/tests/browser/preview-document.spec.ts:36:54
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ../../../../../../tmp/atoms-issue15-local-tests/preview-document-真实-head-装-3a693-运行异常反馈：----example-head----/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../../../../../../tmp/atoms-issue15-local-tests/preview-document-真实-head-装-3a693-运行异常反馈：----example-head----/error-context.md
+
+  4 failed
+    tests/browser/candidate.spec.ts:40:5 › 同项目多轮使用最新候选；试用增删改、失败、放弃、刷新和关闭重开均保全正式数据 ──────────────────
+    tests/browser/home-entry.spec.ts:90:5 › 空项目入口与存储失败反馈可达 ─────────────────────────────────────────
+    tests/browser/persistence.spec.ts:136:5 › 业务数据事务中止时明确失败，不把请求成功当作保存成功 ───────────────────────────
+    tests/browser/preview-document.spec.ts:7:7 › 真实 head 装配、数据保存恢复和运行异常反馈：<!-- example <head> --> ──
+  21 passed (4.2m)
+ ELIFECYCLE  Command failed with exit code 1.

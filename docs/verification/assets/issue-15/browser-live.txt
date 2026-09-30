@@ -1,0 +1,14 @@
+
+> atoms@0.1.0 test:e2e /Users/gaowenlong/.codex/worktrees/m4-home-entry/atoms
+> playwright test home-entry.spec.ts --workers\=1 --output\=/tmp/atoms-issue15-live-tests
+
+
+Running 3 tests using 1 worker
+
+(node:94354) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  1 tests/browser/home-entry.spec.ts:9:7 › 首页与项目网格真实接线、禁用与恢复 1440×900 (6.0s)
+  ✓  2 tests/browser/home-entry.spec.ts:9:7 › 首页与项目网格真实接线、禁用与恢复 1280×720 (15.7s)
+  ✓  3 tests/browser/home-entry.spec.ts:90:5 › 空项目入口与存储失败反馈可达 (3.5s)
+
+  3 passed (28.0s)

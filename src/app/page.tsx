@@ -12,6 +12,7 @@ import {
 } from "@/lib/project-store";
 import type { TrialData } from "@/lib/trial-data";
 import { AppPreview } from "@/components/app-preview";
+import { HomeEntry, type HomeView } from "@/components/home-entry";
 import {
   CLIENT_TIMEOUT_MS,
   MAX_REQUIREMENT_LENGTH,
@@ -51,6 +52,7 @@ export default function Home() {
   const generationSession = useRef<{ record: InitialGeneration; step: RecordStep; saved: boolean; projectId: string; writes: Promise<void> } | null>(null);
   const [previewStep, setPreviewStep] = useState<RecordStep>();
   const [requirement, setRequirement] = useState("");
+  const [homeView, setHomeView] = useState<HomeView>("home");
   const [project, setProject] = useState<Project | null>(null);
   const [task, setTask] = useState<Task | null>(null);
   const [projects, setProjects] = useState<SavedProject[]>([]);
@@ -336,7 +338,7 @@ export default function Home() {
 
   return (
     <div className={project ? "app-shell workbench" : "app-shell"}>
-      <header className="topbar">
+      {project && <header className="topbar">
         <button
           className="brand"
           disabled={busy}
@@ -352,105 +354,23 @@ export default function Home() {
           {project ? <button className="text-button" disabled={busy} onClick={goHome}>← 新建项目 / 已有项目</button> : <a className="text-button" href="#projects">已有项目 ↗</a>}
         </nav>
         <span className="session-badge">无需注册 · 本浏览器保存</span>
-      </header>
+      </header>}
       {!project ? (
-        <main className="home">
-          <div className="home-create">
-          <div className="home-intro">
-            <p className="eyebrow">YOUR NEXT LITTLE APP</p>
-            <h1>
-              把想法，
-              <br />
-              变成<span>用得上的应用。</span>
-            </h1>
-            <p className="intro-copy">
-              描述你需要的功能，AI 为你生成一个轻量应用。
-              <br />
-              生成后，直接在这里试一试。
-            </p>
-          </div>
-          <form
-            className="prompt-card"
-            onSubmit={(event) => {
-              event.preventDefault();
-              if (requirement.trim())
-                void generate({
-                  id: crypto.randomUUID(),
-                  requirement: requirement.trim(),
-                });
-            }}
-          >
-            <label htmlFor="requirement">你想做什么？</label>
-            <textarea
-              id="requirement"
-              value={requirement}
-              onChange={(event) => setRequirement(event.target.value)}
-              maxLength={MAX_REQUIREMENT_LENGTH}
-              placeholder="例如：一个帮我记录今天任务的待办清单，可以添加、完成和删除任务…"
-              required
-            />
-            <div className="prompt-footer">
-              <span>
-                轻量前端应用
-                <span className="character-count">
-                  {requirement.length} / {MAX_REQUIREMENT_LENGTH}
-                </span>
-              </span>
-              <button
-                className="primary-button"
-                disabled={!requirement.trim() || loadingProjects}
-                type="submit"
-              >
-                开始生成 <span aria-hidden="true">↗</span>
-              </button>
-            </div>
-          </form>
-          <div className="examples">
-            <span>从一个小想法开始</span>
-            {examples.map((example) => (
-              <button
-                key={example.name}
-                onClick={() => {
-                  setRequirement(example.text);
-                  document.getElementById("requirement")?.focus();
-                }}
-              >
-                {example.name}
-                <span aria-hidden="true">↗</span>
-              </button>
-            ))}
-          </div>
-          <p className="scope-note">
-            支持轻量前端应用。项目和应用数据自动保存在同一浏览器、同一网址（协议、主机和端口）下；请等待保存成功再离开。清除站点数据、无痕会话结束或浏览器回收存储后可能无法找回，不支持跨设备恢复。
-          </p>
-          </div>
-          <section id="projects" className="project-list" aria-label="已有项目">
-            <h2>已有项目</h2>
-            {loadingProjects && <p role="status">正在读取已有项目…</p>}
-            {listError && (
-              <p className="save-error" role="alert">
-                {listError}
-              </p>
-            )}
-            {!loadingProjects && !listError && projects.length === 0 && (
-              <p>还没有已保存的项目。生成一个应用后，会自动出现在这里。</p>
-            )}
-            {projects.map((saved) => (
-              <button key={saved.id} onClick={() => openProject(saved)}>
-                <span>{saved.title}</span>
-                <small>
-                  更新于 {new Date(saved.updatedAt).toLocaleString("zh-CN")} ·
-                  打开项目 ↗
-                </small>
-              </button>
-            ))}
-          </section>
-          <div className="home-bottom">
-            <span>01 / 描述需求</span>
-            <span>02 / 真实生成</span>
-            <span>03 / 保存与重开</span>
-          </div>
-        </main>
+        <HomeEntry
+          view={homeView}
+          onViewChange={setHomeView}
+          requirement={requirement}
+          onRequirementChange={setRequirement}
+          projects={projects}
+          loadingProjects={loadingProjects}
+          listError={listError}
+          examples={examples}
+          onOpenProject={openProject}
+          onGenerate={() => {
+            if (requirement.trim() && !loadingProjects)
+              void generate({ id: crypto.randomUUID(), requirement: requirement.trim() });
+          }}
+        />
       ) : (
         <main className="workspace">
           <aside className="project-panel">

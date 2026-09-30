@@ -1,0 +1,24 @@
+/* M4 light desktop tokens. Reference/mapping evidence: docs/verification/issue-15.md.
+   Workbench adoption belongs to #18. */
+:root {
+  --ui-font: Arial, "PingFang SC", "Microsoft YaHei", sans-serif;
+  --ui-canvas: #f6f6f6;
+  --ui-sidebar: #ebebe9;
+  --ui-surface: #ffffff;
+  --ui-text: #202020;
+  --ui-secondary: #737373;
+  --ui-border: #e5e5e5;
+  --ui-hover: #e2e2e0;
+  --ui-accent: #4268e8;
+  --ui-focus: #4268e8;
+  --ui-radius-control: 8px;
+  --ui-radius-card: 24px;
+  --ui-shadow-card: 0 2px 6px #00000004;
+  --ui-sidebar-width: 268px;
+  --ui-space-1: 4px;
+  --ui-space-2: 8px;
+  --ui-space-3: 12px;
+  --ui-space-4: 16px;
+  --ui-space-6: 24px;
+  --ui-space-8: 32px;
+}

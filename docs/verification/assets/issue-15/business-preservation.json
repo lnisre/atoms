@@ -1,0 +1,10 @@
+{
+  "src/lib/generation.ts": true,
+  "src/lib/project-store.ts": true,
+  "src/lib/trial-data.ts": true,
+  "src/lib/preview-document.ts": true,
+  "src/lib/html-document.ts": true,
+  "src/components/app-preview.tsx": true,
+  "src/app/api/generate/route.ts": true,
+  "page business functions unchanged": true
+}
