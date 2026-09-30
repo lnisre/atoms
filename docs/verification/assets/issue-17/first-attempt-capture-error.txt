@@ -1,0 +1,4 @@
+response.text: Protocol error (Network.getResponseBody): No data found for resource with given identifier
+Response body is not available for a response that was navigated away from. Read response.body() before triggering any navigation.
+    at round (/private/tmp/issue17-live.mjs:17:69)
+    at async file:///private/tmp/issue17-live.mjs:29:14
