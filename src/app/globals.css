@@ -675,3 +675,15 @@ details p { line-height: 1.8; white-space: pre-wrap; overflow-wrap: anywhere; }
   .candidate-action-row { flex-wrap: wrap; }
   .candidate-actions { max-height: none; }
 }
+
+.generation-record { margin: 18px 0; padding: 16px; border: 1px solid var(--border, #e5e5e5); border-radius: 12px; background: #fff; }
+.generation-record h2, .generation-record h3 { font-size: 14px; margin: 0 0 12px; }
+.assistant-reply { white-space: pre-wrap; overflow-wrap: anywhere; font-size: 14px; line-height: 1.7; }
+.record-note { color: #666; font-size: 12px; line-height: 1.6; }
+.generation-record ol { list-style: none; padding: 0; }
+.generation-record li { border-top: 1px solid #eee; padding: 10px 0; font-size: 13px; }
+.generation-record summary { cursor: pointer; }
+.generation-record summary small { float: right; color: #666; }
+.generation-record li[data-status="failed"] summary small { color: #b42318; }
+.generation-record details p { overflow-wrap: anywhere; font-size: 12px; line-height: 1.6; }
+.event-time { color: #777; }

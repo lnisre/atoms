@@ -154,7 +154,7 @@ test("业务数据事务中止时明确失败，不把请求成功当作保存�
     .frameLocator("iframe")
     .getByRole("button", { name: "添加", exact: true })
     .press("Enter");
-  await expect(page.getByRole("main").getByRole("alert")).toContainText(
+  await expect(page.getByRole("region", { name: "应用预览" }).getByRole("alert")).toContainText(
     "应用数据保存或读取失败",
   );
   await expect(page.getByText("应用数据已保存", { exact: true })).toHaveCount(
@@ -210,7 +210,7 @@ test("读取失败禁止覆盖原数据，恢复存储后仍能重开", async ({
     };
   });
   await page.reload();
-  await expect(page.getByRole("main").getByRole("alert")).toContainText(
+  await expect(page.getByRole("region", { name: "应用预览" }).getByRole("alert")).toContainText(
     "应用数据保存或读取失败",
   );
   await expect(

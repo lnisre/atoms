@@ -22,7 +22,7 @@ test("真实旧产物保存时禁止新修改，下一次修改确认后立即�
     const control = window as typeof window & { releaseSave?: boolean };
     IDBDatabase.prototype.transaction = function (...args: Parameters<typeof original>) {
       const tx = original.apply(this, args);
-      if (args[1] === "readwrite" && !held) {
+      if (args[1] === "readwrite" && tx.objectStoreNames.contains("applicationData") && !held) {
         held = true;
         const store = tx.objectStore("applicationData");
         const pump = () => {

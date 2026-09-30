@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState, type ReactNode } from "react";
+import type { RecordStep } from "@/lib/execution";
 import type { TrialData } from "@/lib/trial-data";
 import { previewDocument } from "@/lib/preview-document";
 import { loadApplicationData, saveApplicationData } from "@/lib/project-store";
@@ -12,6 +13,7 @@ export function AppPreview({
   onRetry,
   trial,
   actions,
+  recordStep,
 }: {
   html: string;
   projectId: string;
@@ -19,7 +21,12 @@ export function AppPreview({
   onRetry: () => void;
   trial?: TrialData;
   actions?: ReactNode;
+  recordStep?: RecordStep;
 }) {
+  // Keep event callbacks fresh without remounting the document on log updates.
+  const recorder = useRef(recordStep);
+  useEffect(() => { recorder.current = recordStep; }, [recordStep]);
+  const loadTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const frame = useRef<HTMLIFrameElement>(null);
   const [document, setDocument] = useState("");
   const [loaded, setLoaded] = useState(false);
@@ -46,7 +53,10 @@ export function AppPreview({
         message?.channel !== channel
       )
         return;
-      if (message.type === "atoms:preview-error") return setFailed(true);
+      if (message.type === "atoms:preview-error") {
+        recorder.current?.("preview-runtime", "预览运行错误", "failed", "预览报告脚本异常；未将模型说明作为运行检查依据。");
+        return setFailed(true);
+      }
       if (message.type === "atoms:storage-error")
         return fail(
           "应用数据保存或读取失败，请保留页面；刷新可能丢失未保存的修改。",
@@ -66,8 +76,12 @@ export function AppPreview({
       );
       setStorageError(false);
       // Serialize calls so rapid changes cannot overwrite newer state with older state.
+      const recordOperation = recorder.current;
       queue = queue.then(async () => {
         if (disposed) return;
+        const stepId = `data-${message.id}`;
+        const label = message.method === "load" ? "读取应用数据" : "保存应用数据";
+        recordOperation?.(stepId, label, "started", "通过平台接口访问本项目的正式业务数据。");
         try {
           if (trial && trial.projectId !== projectId)
             throw new Error("试用数据与项目不匹配，已阻止读写。");
@@ -102,6 +116,7 @@ export function AppPreview({
             }
             hasData = true;
           }
+          recordOperation?.(stepId, label, "completed", message.method === "load" ? "读取已完成；未复制业务数据到执行记录。" : "正式业务数据事务已提交。");
           if (disposed) return;
           pending--;
           source.postMessage(
@@ -128,6 +143,7 @@ export function AppPreview({
             error instanceof Error && !error.message.startsWith("浏览器")
               ? error.message
               : "应用数据保存或读取失败，请保留页面并检查浏览器存储权限或空间；刷新可能丢失未保存的修改。";
+          recordOperation?.(stepId, label, "failed", detail);
           fail(detail);
           if (!disposed)
             source.postMessage(
@@ -152,15 +168,25 @@ export function AppPreview({
     window.addEventListener("message", receive);
     window.addEventListener("beforeunload", beforeUnload);
     // Mount only after the listener exists: a generated script may load state immediately.
+    recorder.current?.("preview-assemble", "装配隔离预览", "started", "向结构合格的完整 HTML 注入平台数据接口与隔离策略。");
     try {
       setDocument(previewDocument(html, channel, window.location.origin));
+      recorder.current?.("preview-assemble", "装配隔离预览", "completed", "完整预览文档已装配；未验证业务功能。");
+      recorder.current?.("preview-load", "载入隔离预览", "started", "将完整文档载入 sandbox iframe。");
+      loadTimer.current = setTimeout(() => {
+        if (disposed) return;
+        setFailed(true);
+        recorder.current?.("preview-load", "载入隔离预览", "failed", "15 秒内未观察到 iframe 载入完成，请检查预览或重新生成。");
+      }, 15_000);
     } catch {
+      recorder.current?.("preview-assemble", "装配隔离预览", "failed", "HTML 结构无法装配，未运行预览。");
       setDocument("");
       setFailed(true);
       fail("应用 HTML 结构不完整，无法装配预览；请重新生成。");
     }
     return () => {
       disposed = true;
+      if (loadTimer.current) clearTimeout(loadTimer.current);
       window.removeEventListener("message", receive);
       window.removeEventListener("beforeunload", beforeUnload);
     };
@@ -195,7 +221,11 @@ export function AppPreview({
           sandbox="allow-scripts"
           referrerPolicy="no-referrer"
           srcDoc={document}
-          onLoad={() => setLoaded(true)}
+          onLoad={() => {
+            if (loadTimer.current) clearTimeout(loadTimer.current);
+            setLoaded(true);
+            recorder.current?.("preview-load", "载入隔离预览", "completed", "已观察到 iframe load 事件；请实际操作验证业务功能。");
+          }}
         />
       )}
     </section>

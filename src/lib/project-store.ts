@@ -1,3 +1,4 @@
+import type { ExecutionEvent, InitialGeneration } from "./execution";
 import type { GenerationResult } from "./generation";
 
 export type ModificationRecord = {
@@ -14,6 +15,7 @@ export type SavedProject = {
   updatedAt: string;
   result: GenerationResult;
   modificationRecords?: ModificationRecord[];
+  initialGeneration?: InitialGeneration;
 };
 
 // Keep the database name/version stable across compatible deployments.
@@ -156,4 +158,21 @@ export function saveApplicationData(projectId: string, state: unknown) {
       };
     },
   );
+}
+
+// Read/append in the same transaction. Never put a stale project snapshot after
+// a preview save or adoption; neither code nor applicationData is an input here.
+export function appendGenerationEvents(projectId: string, taskId: string, events: ExecutionEvent[]) {
+  return transaction<void>(["projects"], "readwrite", tx => {
+    const projects = tx.objectStore("projects");
+    projects.get(projectId).onsuccess = event => {
+      const current: SavedProject | undefined = (event.target as IDBRequest).result;
+      if (!current?.initialGeneration || current.initialGeneration.taskId !== taskId) return tx.abort();
+      const existing = current.initialGeneration.events;
+      const keys = new Set(existing.map(item => `${item.source}:${item.sequence}`));
+      const additions = events.filter(item => item.taskId === taskId && !keys.has(`${item.source}:${item.sequence}`));
+      try { projects.put({ ...current, initialGeneration: { ...current.initialGeneration, events: [...existing, ...additions] } }); }
+      catch { tx.abort(); }
+    };
+  });
 }

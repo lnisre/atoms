@@ -61,13 +61,22 @@ document.getElementById('error').onclick=()=>{throw new Error('controlled runtim
 }
 
 test("恢复旧的不完整 HTML 时明确显示装配失败且不运行 iframe", async ({ page }) => {
-  await page.route("**/api/generate", route => route.fulfill({ json: {
-    html: "<!DOCTYPE html><html><!-- <head> --><body>旧的不完整结果</body></html>",
-    model: "controlled-legacy-fixture", generatedAt: new Date().toISOString(), durationMs: 1,
-  } }));
   await page.goto("/");
-  await page.getByLabel("你想做什么？").fill("旧项目装配失败回归");
-  await page.getByRole("button", { name: "开始生成" }).click();
+  await expect(page.getByRole("button", { name: "开始生成" })).toBeDisabled();
+  await page.evaluate(async () => {
+    const db = await new Promise<IDBDatabase>(resolve => { const request = indexedDB.open("atoms-projects", 1); request.onsuccess = () => resolve(request.result); });
+    await new Promise<void>((resolve, reject) => {
+      const tx = db.transaction("projects", "readwrite");
+      tx.oncomplete = () => resolve(); tx.onabort = () => reject(new Error("fixture failed"));
+      tx.objectStore("projects").put({ id: "legacy-invalid", requirement: "旧项目装配失败回归", title: "旧项目", updatedAt: new Date().toISOString(), result: {
+        html: "<!DOCTYPE html><html><!-- <head> --><body>旧的不完整结果</body></html>",
+        model: "controlled-legacy-fixture", generatedAt: new Date().toISOString(), durationMs: 1,
+      } });
+    });
+    db.close();
+  });
+  await page.goto("/?project=legacy-invalid");
+  await expect(page.getByRole("region", { name: "首次生成记录" })).toHaveCount(0);
   await expect(page.locator(".data-status")).toContainText("无法装配预览");
   await expect(page.locator("iframe")).toHaveCount(0);
   await page.reload();

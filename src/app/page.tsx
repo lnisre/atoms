@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import {
+  appendGenerationEvents,
   listProjects,
   loadApplicationData,
   saveProject,
@@ -16,6 +17,10 @@ import {
   MAX_REQUIREMENT_LENGTH,
   type GenerationResult,
 } from "@/lib/generation";
+
+import { createRecorder, type InitialGeneration, type RecordStep } from "@/lib/execution";
+import { readGeneration } from "@/lib/generation-client";
+import { GenerationRecord } from "@/components/generation-record";
 
 type Project = { id: string; requirement: string };
 type Task =
@@ -39,6 +44,12 @@ const examples = [
 ];
 
 export default function Home() {
+  const [generationRecord, setGenerationRecord] = useState<InitialGeneration | null>(null);
+  const [logSavePending, setLogSavePending] = useState(false);
+  const pendingRecordWrites = useRef(0);
+  const [logSaveError, setLogSaveError] = useState(false);
+  const generationSession = useRef<{ record: InitialGeneration; step: RecordStep; saved: boolean; projectId: string; writes: Promise<void> } | null>(null);
+  const [previewStep, setPreviewStep] = useState<RecordStep>();
   const [requirement, setRequirement] = useState("");
   const [project, setProject] = useState<Project | null>(null);
   const [task, setTask] = useState<Task | null>(null);
@@ -72,6 +83,8 @@ export default function Home() {
         const id = new URLSearchParams(window.location.search).get("project");
         const current = saved.find((item) => item.id === id);
         if (current) {
+          generationSession.current = null;
+          setGenerationRecord(current.initialGeneration ?? null);
           setProject(current);
           setRecords(current.modificationRecords ?? []);
           setTask({ status: "complete", result: current.result });
@@ -106,6 +119,10 @@ export default function Home() {
   }
 
   function openProject(saved: SavedProject) {
+    generationSession.current = null;
+    setPreviewStep(undefined);
+    setGenerationRecord(saved.initialGeneration ?? null);
+    setLogSaveError(false);
     discardChanges();
     setProject(saved);
     setRecords(saved.modificationRecords ?? []);
@@ -126,6 +143,9 @@ export default function Home() {
     )
       return;
     discardChanges();
+    generationSession.current = null;
+    setPreviewStep(undefined);
+    setGenerationRecord(null);
     setProject(null);
     setTask(null);
     setProjectSave("unsaved");
@@ -154,7 +174,7 @@ export default function Home() {
   useEffect(() => () => active.current?.abort(), []);
   useEffect(() => {
     const beforeUnload = (event: BeforeUnloadEvent) => {
-      if (adoptionPending.current) {
+      if (adoptionPending.current || pendingRecordWrites.current > 0) {
         event.preventDefault();
         event.returnValue = "";
       }
@@ -175,33 +195,57 @@ export default function Home() {
     window.history.replaceState(null, "", "/");
     setTask({ status: "waiting" });
     setSeconds(0);
+    const taskId = crypto.randomUUID();
+    const record: InitialGeneration = { taskId, startedAt: new Date().toISOString(), assistantReply: null, events: [] };
+    const session = { record, step: null as unknown as RecordStep, saved: false, projectId: nextProject.id, writes: Promise.resolve() };
+    generationSession.current = session;
+    setGenerationRecord({ ...record });
+    setLogSaveError(false);
+    const append = (event: InitialGeneration["events"][number]) => {
+      record.events = [...record.events, event];
+      if (generationSession.current === session) setGenerationRecord({ ...record });
+      if (session.saved) {
+        const events = [...record.events];
+        pendingRecordWrites.current++;
+        setLogSavePending(true);
+        session.writes = session.writes.then(() => appendGenerationEvents(nextProject.id, taskId, events)).then(() => {
+          if (generationSession.current === session) setLogSaveError(false);
+        }).catch(() => {
+          if (generationSession.current === session) setLogSaveError(true);
+        }).finally(() => {
+          pendingRecordWrites.current--;
+          setLogSavePending(pendingRecordWrites.current > 0);
+        });
+      }
+    };
+    session.step = createRecorder(taskId, "browser", append);
+    setPreviewStep(() => session.step);
+    session.step("transport", "接收生成结果", "started", "向服务端提交需求并持续读取实际执行事件。");
     const timer = setTimeout(() => controller.abort(), CLIENT_TIMEOUT_MS);
     try {
       const response = await fetch("/api/generate", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json", Accept: "application/x-ndjson", "X-Atoms-Task-Id": taskId },
         body: JSON.stringify({ requirement: nextProject.requirement }),
         signal: controller.signal,
       });
-      const data = await response.json().catch(() => null);
-      if (!response.ok)
-        throw new Error(data?.error || "生成服务未能完成请求，请稍后重试。");
-      if (
-        !data ||
-        typeof data.html !== "string" ||
-        typeof data.durationMs !== "number"
-      )
-        throw new Error("生成结果不完整，请重新发起。");
+      const { result: data, assistantReply } = await readGeneration(response, taskId, append);
+      record.assistantReply = assistantReply;
+      session.step("transport", "接收生成结果", "completed", "完整结果与正常传输终态已收到。");
       setTask({ status: "complete", result: data });
       setProjectSave("saving");
       const saved: SavedProject = {
         ...nextProject,
         title: nextProject.requirement.slice(0, 48),
         result: data,
+        initialGeneration: record,
         updatedAt: new Date().toISOString(),
       };
+      session.step("project-save", "保存项目与助手回复", "started", "写入本浏览器项目存储，等待事务提交。");
       try {
         await saveProject(saved);
+        session.saved = true;
+        session.step("project-save", "保存项目与助手回复", "completed", "项目、HTML、助手回复及已有执行记录已提交；后续步骤独立追加。");
         setProjectSave("saved");
         setProjects((items) => [
           saved,
@@ -213,9 +257,11 @@ export default function Home() {
           `?project=${encodeURIComponent(saved.id)}`,
         );
       } catch {
+        session.step("project-save", "保存项目与助手回复", "failed", "浏览器存储未提交，当前产物仅留在页面中。");
         setProjectSave("failed");
       }
     } catch (error) {
+      session.step("transport", "接收生成结果", "failed", controller.signal.aborted ? "等待超时，本次请求已结束。" : error instanceof Error ? error.message : "连接失败，未取得完整结果。");
       setTask({
         status: "failed",
         error: controller.signal.aborted
@@ -234,6 +280,7 @@ export default function Home() {
     if (active.current || adoptionPending.current || !project || task?.status !== "complete" || projectSave !== "saved" || !modification.trim()) return;
     const controller = new AbortController();
     active.current = controller;
+    setPreviewStep(undefined);
     const change = modification.trim();
     setModifying(true);
     setModificationError("");
@@ -272,6 +319,7 @@ export default function Home() {
     setAdoptionError("");
     try {
       const saved = await adoptCandidate(project.id, candidate.result, dialogue);
+      setPreviewStep(undefined);
       setTask({ status: "complete", result: saved.result });
       setRecords(saved.modificationRecords ?? []);
       setProjects(items => [saved, ...items.filter(item => item.id !== saved.id)]);
@@ -419,10 +467,11 @@ export default function Home() {
                   <span className={initialBusy ? "spinner" : "state-symbol"} aria-hidden="true">{initialBusy ? "" : task?.status === "failed" ? "!" : "✓"}</span>
                   <h2>{initialBusy ? "正在生成应用" : task?.status === "failed" ? "生成未完成" : restored ? "已恢复保存的应用" : "代码已生成"}</h2>
                 </div>
-                {initialBusy && <><p>已提交模型服务，正在等待完整结果。生成完成后会自动展示预览。</p><p className="elapsed">已等待 {seconds} 秒 · 最多约 2 分钟</p></>}
+                {initialBusy && <><p>正在处理需求，实际进展见平台执行记录。完整结果保存后会展示预览。</p><p className="elapsed">已等待 {seconds} 秒 · 最多约 2 分钟</p></>}
                 {task?.status === "failed" && <><p role="alert">{task.error}</p><button className="primary-button" onClick={() => void generate(project)}>重新生成</button></>}
                 {task?.status === "complete" && <p>{restored ? "已读取保存的需求和代码，没有重新调用模型。" : "现在可以在预览中操作应用。生成完成不代表所有功能都已验证。"}</p>}
               </section>
+              {generationRecord && <GenerationRecord record={generationRecord} live={!restored && task?.status !== "failed"} pending={task?.status === "waiting"} saveError={logSaveError} saving={logSavePending} />}
               {dialogue.length > 0 && <section className="current-dialogue">
                 <h2>本轮对话 <span>最新在前</span></h2>
                 <ol aria-label="本轮对话">{dialogue.map((change, index) => ({ change, index })).reverse().map(({ change, index }) => <li key={index}><small>第 {index + 1} 轮候选已生成 · 未采用</small><p>{change}</p></li>)}</ol>
@@ -463,6 +512,7 @@ export default function Home() {
             <AppPreview
               key={project.id + task.result.generatedAt + (candidate ? `:trial:${candidate.revision}` : ":adopted")}
               html={(candidate?.result ?? task.result).html}
+              recordStep={!candidate ? previewStep : undefined}
               trial={candidate?.trial}
               actions={candidate && <div className="candidate-actions" aria-label="候选操作">
                 <div className="candidate-action-row"><strong>第 {candidate.revision} 轮候选 · 等待采用</strong><div>
