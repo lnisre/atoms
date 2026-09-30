@@ -161,3 +161,18 @@ test("新项目进入 M2 多轮修改与采用后保留首次说明，日志不�
   await expect(page.locator(".assistant-reply")).toHaveText(explanation);
   expect(calls).toBe(3);
 });
+
+
+test("真实 Next.js 请求代理可进入流接口，校验失败不调用模型", async ({ request }) => {
+  const response = await request.post("/api/generate", {
+    headers: { Accept: "application/x-ndjson", "X-Atoms-Task-Id": "http-entry-regression" },
+    data: { requirement: "" },
+  });
+  expect(response.status()).toBe(200);
+  expect(response.headers()["content-type"]).toContain("application/x-ndjson");
+  const events = (await response.text()).trim().split("\n").map(line => JSON.parse(line));
+  expect(events.map(item => item.type)).toEqual(["step", "step", "error"]);
+  expect(events[0].event.stepId).toBe("context");
+  expect(events[1].event.status).toBe("failed");
+  expect(events[2].error).toContain("请输入");
+});
