@@ -2,8 +2,8 @@
    Workbench adoption belongs to #18. */
 :root {
   --ui-font: Arial, "PingFang SC", "Microsoft YaHei", sans-serif;
-  --ui-canvas: #f7f7f7;
-  --ui-sidebar: #eeeeec;
+  --ui-canvas: #f6f6f6;
+  --ui-sidebar: #ebebe9;
   --ui-surface: #ffffff;
   --ui-text: #202020;
   --ui-secondary: #737373;

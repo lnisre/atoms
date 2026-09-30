@@ -33,16 +33,16 @@
 .topActions { position: absolute; right: 20px; top: 52px; }
 .shell .balance { display: flex; align-items: center; gap: 5px; border: 1px solid var(--ui-border); border-radius: 20px; padding: 6px 12px; font-size: 12px; }
 .balance svg { width: 15px; }
-.hero { max-width: 768px; width: calc(100% - 96px); margin: 0 auto; padding-top: 72px; }
+.hero { max-width: 720px; width: calc(100% - 96px); margin: 0 auto; padding-top: 72px; }
 .notice { display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 12px; color: #858585; background: #ededed; border-radius: 20px; width: fit-content; max-width: 100%; padding: 7px 16px; margin: 0 auto 22px; }
 .avatars { display: flex; justify-content: center; height: 48px; padding-left: 7px; }
 .avatars svg { width: 46px; height: 48px; margin-left: -7px; }
 .avatars svg:first-child { z-index: 8; } .avatars svg:nth-child(2) { z-index: 7; } .avatars svg:nth-child(3) { z-index: 6; } .avatars svg:nth-child(4) { z-index: 5; } .avatars svg:nth-child(5) { z-index: 4; } .avatars svg:nth-child(6) { z-index: 3; } .avatars svg:nth-child(7) { z-index: 2; }
-.hero h1 { margin: 18px 0 26px; text-align: center; font-size: 32px; font-weight: 600; line-height: 1.4; letter-spacing: -.7px; }
+.hero h1 { margin: 18px 0 22px; text-align: center; font-size: 32px; font-weight: 600; line-height: 1.2; letter-spacing: -.7px; }
 .composerGroup { border-radius: var(--ui-radius-card); background: #f0f0f0; }
 .composer { border: 1px solid var(--ui-border); border-radius: var(--ui-radius-card); padding: 16px; background: var(--ui-surface); box-shadow: var(--ui-shadow-card); }
 .composer:focus-within { border-color: #aab9ea; box-shadow: 0 0 0 3px #4268e80a; }
-.composer textarea { display: block; border: 0; outline: 0; background: transparent; width: 100%; min-height: 65px; height: 65px; max-height: 220px; resize: vertical; color: var(--ui-text); font: inherit; font-size: 16px; line-height: 1.6; padding: 0; }
+.composer textarea { display: block; border: 0; outline: 0; background: transparent; width: 100%; min-height: 52px; height: 52px; max-height: 220px; resize: vertical; color: var(--ui-text); font: inherit; font-size: 16px; line-height: 1.6; padding: 0; }
 .composer textarea::placeholder { color: #999; }
 .composerFooter { display: flex; align-items: center; gap: 8px; margin-top: 12px; }
 .shell .roundButton { width: 32px; height: 32px; display: grid; place-items: center; border: 1px solid #f1f1f1; border-radius: 50%; padding: 0; }
@@ -65,7 +65,7 @@
 .homeNotes summary { font-size: 11px; color: var(--ui-secondary); padding: 3px 0; font-weight: 400; }
 .homeNotes details p { max-width: 600px; margin: 6px auto; }
 .projects { margin: 0 32px 32px; border-radius: var(--ui-radius-card); background: var(--ui-surface); padding: 28px 32px; }
-.homeProjects { margin-top: 104px; }
+.homeProjects { margin-top: 76px; }
 .allProjects { margin-top: 56px; min-height: calc(100dvh - 168px); }
 .allProjects h1 { font-size: 24px; font-weight: 600; margin: 0 0 28px; }
 .projectToolbar { display: flex; align-items: center; gap: 24px; min-height: 36px; margin-bottom: 26px; }

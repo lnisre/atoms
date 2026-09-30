@@ -1,0 +1,36 @@
+
+> atoms@0.1.0 test:e2e /Users/gaowenlong/.codex/worktrees/m4-home-entry/atoms
+> playwright test --workers\=1 --output\=/tmp/atoms-issue15-production-tests
+
+
+Running 25 tests using 1 worker
+
+(node:46070) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓   1 tests/browser/candidate.spec.ts:40:5 › 同项目多轮使用最新候选；试用增删改、失败、放弃、刷新和关闭重开均保全正式数据 (4.6s)
+  ✓   2 tests/browser/candidate.spec.ts:89:5 › 复制正式数据读取失败不开始空试用；手动重试可成功 (1.1s)
+  ✓   3 tests/browser/candidate.spec.ts:106:5 › 修改超时结束等待，保留已采用应用供继续使用 (632ms)
+  ✓   4 tests/browser/candidate.spec.ts:117:5 › 明确采用最新候选只保存代码与多轮记录；旧通道失效，正式操作和重开可恢复 (4.7s)
+  ✓   5 tests/browser/candidate.spec.ts:183:5 › 采用事务未完成不显示成功；中止保留候选和此前采用记录，可手动重试 (5.1s)
+  ✓   6 tests/browser/generation.spec.ts:12:5 › 需求留在工作台，等待结束后运行隔离预览并保存项目 (812ms)
+  ✓   7 tests/browser/generation.spec.ts:59:5 › 失败后保留需求并允许手动重新生成 (633ms)
+  ✓   8 tests/browser/generation.spec.ts:84:5 › 浏览器等待超时后结束等待并提供重试 (516ms)
+  ✓   9 tests/browser/generation.spec.ts:102:5 › 生成应用运行异常时提示而非宣称验证通过 (526ms)
+  ✓  10 tests/browser/generation.spec.ts:125:5 › 手机首页不横向溢出，示例只填入需求 (438ms)
+  ✓  11 tests/browser/home-entry.spec.ts:9:7 › 首页与项目网格真实接线、禁用与恢复 1440×900 (1.6s)
+  ✓  12 tests/browser/home-entry.spec.ts:9:7 › 首页与项目网格真实接线、禁用与恢复 1280×720 (1.4s)
+  ✓  13 tests/browser/home-entry.spec.ts:90:5 › 空项目入口与存储失败反馈可达 (509ms)
+  ✓  14 tests/browser/persistence.spec.ts:45:5 › 添加、完成、删除后刷新和关闭重开，恢复需求与业务数据且不调用模型 (1.3s)
+  ✓  15 tests/browser/persistence.spec.ts:97:5 › 多个项目数据隔离，外部伪造的保存消息被忽略 (1.5s)
+  ✓  16 tests/browser/persistence.spec.ts:136:5 › 业务数据事务中止时明确失败，不把请求成功当作保存成功 (722ms)
+  ✓  17 tests/browser/persistence.spec.ts:177:5 › 项目写入失败仍展示结果和错误，不宣称项目已保存 (502ms)
+  ✓  18 tests/browser/persistence.spec.ts:201:5 › 读取失败禁止覆盖原数据，恢复存储后仍能重开 (1.0s)
+  ✓  19 tests/browser/preview-document.spec.ts:7:7 › 真实 head 装配、数据保存恢复和运行异常反馈：普通完整 HTML (721ms)
+  ✓  20 tests/browser/preview-document.spec.ts:7:7 › 真实 head 装配、数据保存恢复和运行异常反馈：<!-- example <head> --> (757ms)
+  ✓  21 tests/browser/preview-document.spec.ts:7:7 › 真实 head 装配、数据保存恢复和运行异常反馈：<!-- <head> --><!----><!-- <body> --> (649ms)
+  ✓  22 tests/browser/preview-document.spec.ts:63:5 › 恢复旧的不完整 HTML 时明确显示装配失败且不运行 iframe (624ms)
+  ✓  23 tests/browser/save-race.spec.ts:7:5 › 真实旧产物保存时禁止新修改，下一次修改确认后立即关闭可恢复 (1.5s)
+  ✓  24 tests/browser/workbench.spec.ts:17:7 › 长内容桌面路径、独立滚动与详情状态保全 1280×720 (3.2s)
+  ✓  25 tests/browser/workbench.spec.ts:17:7 › 长内容桌面路径、独立滚动与详情状态保全 1440×900 (2.8s)
+
+  25 passed (42.6s)

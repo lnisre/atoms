@@ -1,0 +1,19 @@
+
+> atoms@0.1.0 test:e2e /Users/gaowenlong/.codex/worktrees/m4-home-entry/atoms
+> playwright test home-entry.spec.ts generation.spec.ts --workers\=1 --output\=/tmp/atoms-issue15-final-entry
+
+
+Running 8 tests using 1 worker
+
+(node:65971) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  1 tests/browser/generation.spec.ts:12:5 › 需求留在工作台，等待结束后运行隔离预览并保存项目 (2.1s)
+  ✓  2 tests/browser/generation.spec.ts:59:5 › 失败后保留需求并允许手动重新生成 (1.5s)
+  ✓  3 tests/browser/generation.spec.ts:84:5 › 浏览器等待超时后结束等待并提供重试 (830ms)
+  ✓  4 tests/browser/generation.spec.ts:102:5 › 生成应用运行异常时提示而非宣称验证通过 (898ms)
+  ✓  5 tests/browser/generation.spec.ts:125:5 › 手机首页不横向溢出，示例只填入需求 (1.1s)
+  ✓  6 tests/browser/home-entry.spec.ts:9:7 › 首页与项目网格真实接线、禁用与恢复 1440×900 (2.6s)
+  ✓  7 tests/browser/home-entry.spec.ts:9:7 › 首页与项目网格真实接线、禁用与恢复 1280×720 (3.5s)
+  ✓  8 tests/browser/home-entry.spec.ts:90:5 › 空项目入口与存储失败反馈可达 (2.4s)
+
+  8 passed (19.0s)
