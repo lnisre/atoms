@@ -1,0 +1,74 @@
+
+Running 7 tests using 1 worker
+
+(node:12619) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  1 tests/browser/first-generation.spec.ts:92:5 › 正文缺失降级保留应用，缺失状态也能恢复且不补调模型 (8.3s)
+  ✓  2 tests/browser/first-generation.spec.ts:102:5 › 传输中断、任务错配和无效 HTML 均结束等待，不保存或运行产物 (6.1s)
+  ✓  3 tests/browser/first-generation.spec.ts:138:5 › 新项目进入 M2 多轮修改与采用后保留首次说明，日志不覆盖采用代码 (4.2s)
+  ✘  4 tests/browser/first-generation.spec.ts:166:5 › 真实 Next.js 请求代理可进入流接口，校验失败不调用模型 (1.0m)
+(node:15968) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  5 tests/browser/modification-records.spec.ts:88:5 › 采用事务失败不保存消息或代码，保留候选可重试，缺正文也可采用 (11.1s)
+  ✘  6 tests/browser/modification-records.spec.ts:120:5 › 真实HTTP修改入口验证失败返回任务终态，不触发模型 (1.0m)
+(node:19058) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  7 tests/browser/preview-document.spec.ts:63:5 › 恢复旧的不完整 HTML 时明确显示装配失败且不运行 iframe (6.5s)
+
+
+  1) tests/browser/first-generation.spec.ts:166:5 › 真实 Next.js 请求代理可进入流接口，校验失败不调用模型 ────────────────
+
+    Test timeout of 60000ms exceeded.
+
+    Error: apiRequestContext.post: Request context disposed.
+    Call log:
+      - → POST https://v0-test0-nine.vercel.app/api/generate
+        - user-agent: Playwright/1.63.0 (arm64; macOS 15.6) node/24.18
+        - accept: application/x-ndjson
+        - accept-encoding: gzip,deflate,br
+        - X-Atoms-Task-Id: http-entry-regression
+        - content-type: application/json
+        - content-length: 18
+
+
+      165 |
+      166 | test("真实 Next.js 请求代理可进入流接口，校验失败不调用模型", async ({ request }) => {
+    > 167 |   const response = await request.post("/api/generate", {
+          |                                  ^
+      168 |     headers: { Accept: "application/x-ndjson", "X-Atoms-Task-Id": "http-entry-regression" },
+      169 |     data: { requirement: "" },
+      170 |   });
+        at /Users/gaowenlong/.codex/worktrees/m4-workbench/atoms/tests/browser/first-generation.spec.ts:167:34
+
+    Error Context: test-results/first-generation-真实-Next-js-请求代理可进入流接口，校验失败不调用模型/error-context.md
+
+  2) tests/browser/modification-records.spec.ts:120:5 › 真实HTTP修改入口验证失败返回任务终态，不触发模型 ─────────────────
+
+    Test timeout of 60000ms exceeded.
+
+    Error: apiRequestContext.post: Request context disposed.
+    Call log:
+      - → POST https://v0-test0-nine.vercel.app/api/generate
+        - user-agent: Playwright/1.63.0 (arm64; macOS 15.6) node/24.18
+        - accept: application/x-ndjson
+        - accept-encoding: gzip,deflate,br
+        - X-Atoms-Task-Id: http-modification
+        - content-type: application/json
+        - content-length: 78
+
+
+      119 |
+      120 | test('真实HTTP修改入口验证失败返回任务终态，不触发模型',async({request})=>{
+    > 121 |   const response=await request.post('/api/generate',{headers:{Accept:'application/x-ndjson','X-Atoms-Task-Id':'http-modification'},data:{requirement:'原应用',modification:'修改',baseHtml:'',context:[]}});
+          |                                ^
+      122 |   expect(response.status()).toBe(200);const events=(await response.text()).trim().split('\n').map(x=>JSON.parse(x));
+      123 |   expect(events.at(-1).type).toBe('error');expect(events.at(-1).taskId).toBe('http-modification');expect(events.at(-2).event.status).toBe('failed');
+      124 | });
+        at /Users/gaowenlong/.codex/worktrees/m4-workbench/atoms/tests/browser/modification-records.spec.ts:121:32
+
+    Error Context: test-results/modification-records-真实HTTP修改入口验证失败返回任务终态，不触发模型/error-context.md
+
+  2 failed
+    tests/browser/first-generation.spec.ts:166:5 › 真实 Next.js 请求代理可进入流接口，校验失败不调用模型 ─────────────────
+    tests/browser/modification-records.spec.ts:120:5 › 真实HTTP修改入口验证失败返回任务终态，不触发模型 ──────────────────
+  5 passed (3.1m)

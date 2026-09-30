@@ -1,0 +1,62 @@
+{
+  ".topbar": {
+    "x": 0,
+    "y": 0,
+    "width": 1280,
+    "height": 44
+  },
+  ".workspace": {
+    "x": 0,
+    "y": 44,
+    "width": 1280,
+    "height": 676
+  },
+  ".project-panel": {
+    "x": 0,
+    "y": 44,
+    "width": 451.828125,
+    "height": 676
+  },
+  ".conversation-scroll": {
+    "x": 0,
+    "y": 44,
+    "width": 451.828125,
+    "height": 510
+  },
+  ".modification-panel": {
+    "x": 9,
+    "y": 584,
+    "width": 433.828125,
+    "height": 127
+  },
+  ".preview-panel": {
+    "x": 451.828125,
+    "y": 44,
+    "width": 819.171875,
+    "height": 667
+  },
+  ".preview-navigation": {
+    "x": 452.828125,
+    "y": 45,
+    "width": 817.171875,
+    "height": 34
+  },
+  ".preview-toolbar": {
+    "x": 452.828125,
+    "y": 177.1875,
+    "width": 817.171875,
+    "height": 31
+  },
+  ".candidate-actions": {
+    "x": 452.828125,
+    "y": 79,
+    "width": 817.171875,
+    "height": 98.1875
+  },
+  "iframe": {
+    "x": 452.828125,
+    "y": 234.1875,
+    "width": 817.171875,
+    "height": 475.8125
+  }
+}

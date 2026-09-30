@@ -46,7 +46,7 @@ for (const viewport of [{ width: 1280, height: 720 }, { width: 1440, height: 900
     for (let round = 0; round < 6; round++) {
       await page.getByLabel('追加修改需求').fill(`本轮修改 ${round}：` + '让布局更清楚且保留数据。'.repeat(18));
       await page.getByRole('button', { name: '生成候选', exact: true }).click();
-      await expect(page.getByLabel('本轮对话').locator('li')).toHaveCount(round + 1);
+      await expect(page.getByLabel('本轮对话').locator(':scope > li')).toHaveCount(round + 1);
     }
     const f = page.frameLocator('iframe');
     await f.getByRole('button', { name: '增加' }).press('Enter');
@@ -59,7 +59,8 @@ for (const viewport of [{ width: 1280, height: 720 }, { width: 1440, height: 900
     await scroll.hover(); await page.mouse.wheel(0, 900);
     await expect.poll(() => scroll.evaluate(el => el.scrollTop)).toBeGreaterThan(0);
     expect(await page.locator('iframe').boundingBox()).toEqual(frameBox);
-    for (const name of ['原需求详情', '较早修改记录（11）', '模型与耗时']) {
+    await page.locator('.project-details > summary').click();
+    for (const name of ['原需求详情', '模型与耗时']) {
       const summary = page.locator('summary').filter({ hasText: name });
       await summary.focus(); await summary.press('Enter');
       await expect(summary.locator('..')).toHaveAttribute('open', '');
@@ -67,10 +68,11 @@ for (const viewport of [{ width: 1280, height: 720 }, { width: 1440, height: 900
     await expect(page.locator('.requirement-block p')).toHaveText(requirement);
     await expect(page.getByText('desktop-fixture')).toBeVisible();
     await page.screenshot({ path: testInfo.outputPath('details.png') });
-    for (const name of ['原需求详情', '较早修改记录（11）', '模型与耗时']) {
+    for (const name of ['原需求详情', '模型与耗时']) {
       const summary = page.locator('summary').filter({ hasText: name });
       await summary.focus(); await summary.press('Enter');
     }
+    await page.locator('.project-details > summary').click();
     const conversationTop = await scroll.evaluate(el => el.scrollTop);
     await f.getByRole('heading').hover(); await page.mouse.wheel(0, 700);
     await expect.poll(() => f.locator('body').evaluate(() => window.scrollY)).toBeGreaterThan(0);
@@ -90,7 +92,7 @@ for (const viewport of [{ width: 1280, height: 720 }, { width: 1440, height: 900
     await expect(f.locator('output')).toHaveText('1');
     await expect(page.getByLabel('已采用修改记录')).toContainText('已采用 6 轮调整');
     await page.getByRole('button', { name: /新建项目/ }).click();
-    await page.getByRole('region', { name: '已有项目' }).getByRole('button').click();
+    await page.getByRole('region', { name: '已有项目' }).getByRole('button', { name: /打开项目/ }).click();
     await expect(page).toHaveURL(url);
     await expect(f.locator('output')).toHaveText('1');
     expect(generations).toBe(7);

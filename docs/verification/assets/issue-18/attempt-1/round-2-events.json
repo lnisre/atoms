@@ -1,0 +1,106 @@
+[
+  {
+    "type": "step",
+    "event": {
+      "taskId": "69b07125-68d7-4e7d-872a-3355db9d9fe9",
+      "source": "server",
+      "sequence": 1,
+      "stepId": "context",
+      "label": "准备请求与上下文",
+      "status": "started",
+      "detail": "读取并校验本次需求与生成配置。",
+      "at": "2026-09-30T09:14:31.678Z"
+    }
+  },
+  {
+    "type": "step",
+    "event": {
+      "taskId": "69b07125-68d7-4e7d-872a-3355db9d9fe9",
+      "source": "server",
+      "sequence": 2,
+      "stepId": "context",
+      "label": "准备请求与上下文",
+      "status": "completed",
+      "detail": "需求与配置已准备，未执行模型工具调用。",
+      "at": "2026-09-30T09:14:31.689Z"
+    }
+  },
+  {
+    "type": "step",
+    "event": {
+      "taskId": "69b07125-68d7-4e7d-872a-3355db9d9fe9",
+      "source": "server",
+      "sequence": 3,
+      "stepId": "model",
+      "label": "调用模型",
+      "status": "started",
+      "detail": "等待 DeepSeek V4-Flash 的一次完整响应。",
+      "at": "2026-09-30T09:14:31.690Z"
+    }
+  },
+  {
+    "type": "step",
+    "event": {
+      "taskId": "69b07125-68d7-4e7d-872a-3355db9d9fe9",
+      "source": "server",
+      "sequence": 4,
+      "stepId": "model",
+      "label": "调用模型",
+      "status": "completed",
+      "detail": "已收到模型完整响应；接下来提取产物。",
+      "at": "2026-09-30T09:14:37.408Z"
+    }
+  },
+  {
+    "type": "step",
+    "event": {
+      "taskId": "69b07125-68d7-4e7d-872a-3355db9d9fe9",
+      "source": "server",
+      "sequence": 5,
+      "stepId": "extract",
+      "label": "提取生成产物",
+      "status": "started",
+      "detail": "分离应用 HTML 与助手说明，不执行说明内容。",
+      "at": "2026-09-30T09:14:37.408Z"
+    }
+  },
+  {
+    "type": "step",
+    "event": {
+      "taskId": "69b07125-68d7-4e7d-872a-3355db9d9fe9",
+      "source": "server",
+      "sequence": 6,
+      "stepId": "extract",
+      "label": "提取生成产物",
+      "status": "completed",
+      "detail": "已提取 HTML；本次未取得助手说明。",
+      "at": "2026-09-30T09:14:37.409Z"
+    }
+  },
+  {
+    "type": "step",
+    "event": {
+      "taskId": "69b07125-68d7-4e7d-872a-3355db9d9fe9",
+      "source": "server",
+      "sequence": 7,
+      "stepId": "html",
+      "label": "检查 HTML 结构",
+      "status": "started",
+      "detail": "检查唯一完整文档及可安全注入平台接口的 head/body 结构。",
+      "at": "2026-09-30T09:14:37.409Z"
+    }
+  },
+  {
+    "type": "step",
+    "event": {
+      "taskId": "69b07125-68d7-4e7d-872a-3355db9d9fe9",
+      "source": "server",
+      "sequence": 8,
+      "stepId": "html",
+      "label": "检查 HTML 结构",
+      "status": "completed",
+      "detail": "HTML 结构合格；这不代表业务功能已经验证。",
+      "at": "2026-09-30T09:14:37.418Z"
+    }
+  }
+]

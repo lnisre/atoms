@@ -1,0 +1,10 @@
+{
+  "baseline": "f61c929b6c6b8b820feee5abde2ff31370d6a66c",
+  "pageBusinessFunctionsIdentical": true,
+  "pageFunctionsSha256": "66a9130fc3f375a858d47a5e01a765772957a5227f59108745c54f5839106749",
+  "unchangedModules": [
+    "src/lib",
+    "src/app/api"
+  ],
+  "appPreviewOnlyAddsPresentationToolbar": true
+}

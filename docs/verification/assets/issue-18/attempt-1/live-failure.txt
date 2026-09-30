@@ -1,0 +1,14 @@
+Error: expect(received).toBeGreaterThan(expected)
+
+Matcher error: received value must be a number or bigint
+
+Received has value: undefined
+    at ensureActualIsNumber2 (/Users/gaowenlong/Desktop/atoms/node_modules/.pnpm/playwright@1.63.0/node_modules/playwright/lib/matchers/expect.js:5550:19)
+    at ensureNumbers2 (/Users/gaowenlong/Desktop/atoms/node_modules/.pnpm/playwright@1.63.0/node_modules/playwright/lib/matchers/expect.js:5562:11)
+    at Object.toBeGreaterThan (/Users/gaowenlong/Desktop/atoms/node_modules/.pnpm/playwright@1.63.0/node_modules/playwright/lib/matchers/expect.js:11429:5)
+    at invokeMatcher (/Users/gaowenlong/Desktop/atoms/node_modules/.pnpm/playwright@1.63.0/node_modules/playwright/lib/matchers/expect.js:13362:20)
+    at invoke (/Users/gaowenlong/Desktop/atoms/node_modules/.pnpm/playwright@1.63.0/node_modules/playwright/lib/matchers/expect.js:13340:109)
+    at callMatcherAsStep (/Users/gaowenlong/Desktop/atoms/node_modules/.pnpm/playwright@1.63.0/node_modules/playwright/lib/matchers/expect.js:13341:78)
+    at Object.toBeGreaterThan (/Users/gaowenlong/Desktop/atoms/node_modules/.pnpm/playwright@1.63.0/node_modules/playwright/lib/matchers/expect.js:13302:23)
+    at generation (file:///private/tmp/atoms-issue18/live.mjs:21:86)
+    at async file:///private/tmp/atoms-issue18/live.mjs:46:14

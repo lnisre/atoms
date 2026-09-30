@@ -1,0 +1,13 @@
+{
+  "projects": [
+    {
+      "id": "e5052705-847c-4858-be72-2b7d57d172c6",
+      "title": "做一个支持添加、完成、删除任务的待办应用。中文界面，清楚区分已完成和未完成任务，适配手机。",
+      "hash": "71a38e4db294aa49ec209db6edc280ca1fef22a4995fc49298ce00f1f1621439"
+    }
+  ],
+  "dataHash": "8a34b46b8f0a7050f7e9a01561070089013c3c10a09c65deda779495274db253",
+  "calls": 0,
+  "application": "- heading \"待办清单\" [level=1]\n- status: 已就绪\n- group \"按优先级筛选\":\n  - button \"全部\" [pressed]\n  - button \"高优先\"\n  - button \"中优先\"\n  - button \"低优先\"\n- textbox \"新任务内容\":\n  - /placeholder: 添加新任务…\n- button \"添加任务\": 添加\n- group \"选择新任务优先级\":\n  - text: 优先级\n  - button \"高\"\n  - button \"中\"\n  - button \"低\" [pressed]\n- text: 未完成 1\n- list:\n  - listitem:\n    - button \"标记为已完成：真实新产物第一条\"\n    - text: 真实新产物第一条 高\n    - group \"修改优先级：真实新产物第一条\":\n      - button \"设为低优先级：真实新产物第一条\": 低\n      - button \"设为中优先级：真实新产物第一条\": 中\n      - button \"当前优先级：高\" [pressed]: 高\n    - button \"删除任务：真实新产物第一条\"\n- text: 已完成 1\n- list:\n  - listitem:\n    - button \"标记为未完成：M2正式-高优先级保留\"\n    - text: M2正式-高优先级保留 高\n    - group \"修改优先级：M2正式-高优先级保留\":\n      - button \"设为低优先级：M2正式-高优先级保留\": 低\n      - button \"设为中优先级：M2正式-高优先级保留\": 中\n      - button \"当前优先级：高\" [pressed]: 高\n    - button \"删除任务：M2正式-高优先级保留\"\n- text: 🔒 数据仅保存在此浏览器和站点中。清除浏览器站点数据会导致待办丢失，恢复仅限于当前浏览器和站点。",
+  "url": "https://v0-test0-nine.vercel.app/?project=e5052705-847c-4858-be72-2b7d57d172c6"
+}

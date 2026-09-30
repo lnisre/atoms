@@ -1,0 +1,21 @@
+{
+  "url": "https://v0-test0-nine.vercel.app/?project=fe79d7f7-b6ad-4081-b325-eae2d24795b9",
+  "initialCalls": 1,
+  "additionalCalls": 0,
+  "finalState": {
+    "count": 2
+  },
+  "recordHash": "6024eaf00fa300f3e92c9286390fac3741ff19258c8f7af1a58beaf2d32df9cf",
+  "eventCount": 22,
+  "errors": [],
+  "verified": [
+    "old record and data hashes unchanged after deployment",
+    "real HTML and complete explanation from one request",
+    "model-start visible while no iframe exists",
+    "iframe controls work and committed data survives refresh",
+    "complete assistant text and actual saved events restored unchanged",
+    "detail expansion preserves modification input",
+    "full browser close and project card reopen restores {count:2}",
+    "reopening and operation add no generation calls"
+  ]
+}

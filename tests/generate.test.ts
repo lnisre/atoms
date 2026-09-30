@@ -160,3 +160,118 @@ test("注释中的结构标签不能冒充真实 head/body，无法装配时明�
     assert.match((await response.json()).error, /完整 HTML/);
   }
 });
+
+const fullHtml = "<!DOCTYPE html><html><head></head><body>真实生成</body></html>";
+const streamedRequest = () => new Request("http://localhost:3100/api/generate", {
+  method: "POST", headers: { "Content-Type": "application/json", Accept: "application/x-ndjson", "X-Atoms-Task-Id": "test-task", origin: "http://localhost:3100" },
+  body: JSON.stringify({ requirement: "做一个待办应用" }),
+});
+const events = async (response: Response) => (await response.text()).trim().split("\n").map(line => JSON.parse(line));
+
+test("单次请求分离完整正文与 HTML，模型等待期间已传递真实开始事件", async () => {
+  process.env.DEEPSEEK_API_KEY = "test-key";
+  let resolve!: (value: Response) => void;
+  let calls = 0;
+  globalThis.fetch = async (_url, options) => {
+    calls++;
+    const payload = JSON.parse(String(options?.body));
+    assert.match(payload.messages[0].content, /assistantReply/);
+    assert.equal(payload.max_tokens, 12288);
+    return new Promise<Response>(done => { resolve = done; });
+  };
+  const response = await POST(streamedRequest());
+  const reader = response.body!.getReader();
+  const decoder = new TextDecoder();
+  const first = [];
+  while (first.length < 3) first.push(JSON.parse(decoder.decode((await reader.read()).value)));
+  assert.deepEqual(first.map(x => [x.event.stepId, x.event.status]), [["context", "started"], ["context", "completed"], ["model", "started"]]);
+  const assistantReply = "这是本次模型说明，示例 <!DOCTYPE html> 只是文本。\n<script>window.bad=true</script>";
+  resolve(Response.json({ choices: [{ finish_reason: "stop", message: { content: JSON.stringify({ html: fullHtml, assistantReply }) } }] }));
+  let tail = "";
+  while (true) { const item = await reader.read(); if (item.done) break; tail += decoder.decode(item.value); }
+  const rest = tail.trim().split("\n").map(line => JSON.parse(line));
+  assert.equal(calls, 1);
+  assert.equal(rest.at(-1).result.html, fullHtml);
+  assert.equal(rest.at(-1).assistantReply, assistantReply);
+  assert.deepEqual(rest.slice(0,-1).map(x => [x.event.stepId, x.event.status]), [["model", "completed"], ["extract", "started"], ["extract", "completed"], ["html", "started"], ["html", "completed"]]);
+  for (const [index, item] of [...first, ...rest.slice(0,-1)].entries()) {
+    assert.equal(item.event.taskId, "test-task"); assert.equal(item.event.source, "server"); assert.equal(item.event.sequence, index + 1);
+    assert.ok(Number.isFinite(Date.parse(item.event.at)));
+  }
+});
+
+test("缺少或无效正文保留完整应用，不补调模型；超长正文不静默截断", async () => {
+  process.env.DEEPSEEK_API_KEY = "test-key";
+  for (const content of [fullHtml, JSON.stringify({ html: fullHtml }), JSON.stringify({ html: fullHtml, assistantReply: { text: "invalid" } }), JSON.stringify({ html: fullHtml, assistantReply: " " })]) {
+    let calls = 0;
+    globalThis.fetch = async () => { calls++; return Response.json({ choices: [{ finish_reason: "stop", message: { content } }] }); };
+    const result = (await events(await POST(streamedRequest()))).at(-1);
+    assert.equal(result.type, "result"); assert.equal(result.result.html, fullHtml); assert.equal(result.assistantReply, null); assert.equal(calls, 1);
+  }
+  globalThis.fetch = async () => Response.json({ choices: [{ finish_reason: "stop", message: { content: JSON.stringify({ html: fullHtml, assistantReply: "x".repeat(32001) }) } }] });
+  const output = await events(await POST(streamedRequest()));
+  assert.equal(output.at(-1).result.html, fullHtml);
+  assert.equal(output.at(-1).assistantReply, null);
+  assert.ok(output.some(item => item.event?.detail.includes("正文超过 32000 字符限制")));
+});
+
+test("模型、提取、结构失败均发出实际失败与终态，不透传敏感错误", async () => {
+  process.env.DEEPSEEK_API_KEY = "test-secret";
+  const cases = [
+    { response: new Response("test-secret", { status: 401 }), step: "model" },
+    { response: Response.json({ choices: [{ finish_reason: "length", message: { content: fullHtml } }] }), step: "model" },
+    { response: Response.json({ choices: [{ finish_reason: "stop", message: { content: '{"html":' } }] }), step: "extract" },
+    { response: Response.json({ choices: [{ finish_reason: "stop", message: { content: JSON.stringify({ html: "<!DOCTYPE html><html><head></head><body>incomplete", assistantReply: "完整说明" }) } }] }), step: "html" },
+  ];
+  for (const {response, step} of cases) {
+    globalThis.fetch = async () => response;
+    const output = await events(await POST(streamedRequest()));
+    assert.equal(output.at(-2).event.status, "failed"); assert.equal(output.at(-2).event.stepId, step); assert.equal(output.at(-1).type, "error");
+    assert.equal(output.some(x => x.type === "result"), false); assert.doesNotMatch(JSON.stringify(output), /test-secret/);
+  }
+});
+
+test("客户端收到产物后连接异常也不提交成功；取消读取会取消上游", async () => {
+  const { readGeneration } = await import("../src/lib/generation-client");
+  const encoder = new TextEncoder();
+  let interrupt!: () => void;
+  const response = new Response(new ReadableStream({ start(controller) {
+    controller.enqueue(encoder.encode(JSON.stringify({ type: "result", taskId: "client-task", result: { html: fullHtml, model: "test", durationMs: 1, generatedAt: new Date().toISOString() }, assistantReply: "完整说明" }) + "\n"));
+    interrupt = () => controller.error(new Error("connection interrupted"));
+  } }), { headers: { "Content-Type": "application/x-ndjson" } });
+  const pending = readGeneration(response, "client-task", () => {});
+  interrupt();
+  await assert.rejects(pending, /connection interrupted/);
+
+  process.env.DEEPSEEK_API_KEY = "test-key";
+  let aborted = false;
+  globalThis.fetch = async (_url, options) => new Promise((_resolve, reject) => {
+    options!.signal!.addEventListener("abort", () => { aborted = true; reject(new Error("cancelled")); });
+  });
+  const streaming = await POST(streamedRequest());
+  const reader = streaming.body!.getReader();
+  for (let n=0;n<3;n++) await reader.read();
+  await reader.cancel();
+  assert.equal(aborted, true);
+});
+
+test("修改沿用同次正文协议与实时事件，保留完整上下文和缺正文降级", async () => {
+  process.env.DEEPSEEK_API_KEY = "test-key";
+  for (const missing of [false, true]) {
+    let calls = 0;
+    globalThis.fetch = async (_url, options) => {
+      calls++;
+      const payload = JSON.parse(String(options?.body));
+      assert.match(payload.messages[0].content, /assistantReply/);
+      assert.equal(payload.max_tokens, 12288);
+      assert.deepEqual(JSON.parse(payload.messages.at(-1).content).successfulModifications, ["上一轮"]);
+      return Response.json({ choices: [{ finish_reason: "stop", message: { content: JSON.stringify({ html: fullHtml, ...(missing ? {} : { assistantReply: "本轮真实说明" }) }) } }] });
+    };
+    const req = editRequest({ baseHtml: fullHtml, modification: "本轮修改", context: ["上一轮"] });
+    req.headers.set("Accept", "application/x-ndjson"); req.headers.set("X-Atoms-Task-Id", "modification-task");
+    const output = await events(await POST(req));
+    assert.equal(calls, 1); assert.equal(output.at(-1).assistantReply, missing ? null : "本轮真实说明");
+    assert.equal(output.at(-1).result.html, fullHtml);
+    assert.ok(output.filter(x => x.type === "step").every(x => x.event.taskId === "modification-task"));
+  }
+});

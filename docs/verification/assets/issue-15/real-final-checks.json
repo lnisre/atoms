@@ -1,0 +1,24 @@
+{
+  "url": "https://v0-test0-nine.vercel.app/?project=839d8062-8e51-4ad7-8977-a18012712790",
+  "initialCalls": 1,
+  "additionalCalls": 0,
+  "finalData": {
+    "projectId": "839d8062-8e51-4ad7-8977-a18012712790",
+    "state": {
+      "count": 1
+    },
+    "updatedAt": "2026-09-30T06:55:04.989Z"
+  },
+  "errors": [],
+  "verified": [
+    "card reopen after browser close",
+    "mouse increment 0→1→2",
+    "refresh restores 2",
+    "return to previous project entry",
+    "1280 home and project view",
+    "recent entry restores 2",
+    "full browser close and card reopen restores 2",
+    "reset→0 and increment→1 after reopen",
+    "refresh and IndexedDB confirm 1"
+  ]
+}
