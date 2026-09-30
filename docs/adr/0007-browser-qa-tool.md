@@ -1,6 +1,6 @@
 # M5 的受限 QA 工具在用户浏览器的独立页面执行
 
-针对 [#24](https://github.com/lnisre/atoms/issues/24)，选择用户浏览器内的独立 opaque-origin iframe，沿用 M4 `previewDocument` 的 CSP、`window.atoms` 数据接口和保存锁。检查只接收合成样本，父页面使用独立内存数据；不接收项目存储或试用副本。决定落实 [M5 #23](https://github.com/lnisre/atoms/issues/23) 的检查页面独立、页面打开期间执行和无后台续跑边界。本票的入口是确定性资格验证任务，真实团队与生成入口接入留给 #25。目标部署上的往返尚受访问授权阻塞；在补齐证据之前，不宣称 #24 的接入门槛已经完成。
+针对 [#24](https://github.com/lnisre/atoms/issues/24)，选择用户浏览器内的独立 opaque-origin iframe，沿用 M4 `previewDocument` 的 CSP、`window.atoms` 数据接口和保存锁。检查只接收合成样本，父页面使用独立内存数据；不接收项目存储或试用副本。决定落实 [M5 #23](https://github.com/lnisre/atoms/issues/23) 的检查页面独立、页面打开期间执行和无后台续跑边界。本票的入口是确定性资格验证任务，真实团队与生成入口接入留给 #25。已在目标 Vercel Preview 实际验证浏览器请求、执行和结果继续往返；线上证据与此前授权阻塞、失败保留在 #24 验证记录中。
 
 浏览器内方案需要新增受限执行器、私有 MessagePort、代码/计划身份校验和 HTTP 结果继续协议。它复用已部署的 Next.js，不增加常驻浏览器、二进制依赖、进程监督和云资源。原型 Playwright/Chrome 已证明本机自动化能力，但目标云环境中的 Chromium 启动、凭据/网络/资源隔离和终止尚无证据；本轮没有同时建设第二套运行器。后续若需要可信输入、跨浏览器或恶意程序资源隔离，应重新评估受控运行器，不能把这次选择外推为所有 QA 的最优方案。
 

@@ -1,5 +1,15 @@
 import { expect, test, type Page } from "@playwright/test";
 import { mkdirSync, writeFileSync } from "node:fs";
+// Deployment access stays in the test process and is attached only to this
+// deployment origin. Never inject it into srcdoc, URLs, evidence or app storage.
+const qaHeaders: Record<string, string> = process.env.QA_PROTECTION_BYPASS
+  ? { "x-vercel-protection-bypass": process.env.QA_PROTECTION_BYPASS } : {};
+test.beforeEach(async ({ context, baseURL }) => {
+  if (process.env.QA_PROTECTION_BYPASS) {
+    await context.route(url => url.origin === new URL(baseURL!).origin,
+      route => route.continue({ headers: { ...route.request().headers(), ...qaHeaders } }));
+  }
+});
 const evidenceDir = process.env.QA_EVIDENCE_DIR;
 async function evidence(page: Page, name: string) {
   const record = JSON.parse((await page.getByTestId("qa-evidence").textContent())!);
@@ -68,18 +78,27 @@ test("QA stops in flight and a new task never receives its results", async ({ pa
   expect(next.result.taskId).toBe(next.request.taskId);
   expect(completed).toBe(1);
 });
-test("QA rejects wrong code/task/plan, missing and late results at the HTTP boundary", async ({ page, request }) => {
+test("QA rejects wrong code/task/plan, missing and late results at the HTTP boundary", async ({ page }) => {
+  // Use the same browser transport as the task. APIRequestContext does not
+  // inherit the browser's system proxy, and can hang on protected remote hosts.
+  const post = (body: unknown) => page.evaluate(async payload => {
+    const response = await fetch("/api/qa", {
+      method: "POST", headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload), signal: AbortSignal.timeout(15000),
+    });
+    return { status: response.status, body: await response.json() };
+  }, body);
   let envelope: unknown;
   page.on("response", async r => { if (r.url().endsWith("/api/qa") && r.request().postDataJSON().action === "start") envelope = await r.json(); });
   await start(page);
   await expect(page.getByTestId("qa-status")).toContainText("passed", { timeout: 25000 });
   const record = await evidence(page, "protocol-baseline");
   for (const patch of [{ taskId: "other" }, { codeHash: "other" }, { results: [] }, { planHash: "other" }, { results: record.result.results.map((r: object, i: number) => i === 0 ? { ...r, status: "not-run" } : r) }, { results: record.result.results.map((r: object, i: number) => i === 0 ? { ...r, expected: "lowered" } : r) }]) {
-    const response = await request.post("/api/qa", { data: { action: "complete", envelope, result: { ...record.result, ...patch } } });
-    expect(response.status()).toBe(400);
+    const response = await post({ action: "complete", envelope, result: { ...record.result, ...patch } });
+    expect(response.status).toBe(400);
   }
   // Acquire a server-signed short deadline and wait for its actual expiry.
-  const short = await (await request.post("/api/qa", { data: { action: "start", taskId: record.request.taskId, fixture: "todo", variant: "timeout" } })).json();
+  const short = (await post({ action: "start", taskId: record.request.taskId, fixture: "todo", variant: "timeout" })).body;
   await page.waitForTimeout(400);
   // Deliberately forge a structurally complete "passed" receipt after expiry.
   // This is a protocol rejection probe, not claimed browser execution evidence.
@@ -87,9 +106,9 @@ test("QA rejects wrong code/task/plan, missing and late results at the HTTP boun
     const expected = c.command.equals ?? (c.command.op === "input" ? c.command.value : c.command.op === "wait" ? c.command.ms : "executed");
     return { scenarioId: s.id, checkId: c.id, command: c.command, expected, actual: expected, status: "passed", startedAt: Date.now(), endedAt: Date.now() };
   })) };
-  const late = await request.post("/api/qa", { data: { action: "complete", envelope: short, result: r } });
-  expect(late.status()).toBe(200);
-  expect((await late.json()).status).toBe("timeout");
+  const late = await post({ action: "complete", envelope: short, result: r });
+  expect(late.status).toBe(200);
+  expect(late.body.status).toBe("timeout");
 });
 test("QA synthetic data never enters active formal or trial data", async ({ page, context }) => {
   test.setTimeout(60000);

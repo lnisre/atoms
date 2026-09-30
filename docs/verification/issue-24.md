@@ -52,6 +52,10 @@ pnpm build
 
 测试使用本机 Chrome；外层 60 秒包含开发服务编译和页面导航，工具内部期限没有放宽。可通过 `TEST_BASE_URL` 指向同一代码的目标部署。受保护部署需要已有的授权浏览器登录或获准的自动化访问，不能把登录页面 HTTP 200 当通过。原始证据可放在指定目录；提交只保留选定关键结果与摘要。
 
+本次用户已明确要求保留自动化凭据。它保存在 Vercel 项目 `prj_eErnQuAz4P719xKTyuT6XT2Qu5ab`，备注为 **`Atoms QA automation (user retained)`**，scope 为 `automation-bypass`。后续 agent 按 `docs/agents/vercel.md` 读取项目访问 Token，通过 `GET /v9/projects/{projectId}?teamId=team_brlKMv4xsRX1SFiSIq5cMbfj` 在内存中按上述备注定位 `protectionBypass`，再把对应值仅作为测试进程的 `QA_PROTECTION_BYPASS` 环境变量传入。不要打印完整项目响应、把值写入命令参数/文件/URL/日志、重复创建或擅自撤销。它可访问该项目的受保护部署；本测试仅向 `TEST_BASE_URL` 的同源请求添加头。没有修改生产别名或关闭 Vercel Authentication。
+
+线上协议拒绝探针也通过浏览器 `fetch` 发出；不要假定 Node 的 APIRequestContext 与浏览器共用系统代理。授权头由 Playwright 路由在目标源边界附加，不进入页面 JavaScript 或生成 HTML。
+
 ## 实际运行记录与限制
 
 最终本地验证使用 Next.js 16.3.6 的生产构建、Node 24.18.0、本机真实 Chrome，测试串行运行。全部 **50 个浏览器测试通过**（其中 QA 10 个），生成接口 **15 个测试通过**，lint、typecheck、本地 webpack 生产构建与 Vercel 默认 Turbopack 构建通过。增强的“迟到但声称 passed”协议探针另行通过；它是合成回执拒绝测试，不冒充实际浏览器检查结果。
@@ -79,9 +83,15 @@ pnpm build
 5. 就绪保护初版直接在 effect 中 setState，被 lint 拒绝；改为 `useSyncExternalStore` 的服务器/客户端快照，最终检查通过。
 6. 尝试用现有 Chrome 会话打开受保护 Preview 的 CUA 调用超时，没有取得可用登录态或线上执行证据。
 
-最终 [Preview](https://v0-test0-l5zm5773h-lnisres-projects.vercel.app/qa) 对应 `dpl_98ybMX8Q9MdAvjKSPSU6FocaeL4P`，READY，`target=null`（Preview）。只读复核确认生产仍为 `dpl_68LXQuH7oBNajTAM7JJKZMpVAJRH`，未提升生产别名。匿名访问 `/qa` 返回 **302 到 vercel.com**，项目没有已有 automation-bypass 凭据。[部署与访问证据](assets/issue-24/deployment.json)。
+最终 [Preview](https://v0-test0-l5zm5773h-lnisres-projects.vercel.app/qa) 对应 `dpl_98ybMX8Q9MdAvjKSPSU6FocaeL4P`，READY，`target=null`（Preview）。2026-09-30 22:28–22:33（Asia/Shanghai）实际完成目标部署的浏览器 → Vercel API → 同一浏览器任务往返。浏览器从该部署加载页面和受限执行器，签发及回传 API 均为云端真实函数；未 mock `/api/qa`。本机 Playwright 只负责驱动页面，实际 QA 仍为选定的页内执行路径。
 
-**尚未完成目标部署上的浏览器 → API → 浏览器最小往返，因此 #24 保持 OPEN，PR 为草稿，不能称为验收完成。** 自动审批拒绝了“缺少凭据时创建持久 automation-bypass”的步骤，原因是新增部署保护访问能力未获明确授权。未执行该设置变更；已向用户请求访问授权。获准后应在受保护 Preview 运行相同 10 项 QA（仅对该部署源发送授权头，证据不记录凭据），或在已登录浏览器实际执行两类正常检查与停止并保存结果。不能用本机成功替代。
+线上 10 项测试均已取得通过证据：完整场次先通过 9 项；协议测试的 Node 直接请求通道超时，改为浏览器 `fetch` 后单独复跑通过。不能将首轮写成 10/10。两类应用分别 39/39、40/40，读失败缺陷 35/39、保存失败误报 38/39；无结果/超时/用户停止均为非成功终态，停止后新任务独立通过。线上三类数据隔离和 M4 候选采用测试通过（生成接口仅用明确标注的受控 HTML，QA API 为真实请求）。
+
+[线上逐项证据与控制场景](assets/issue-24/cloud-qualification.json)、[线上截图](assets/issue-24/cloud-todo.png)、[首轮 9 通过/1 失败日志（已脱敏）](assets/issue-24/cloud-first-test.log)、[协议复跑通过](assets/issue-24/cloud-protocol-retest.log)、[云端访问与部署核对](assets/issue-24/cloud-deployment.json)、[凭据保留核对](assets/issue-24/credential-retention.json)。已核对生产源码与此前 `source-sha256.json` 全部一致；本次只修改测试适配和证据文档，复用本地 50 项浏览器、15 项接口和构建证据，lint/typecheck 再次通过。
+
+历史访问阻塞仍保留在[最初部署记录](assets/issue-24/deployment.json)：匿名访问 302 到 Vercel 登录，自动审批最初拒绝创建持久凭据；用户随后明确授权创建，并明确要求保留供后续 agent 使用。首次创建参数被 API 400 拒绝且无凭据产生；第二次创建后已获得 HTTP 200，但本地启动脚本引用不存在的 pnpm 绝对路径而失败。修复为 Node 直接启动 Playwright 后，原监督进程又因用户要求保留凭据而被中断，避免执行旧撤销逻辑；该中断场次不算完整通过。最终复用同一凭据完成上述线上验证，没有额外创建第二枚。请求失败日志已脱敏。
+
+凭据当前保留且授权访问仍返回 HTTP 200；生产仍为 `dpl_68LXQuH7oBNajTAM7JJKZMpVAJRH`，保护开关未变。目标部署往返门槛现已满足，#24 可按完成记录关闭；PR 转为可评审，不代表已经合并或完成 #25–#28。
 
 工具当前使用绝对截止时间，系统时钟偏差可能造成提前拒绝；服务端独立检查签名期限并拒绝迟到成功。没有把跨执行方时间当作统一事件排序依据。
 
