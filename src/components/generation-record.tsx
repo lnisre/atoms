@@ -11,7 +11,13 @@ export function GenerationRecord({ record, live, pending, saveError, saving, tit
     <div className="assistant-heading"><span className="assistant-mark" aria-hidden="true">✳</span><h2>助手 <span>{title}</span></h2></div>
     <div className="assistant-content">
       {pending ? <p className="record-note" role="status">等待模型完整说明…</p> : <p className="assistant-reply">{record.assistantReply ?? "本次未取得助手说明"}</p>}
-      <p className="record-note">模型说明仅供参考，实际执行情况见下方记录。</p>
+      <p className="record-note">{record.team ? (record.team.deliveries.length ? "团队已返回实际角色产物；检查结论仅覆盖本次代码、操作和合成样本。" : "等待四角色执行；尚未取得角色交付或检查结果。") : "M4 单模型生成；未执行四角色业务 QA。"}</p>
+      {record.team && <div className="team-deliveries">
+        <p role="status">{record.team.check ? `浏览器检查：${record.team.check.status} · ${record.team.check.results.filter(r => r.status === "passed").length}/${record.team.check.results.length}` : pending ? "团队正在分派、实现或等待检查" : "本次未取得完整检查结果"}</p>
+        {record.team.deliveries.map((delivery, i) => <details key={i}><summary>{{Mike: "TeamLeader · 分派与交付", Requirements: "需求负责人 · 规格", Engineer: "实现工程师 · 交付", Verifier: "验证工程师 · 检查"}[delivery.role]}</summary><pre style={{whiteSpace: "pre-wrap", overflowWrap: "anywhere"}}>{delivery.content}</pre></details>)}
+        {record.team.check && <details><summary>完整运行检查结果</summary><pre style={{whiteSpace: "pre-wrap", overflowWrap: "anywhere"}}>{JSON.stringify(record.team.check, null, 2)}</pre></details>}
+        <details><summary>模型调用与用量 · {record.team.calls.length} 次</summary><pre style={{whiteSpace: "pre-wrap", overflowWrap: "anywhere"}}>{JSON.stringify(record.team.calls, null, 2)}</pre></details>
+      </div>}
       <div className="execution-card">
         <h3>平台执行记录 {pending && <span className="spinner" aria-label="进行中" />}</h3>
         <p className="record-note">结构检查和预览载入不代表业务功能已验证。</p>

@@ -1,3 +1,4 @@
+import { fulfillGeneration } from "./team-fixture";
 import { expect, test, type Page } from "@playwright/test";
 
 // Controlled application tests the public runtime contract, not model quality.
@@ -12,7 +13,7 @@ atoms.loadState().then(state=>{items=state??[];render();input.disabled=button.di
 </script></body></html>`;
 async function generate(page: Page, name = "持久化待办") {
   await page.route("**/api/generate", (route) =>
-    route.fulfill({
+    fulfillGeneration(route, {
       json: {
         html,
         model: "test-fixture",
@@ -181,7 +182,7 @@ test("项目写入失败仍展示结果和错误，不宣称项目已保存", as
     };
   });
   await page.route("**/api/generate", (route) =>
-    route.fulfill({
+    fulfillGeneration(route, {
       json: { html, model: "test-fixture", durationMs: 1, generatedAt: "test" },
     }),
   );

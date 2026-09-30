@@ -1,0 +1,466 @@
+[
+  {
+    "kind": "live-generation",
+    "run": "cloud-todo-1",
+    "taskId": "004afa31-f318-4916-956e-a6db23ce004b",
+    "syntheticRequirement": "做一个中文待办应用，支持添加、完成、删除任务，区分完成状态，同浏览器重开恢复。输入框无障碍名称为“待办内容”，添加按钮叫“添加任务”。普通样式自行决定。",
+    "generationSaved": false,
+    "restored": false,
+    "restorationRequests": null,
+    "workflowElapsedMs": 50205,
+    "modelRequests": 7,
+    "errors": [
+      "首次 QA 未通过，未交付应用：2 checks failed: platform-timing-6 expected status text '正在保存' but actual was '正在保存…'; toggle-complete init-checked expected 'off' but actual was 'on'. Overall status failed."
+    ],
+    "knownInputTokens": 20324,
+    "knownOutputTokens": 6585,
+    "unknownUsageRequests": 0,
+    "testFailure": "Explicit failed task"
+  },
+  {
+    "kind": "transport-probe",
+    "run": "cloud-transport-1",
+    "taskId": null,
+    "syntheticRequirement": "做一个中文待办应用，支持添加、完成、删除任务，区分完成状态，同浏览器重开恢复。输入框无障碍名称为“待办内容”，添加按钮叫“添加任务”。普通样式自行决定。",
+    "generationSaved": false,
+    "restored": false,
+    "restorationRequests": null,
+    "workflowElapsedMs": 33583,
+    "modelRequests": 0,
+    "errors": [],
+    "knownInputTokens": 0,
+    "knownOutputTokens": 0,
+    "unknownUsageRequests": 0,
+    "testFailure": "locator.waitFor: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByLabel('你想做什么？') to be visible\u001b[22m\n"
+  },
+  {
+    "kind": "transport-probe",
+    "run": "cloud-transport-2",
+    "taskId": null,
+    "syntheticRequirement": "做一个中文待办应用，支持添加、完成、删除任务，区分完成状态，同浏览器重开恢复。输入框无障碍名称为“待办内容”，添加按钮叫“添加任务”。普通样式自行决定。",
+    "generationSaved": false,
+    "restored": false,
+    "restorationRequests": null,
+    "workflowElapsedMs": 33049,
+    "modelRequests": 0,
+    "errors": [],
+    "knownInputTokens": 0,
+    "knownOutputTokens": 0,
+    "unknownUsageRequests": 0,
+    "testFailure": "locator.waitFor: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByLabel('你想做什么？') to be visible\u001b[22m\n"
+  },
+  {
+    "kind": "live-generation",
+    "run": "counter-1",
+    "taskId": "144d5030-3b7c-49fa-9d42-19d53c1407d7",
+    "syntheticRequirement": "做一个中文计数器，初始数值为 0，三个按钮分别叫“增加”“减少”“重置”，每次加一、减一或归零并保存，同浏览器重开恢复数值。用一个 output 元素只显示当前数字。普通样式自行决定。",
+    "generationSaved": false,
+    "restored": false,
+    "restorationRequests": null,
+    "workflowElapsedMs": 26866,
+    "modelRequests": 8,
+    "errors": [
+      "QA 检查请求格式重试后仍无效"
+    ],
+    "knownInputTokens": 13736,
+    "knownOutputTokens": 3607,
+    "unknownUsageRequests": 0,
+    "testFailure": "Explicit failed task"
+  },
+  {
+    "kind": "live-generation",
+    "run": "counter-2",
+    "taskId": "7cc3e9c0-8975-45df-a580-fde2b6664bb4",
+    "syntheticRequirement": "做一个中文计数器，初始数值为 0，三个按钮分别叫“增加”“减少”“重置”，每次加一、减一或归零并保存，同浏览器重开恢复数值。用一个 output 元素只显示当前数字。普通样式自行决定。",
+    "generationSaved": true,
+    "restored": true,
+    "restorationRequests": 0,
+    "workflowElapsedMs": 39158,
+    "modelRequests": 14,
+    "errors": [],
+    "knownInputTokens": 33823,
+    "knownOutputTokens": 4714,
+    "unknownUsageRequests": 0,
+    "taskDurationMs": 37160,
+    "codeHash": "3f0d8d90c91c50f79022b50577dbce730443b93d678d17200e10a9632e6f86e6",
+    "passedChecks": 85
+  },
+  {
+    "kind": "live-generation",
+    "run": "reading-1",
+    "taskId": "2ecf5047-2016-472d-ab58-a66e467dcd88",
+    "syntheticRequirement": "做一个中文阅读记录应用，支持添加书名、标记读完、删除记录，同浏览器重开恢复。输入框无障碍名称为“书名”，添加按钮叫“添加书籍”。普通样式自行决定。",
+    "generationSaved": false,
+    "restored": false,
+    "restorationRequests": null,
+    "workflowElapsedMs": 74161,
+    "modelRequests": 6,
+    "errors": [
+      "模型输出不完整：length"
+    ],
+    "knownInputTokens": 13150,
+    "knownOutputTokens": 14747,
+    "unknownUsageRequests": 0,
+    "testFailure": "Explicit failed task"
+  },
+  {
+    "kind": "live-generation",
+    "run": "reading-10",
+    "taskId": "c3559238-f5dd-416a-a5b7-606a85e165a1",
+    "syntheticRequirement": "做一个中文阅读记录应用，支持添加书名、标记读完、删除记录，同浏览器重开恢复。输入框无障碍名称为“书名”，添加按钮叫“添加书籍”。普通样式自行决定。",
+    "generationSaved": false,
+    "restored": false,
+    "restorationRequests": null,
+    "workflowElapsedMs": 51943,
+    "modelRequests": 11,
+    "errors": [
+      "首次 QA 未通过，未交付应用：Multiple checks failed, including item-count-3 (expected 3, actual 2), persisted-new-title (expected 活着, actual null), restore-state add-persists-third (actual null), and several tool-errors. The status remains failed and the application was not delivered."
+    ],
+    "knownInputTokens": 37182,
+    "knownOutputTokens": 8026,
+    "unknownUsageRequests": 0,
+    "testFailure": "Explicit failed task"
+  },
+  {
+    "kind": "live-generation",
+    "run": "reading-2",
+    "taskId": "eb9a0cca-ae63-47a0-92cf-7f0c5eb07d1d",
+    "syntheticRequirement": "做一个中文阅读记录应用，支持添加书名、标记读完、删除记录，同浏览器重开恢复。输入框无障碍名称为“书名”，添加按钮叫“添加书籍”。普通样式自行决定。",
+    "generationSaved": false,
+    "restored": false,
+    "restorationRequests": null,
+    "workflowElapsedMs": 14294,
+    "modelRequests": 2,
+    "errors": [
+      "模型传输或产物解析失败：JSONDecodeError"
+    ],
+    "knownInputTokens": 1101,
+    "knownOutputTokens": 896,
+    "unknownUsageRequests": 0,
+    "testFailure": "Explicit failed task"
+  },
+  {
+    "kind": "live-generation",
+    "run": "reading-3",
+    "taskId": "42635d19-98a7-4b1b-8087-b82f5e601c10",
+    "syntheticRequirement": "做一个中文阅读记录应用，支持添加书名、标记读完、删除记录，同浏览器重开恢复。输入框无障碍名称为“书名”，添加按钮叫“添加书籍”。普通样式自行决定。",
+    "generationSaved": false,
+    "restored": false,
+    "restorationRequests": null,
+    "workflowElapsedMs": 35015,
+    "modelRequests": 6,
+    "errors": [
+      "需求规格缺少数据保护检查合同"
+    ],
+    "knownInputTokens": 12557,
+    "knownOutputTokens": 6888,
+    "unknownUsageRequests": 0,
+    "testFailure": "Explicit failed task"
+  },
+  {
+    "kind": "live-generation",
+    "run": "reading-4",
+    "taskId": "de0fd1a5-bc82-4b5e-941e-520609da077a",
+    "syntheticRequirement": "做一个中文阅读记录应用，支持添加书名、标记读完、删除记录，同浏览器重开恢复。输入框无障碍名称为“书名”，添加按钮叫“添加书籍”。普通样式自行决定。",
+    "generationSaved": false,
+    "restored": false,
+    "restorationRequests": null,
+    "workflowElapsedMs": 37379,
+    "modelRequests": 7,
+    "errors": [
+      "首次 QA 未通过，未交付应用：Multiple checks failed: toggle-done data-first-done and bridge-save-attempts failed; delete-book delete-second tool-error and subsequent count/length/saveAttempts failed; persist-on-reopen data-second-title and saveAttempts/commits failed. Overall status failed."
+    ],
+    "knownInputTokens": 20014,
+    "knownOutputTokens": 6225,
+    "unknownUsageRequests": 0,
+    "testFailure": "Explicit failed task"
+  },
+  {
+    "kind": "live-generation",
+    "run": "reading-5",
+    "taskId": "54e4049c-b7fa-42c2-b69a-bcb40e1628c7",
+    "syntheticRequirement": "做一个中文阅读记录应用，支持添加书名、标记读完、删除记录，同浏览器重开恢复。输入框无障碍名称为“书名”，添加按钮叫“添加书籍”。普通样式自行决定。",
+    "generationSaved": false,
+    "restored": false,
+    "restorationRequests": null,
+    "workflowElapsedMs": 12213,
+    "modelRequests": 2,
+    "errors": [
+      "send() got multiple values for argument 'kind'"
+    ],
+    "knownInputTokens": 1075,
+    "knownOutputTokens": 543,
+    "unknownUsageRequests": 0,
+    "testFailure": "Explicit failed task"
+  },
+  {
+    "kind": "live-generation",
+    "run": "reading-6",
+    "taskId": "fdc21ef4-1c27-41ba-b150-a1db60cdd149",
+    "syntheticRequirement": "做一个中文阅读记录应用，支持添加书名、标记读完、删除记录，同浏览器重开恢复。输入框无障碍名称为“书名”，添加按钮叫“添加书籍”。普通样式自行决定。",
+    "generationSaved": false,
+    "restored": false,
+    "restorationRequests": null,
+    "workflowElapsedMs": 45453,
+    "modelRequests": 7,
+    "errors": [
+      "首次 QA 未通过，未交付应用：存在失败检查：add-book 场景中 save-attempts 与 empty-attempts 期望值为 3，实际值为 1，因此整体未通过。"
+    ],
+    "knownInputTokens": 24589,
+    "knownOutputTokens": 8010,
+    "unknownUsageRequests": 0,
+    "testFailure": "Explicit failed task"
+  },
+  {
+    "kind": "live-generation",
+    "run": "reading-7",
+    "taskId": "915281e1-ad88-48ec-801a-e8a47cbbe5a0",
+    "syntheticRequirement": "做一个中文阅读记录应用，支持添加书名、标记读完、删除记录，同浏览器重开恢复。输入框无障碍名称为“书名”，添加按钮叫“添加书籍”。普通样式自行决定。",
+    "generationSaved": false,
+    "restored": false,
+    "restorationRequests": null,
+    "workflowElapsedMs": 65542,
+    "modelRequests": 6,
+    "errors": [
+      "模型输出不完整：length"
+    ],
+    "knownInputTokens": 13222,
+    "knownOutputTokens": 16379,
+    "unknownUsageRequests": 0,
+    "testFailure": "Explicit failed task"
+  },
+  {
+    "kind": "live-generation",
+    "run": "reading-8",
+    "taskId": "a3f8641f-650e-4ebc-bbb5-e8fee2371437",
+    "syntheticRequirement": "做一个中文阅读记录应用，支持添加书名、标记读完、删除记录，同浏览器重开恢复。输入框无障碍名称为“书名”，添加按钮叫“添加书籍”。普通样式自行决定。",
+    "generationSaved": false,
+    "restored": false,
+    "restorationRequests": null,
+    "workflowElapsedMs": 42024,
+    "modelRequests": 7,
+    "errors": [
+      "模型输出不完整：length"
+    ],
+    "knownInputTokens": 16562,
+    "knownOutputTokens": 9992,
+    "unknownUsageRequests": 0,
+    "testFailure": "Explicit failed task"
+  },
+  {
+    "kind": "live-generation",
+    "run": "reading-9",
+    "taskId": "5e95f8a3-7ec2-4596-830a-bec0d7514cc9",
+    "syntheticRequirement": "做一个中文阅读记录应用，支持添加书名、标记读完、删除记录，同浏览器重开恢复。输入框无障碍名称为“书名”，添加按钮叫“添加书籍”。普通样式自行决定。",
+    "generationSaved": false,
+    "restored": false,
+    "restorationRequests": null,
+    "workflowElapsedMs": 35673,
+    "modelRequests": 6,
+    "errors": [
+      "Expecting value: line 1 column 2 (char 1)"
+    ],
+    "knownInputTokens": 7335,
+    "knownOutputTokens": 4671,
+    "unknownUsageRequests": 0,
+    "testFailure": "Explicit failed task"
+  },
+  {
+    "kind": "live-generation",
+    "run": "todo-1",
+    "taskId": "a1030ae2-1d39-4b19-b5ea-642083679601",
+    "syntheticRequirement": "做一个中文待办应用，支持添加、完成、删除任务，区分完成状态，同浏览器重开恢复。输入框无障碍名称为“待办内容”，添加按钮叫“添加任务”。普通样式自行决定。",
+    "generationSaved": false,
+    "restored": false,
+    "restorationRequests": null,
+    "workflowElapsedMs": 38507,
+    "modelRequests": 6,
+    "errors": [
+      "业务检查缺项或与冻结需求不一致"
+    ],
+    "knownInputTokens": 13477,
+    "knownOutputTokens": 6881,
+    "unknownUsageRequests": 0,
+    "testFailure": "Explicit failed task"
+  },
+  {
+    "kind": "live-generation",
+    "run": "todo-10",
+    "taskId": "f56bcc23-445d-4862-b689-871d50198b68",
+    "syntheticRequirement": "做一个中文待办应用，支持添加、完成、删除任务，区分完成状态，同浏览器重开恢复。输入框无障碍名称为“待办内容”，添加按钮叫“添加任务”。普通样式自行决定。",
+    "generationSaved": false,
+    "restored": false,
+    "restorationRequests": null,
+    "workflowElapsedMs": 45090,
+    "modelRequests": 7,
+    "errors": [
+      "首次 QA 未通过，未交付应用：One or more checks failed. Notably, scenario 'toggle-done' had multiple failures: initial-item2-not-done expected 0 but got 1, item2-done expected 1 but got 0, done-count-after expected 2 but got 0, persisted-done expected true but got false, item2-not-done expected 0 but got 1, and persisted-done-false expected false but got true. The overall status is failed."
+    ],
+    "knownInputTokens": 22822,
+    "knownOutputTokens": 8554,
+    "unknownUsageRequests": 0,
+    "testFailure": "Explicit failed task"
+  },
+  {
+    "kind": "live-generation",
+    "run": "todo-11",
+    "taskId": "70dc9374-bfa0-4d60-abc9-bd9eeee0bf7b",
+    "syntheticRequirement": "做一个中文待办应用，支持添加、完成、删除任务，区分完成状态，同浏览器重开恢复。输入框无障碍名称为“待办内容”，添加按钮叫“添加任务”。普通样式自行决定。",
+    "generationSaved": true,
+    "restored": true,
+    "restorationRequests": 0,
+    "workflowElapsedMs": 49287,
+    "modelRequests": 8,
+    "errors": [],
+    "knownInputTokens": 25860,
+    "knownOutputTokens": 7789,
+    "unknownUsageRequests": 0,
+    "taskDurationMs": 47317,
+    "codeHash": "dcfe92f88281423c9f80203282632b1d8a76c9dbb8197249b1c5a3d7bdbc2fce",
+    "passedChecks": 110
+  },
+  {
+    "kind": "live-generation",
+    "run": "todo-2",
+    "taskId": "9d11d9cd-83be-4b38-abd6-b53911e63ab7",
+    "syntheticRequirement": "做一个中文待办应用，支持添加、完成、删除任务，区分完成状态，同浏览器重开恢复。输入框无障碍名称为“待办内容”，添加按钮叫“添加任务”。普通样式自行决定。",
+    "generationSaved": false,
+    "restored": false,
+    "restorationRequests": null,
+    "workflowElapsedMs": 67479,
+    "modelRequests": 7,
+    "errors": [
+      "首次 QA 未通过，未交付应用：存在失败检查项：add-task 场景 add-8、toggle-complete 场景 tg-3 与 tg-4 期望元素文本为“买菜”/“买牛奶”，实际为“买菜删除”/“买牛奶删除”，因此整体失败。"
+    ],
+    "knownInputTokens": 24882,
+    "knownOutputTokens": 8396,
+    "unknownUsageRequests": 0,
+    "testFailure": "Explicit failed task"
+  },
+  {
+    "kind": "live-generation",
+    "run": "todo-3",
+    "taskId": "2ce15260-39de-4339-b99b-9ea34f07a4c5",
+    "syntheticRequirement": "做一个中文待办应用，支持添加、完成、删除任务，区分完成状态，同浏览器重开恢复。输入框无障碍名称为“待办内容”，添加按钮叫“添加任务”。普通样式自行决定。",
+    "generationSaved": false,
+    "restored": false,
+    "restorationRequests": null,
+    "workflowElapsedMs": 42947,
+    "modelRequests": 7,
+    "errors": [
+      "首次 QA 未通过，未交付应用：QA failed: multiple checks failed. Notably add-9, del-6, and st-7 expected data path ['todos'] to equal {length: N}, but actual data returned full arrays, not length objects; overall status is failed and the app was not delivered."
+    ],
+    "knownInputTokens": 20976,
+    "knownOutputTokens": 7066,
+    "unknownUsageRequests": 0,
+    "testFailure": "Explicit failed task"
+  },
+  {
+    "kind": "live-generation",
+    "run": "todo-4",
+    "taskId": "2dfd9d64-403c-4fdc-8771-3636f8948715",
+    "syntheticRequirement": "做一个中文待办应用，支持添加、完成、删除任务，区分完成状态，同浏览器重开恢复。输入框无障碍名称为“待办内容”，添加按钮叫“添加任务”。普通样式自行决定。",
+    "generationSaved": false,
+    "restored": false,
+    "restorationRequests": null,
+    "workflowElapsedMs": 37393,
+    "modelRequests": 6,
+    "errors": [
+      "invalid observation"
+    ],
+    "knownInputTokens": 13773,
+    "knownOutputTokens": 7523,
+    "unknownUsageRequests": 0,
+    "testFailure": "Explicit failed task"
+  },
+  {
+    "kind": "live-generation",
+    "run": "todo-5",
+    "taskId": "87f2877c-32e7-429b-ac28-f54f12e4afa7",
+    "syntheticRequirement": "做一个中文待办应用，支持添加、完成、删除任务，区分完成状态，同浏览器重开恢复。输入框无障碍名称为“待办内容”，添加按钮叫“添加任务”。普通样式自行决定。",
+    "generationSaved": false,
+    "restored": false,
+    "restorationRequests": null,
+    "workflowElapsedMs": 44881,
+    "modelRequests": 7,
+    "errors": [
+      "首次 QA 未通过，未交付应用：Multiple checks failed or errored across scenarios (e.g., platform-timing-3/4 tool-errors, platform-timing-5/6/11/12/13/14 failed, add-todo-3/4/5 etc., toggle, delete, restore, status-and-controls failures). The run status is 'failed' and the app was not delivered, so the evidence does not pass."
+    ],
+    "knownInputTokens": 23535,
+    "knownOutputTokens": 7925,
+    "unknownUsageRequests": 0,
+    "testFailure": "Explicit failed task"
+  },
+  {
+    "kind": "live-generation",
+    "run": "todo-6",
+    "taskId": "5f806211-b346-4aef-bf0a-6ac64099f6d9",
+    "syntheticRequirement": "做一个中文待办应用，支持添加、完成、删除任务，区分完成状态，同浏览器重开恢复。输入框无障碍名称为“待办内容”，添加按钮叫“添加任务”。普通样式自行决定。",
+    "generationSaved": false,
+    "restored": false,
+    "restorationRequests": null,
+    "workflowElapsedMs": 24243,
+    "modelRequests": 2,
+    "errors": [
+      "模型传输或产物解析失败：RemoteProtocolError"
+    ],
+    "knownInputTokens": 249,
+    "knownOutputTokens": 149,
+    "unknownUsageRequests": 1,
+    "testFailure": "Explicit failed task"
+  },
+  {
+    "kind": "live-generation",
+    "run": "todo-7",
+    "taskId": "e6e9eac6-b287-4f27-a47a-bee9aa592ade",
+    "syntheticRequirement": "做一个中文待办应用，支持添加、完成、删除任务，区分完成状态，同浏览器重开恢复。输入框无障碍名称为“待办内容”，添加按钮叫“添加任务”。普通样式自行决定。",
+    "generationSaved": false,
+    "restored": false,
+    "restorationRequests": null,
+    "workflowElapsedMs": 13697,
+    "modelRequests": 2,
+    "errors": [
+      "模型传输或产物解析失败：JSONDecodeError"
+    ],
+    "knownInputTokens": 1057,
+    "knownOutputTokens": 828,
+    "unknownUsageRequests": 0,
+    "testFailure": "Explicit failed task"
+  },
+  {
+    "kind": "live-generation",
+    "run": "todo-8",
+    "taskId": "7f18b484-4052-43d4-b162-db8e32851e6a",
+    "syntheticRequirement": "做一个中文待办应用，支持添加、完成、删除任务，区分完成状态，同浏览器重开恢复。输入框无障碍名称为“待办内容”，添加按钮叫“添加任务”。普通样式自行决定。",
+    "generationSaved": false,
+    "restored": false,
+    "restorationRequests": null,
+    "workflowElapsedMs": 47795,
+    "modelRequests": 7,
+    "errors": [
+      "首次 QA 未通过，未交付应用：总体状态为失败：legacy-fields 场景存在失败检查（a1-done 期望 false 实际 null，a3-text 期望 \"\" 实际 null）。虽然大量检查通过，但存在失败项，按规则判定不通过。"
+    ],
+    "knownInputTokens": 21706,
+    "knownOutputTokens": 7126,
+    "unknownUsageRequests": 0,
+    "testFailure": "Explicit failed task"
+  },
+  {
+    "kind": "live-generation",
+    "run": "todo-9",
+    "taskId": "3f2817a1-3c53-416c-a08e-682423dbd9f6",
+    "syntheticRequirement": "做一个中文待办应用，支持添加、完成、删除任务，区分完成状态，同浏览器重开恢复。输入框无障碍名称为“待办内容”，添加按钮叫“添加任务”。普通样式自行决定。",
+    "generationSaved": false,
+    "restored": false,
+    "restorationRequests": null,
+    "workflowElapsedMs": 42862,
+    "modelRequests": 5,
+    "errors": [
+      "模型传输或产物解析失败：RemoteProtocolError"
+    ],
+    "knownInputTokens": 6272,
+    "knownOutputTokens": 5095,
+    "unknownUsageRequests": 1,
+    "testFailure": "Explicit failed task"
+  }
+]

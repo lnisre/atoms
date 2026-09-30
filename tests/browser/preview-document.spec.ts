@@ -1,3 +1,4 @@
+import { fulfillGeneration } from "./team-fixture";
 import { expect, test } from "@playwright/test";
 import { POST } from "../../src/app/api/generate/route";
 
@@ -30,7 +31,7 @@ document.getElementById('error').onclick=()=>{throw new Error('controlled runtim
       if (originalKey === undefined) delete process.env.DEEPSEEK_API_KEY;
       else process.env.DEEPSEEK_API_KEY = originalKey;
     }
-    await page.route("**/api/generate", route => route.fulfill({ json: result }));
+    await page.route("**/api/generate", route => fulfillGeneration(route, { json: result }));
     await page.goto("/");
     await page.getByLabel("你想做什么？").fill("平台装配回归");
     await page.getByRole("button", { name: "开始生成" }).click();

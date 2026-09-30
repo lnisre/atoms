@@ -1,3 +1,4 @@
+import { fulfillGeneration } from "./team-fixture";
 import { expect, test, type Page } from "@playwright/test";
 
 const html = `<!DOCTYPE html><html><head></head><body><button disabled>增加</button><output>0</output><script>
@@ -17,7 +18,7 @@ async function fixture(page: Page, assistantReply: unknown = explanation) {
   await page.route("**/api/generate", route => {
     calls++;
     const taskId = route.request().headers()["x-atoms-task-id"];
-    return route.fulfill({ contentType: "application/x-ndjson", body: JSON.stringify({ type: "result", taskId, result, assistantReply }) + "\n" });
+    return fulfillGeneration(route, { contentType: "application/x-ndjson", body: JSON.stringify({ type: "result", taskId, result, assistantReply }) + "\n" });
   });
   return () => calls;
 }
@@ -59,7 +60,7 @@ test("完整说明安全显示，真实预览/数据步骤保存，刷新和同�
   expect(calls()).toBe(1); expect(restorationCalls).toBe(0);
 });
 
-test("等待期间观察到流事件，完成前不显示正文或运行 HTML", async ({ page }) => {
+test("旧流事件仍实时可见，但缺少团队会话不能交付新 M5 结果", async ({ page }) => {
   await page.addInitScript(({result, explanation}) => {
     const original=window.fetch;
     window.fetch=async (...args) => {
@@ -85,8 +86,8 @@ test("等待期间观察到流事件，完成前不显示正文或运行 HTML", 
   await expect(page.getByText("等待模型完整说明…")).toBeVisible();
   await expect(page.locator("iframe")).toHaveCount(0);
   await page.evaluate(() => (window as unknown as {finishControlledGeneration:()=>void}).finishControlledGeneration());
-  await expect(page.locator(".assistant-reply")).toHaveText(explanation);
-  await expect(page.frameLocator("iframe").getByRole("button",{name:"增加"})).toBeEnabled();
+  await expect(page.getByRole("heading", {name:"生成未完成"})).toBeVisible();
+  await expect(page.locator("iframe")).toHaveCount(0);
 });
 
 test("正文缺失降级保留应用，缺失状态也能恢复且不补调模型", async ({ page }) => {
@@ -104,7 +105,7 @@ test("传输中断、任务错配和无效 HTML 均结束等待，不保存或�
     await page.route("**/api/generate", route => {
       const taskId=route.request().headers()["x-atoms-task-id"];
       const body= failure==="partial" ? '{"type":"result",' : JSON.stringify({type:"result",taskId:failure==="mismatch"?"wrong-task":taskId,result:{...result,html:"<!DOCTYPE html><html><head></head><body>截断"},assistantReply:"看起来完整的说明"})+"\n";
-      return route.fulfill({contentType:"application/x-ndjson",body});
+      return fulfillGeneration(route, {contentType:"application/x-ndjson",body});
     });
     await start(page);
     await expect(page.getByRole("heading",{name:"生成未完成"})).toBeVisible();
@@ -139,8 +140,8 @@ test("新项目进入 M2 多轮修改与采用后保留首次说明，日志不�
   let calls=0;
   await page.route("**/api/generate",route=>{
     calls++;
-    if(route.request().postDataJSON().modification)return route.fulfill({json:{...result,html:html.replace('<output>0</output>',`<h1>修改版本 ${calls}</h1><output>0</output>`),generatedAt:`candidate-${calls}`}});
-    return route.fulfill({contentType:"application/x-ndjson",body:JSON.stringify({type:"result",taskId:route.request().headers()["x-atoms-task-id"],result,assistantReply:explanation})+"\n"});
+    if(route.request().postDataJSON().modification)return fulfillGeneration(route, {json:{...result,html:html.replace('<output>0</output>',`<h1>修改版本 ${calls}</h1><output>0</output>`),generatedAt:`candidate-${calls}`}});
+    return fulfillGeneration(route, {contentType:"application/x-ndjson",body:JSON.stringify({type:"result",taskId:route.request().headers()["x-atoms-task-id"],result,assistantReply:explanation})+"\n"});
   });
   await start(page);
   await expect(page.frameLocator("iframe").getByRole("button",{name:"增加"})).toBeEnabled();

@@ -1,3 +1,4 @@
+import { fulfillGeneration } from "./team-fixture";
 import { expect, test, type Page } from "@playwright/test";
 const html = `<!DOCTYPE html><html><head></head><body>
 <div><label>任务<input aria-label="任务" disabled></label><button disabled>添加</button></div><ul></ul><p role="status"></p>
@@ -10,7 +11,7 @@ atoms.loadState().then(state=>{items=state??[];render();input.disabled=button.di
 </script></body></html>`;
 const candidateHtml = (round: number) => html.replace('<body>', `<body><h1>候选第${round}轮</h1><label>优先级筛选<select><option>全部</option><option>普通</option></select></label>`);
 async function setup(page: Page) {
-  await page.route('**/api/generate', route => route.fulfill({ json: { html, model: 'fixture', durationMs: 1, generatedAt: 'original' } }));
+  await page.route('**/api/generate', route => fulfillGeneration(route, { json: { html, model: 'fixture', durationMs: 1, generatedAt: 'original' } }));
   await page.goto('/');
   await page.getByLabel('你想做什么？').fill('候选隔离待办');
   await page.getByRole('button', { name: '开始生成' }).click();
@@ -46,7 +47,7 @@ test('同项目多轮使用最新候选；试用增删改、失败、放弃、�
   let round = 0;
   await page.route('**/api/generate', route => {
     requests.push(route.request().postDataJSON());
-    return fail ? route.fulfill({ status: 502, json: { error: '受控模型失败' } }) : route.fulfill({ json: { html: candidateHtml(++round), model: 'fixture', durationMs: 1, generatedAt: String(round) } });
+    return fail ? fulfillGeneration(route, { status: 502, json: { error: '受控模型失败' } }) : fulfillGeneration(route, { json: { html: candidateHtml(++round), model: 'fixture', durationMs: 1, generatedAt: String(round) } });
   });
   await modify(page);
   const f = page.frameLocator('iframe');
@@ -89,7 +90,7 @@ test('同项目多轮使用最新候选；试用增删改、失败、放弃、�
 });
 test('复制正式数据读取失败不开始空试用；手动重试可成功', async ({ page }) => {
   await setup(page);
-  await page.route('**/api/generate', route => route.fulfill({ json: { html: candidateHtml(1), model: 'fixture', durationMs: 1, generatedAt: '1' } }));
+  await page.route('**/api/generate', route => fulfillGeneration(route, { json: { html: candidateHtml(1), model: 'fixture', durationMs: 1, generatedAt: '1' } }));
   await page.evaluate(() => {
     const original = IDBObjectStore.prototype.get;
     IDBObjectStore.prototype.get = function (...args) {
@@ -123,7 +124,7 @@ test('明确采用最新候选只保存代码与多轮记录；旧通道失效�
   let round = 0;
   await page.route('**/api/generate', route => {
     requests.push(route.request().postDataJSON());
-    return route.fulfill({ json: { html: candidateHtml(++round), model: 'fixture', durationMs: 1, generatedAt: String(round) } });
+    return fulfillGeneration(route, { json: { html: candidateHtml(++round), model: 'fixture', durationMs: 1, generatedAt: String(round) } });
   });
   const f = page.frameLocator('iframe');
   await f.getByLabel('完成 原任务乙', { exact: true }).check();
@@ -184,7 +185,7 @@ test('明确采用最新候选只保存代码与多轮记录；旧通道失效�
 test('采用事务未完成不显示成功；中止保留候选和此前采用记录，可手动重试', async ({ page, context }) => {
   await setup(page);
   let round = 0;
-  await page.route('**/api/generate', route => route.fulfill({ json: { html: candidateHtml(++round), model: 'fixture', durationMs: 1, generatedAt: String(round) } }));
+  await page.route('**/api/generate', route => fulfillGeneration(route, { json: { html: candidateHtml(++round), model: 'fixture', durationMs: 1, generatedAt: String(round) } }));
   await modify(page, '先采用的修改');
   await page.getByRole('button', { name: '采用修改', exact: true }).click();
   await expect(page.getByLabel('已采用修改记录').locator(':scope > .adopted-group')).toHaveCount(1);

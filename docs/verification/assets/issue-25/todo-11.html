@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>待办清单</title>
+<style>
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    padding: 24px 16px;
+    font-family: system-ui, -apple-system, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+    background: #f5f6f8;
+    color: #1f2329;
+    display: flex;
+    justify-content: center;
+  }
+  .app {
+    width: 100%;
+    max-width: 520px;
+    background: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+    padding: 20px;
+  }
+  h1 { font-size: 20px; margin: 0 0 16px; }
+  .row { display: flex; gap: 8px; }
+  #todo-input {
+    flex: 1;
+    padding: 10px 12px;
+    font-size: 15px;
+    border: 1px solid #cfd3da;
+    border-radius: 8px;
+    outline: none;
+  }
+  #todo-input:focus { border-color: #3b82f6; }
+  #add-btn {
+    padding: 10px 16px;
+    font-size: 15px;
+    border: none;
+    border-radius: 8px;
+    background: #3b82f6;
+    color: #fff;
+    cursor: pointer;
+  }
+  #add-btn:disabled, #todo-input:disabled { opacity: 0.5; cursor: not-allowed; }
+  #todo-list { list-style: none; margin: 16px 0 0; padding: 0; }
+  #todo-list li {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 0;
+    border-bottom: 1px solid #eceef1;
+  }
+  #todo-list li .text { flex: 1; word-break: break-all; }
+  #todo-list li.done .text {
+    text-decoration: line-through;
+    color: #a3a8b0;
+  }
+  #todo-list li button {
+    border: 1px solid #cfd3da;
+    background: #fff;
+    border-radius: 6px;
+    padding: 4px 10px;
+    font-size: 13px;
+    cursor: pointer;
+  }
+  #todo-list li button:disabled { opacity: 0.5; cursor: not-allowed; }
+  .del { color: #d64545; }
+  [data-atoms-status] {
+    margin-top: 14px;
+    font-size: 13px;
+    color: #6b7280;
+    min-height: 18px;
+  }
+  [data-atoms-status].err { color: #d64545; }
+</style>
+</head>
+<body>
+  <main class="app">
+    <h1>待办清单</h1>
+    <div class="row">
+      <input id="todo-input" type="text" aria-label="待办内容" placeholder="待办内容" disabled>
+      <button id="add-btn" type="button" disabled>添加任务</button>
+    </div>
+    <ul id="todo-list"></ul>
+    <div data-atoms-status>正在加载…</div>
+  </main>
+<script>
+(function () {
+  "use strict";
+
+  var state = { items: [] };
+  var ready = false;
+  var loadingFailed = false;
+
+  var inputEl = document.getElementById("todo-input");
+  var addBtn = document.getElementById("add-btn");
+  var listEl = document.getElementById("todo-list");
+  var statusEl = document.querySelector("[data-atoms-status]");
+
+  function setStatus(text, isErr) {
+    statusEl.textContent = text;
+    if (isErr) { statusEl.classList.add("err"); }
+    else { statusEl.classList.remove("err"); }
+  }
+
+  function setControlsEnabled(enabled) {
+    inputEl.disabled = !enabled;
+    addBtn.disabled = !enabled;
+    var btns = listEl.querySelectorAll("button");
+    for (var i = 0; i < btns.length; i++) { btns[i].disabled = !enabled; }
+  }
+
+  var idCounter = 0;
+  function genId() {
+    idCounter += 1;
+    return "t-" + Date.now().toString(36) + "-" + idCounter + "-" + Math.floor(Math.random() * 1e6).toString(36);
+  }
+
+  function normalizeItem(raw) {
+    var it = (raw && typeof raw === "object") ? raw : {};
+    var id = (typeof it.id === "string" && it.id !== "") ? it.id : genId();
+    var text = (typeof it.text === "string") ? it.text : "";
+    var done = (typeof it.done === "boolean") ? it.done : false;
+    return { id: id, text: text, done: done };
+  }
+
+  function normalizeState(raw) {
+    var out = { items: [] };
+    if (raw && typeof raw === "object" && Array.isArray(raw.items)) {
+      for (var i = 0; i < raw.items.length; i++) {
+        out.items.push(normalizeItem(raw.items[i]));
+      }
+    }
+    return out;
+  }
+
+  function makeButton(className, label) {
+    var b = document.createElement("button");
+    b.type = "button";
+    b.className = className;
+    b.textContent = label;
+    b.setAttribute("aria-label", label);
+    return b;
+  }
+
+  function renderItem(item) {
+    var li = document.createElement("li");
+    li.setAttribute("data-id", item.id);
+    if (item.done) { li.classList.add("done"); }
+
+    var textSpan = document.createElement("span");
+    textSpan.className = "text";
+    textSpan.textContent = item.text;
+
+    var toggle = makeButton("toggle", item.done ? "取消完成" : "标记完成");
+    toggle.addEventListener("click", function () { onToggle(item.id); });
+
+    var del = makeButton("del", "删除");
+    del.addEventListener("click", function () { onDelete(item.id); });
+
+    li.appendChild(textSpan);
+    li.appendChild(toggle);
+    li.appendChild(del);
+    return li;
+  }
+
+  function render() {
+    listEl.textContent = "";
+    for (var i = 0; i < state.items.length; i++) {
+      listEl.appendChild(renderItem(state.items[i]));
+    }
+    if (!ready) {
+      setControlsEnabled(false);
+    } else {
+      setControlsEnabled(true);
+    }
+  }
+
+  function persist(nextState) {
+    var prev = state;
+    state = nextState;
+    render();
+    setStatus("正在保存", false);
+    var p;
+    try {
+      p = window.atoms.saveState(state);
+    } catch (e) {
+      state = prev;
+      render();
+      setStatus("保存失败", true);
+      return;
+    }
+    Promise.resolve(p).then(function () {
+      setStatus("已保存", false);
+    }, function () {
+      state = prev;
+      render();
+      setStatus("保存失败", true);
+    });
+  }
+
+  function onAdd() {
+    if (!ready) { return; }
+    var text = inputEl.value;
+    if (typeof text !== "string") { text = ""; }
+    text = text.trim();
+    if (text === "") { return; }
+    var nextItems = state.items.slice();
+    nextItems.push({ id: genId(), text: text, done: false });
+    inputEl.value = "";
+    persist({ items: nextItems });
+  }
+
+  function onToggle(id) {
+    if (!ready) { return; }
+    var nextItems = [];
+    var found = false;
+    for (var i = 0; i < state.items.length; i++) {
+      var it = state.items[i];
+      if (it.id === id) {
+        found = true;
+        nextItems.push({ id: it.id, text: it.text, done: !it.done });
+      } else {
+        nextItems.push(it);
+      }
+    }
+    if (!found) { return; }
+    persist({ items: nextItems });
+  }
+
+  function onDelete(id) {
+    if (!ready) { return; }
+    var nextItems = [];
+    var found = false;
+    for (var i = 0; i < state.items.length; i++) {
+      if (state.items[i].id === id) { found = true; }
+      else { nextItems.push(state.items[i]); }
+    }
+    if (!found) { return; }
+    persist({ items: nextItems });
+  }
+
+  inputEl.addEventListener("keydown", function (e) {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      onAdd();
+    }
+  });
+  addBtn.addEventListener("click", onAdd);
+
+  // initial render: disabled controls, empty list
+  render();
+  setControlsEnabled(false);
+
+  var loadResult;
+  try {
+    loadResult = window.atoms.loadState();
+  } catch (e) {
+    loadResult = Promise.reject(e);
+  }
+  Promise.resolve(loadResult).then(function (raw) {
+    state = normalizeState(raw);
+    ready = true;
+    render();
+    setStatus("已读取", false);
+  }, function () {
+    loadingFailed = true;
+    ready = false;
+    state = { items: [] };
+    render();
+    setControlsEnabled(false);
+    setStatus("读取失败", true);
+  });
+})();
+</script>
+</body>
+</html>

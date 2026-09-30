@@ -1,0 +1,6 @@
+llm:
+  api_type: openai
+  model: offline-no-model
+  api_key: offline-placeholder-not-a-secret
+  base_url: http://127.0.0.1:9/v1
+  timeout: 1

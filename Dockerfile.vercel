@@ -1,0 +1,29 @@
+FROM node:24.18.0-bookworm-slim AS web
+WORKDIR /web
+RUN corepack enable && corepack prepare pnpm@10.12.1 --activate
+COPY package.json pnpm-lock.yaml ./
+RUN pnpm install --frozen-lockfile
+COPY src ./src
+COPY next.config.ts tsconfig.json postcss.config.mjs eslint.config.mjs ./
+RUN pnpm build
+
+# Rebuild the verified fixed upstream directly: cross-project private image pulls
+# are denied by VCR. This does not require changing registry permissions.
+FROM python:3.11.14-slim-bookworm
+RUN apt-get update && apt-get install -y --no-install-recommends git libgomp1 && rm -rf /var/lib/apt/lists/*
+RUN git init /opt/metagpt && git -C /opt/metagpt remote add origin https://github.com/FoundationAgents/MetaGPT.git && git -C /opt/metagpt fetch --depth 1 origin 11cdf466d042aece04fc6cfd13b28e1a70341b1f && git -C /opt/metagpt checkout --detach FETCH_HEAD
+COPY runtime/team/optional-lancedb.patch runtime/team/requirements.lock /tmp/
+RUN git -C /opt/metagpt apply /tmp/optional-lancedb.patch && pip install --no-cache-dir /opt/metagpt -r /tmp/requirements.lock && pip check
+ENV METAGPT_PROJECT_ROOT=/opt/metagpt
+COPY runtime/team/config2.yaml /opt/metagpt/config/config2.yaml
+COPY --from=web /usr/local/bin/node /usr/local/bin/node
+WORKDIR /app
+COPY --from=web /web/.next/standalone ./
+COPY --from=web /web/.next/static ./.next/static
+COPY runtime/team ./runtime/team
+COPY --from=web /web/node_modules/.pnpm/ws@8.18.3/node_modules/ws ./runtime/team/node_modules/ws
+RUN python -m pip check && python runtime/team/test_runner.py && python -m pip freeze > /app/runtime/team/target-freeze.txt
+ENV NODE_ENV=production HOSTNAME=0.0.0.0 PORT=3000 ATOMS_TEAM_PYTHON=/usr/local/bin/python
+EXPOSE 3000
+ENV ATOMS_NEXT_ENTRY=server.js
+CMD ["node", "runtime/team/gateway.mjs"]

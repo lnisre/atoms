@@ -1,3 +1,4 @@
+import { fulfillGeneration } from "./team-fixture";
 import { test, expect } from '@playwright/test';
 
 // Controlled old-format projects verify entry behavior; these are not real generation evidence.
@@ -9,7 +10,7 @@ for (const viewport of [{ width: 1440, height: 900 }, { width: 1280, height: 720
   test(`首页与项目网格真实接线、禁用与恢复 ${viewport.width}×${viewport.height}`, async ({ page }, info) => {
     await page.setViewportSize(viewport);
     let calls = 0;
-    await page.route('**/api/generate', route => route.fulfill({ json: { html, model: 'entry-fixture', generatedAt: String(++calls), durationMs: 1000 } }));
+    await page.route('**/api/generate', route => fulfillGeneration(route, { json: { html, model: 'entry-fixture', generatedAt: String(++calls), durationMs: 1000 } }));
     await page.goto('/');
     await expect(page.getByText('正在读取已有项目…')).toHaveCount(0);
     await page.evaluate(async html => {
