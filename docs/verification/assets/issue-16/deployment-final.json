@@ -1,0 +1,23 @@
+{
+  "name": "v0-test0",
+  "id": "prj_eErnQuAz4P719xKTyuT6XT2Qu5ab",
+  "nodeVersion": "24.x",
+  "production": {
+    "id": "dpl_CNLWo5rMTg73XdiSca4MmkaeXjSY",
+    "url": "v0-test0-3ct8x78wg-lnisres-projects.vercel.app",
+    "target": "production",
+    "readyState": "READY",
+    "alias": [
+      "v0-test0-nine.vercel.app",
+      "v0-test0-lnisres-projects.vercel.app"
+    ],
+    "createdAt": 1790754030433,
+    "meta": {
+      "sourceCommit": "c258fb0ccb5b8820a93c55176b5501e61656f75a",
+      "ticket": "16",
+      "actor": "codex",
+      "lambdaRuntimeStats": "{\"nodejs\":2}",
+      "bundler": "turbopack"
+    }
+  }
+}
