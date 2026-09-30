@@ -1,4 +1,4 @@
-import type { ExecutionEvent, InitialGeneration } from "./execution";
+import type { ExecutionEvent, InitialGeneration, ModificationGeneration } from "./execution";
 import type { GenerationResult } from "./generation";
 
 export type ModificationRecord = {
@@ -6,6 +6,8 @@ export type ModificationRecord = {
   adoptedAt: string;
   requests: string[];
   summary: string;
+  generations?: ModificationGeneration[];
+  codeTaskId?: string;
 };
 
 export type SavedProject = {
@@ -102,11 +104,16 @@ export function adoptCandidate(
   projectId: string,
   result: GenerationResult,
   requests: string[],
+  generations: ModificationGeneration[] = [],
 ) {
+  if (generations.some(item => item.projectId !== projectId || item.outcome !== "complete") ||
+      (generations.length > 0 && (generations.length !== requests.length || generations.some((item, index) => item.requirement !== requests[index]))))
+    throw new Error("候选消息与项目或需求不匹配，未采用。");
   const record: ModificationRecord = {
     id: crypto.randomUUID(),
     adoptedAt: new Date().toISOString(),
     requests: [...requests],
+    ...(generations.length ? { generations: structuredClone(generations), codeTaskId: generations.at(-1)!.taskId } : {}),
     summary: `已采用 ${requests.length} 轮调整后的候选代码，继续使用原项目正式数据。`,
   };
   return transaction<SavedProject>(["projects"], "readwrite", (tx, done) => {
@@ -167,11 +174,15 @@ export function appendGenerationEvents(projectId: string, taskId: string, events
     const projects = tx.objectStore("projects");
     projects.get(projectId).onsuccess = event => {
       const current: SavedProject | undefined = (event.target as IDBRequest).result;
-      if (!current?.initialGeneration || current.initialGeneration.taskId !== taskId) return tx.abort();
-      const existing = current.initialGeneration.events;
-      const keys = new Set(existing.map(item => `${item.source}:${item.sequence}`));
+      if (!current) return tx.abort();
+      const generation = current.initialGeneration?.taskId === taskId
+        ? current.initialGeneration
+        : current.modificationRecords?.flatMap(record => record.generations ?? []).find(item => item.taskId === taskId && item.projectId === projectId);
+      if (!generation) return tx.abort();
+      const keys = new Set(generation.events.map(item => `${item.source}:${item.sequence}`));
       const additions = events.filter(item => item.taskId === taskId && !keys.has(`${item.source}:${item.sequence}`));
-      try { projects.put({ ...current, initialGeneration: { ...current.initialGeneration, events: [...existing, ...additions] } }); }
+      generation.events = [...generation.events, ...additions];
+      try { projects.put(current); }
       catch { tx.abort(); }
     };
   });

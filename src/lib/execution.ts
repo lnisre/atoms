@@ -16,6 +16,11 @@ export type InitialGeneration = {
   assistantReply: string | null;
   events: ExecutionEvent[];
 };
+export type ModificationGeneration = InitialGeneration & {
+  projectId: string;
+  requirement: string;
+  outcome: "waiting" | "complete" | "failed";
+};
 export type GenerationEvent =
   | { type: "step"; event: ExecutionEvent }
   | { type: "result"; taskId: string; result: GenerationResult; assistantReply: string | null }

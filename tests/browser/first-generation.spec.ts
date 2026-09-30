@@ -158,7 +158,7 @@ test("新项目进入 M2 多轮修改与采用后保留首次说明，日志不�
   await page.reload();
   await expect(page.frameLocator("iframe").getByRole("heading",{name:"修改版本 3"})).toBeVisible();
   await expect(page.frameLocator("iframe").locator("output")).toHaveText("1");
-  await expect(page.locator(".assistant-reply")).toHaveText(explanation);
+  await expect(page.getByRole("region", {name:"首次生成记录"}).locator(".assistant-reply")).toHaveText(explanation);
   expect(calls).toBe(3);
 });
 

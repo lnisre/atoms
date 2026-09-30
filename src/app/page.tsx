@@ -18,9 +18,15 @@ import {
   type GenerationResult,
 } from "@/lib/generation";
 
-import { createRecorder, type InitialGeneration, type RecordStep } from "@/lib/execution";
+import { createRecorder, type InitialGeneration, type ModificationGeneration, type RecordStep } from "@/lib/execution";
 import { readGeneration } from "@/lib/generation-client";
 import { GenerationRecord } from "@/components/generation-record";
+
+type ModificationSession = {
+  record: ModificationGeneration;
+  step: RecordStep;
+  active: boolean;
+};
 
 type Project = { id: string; requirement: string };
 type Task =
@@ -44,11 +50,13 @@ const examples = [
 ];
 
 export default function Home() {
+  const modificationSessions = useRef<ModificationSession[]>([]);
+  const [sessionRecords, setSessionRecords] = useState<ModificationGeneration[]>([]);
   const [generationRecord, setGenerationRecord] = useState<InitialGeneration | null>(null);
   const [logSavePending, setLogSavePending] = useState(false);
   const pendingRecordWrites = useRef(0);
   const [logSaveError, setLogSaveError] = useState(false);
-  const generationSession = useRef<{ record: InitialGeneration; step: RecordStep; saved: boolean; projectId: string; writes: Promise<void> } | null>(null);
+  const generationSession = useRef<{ record: InitialGeneration; step: RecordStep; projectId: string; writes: Promise<void> } | null>(null);
   const [previewStep, setPreviewStep] = useState<RecordStep>();
   const [requirement, setRequirement] = useState("");
   const [project, setProject] = useState<Project | null>(null);
@@ -61,7 +69,7 @@ export default function Home() {
   >("unsaved");
   const [restored, setRestored] = useState(false);
   const [modification, setModification] = useState("");
-  const [candidate, setCandidate] = useState<{ result: GenerationResult; trial: TrialData; revision: number } | null>(null);
+  const [candidate, setCandidate] = useState<{ result: GenerationResult; trial: TrialData; revision: number; session: ModificationSession } | null>(null);
   const [dialogue, setDialogue] = useState<string[]>([]);
   const [records, setRecords] = useState<ModificationRecord[]>([]);
   const [adopting, setAdopting] = useState(false);
@@ -111,6 +119,10 @@ export default function Home() {
   }, []);
 
   function discardChanges() {
+    for (const session of modificationSessions.current) session.active = false;
+    modificationSessions.current = [];
+    setSessionRecords([]);
+    setPreviewStep(undefined);
     setCandidate(null);
     setDialogue([]);
     setModification("");
@@ -197,14 +209,15 @@ export default function Home() {
     setSeconds(0);
     const taskId = crypto.randomUUID();
     const record: InitialGeneration = { taskId, startedAt: new Date().toISOString(), assistantReply: null, events: [] };
-    const session = { record, step: null as unknown as RecordStep, saved: false, projectId: nextProject.id, writes: Promise.resolve() };
+    let persisted = false;
+    const session = { record, step: null as unknown as RecordStep, projectId: nextProject.id, writes: Promise.resolve() };
     generationSession.current = session;
     setGenerationRecord({ ...record });
     setLogSaveError(false);
     const append = (event: InitialGeneration["events"][number]) => {
       record.events = [...record.events, event];
       if (generationSession.current === session) setGenerationRecord({ ...record });
-      if (session.saved) {
+      if (persisted) {
         const events = [...record.events];
         pendingRecordWrites.current++;
         setLogSavePending(true);
@@ -244,7 +257,7 @@ export default function Home() {
       session.step("project-save", "保存项目与助手回复", "started", "写入本浏览器项目存储，等待事务提交。");
       try {
         await saveProject(saved);
-        session.saved = true;
+        persisted = true;
         session.step("project-save", "保存项目与助手回复", "completed", "项目、HTML、助手回复及已有执行记录已提交；后续步骤独立追加。");
         setProjectSave("saved");
         setProjects((items) => [
@@ -282,6 +295,17 @@ export default function Home() {
     active.current = controller;
     setPreviewStep(undefined);
     const change = modification.trim();
+    const taskId = crypto.randomUUID();
+    const record: ModificationGeneration = { taskId, projectId: project.id, requirement: change, startedAt: new Date().toISOString(), assistantReply: null, events: [], outcome: "waiting" };
+    const session: ModificationSession = { record, step: null as unknown as RecordStep, active: true };
+    modificationSessions.current.push(session);
+    const append = (event: ModificationGeneration["events"][number]) => {
+      if (!session.active || event.taskId !== taskId) return;
+      record.events = [...record.events, event];
+      setSessionRecords(modificationSessions.current.map(item => ({ ...item.record })));
+    };
+    session.step = createRecorder(taskId, "browser", append);
+    session.step("transport", "接收修改结果", "started", candidate ? "提交最新候选代码及已完成的本轮需求，读取实际执行事件。" : "提交已采用代码，读取实际执行事件。");
     setModifying(true);
     setModificationError("");
     setAdoptionError("");
@@ -290,20 +314,32 @@ export default function Home() {
     try {
       const response = await fetch("/api/generate", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json", Accept: "application/x-ndjson", "X-Atoms-Task-Id": taskId },
         body: JSON.stringify({ requirement: project.requirement, modification: change, baseHtml: (candidate?.result ?? task.result).html, context: dialogue }),
         signal: controller.signal,
       });
-      const result = await response.json().catch(() => null);
-      if (!response.ok) throw new Error(result?.error || "修改未完成，请手动重新发起。");
-      if (!result || typeof result.html !== "string" || typeof result.durationMs !== "number") throw new Error("修改结果不完整，请重新发起。");
-      // Clone only a successfully read committed state. A failed read never becomes empty trial data.
-      const record = candidate ? undefined : await loadApplicationData(project.id);
-      const trial = candidate?.trial ?? { projectId: project.id, state: structuredClone(record?.state ?? null), hasData: !!record };
-      setCandidate({ result, trial, revision: (candidate?.revision ?? 0) + 1 });
+      const { result, assistantReply } = await readGeneration(response, taskId, append);
+      record.assistantReply = assistantReply;
+      session.step("transport", "接收修改结果", "completed", "完整 HTML 与正常传输终态已收到。");
+      session.step("trial", "准备试用副本", "started", candidate ? "沿用当前会话的试用数据。" : "读取正式数据并创建会话内副本。");
+      let trial: TrialData;
+      try {
+        const data = candidate ? undefined : await loadApplicationData(project.id);
+        trial = candidate?.trial ?? { projectId: project.id, state: structuredClone(data?.state ?? null), hasData: !!data };
+      } catch (error) {
+        session.step("trial", "准备试用副本", "failed", "未成功读取正式数据，未开始空数据试用。");
+        throw error;
+      }
+      record.outcome = "complete";
+      session.step("trial", "准备试用副本", "completed", "试用副本已准备；不会写入正式业务数据。");
+      setCandidate({ result, trial, revision: (candidate?.revision ?? 0) + 1, session });
       setDialogue(items => [...items, change]);
       setModification("");
     } catch (error) {
+      record.outcome = "failed";
+      if (!record.events.some(event => event.stepId === "transport" && event.status === "completed"))
+        session.step("transport", "接收修改结果", "failed", "未取得完整且匹配的结果，接收已结束。");
+      session.step("modification", "本轮修改", "failed", controller.signal.aborted ? "等待超时；已有候选与正式成果保留。" : error instanceof Error ? error.message : "修改失败，已有成果保留。");
       setModificationError(controller.signal.aborted ? "等待超时，已结束本次修改。已有应用与候选保留，可手动重新发起。" : error instanceof Error ? error.message : "修改失败，请重新发起。");
     } finally {
       clearTimeout(timer);
@@ -318,7 +354,24 @@ export default function Home() {
     setAdopting(true);
     setAdoptionError("");
     try {
-      const saved = await adoptCandidate(project.id, candidate.result, dialogue);
+      const sessions = modificationSessions.current.filter(item => item.record.outcome === "complete");
+      candidate.session.step("adoption", "采用代码与消息", "started", "在同一事务保存最新候选代码、对应需求、助手回复与执行记录；不写入试用数据。");
+      const saved = await adoptCandidate(project.id, candidate.result, dialogue, sessions.map(item => item.record));
+      candidate.session.step("adoption", "采用代码与消息", "completed", "采用事务已提交，代码与对应消息已保存；正式数据保持原样。");
+      // Completion is only recorded after commit. Append to the latest stored
+      // record, never overwrite code or official data with a stale snapshot.
+      pendingRecordWrites.current++;
+      setLogSavePending(true);
+      try {
+        await appendGenerationEvents(project.id, candidate.session.record.taskId, candidate.session.record.events);
+        setLogSaveError(false);
+      } catch {
+        setLogSaveError(true);
+      } finally {
+        pendingRecordWrites.current--;
+        setLogSavePending(pendingRecordWrites.current > 0);
+      }
+      saved.modificationRecords!.at(-1)!.generations = sessions.map(item => structuredClone(item.record));
       setPreviewStep(undefined);
       setTask({ status: "complete", result: saved.result });
       setRecords(saved.modificationRecords ?? []);
@@ -327,6 +380,7 @@ export default function Home() {
       // Remount with a fresh channel and official storage only after commit.
       discardChanges();
     } catch {
+      candidate.session.step("adoption", "采用代码与消息", "failed", "采用事务未提交，旧保存结果仍保留，当前候选未采用。");
       setAdoptionError("采用保存失败。原先已保存的代码、修改记录和正式数据仍保留；当前候选尚未采用，请保留页面并检查浏览器存储权限或空间，再手动点击“采用修改”。");
     } finally {
       adoptionPending.current = false;
@@ -489,6 +543,9 @@ export default function Home() {
                   </li>)}</ol></details>}
                 </>}
               </section>
+              {!generationRecord && logSaveError && <p role="alert" className="save-error">执行记录保存失败，最新步骤可能无法恢复；已采用的代码与消息仍保留。</p>}
+              {records.flatMap(record => record.generations ?? []).map(record => <GenerationRecord key={record.taskId} title="已保存修改" requirement={record.requirement} record={record} live={false} pending={false} saveError={false} saving={false} />)}
+              {sessionRecords.map(record => <GenerationRecord key={record.taskId} title={record.outcome === "failed" ? "修改失败" : "本轮修改"} requirement={record.requirement} record={record} live={record.outcome !== "failed"} pending={record.outcome === "waiting"} saveError={false} saving={false} />)}
               <details className="requirement-block"><summary>原需求详情</summary><p>{project.requirement}</p></details>
               {task?.status === "complete" && <details className="generation-details"><summary>模型与耗时</summary>
                 <dl><div><dt>模型</dt><dd>{(candidate?.result ?? task.result).model}</dd></div><div><dt>{candidate ? "最近候选耗时" : "生成耗时"}</dt><dd>{((candidate?.result ?? task.result).durationMs / 1000).toFixed(1)} 秒</dd></div></dl>
@@ -512,14 +569,14 @@ export default function Home() {
             <AppPreview
               key={project.id + task.result.generatedAt + (candidate ? `:trial:${candidate.revision}` : ":adopted")}
               html={(candidate?.result ?? task.result).html}
-              recordStep={!candidate ? previewStep : undefined}
+              recordStep={candidate ? candidate.session.step : previewStep}
               trial={candidate?.trial}
               actions={candidate && <div className="candidate-actions" aria-label="候选操作">
                 <div className="candidate-action-row"><strong>第 {candidate.revision} 轮候选 · 等待采用</strong><div>
                   <button className="text-button" disabled={busy} onClick={discardChanges}>放弃本轮修改</button>
                   <button className="primary-button" disabled={busy} onClick={() => void adopt()}>{adopting ? "正在保存采用…" : "采用修改"}</button>
                 </div></div>
-                <p>采用只保存代码与修改记录，试用数据不会写回正式数据。</p>
+                <p>采用保存代码、对应消息与修改记录，试用数据不会写回正式数据。</p>
                 <p>候选、试用数据和本轮对话仅在当前会话保留；放弃、离开项目、刷新或关闭后会丢失。</p>
                 {adopting && <p role="status">正在保存代码与修改记录，完成前仍为未采用候选。请等待保存成功再离开。</p>}
                 {adoptionError && <p className="save-error" role="alert">{adoptionError}</p>}
