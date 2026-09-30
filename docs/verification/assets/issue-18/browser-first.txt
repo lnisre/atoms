@@ -1,0 +1,259 @@
+
+Running 38 tests using 2 workers
+
+(node:15882) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:15883) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓   2 tests/browser/first-generation.spec.ts:25:5 › 完整说明安全显示，真实预览/数据步骤保存，刷新和同浏览器重开零调用 (2.7s)
+  ✓   3 tests/browser/first-generation.spec.ts:62:5 › 等待期间观察到流事件，完成前不显示正文或运行 HTML (689ms)
+  ✓   4 tests/browser/first-generation.spec.ts:92:5 › 正文缺失降级保留应用，缺失状态也能恢复且不补调模型 (949ms)
+  ✓   1 tests/browser/candidate.spec.ts:40:5 › 同项目多轮使用最新候选；试用增删改、失败、放弃、刷新和关闭重开均保全正式数据 (4.5s)
+  ✓   5 tests/browser/first-generation.spec.ts:102:5 › 传输中断、任务错配和无效 HTML 均结束等待，不保存或运行产物 (948ms)
+  ✓   7 tests/browser/first-generation.spec.ts:118:5 › 日志事务失败明确提示，已提交项目和数据不被日志覆盖 (695ms)
+  ✓   8 tests/browser/first-generation.spec.ts:138:5 › 新项目进入 M2 多轮修改与采用后保留首次说明，日志不覆盖采用代码 (992ms)
+  ✓   9 tests/browser/first-generation.spec.ts:166:5 › 真实 Next.js 请求代理可进入流接口，校验失败不调用模型 (87ms)
+  ✓  10 tests/browser/generation.spec.ts:12:5 › 需求留在工作台，等待结束后运行隔离预览并保存项目 (626ms)
+  ✓  11 tests/browser/generation.spec.ts:59:5 › 失败后保留需求并允许手动重新生成 (568ms)
+  ✓  12 tests/browser/generation.spec.ts:84:5 › 浏览器等待超时后结束等待并提供重试 (787ms)
+  ✓  13 tests/browser/generation.spec.ts:102:5 › 生成应用运行异常时提示而非宣称验证通过 (635ms)
+  ✓  14 tests/browser/generation.spec.ts:125:5 › 手机首页不横向溢出，示例只填入需求 (392ms)
+  ✘   6 tests/browser/candidate.spec.ts:89:5 › 复制正式数据读取失败不开始空试用；手动重试可成功 (6.1s)
+(node:16521) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  15 tests/browser/home-entry.spec.ts:9:7 › 首页与项目网格真实接线、禁用与恢复 1440×900 (1.6s)
+  ✓  17 tests/browser/home-entry.spec.ts:9:7 › 首页与项目网格真实接线、禁用与恢复 1280×720 (2.1s)
+  ✓  18 tests/browser/home-entry.spec.ts:90:5 › 空项目入口与存储失败反馈可达 (649ms)
+  ✓  19 tests/browser/modification-records.spec.ts:40:5 › 多轮回复和执行记录随最新代码采用，恢复零调用，首次消息和正式数据不变 (1.6s)
+  ✓  20 tests/browser/modification-records.spec.ts:73:5 › 失败、无效HTML与旧任务事件保留有效候选；放弃和刷新丢弃会话消息 (1.1s)
+  ✓  21 tests/browser/modification-records.spec.ts:88:5 › 采用事务失败不保存消息或代码，保留候选可重试，缺正文也可采用 (1.1s)
+  ✘  16 tests/browser/candidate.spec.ts:106:5 › 修改超时结束等待，保留已采用应用供继续使用 (6.2s)
+  ✓  22 tests/browser/modification-records.spec.ts:99:5 › 修改等待期间展示真实事件，原候选可用，错误终态结束等待 (781ms)
+  ✓  23 tests/browser/modification-records.spec.ts:120:5 › 真实HTTP修改入口验证失败返回任务终态，不触发模型 (23ms)
+(node:16921) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  24 tests/browser/modification-records.spec.ts:126:5 › 采用后的日志追加失败如实提示，代码和消息已提交，重开不补造成功步骤 (912ms)
+  ✓  26 tests/browser/persistence.spec.ts:45:5 › 添加、完成、删除后刷新和关闭重开，恢复需求与业务数据且不调用模型 (1.9s)
+  ✓  27 tests/browser/persistence.spec.ts:97:5 › 多个项目数据隔离，外部伪造的保存消息被忽略 (1.1s)
+  ✓  28 tests/browser/persistence.spec.ts:136:5 › 业务数据事务中止时明确失败，不把请求成功当作保存成功 (835ms)
+  ✓  29 tests/browser/persistence.spec.ts:177:5 › 项目写入失败仍展示结果和错误，不宣称项目已保存 (560ms)
+  ✓  30 tests/browser/persistence.spec.ts:201:5 › 读取失败禁止覆盖原数据，恢复存储后仍能重开 (1.0s)
+  ✓  31 tests/browser/preview-document.spec.ts:7:7 › 真实 head 装配、数据保存恢复和运行异常反馈：普通完整 HTML (700ms)
+  ✓  32 tests/browser/preview-document.spec.ts:7:7 › 真实 head 装配、数据保存恢复和运行异常反馈：<!-- example <head> --> (683ms)
+  ✘  25 tests/browser/candidate.spec.ts:117:5 › 明确采用最新候选只保存代码与多轮记录；旧通道失效，正式操作和重开可恢复 (6.4s)
+  ✓  33 tests/browser/preview-document.spec.ts:7:7 › 真实 head 装配、数据保存恢复和运行异常反馈：<!-- <head> --><!----><!-- <body> --> (719ms)
+(node:17291) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  34 tests/browser/preview-document.spec.ts:63:5 › 恢复旧的不完整 HTML 时明确显示装配失败且不运行 iframe (726ms)
+  ✓  36 tests/browser/save-race.spec.ts:7:5 › 真实旧产物保存时禁止新修改，下一次修改确认后立即关闭可恢复 (1.9s)
+  ✘  35 tests/browser/candidate.spec.ts:183:5 › 采用事务未完成不显示成功；中止保留候选和此前采用记录，可手动重试 (6.6s)
+  ✘  37 tests/browser/workbench.spec.ts:17:7 › 长内容桌面路径、独立滚动与详情状态保全 1280×720 (5.9s)
+(node:17690) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  38 tests/browser/workbench.spec.ts:17:7 › 长内容桌面路径、独立滚动与详情状态保全 1440×900 (6.3s)
+
+
+  1) tests/browser/candidate.spec.ts:89:5 › 复制正式数据读取失败不开始空试用；手动重试可成功 ───────────────────────────────
+
+    Error: expect(locator).toHaveCount(expected) failed
+
+    Locator:  getByLabel('本轮对话')
+    Expected: 0
+    Received: 1
+    Timeout:  5000ms
+
+    Call log:
+      - Expect "toHaveCount" getByLabel('本轮对话') with timeout 5000ms
+      - waiting for getByLabel('本轮对话')
+        14 × locator resolved to 1 element
+           - unexpected value "1"
+
+
+      36 |   await expect(f.getByText('试用新增', { exact: true })).toHaveCount(0);
+      37 |   await expect(f.getByRole('heading', { name: /候选第/ })).toHaveCount(0);
+    > 38 |   await expect(page.getByLabel('本轮对话')).toHaveCount(0);
+         |                                         ^
+      39 | }
+      40 | test('同项目多轮使用最新候选；试用增删改、失败、放弃、刷新和关闭重开均保全正式数据', async ({ page, context }) => {
+      41 |   await setup(page);
+        at originalIntact (/Users/gaowenlong/.codex/worktrees/m4-workbench/atoms/tests/browser/candidate.spec.ts:38:41)
+        at /Users/gaowenlong/.codex/worktrees/m4-workbench/atoms/tests/browser/candidate.spec.ts:101:3
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/candidate-复制正式数据读取失败不开始空试用；手动重试可成功/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/candidate-复制正式数据读取失败不开始空试用；手动重试可成功/error-context.md
+
+  2) tests/browser/candidate.spec.ts:106:5 › 修改超时结束等待，保留已采用应用供继续使用 ─────────────────────────────────
+
+    Error: expect(locator).toHaveCount(expected) failed
+
+    Locator:  getByLabel('本轮对话')
+    Expected: 0
+    Received: 1
+    Timeout:  5000ms
+
+    Call log:
+      - Expect "toHaveCount" getByLabel('本轮对话') with timeout 5000ms
+      - waiting for getByLabel('本轮对话')
+        14 × locator resolved to 1 element
+           - unexpected value "1"
+
+
+      36 |   await expect(f.getByText('试用新增', { exact: true })).toHaveCount(0);
+      37 |   await expect(f.getByRole('heading', { name: /候选第/ })).toHaveCount(0);
+    > 38 |   await expect(page.getByLabel('本轮对话')).toHaveCount(0);
+         |                                         ^
+      39 | }
+      40 | test('同项目多轮使用最新候选；试用增删改、失败、放弃、刷新和关闭重开均保全正式数据', async ({ page, context }) => {
+      41 |   await setup(page);
+        at originalIntact (/Users/gaowenlong/.codex/worktrees/m4-workbench/atoms/tests/browser/candidate.spec.ts:38:41)
+        at /Users/gaowenlong/.codex/worktrees/m4-workbench/atoms/tests/browser/candidate.spec.ts:113:3
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/candidate-修改超时结束等待，保留已采用应用供继续使用/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/candidate-修改超时结束等待，保留已采用应用供继续使用/error-context.md
+
+  3) tests/browser/candidate.spec.ts:117:5 › 明确采用最新候选只保存代码与多轮记录；旧通道失效，正式操作和重开可恢复 ───────────────────
+
+    Error: expect(locator).toContainText(expected) failed
+
+    Locator: getByLabel('已采用修改记录')
+    Expected substring: "还没有"
+    Received string:    ""
+    Timeout: 5000ms
+
+    Call log:
+      - Expect "toContainText" getByLabel('已采用修改记录') with timeout 5000ms
+      - waiting for getByLabel('已采用修改记录')
+        14 × locator resolved to <section aria-label="已采用修改记录" class="record-history"></section>
+           - unexpected value ""
+
+
+      117 | test('明确采用最新候选只保存代码与多轮记录；旧通道失效，正式操作和重开可恢复', async ({ page, context }) => {
+      118 |   await setup(page);
+    > 119 |   await expect(page.getByLabel('已采用修改记录')).toContainText('还没有');
+          |                                            ^
+      120 |   const url = page.url();
+      121 |   const requests: Record<string, unknown>[] = [];
+      122 |   let round = 0;
+        at /Users/gaowenlong/.codex/worktrees/m4-workbench/atoms/tests/browser/candidate.spec.ts:119:44
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/candidate-明确采用最新候选只保存代码与多轮记录；旧通道失效，正式操作和重开可恢复/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/candidate-明确采用最新候选只保存代码与多轮记录；旧通道失效，正式操作和重开可恢复/error-context.md
+
+  4) tests/browser/candidate.spec.ts:183:5 › 采用事务未完成不显示成功；中止保留候选和此前采用记录，可手动重试 ──────────────────────
+
+    Error: expect(locator).toHaveCount(expected) failed
+
+    Locator:  getByLabel('已采用修改记录').locator('li')
+    Expected: 1
+    Received: 6
+    Timeout:  5000ms
+
+    Call log:
+      - Expect "toHaveCount" getByLabel('已采用修改记录').locator('li') with timeout 5000ms
+      - waiting for getByLabel('已采用修改记录').locator('li')
+        - locator resolved to 0 elements
+        - unexpected value "0"
+        13 × locator resolved to 6 elements
+           - unexpected value "6"
+
+
+      187 |   await modify(page, '先采用的修改');
+      188 |   await page.getByRole('button', { name: '采用修改', exact: true }).click();
+    > 189 |   await expect(page.getByLabel('已采用修改记录').locator('li')).toHaveCount(1);
+          |                                                          ^
+      190 |   await modify(page, '保存失败的修改');
+      191 |   await expect(page.frameLocator('iframe').getByRole('heading', { name: '候选第2轮' })).toBeVisible();
+      192 |   await page.evaluate(() => {
+        at /Users/gaowenlong/.codex/worktrees/m4-workbench/atoms/tests/browser/candidate.spec.ts:189:58
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/candidate-采用事务未完成不显示成功；中止保留候选和此前采用记录，可手动重试/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/candidate-采用事务未完成不显示成功；中止保留候选和此前采用记录，可手动重试/error-context.md
+
+  5) tests/browser/workbench.spec.ts:17:7 › 长内容桌面路径、独立滚动与详情状态保全 1280×720 ───────────────────────────
+
+    Error: expect(locator).toHaveCount(expected) failed
+
+    Locator:  getByLabel('本轮对话').locator('li')
+    Expected: 1
+    Received: 6
+    Timeout:  5000ms
+
+    Call log:
+      - Expect "toHaveCount" getByLabel('本轮对话').locator('li') with timeout 5000ms
+      - waiting for getByLabel('本轮对话').locator('li')
+        - locator resolved to 2 elements
+        - unexpected value "2"
+        - locator resolved to 5 elements
+        - unexpected value "5"
+        12 × locator resolved to 6 elements
+           - unexpected value "6"
+
+
+      47 |       await page.getByLabel('追加修改需求').fill(`本轮修改 ${round}：` + '让布局更清楚且保留数据。'.repeat(18));
+      48 |       await page.getByRole('button', { name: '生成候选', exact: true }).click();
+    > 49 |       await expect(page.getByLabel('本轮对话').locator('li')).toHaveCount(round + 1);
+         |                                                           ^
+      50 |     }
+      51 |     const f = page.frameLocator('iframe');
+      52 |     await f.getByRole('button', { name: '增加' }).press('Enter');
+        at /Users/gaowenlong/.codex/worktrees/m4-workbench/atoms/tests/browser/workbench.spec.ts:49:59
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/workbench-长内容桌面路径、独立滚动与详情状态保全-1280×720/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/workbench-长内容桌面路径、独立滚动与详情状态保全-1280×720/error-context.md
+
+  6) tests/browser/workbench.spec.ts:17:7 › 长内容桌面路径、独立滚动与详情状态保全 1440×900 ───────────────────────────
+
+    Error: expect(locator).toHaveCount(expected) failed
+
+    Locator:  getByLabel('本轮对话').locator('li')
+    Expected: 1
+    Received: 6
+    Timeout:  5000ms
+
+    Call log:
+      - Expect "toHaveCount" getByLabel('本轮对话').locator('li') with timeout 5000ms
+      - waiting for getByLabel('本轮对话').locator('li')
+        - locator resolved to 2 elements
+        - unexpected value "2"
+        13 × locator resolved to 6 elements
+           - unexpected value "6"
+
+
+      47 |       await page.getByLabel('追加修改需求').fill(`本轮修改 ${round}：` + '让布局更清楚且保留数据。'.repeat(18));
+      48 |       await page.getByRole('button', { name: '生成候选', exact: true }).click();
+    > 49 |       await expect(page.getByLabel('本轮对话').locator('li')).toHaveCount(round + 1);
+         |                                                           ^
+      50 |     }
+      51 |     const f = page.frameLocator('iframe');
+      52 |     await f.getByRole('button', { name: '增加' }).press('Enter');
+        at /Users/gaowenlong/.codex/worktrees/m4-workbench/atoms/tests/browser/workbench.spec.ts:49:59
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/workbench-长内容桌面路径、独立滚动与详情状态保全-1440×900/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/workbench-长内容桌面路径、独立滚动与详情状态保全-1440×900/error-context.md
+
+  6 failed
+    tests/browser/candidate.spec.ts:89:5 › 复制正式数据读取失败不开始空试用；手动重试可成功 ────────────────────────────────
+    tests/browser/candidate.spec.ts:106:5 › 修改超时结束等待，保留已采用应用供继续使用 ──────────────────────────────────
+    tests/browser/candidate.spec.ts:117:5 › 明确采用最新候选只保存代码与多轮记录；旧通道失效，正式操作和重开可恢复 ────────────────────
+    tests/browser/candidate.spec.ts:183:5 › 采用事务未完成不显示成功；中止保留候选和此前采用记录，可手动重试 ───────────────────────
+    tests/browser/workbench.spec.ts:17:7 › 长内容桌面路径、独立滚动与详情状态保全 1280×720 ────────────────────────────
+    tests/browser/workbench.spec.ts:17:7 › 长内容桌面路径、独立滚动与详情状态保全 1440×900 ────────────────────────────
+  32 passed (47.5s)

@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState, type ReactNode } from "react";
+import { PreviewNavigation } from "@/components/workbench-controls";
 import type { RecordStep } from "@/lib/execution";
 import type { TrialData } from "@/lib/trial-data";
 import { previewDocument } from "@/lib/preview-document";
@@ -194,6 +195,7 @@ export function AppPreview({
 
   return (
     <section className="preview-panel" aria-label="应用预览">
+      <PreviewNavigation />
       {actions}
       <div className="preview-toolbar">
         <span>

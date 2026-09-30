@@ -35,7 +35,8 @@ async function originalIntact(page: Page) {
   await expect(f.getByLabel('完成 原任务乙', { exact: true })).not.toBeChecked();
   await expect(f.getByText('试用新增', { exact: true })).toHaveCount(0);
   await expect(f.getByRole('heading', { name: /候选第/ })).toHaveCount(0);
-  await expect(page.getByLabel('本轮对话')).toHaveCount(0);
+  // Failed attempts remain in the chronological message stream; no usable candidate exists.
+  await expect(page.getByRole('region', { name: '候选操作' })).toHaveCount(0);
 }
 test('同项目多轮使用最新候选；试用增删改、失败、放弃、刷新和关闭重开均保全正式数据', async ({ page, context }) => {
   await setup(page);
@@ -155,16 +156,16 @@ test('明确采用最新候选只保存代码与多轮记录；旧通道失效�
   expect(requests[2].baseHtml).toBe(candidateHtml(2));
   expect(requests[2].context).toEqual([]);
   await page.getByRole('button', { name: '采用修改', exact: true }).click();
-  await expect(page.getByLabel('已采用修改记录').locator('li')).toHaveCount(2);
+  await expect(page.getByLabel('已采用修改记录').locator(':scope > .adopted-group')).toHaveCount(2);
   await modify(page, '不保存的修改');
   await expect(f.getByRole('heading', { name: '候选第4轮' })).toBeVisible();
   await page.getByRole('button', { name: '放弃本轮修改' }).click();
-  await expect(page.getByLabel('已采用修改记录').locator('li')).toHaveCount(2);
+  await expect(page.getByLabel('已采用修改记录').locator(':scope > .adopted-group')).toHaveCount(2);
   await modify(page, '刷新丢弃的修改');
   await expect(f.getByRole('heading', { name: '候选第5轮' })).toBeVisible();
   await page.reload();
   await expect(f.getByRole('heading', { name: '候选第3轮' })).toBeVisible();
-  await expect(page.getByLabel('已采用修改记录').locator('li')).toHaveCount(2);
+  await expect(page.getByLabel('已采用修改记录').locator(':scope > .adopted-group')).toHaveCount(2);
   await expect(page.getByLabel('已采用修改记录')).not.toContainText('丢弃');
   await expect(f.getByText('正式新增', { exact: true })).toBeVisible();
   await expect(f.getByLabel('完成 原任务乙', { exact: true })).toBeChecked();
@@ -176,7 +177,7 @@ test('明确采用最新候选只保存代码与多轮记录；旧通道失效�
   await expect(reopened).toHaveURL(url);
   await expect(reopened.frameLocator('iframe').getByRole('heading', { name: '候选第3轮' })).toBeVisible();
   await expect(reopened.frameLocator('iframe').getByText('正式新增', { exact: true })).toBeVisible();
-  await expect(reopened.getByLabel('已采用修改记录').locator('li')).toHaveCount(2);
+  await expect(reopened.getByLabel('已采用修改记录').locator(':scope > .adopted-group')).toHaveCount(2);
   expect(generations).toBe(0);
 });
 
@@ -186,7 +187,7 @@ test('采用事务未完成不显示成功；中止保留候选和此前采用�
   await page.route('**/api/generate', route => route.fulfill({ json: { html: candidateHtml(++round), model: 'fixture', durationMs: 1, generatedAt: String(round) } }));
   await modify(page, '先采用的修改');
   await page.getByRole('button', { name: '采用修改', exact: true }).click();
-  await expect(page.getByLabel('已采用修改记录').locator('li')).toHaveCount(1);
+  await expect(page.getByLabel('已采用修改记录').locator(':scope > .adopted-group')).toHaveCount(1);
   await modify(page, '保存失败的修改');
   await expect(page.frameLocator('iframe').getByRole('heading', { name: '候选第2轮' })).toBeVisible();
   await page.evaluate(() => {
@@ -206,15 +207,15 @@ test('采用事务未完成不显示成功；中止保留候选和此前采用�
   await page.getByRole('button', { name: '采用修改', exact: true }).click();
   await expect(page.getByRole('button', { name: '正在保存采用…', exact: true })).toBeDisabled();
   await expect(page.getByText('候选试用 · 未采用')).toBeVisible();
-  await expect(page.getByLabel('已采用修改记录').locator('li')).toHaveCount(1);
+  await expect(page.getByLabel('已采用修改记录').locator(':scope > .adopted-group')).toHaveCount(1);
   await expect(page.getByLabel('候选操作').getByRole('alert')).toContainText('采用保存失败');
   await expect(page.frameLocator('iframe').getByRole('heading', { name: '候选第2轮' })).toBeVisible();
   const check = await context.newPage(); await check.goto(page.url());
   await expect(check.frameLocator('iframe').getByRole('heading', { name: '候选第1轮' })).toBeVisible();
-  await expect(check.getByLabel('已采用修改记录').locator('li')).toHaveCount(1);
+  await expect(check.getByLabel('已采用修改记录').locator(':scope > .adopted-group')).toHaveCount(1);
   await expect(check.frameLocator('iframe').getByText('原任务甲', { exact: true })).toBeVisible();
   await check.close();
   await page.getByRole('button', { name: '采用修改', exact: true }).click();
-  await expect(page.getByLabel('已采用修改记录').locator('li')).toHaveCount(2);
+  await expect(page.getByLabel('已采用修改记录').locator(':scope > .adopted-group')).toHaveCount(2);
   await expect(page.getByText('运行预览 · 已采用应用')).toBeVisible();
 });
