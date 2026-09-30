@@ -1,0 +1,76 @@
+[
+  {
+    "taskId": "http-entry-regression",
+    "status": 200,
+    "events": [
+      {
+        "type": "step",
+        "event": {
+          "taskId": "http-entry-regression",
+          "source": "server",
+          "sequence": 1,
+          "stepId": "context",
+          "label": "准备请求与上下文",
+          "status": "started",
+          "detail": "读取并校验本次需求与生成配置。",
+          "at": "2026-09-30T09:48:22.596Z"
+        }
+      },
+      {
+        "type": "step",
+        "event": {
+          "taskId": "http-entry-regression",
+          "source": "server",
+          "sequence": 2,
+          "stepId": "context",
+          "label": "准备请求与上下文",
+          "status": "failed",
+          "detail": "请输入 1–4000 字的应用需求。",
+          "at": "2026-09-30T09:48:22.608Z"
+        }
+      },
+      {
+        "type": "error",
+        "taskId": "http-entry-regression",
+        "error": "请输入 1–4000 字的应用需求。"
+      }
+    ]
+  },
+  {
+    "taskId": "http-modification",
+    "status": 200,
+    "events": [
+      {
+        "type": "step",
+        "event": {
+          "taskId": "http-modification",
+          "source": "server",
+          "sequence": 1,
+          "stepId": "context",
+          "label": "准备请求与上下文",
+          "status": "started",
+          "detail": "读取并校验本次需求与生成配置。",
+          "at": "2026-09-30T09:48:22.900Z"
+        }
+      },
+      {
+        "type": "step",
+        "event": {
+          "taskId": "http-modification",
+          "source": "server",
+          "sequence": 2,
+          "stepId": "context",
+          "label": "准备请求与上下文",
+          "status": "failed",
+          "detail": "基础代码缺失或超过 500000 字符，未提交模型。",
+          "at": "2026-09-30T09:48:22.901Z"
+        }
+      },
+      {
+        "type": "error",
+        "taskId": "http-modification",
+        "error": "基础代码缺失或超过 500000 字符，未提交模型。"
+      }
+    ]
+  }
+]

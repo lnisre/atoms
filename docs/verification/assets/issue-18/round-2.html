@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>工作台多轮验收</title>
+<style>
+  :root{
+    --blue:#1a73e8;
+    --blue-dark:#155ab6;
+    --blue-disabled:#9dc0f5;
+    --text:#202124;
+    --muted:#5f6368;
+    --bg:#ffffff;
+    --border:#dadce0;
+    --danger:#c5221f;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:"PingFang SC","Microsoft YaHei","Hiragino Sans GB","Helvetica Neue",Arial,sans-serif;
+    min-height:100vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:24px;
+  }
+  .card{
+    width:100%;
+    max-width:420px;
+    border:1px solid var(--border);
+    border-radius:12px;
+    padding:28px 24px;
+    text-align:center;
+    background:#fff;
+  }
+  h1{
+    font-size:20px;
+    font-weight:600;
+    margin:0 0 20px;
+  }
+  .count-box{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    margin-bottom:24px;
+  }
+  .count-label{
+    font-size:14px;
+    color:var(--muted);
+    margin-bottom:8px;
+  }
+  #countValue{
+    font-size:56px;
+    font-weight:700;
+    line-height:1;
+    color:var(--blue);
+    font-variant-numeric:tabular-nums;
+  }
+  .actions{
+    display:flex;
+    gap:12px;
+    flex-direction:column;
+  }
+  button{
+    width:100%;
+    font-size:16px;
+    font-weight:500;
+    color:#fff;
+    background:var(--blue);
+    border:none;
+    border-radius:8px;
+    padding:14px 20px;
+    cursor:pointer;
+    transition:background-color .15s ease;
+  }
+  button:hover:not(:disabled){background:var(--blue-dark);}
+  button:focus-visible{outline:3px solid #a8c7fa;outline-offset:2px;}
+  button:disabled{background:var(--blue-disabled);cursor:not-allowed;}
+  .status{
+    margin-top:16px;
+    font-size:14px;
+    min-height:20px;
+    color:var(--muted);
+  }
+  .status.error{color:var(--danger);}
+  .status.saved{color:#188038;}
+  @media (min-width:420px){
+    .actions{flex-direction:row;}
+  }
+</style>
+</head>
+<body>
+  <main class="card">
+    <h1>工作台多轮验收</h1>
+    <div class="count-box">
+      <div class="count-label">当前次数</div>
+      <div id="countValue" aria-live="polite" aria-atomic="true">—</div>
+    </div>
+    <div class="actions">
+      <button id="addButton" type="button" disabled>增加一次</button>
+      <button id="subButton" type="button" disabled>减少一次</button>
+      <button id="addFiveButton" type="button" disabled>增加五次</button>
+    </div>
+    <div id="status" class="status" role="status" aria-live="polite"></div>
+  </main>
+
+<script>
+(function () {
+  "use strict";
+
+  var countEl = document.getElementById("countValue");
+  var addButton = document.getElementById("addButton");
+  var subButton = document.getElementById("subButton");
+  var addFiveButton = document.getElementById("addFiveButton");
+  var statusEl = document.getElementById("status");
+
+  var state = null;          // 业务数据 {count:number}
+  var editing = false;       // 是否允许编辑
+  var saveInFlight = false;  // 仅用于避免重叠保存
+
+  function setStatus(text, kind) {
+    statusEl.textContent = text || "";
+    statusEl.className = "status" + (kind ? " " + kind : "");
+  }
+
+  function setEditingAllowed(allowed) {
+    editing = allowed;
+    addButton.disabled = !allowed;
+    addFiveButton.disabled = !allowed;
+    subButton.disabled = !allowed || (state === null) || state.count <= 0;
+  }
+
+  function render() {
+    countEl.textContent = state === null ? "—" : String(state.count);
+    // 最低为 0，达到 0 时禁用减少按钮（其余按钮遵循整体编辑许可）
+    subButton.disabled = !editing || (state === null) || state.count <= 0;
+  }
+
+  // 初始化：先读取，读取完成后再启用
+  async function init() {
+    setEditingAllowed(false);
+    countEl.textContent = "—";
+    setStatus("正在读取已保存的数据…");
+
+    var loaded;
+    try {
+      loaded = await window.atoms.loadState();
+    } catch (err) {
+      setStatus("读取失败：" + (err && err.message ? err.message : "未知错误") + "。为保护数据，编辑已停用，请刷新重试。", "error");
+      return;
+    }
+
+    if (loaded === null || loaded === undefined) {
+      // 新项目：使用默认值，但不立即保存
+      state = { count: 0 };
+    } else if (typeof loaded === "object" && typeof loaded.count === "number" && isFinite(loaded.count)) {
+      // 旧业务数据原样恢复，不自动写默认值
+      state = { count: loaded.count };
+    } else {
+      // 已存在但结构不可识别：不覆盖，保持只读以避免破坏数据
+      state = null;
+      countEl.textContent = "—";
+      setStatus("已保存的数据格式无法识别，为避免覆盖，编辑已停用。", "error");
+      return;
+    }
+
+    render();
+    setStatus("");
+    setEditingAllowed(true);
+    render();
+  }
+
+  // 唯一的异步变更处理器
+  async function mutate(delta) {
+    if (state === null || saveInFlight) { return; }
+
+    var current = state.count;
+    var next = current + delta;
+    if (next < 0) { next = 0; } // 最低 0
+
+    // 1) 立即更新内存状态并渲染
+    state = { count: next };
+    render();
+
+    // 2) 同步快照并立即发起保存（同一事件处理器内，无 await 之前）
+    var snapshot = { count: state.count };
+    setEditingAllowed(false);
+    setStatus("正在保存…");
+    saveInFlight = true;
+
+    var savePromise;
+    try {
+      savePromise = window.atoms.saveState(snapshot);
+    } catch (err) {
+      saveInFlight = false;
+      setStatus("保存失败：" + (err && err.message ? err.message : "未知错误") + "。计数已回滚，请重试。", "error");
+      state = { count: current };
+      render();
+      setEditingAllowed(true);
+      return;
+    }
+
+    try {
+      await savePromise;
+      saveInFlight = false;
+      setStatus("已更新（保存完成）", "saved");
+      setEditingAllowed(true);
+      render();
+    } catch (err) {
+      saveInFlight = false;
+      setStatus("保存失败：" + (err && err.message ? err.message : "未知错误") + "。计数已回滚，请重试。", "error");
+      state = { count: current };
+      render();
+      setEditingAllowed(true);
+    }
+  }
+
+  addButton.addEventListener("click", function () { mutate(1); });
+  subButton.addEventListener("click", function () { mutate(-1); });
+  addFiveButton.addEventListener("click", function () { mutate(5); });
+
+  init();
+})();
+</script>
+</body>
+</html>
