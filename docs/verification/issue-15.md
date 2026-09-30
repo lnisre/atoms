@@ -90,11 +90,11 @@
 
 1. 点击“待办清单”仅填入需求，生成请求0次。随后输入“入口验收计数器”需求，点击发送，真实调用 `deepseek-flash`，耗时 **11741ms**，返回10191字符 HTML，项目保存成功。见 [请求和页面结果](assets/issue-15/real-generation-checks.json)、[模型元信息](assets/issue-15/real-initial.json)、[原始产物](assets/issue-15/real-initial.html)。
 2. 关闭生成阶段浏览器，以同一配置重开首页，进入“我的项目”并点击卡片，恢复同一项目且当前值0。鼠标点击“增加一次”两次，0→1→2；每次等待“应用数据已保存”，刷新后值仍为2。
-3. 从工作台返回此前的“我的项目”区域；在1280×720检查项目列表和首页，从最近项目进入后值仍为2。
+3. 刷新后的工作台返回首页入口；在1280×720检查首页，从最近项目进入后值仍为2。项目网格另经同视口线上回归和只读截图确认。
 4. 完整关闭浏览器，再以同一配置从首页项目卡片重开，值仍为2。鼠标归零，再增加至1并保存，刷新后值1，IndexedDB记录为 `{count:1}`。
 5. 首次生成共1次模型请求，全部操作/恢复阶段新增请求 **0**；未观察到页面运行错误。见 [最终断言](assets/issue-15/real-final-checks.json)、[生成脚本](assets/issue-15/real-generate.mjs)、[操作与重开脚本](assets/issue-15/real-reopen.mjs)。
 
-线上截图：[首页1440](assets/issue-15/live-home-1440.png)、[项目列表1440](assets/issue-15/live-projects-1440.png)、[首页1280](assets/issue-15/live-home-1280.png)、[项目列表1280](assets/issue-15/live-projects-1280.png)、[重开后仍可操作](assets/issue-15/live-reopened.png)。真实项目记录仅在上述浏览器配置中，不意味着其他设备能用该项目查询参数恢复。
+线上截图：[首页1440](assets/issue-15/live-home-1440.png)、[项目列表1440](assets/issue-15/live-projects-1440.png)、[首页1280](assets/issue-15/live-home-1280.png)、[项目列表1280](assets/issue-15/live-projects-1280.png)、[重开后仍可操作](assets/issue-15/live-reopened.png)。真实项目记录仅在上述浏览器配置中，不意味着其他设备能用该项目查询参数恢复。首轮1280项目截图实际停留在首页，已通过[只读补拍脚本](assets/issue-15/live-screenshots.mjs)同时断言侧栏选中项和一级标题后补正；补拍新增模型请求0次。
 
 ## 剩余工作
 
