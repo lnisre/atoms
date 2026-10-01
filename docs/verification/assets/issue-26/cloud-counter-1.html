@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>中文计数器</title>
+<style>
+  html, body { height: 100%; }
+  body {
+    margin: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: system-ui, -apple-system, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+    background: #f4f5f7;
+    color: #1f2329;
+  }
+  .card {
+    background: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 6px 24px rgba(0,0,0,0.08);
+    padding: 28px 32px;
+    min-width: 280px;
+    text-align: center;
+  }
+  h1 {
+    font-size: 18px;
+    margin: 0 0 16px;
+    font-weight: 600;
+  }
+  output {
+    display: block;
+    font-size: 56px;
+    font-weight: 700;
+    line-height: 1.2;
+    margin: 8px 0 20px;
+    font-variant-numeric: tabular-nums;
+    word-break: break-all;
+  }
+  .buttons {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+  }
+  button {
+    flex: 1 1 auto;
+    padding: 10px 18px;
+    font-size: 15px;
+    border: 1px solid #c9cdd4;
+    border-radius: 8px;
+    background: #ffffff;
+    color: #1f2329;
+    cursor: pointer;
+  }
+  button:hover:not(:disabled) { background: #f0f1f3; }
+  button:active:not(:disabled) { background: #e6e8eb; }
+  button:disabled { opacity: 0.5; cursor: not-allowed; }
+  [data-atoms-status] {
+    margin-top: 16px;
+    font-size: 13px;
+    color: #6b7280;
+    min-height: 18px;
+  }
+</style>
+</head>
+<body>
+  <main class="card">
+    <h1>计数器</h1>
+    <output id="value" for="inc dec reset">0</output>
+    <div class="buttons">
+      <button id="inc" type="button">增加</button>
+      <button id="dec" type="button">减少</button>
+      <button id="reset" type="button">重置</button>
+    </div>
+    <div data-atoms-status></div>
+  </main>
+
+<script>
+(function () {
+  "use strict";
+
+  var outputEl = document.getElementById("value");
+  var incBtn = document.getElementById("inc");
+  var decBtn = document.getElementById("dec");
+  var resetBtn = document.getElementById("reset");
+  var statusEl = document.querySelector("[data-atoms-status]");
+
+  var loaded = false;
+  var current = null; // 完整事实来源对象
+  var count = 0;      // 本地展示数值
+
+  function setStatus(text) {
+    statusEl.textContent = text;
+  }
+
+  function setControlsDisabled(disabled) {
+    incBtn.disabled = disabled;
+    decBtn.disabled = disabled;
+    resetBtn.disabled = disabled;
+  }
+
+  function renderCount() {
+    outputEl.textContent = String(count);
+  }
+
+  function isValidFiniteNumber(v) {
+    return typeof v === "number" && isFinite(v);
+  }
+
+  // 加载前禁用所有控件
+  setControlsDisabled(true);
+  renderCount();
+
+  window.atoms.loadState().then(function (data) {
+    if (data === null || data === undefined) {
+      // 新数据
+      current = { count: 0 };
+      count = 0;
+    } else if (typeof data === "object") {
+      // 整体保留为事实来源
+      current = data;
+      if (isValidFiniteNumber(data.count)) {
+        count = data.count;
+      } else {
+        count = 0;
+      }
+    } else {
+      // 非对象非 null 的异常数据，按新数据处理，但保留原值无意义，重置为对象
+      current = { count: 0 };
+      count = 0;
+    }
+    renderCount();
+    setStatus("已读取");
+    loaded = true;
+    setControlsDisabled(false);
+  }).catch(function () {
+    setStatus("读取失败");
+    // 保持全部控件禁用，绝不保存
+    setControlsDisabled(true);
+  });
+
+  function applyMutation(newCount) {
+    if (!loaded) return;
+
+    // 基于当前完整对象复制一份
+    var next;
+    if (current && typeof current === "object") {
+      next = Object.assign({}, current);
+    } else {
+      next = {};
+    }
+    next.count = newCount;
+
+    // 记录变更前完整快照
+    var prevState = current;
+    var prevCount = count;
+
+    setStatus("正在保存");
+    setControlsDisabled(true);
+
+    window.atoms.saveState(next).then(function () {
+      // 保存成功才提交
+      current = next;
+      count = newCount;
+      renderCount();
+      setStatus("已保存");
+      setControlsDisabled(false);
+    }).catch(function () {
+      // 失败恢复完整先前状态
+      current = prevState;
+      count = prevCount;
+      renderCount();
+      setStatus("保存失败");
+      setControlsDisabled(false);
+    });
+  }
+
+  incBtn.addEventListener("click", function () {
+    if (!loaded) return;
+    var base = isValidFiniteNumber(count) ? count : 0;
+    applyMutation(base + 1);
+  });
+
+  decBtn.addEventListener("click", function () {
+    if (!loaded) return;
+    var base = isValidFiniteNumber(count) ? count : 0;
+    applyMutation(base - 1);
+  });
+
+  resetBtn.addEventListener("click", function () {
+    if (!loaded) return;
+    applyMutation(0);
+  });
+})();
+</script>
+</body>
+</html>

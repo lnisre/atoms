@@ -1,0 +1,14 @@
+{
+  "deployedSourceMatches": true,
+  "sourceDigest": "f6420f4113581844921cf3fc1ac5db24e2edfbfe60e903c7392373a0f5d60b2d",
+  "production": "dpl_68LXQuH7oBNajTAM7JJKZMpVAJRH",
+  "productionUnchanged": true,
+  "retainedAutomationCredentialPresent": true,
+  "deployment": {
+    "id": "dpl_BJgvJKB5tt2xdKLi5nsW7okkBWpw",
+    "url": "v0-test0-lsu3fdhxs-lnisres-projects.vercel.app",
+    "target": "staging",
+    "readyState": "READY",
+    "sourceDigest": "f6420f4113581844921cf3fc1ac5db24e2edfbfe60e903c7392373a0f5d60b2d"
+  }
+}

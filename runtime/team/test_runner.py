@@ -115,7 +115,7 @@ class Controls(unittest.IsolatedAsyncioTestCase):
         self.assertEqual(task.review['codeHash'],task.code_hash())
         self.assertTrue(task.review['approved'])
 
-    async def test_review_rejection_is_terminal_without_replanning(self):
+    async def test_first_review_rejection_returns_business_result_to_leader(self):
         task=r.Task({'deadline':time.time()*1000+240000,'requirement':'counter'})
         task.html='<html>counter</html>';task.spec={}
         calls=[]
@@ -125,7 +125,7 @@ class Controls(unittest.IsolatedAsyncioTestCase):
         task.ask=ask
         await r.Review(task=task).run([])
         self.assertEqual(len(calls),1)
-        self.assertIn('代码审查未通过',task.failure)
+        self.assertIsNone(task.failure)
         self.assertFalse(task.review['approved'])
 
     async def test_review_cannot_approve_with_blockers_or_after_two_invalid_outputs(self):
@@ -138,6 +138,100 @@ class Controls(unittest.IsolatedAsyncioTestCase):
         await r.Review(task=task).run([])
         self.assertEqual(len(calls),2)
         self.assertIsNone(task.review)
+        self.assertIn('格式重试后仍无效',task.failure)
+
+    async def test_native_repair_receives_full_rejected_code_frozen_spec_and_review(self):
+        task=r.Task({'deadline':time.time()*1000+240000,'taskId':'controlled-task','requirement':'increment by one'})
+        original='<!doctype html><html><head></head><body>count+=2</body></html>'
+        repaired=original.replace('count+=2','count++')
+        frozen={'summary':'counter','dataContract':'{count:number}','requirements':[{'id':'increment','description':'one per click'}]}
+        contexts=[];seen=[]
+        async def ask(actor, system, context, tokens):
+            seen.append(actor);task.calls+=1;contexts.append((actor,json.loads(json.dumps(context))))
+            if actor=='Mike':
+                target='Requirements' if task.spec is None else 'Engineer' if task.html is None or task.review and not task.review['approved'] else 'Reviewer' if task.review is None else None
+                return {'command':'assign' if target else 'finish','to':target,'reason':'controlled actual delegation','instruction':'repair all actual blockers'}
+            if actor=='Requirements':return frozen
+            if actor=='Engineer':
+                if task.html:
+                    self.assertEqual(context['rejectedHtml'],original)
+                    self.assertEqual(context['spec'],frozen)
+                    self.assertEqual(context['review']['issues'],['count+=2: click increments twice'])
+                return {'html':repaired if task.html else original,'assistantReply':'修复每次增加两次的问题'}
+            return {'approved':task.implementations==2,'summary':'review actual code','issues':[] if task.implementations==2 else ['count+=2: click increments twice']}
+        task.ask=ask
+        context=r.Context();team=r.Team(context=context,use_mgx=True);team.env.is_public_chat=False
+        leader=r.BoundedLeader(context=context);task.leader=leader
+        leader.set_actions([r.Decide(task=task,context=context)]);leader._watch([])
+        workers=[]
+        for name,action in [('Requirements',r.Specify),('Engineer',r.Implement),('Reviewer',r.Review)]:
+            worker=r.Role(name=name,profile=name,context=context);worker.set_actions([action(task=task,context=context)]);worker._watch([]);workers.append(worker)
+        team.hire([leader,*workers]);team.env.publish_message(r.Message(content='start',cause_by=r.RunCommand,send_to={'Mike'}))
+        await team.run(n_round=20,auto_archive=False)
+        self.assertIsNone(task.failure);self.assertTrue(task.finished);self.assertEqual(task.html,repaired)
+        self.assertEqual(task.spec,frozen);self.assertEqual(task.implementations,2)
+        self.assertEqual([v['approved'] for v in task.reviews],[False,True])
+        self.assertNotEqual(task.reviews[0]['codeHash'],task.reviews[1]['codeHash'])
+        self.assertEqual(seen,['Mike','Requirements','Mike','Engineer','Mike','Reviewer','Mike','Engineer','Mike','Reviewer','Mike'])
+
+    async def test_format_correction_is_shared_across_review_and_rereview(self):
+        task=r.Task({'deadline':time.time()*1000+240000,'requirement':'counter'});task.html='original';task.spec={};task.implementations=1
+        values=iter([{'approved':'yes'},{'approved':False,'summary':'defect','issues':['count+=2 on click']},{'approved':'yes'}]);count=[]
+        async def ask(*args):count.append(args);return next(values)
+        task.ask=ask
+        await r.Review(task=task).run([])
+        self.assertIsNone(task.failure);self.assertTrue(task.format_corrected)
+        task.html='repaired';task.review=None;task.implementations=2
+        await r.Review(task=task).run([])
+        self.assertEqual(len(count),3);self.assertIn('格式重试后仍无效',task.failure)
+
+    async def test_no_valid_review_means_no_blind_repair(self):
+        task=r.Task({'deadline':time.time()*1000+240000,'requirement':'counter'});task.spec={};task.html='code';task.implementations=1
+        task.spec={'summary':'frozen'}
+        with patch.object(r.httpx,'AsyncClient',side_effect=AssertionError('must not connect')):
+            await r.Implement(task=task).run([])
+        self.assertIn('没有有效审查意见',task.failure);self.assertEqual(task.calls,0)
+
+    async def test_review_transport_error_ends_without_retry(self):
+        task=r.Task({'deadline':time.time()*1000+240000,'requirement':'counter'});task.html='code';task.spec={}
+        class BrokenClient:
+            def __init__(self,**kwargs):pass
+            async def __aenter__(self):return self
+            async def __aexit__(self,*args):pass
+            async def post(self,*args,**kwargs):raise r.httpx.RemoteProtocolError('controlled disconnect')
+        with patch.object(r.httpx,'AsyncClient',BrokenClient):await r.Review(task=task).run([])
+        self.assertEqual(task.calls,1);self.assertIsNone(task.review);self.assertIn('模型连接中断',task.failure)
+
+    async def test_format_repair_rereview_share_original_request_and_time_budget(self):
+        task=r.Task({'deadline':time.time()*1000+240000,'taskId':'budget','requirement':'counter'})
+        task.spec={'summary':'frozen'};task.html='broken';task.implementations=1;task.calls=19
+        deadline=task.deadline;seen=[]
+        class Response:
+            status_code=200
+            def json(self):return {'id':'budget-call','model':'fixture','usage':{'prompt_tokens':0,'completion_tokens':0},'choices':[{'finish_reason':'stop','message':{'content':'{"approved":"yes"}'}}]}
+        class Client:
+            def __init__(self,**kwargs):pass
+            async def __aenter__(self):return self
+            async def __aexit__(self,*args):pass
+            async def post(self,*args,**kwargs):seen.append(kwargs);return Response()
+        with patch.object(r.httpx,'AsyncClient',Client):await r.Review(task=task).run([])
+        self.assertEqual(task.calls,20);self.assertEqual(len(seen),1);self.assertEqual(task.deadline,deadline)
+        self.assertIn('20',task.failure);self.assertIsNone(task.review)
+
+    async def test_raw_json_and_schema_errors_have_only_one_correction(self):
+        task=r.Task({'deadline':time.time()*1000+240000,'requirement':'counter'});task.html='code';task.spec={}
+        seen=[]
+        class Response:
+            status_code=200
+            def json(self):return {'id':'fixture','model':'fixture','usage':{},'choices':[{'finish_reason':'stop','message':{'content':'not JSON' if len(seen)==1 else '{"approved":"yes"}'}}]}
+        class Client:
+            def __init__(self,**kwargs):pass
+            async def __aenter__(self):return self
+            async def __aexit__(self,*args):pass
+            async def post(self,*args,**kwargs):seen.append(json.loads(kwargs['json']['messages'][1]['content']));return Response()
+        with patch.object(r.httpx,'AsyncClient',Client):await r.Review(task=task).run([])
+        self.assertEqual(task.calls,2);self.assertEqual(len(seen),2)
+        self.assertEqual(seen[1]['previousResponse'],'not JSON');self.assertTrue(seen[1]['validationErrors'])
         self.assertIn('格式重试后仍无效',task.failure)
 
     def test_six_core_files_match_fixed_upstream(self):

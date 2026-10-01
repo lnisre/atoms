@@ -95,8 +95,10 @@ test("浏览器等待超时后结束等待并提供重试", async ({ page }) => 
   ).toBeVisible();
   await page.clock.fastForward(241_000);
   await expect(page.getByRole("main").getByRole("alert")).toContainText(
-    "等待超时",
+    "任务已达到 4 分钟上限",
   );
+  await expect(page.getByRole("heading", {name:"任务已超限"})).toBeVisible();
+  await expect(page.getByRole("button", {name:"停止任务"})).toHaveCount(0);
   await expect(
     page.getByRole("button", { name: "重新生成", exact: true }),
   ).toBeEnabled();

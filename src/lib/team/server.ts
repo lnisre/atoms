@@ -3,12 +3,12 @@ import { createHash, createHmac, randomBytes, timingSafeEqual } from "node:crypt
 import path from "node:path";
 import { createRecorder } from "../execution";
 import { previewHeadOffset } from "../html-document";
-import { validReview, reviewedTeam } from "./review";
-import { TEAM_PROTOCOL, TEAM_TIMEOUT_MS, type Delivery, type ModelCall, type Specification, type TeamRecord } from "./contract";
+import { validReview, reviewedTeam, inspectDeliveries } from "./review";
+import { TEAM_PROTOCOL, TEAM_TIMEOUT_MS, isTeamOutcome, type TeamOutcome, type Delivery, type ModelCall, type Specification, type TeamRecord } from "./contract";
 
 // Ephemeral, single process task ownership. A missing owner fails closed (410),
 // never recreates a paid task or resets its budget. Container uses one Node worker.
-type Session = { token: string; deadline: number; lease: number; process: ChildProcessWithoutNullStreams; stop: (reason?: string) => void };
+type Session = { token: string; deadline: number; lease: number; process: ChildProcessWithoutNullStreams; stop: (reason?: string, outcome?: TeamOutcome) => void };
 const globalTasks = globalThis as typeof globalThis & { atomsTeamTasks?: Map<string, Session>; atomsTeamKey?: Buffer };
 const tasks = globalTasks.atomsTeamTasks ??= new Map();
 const signingKey = globalTasks.atomsTeamKey ??= randomBytes(32);
@@ -51,8 +51,8 @@ export async function teamControl(request: Request) {
     const body = JSON.parse(raw);
     const session = tasks.get(body.taskId);
     if (!session || !equalSecret(body.token, session.token)) return Response.json({ error: "任务已结束或执行实例不可用，请重新发起。" }, { status: 410 });
-    if (Date.now() >= session.deadline || Date.now() - session.lease > 15_000) { session.stop("任务超时或浏览器已断线。"); return Response.json({ error: "任务已过期" }, { status: 410 }); }
-    if (body.action === "cancel") { session.stop("页面已离开，本次任务已停止。"); return Response.json({ ok: true }); }
+    if (Date.now() >= session.deadline || Date.now() - session.lease > 15_000) { session.stop("任务超时或浏览器已断线。", Date.now() >= session.deadline ? "limit" : "stopped"); return Response.json({ error: "任务已过期" }, { status: 410 }); }
+    if (body.action === "cancel") { session.stop("本次任务已停止。", "stopped"); return Response.json({ ok: true }); }
     if (body.action === "heartbeat") { session.lease = Date.now(); return Response.json({ ok: true }); }
     throw new Error("不支持的团队控制操作");
   } catch (error) { return Response.json({ error: error instanceof Error ? error.message : "检查协议错误" }, { status: 400 }); }
@@ -70,7 +70,7 @@ export async function startTeam(request: Request, started = Date.now()) {
   const deadline = started + TEAM_TIMEOUT_MS;
   const token = randomBytes(32).toString("hex");
   let cancelled = false;
-  let stop: (reason?: string) => void = () => {};
+  let stop: (reason?: string, outcome?: TeamOutcome) => void = () => {};
   const stream = new ReadableStream({
     start(controller) {
       let terminal = false;
@@ -81,13 +81,13 @@ export async function startTeam(request: Request, started = Date.now()) {
       // Never forward framework stderr: it may include full prompts/tracebacks.
       child.stderr.resume();
       const cleanup = () => { clearInterval(watchdog); clearTimeout(hardTimeout); request.signal.removeEventListener("abort", abort); tasks.delete(taskId); child.stdin.destroy(); child.kill("SIGKILL"); };
-      stop = (reason = "任务已停止") => { if (terminal) return; record("team", "四角色生成", "failed", reason); send({ type: "error", taskId, error: reason, team }); terminal = true; cleanup(); if (!cancelled) controller.close(); };
+      stop = (reason = "任务已停止", outcome = "failed") => { if (terminal) return; team.outcome = outcome; record("team", "四角色生成", "failed", reason); send({ type: "error", taskId, error: reason, outcome, team }); terminal = true; cleanup(); if (!cancelled) controller.close(); };
       const session: Session = { token, deadline, lease: Date.now(), process: child, stop };
       tasks.set(taskId, session);
-      const abort = () => stop("生成连接已断开，停止后续步骤。");
+      const abort = () => stop("生成连接已断开，停止后续步骤。", "stopped");
       request.signal.addEventListener("abort", abort, { once: true });
-      const watchdog = setInterval(() => { if (Date.now() >= deadline) stop("任务已达到 4 分钟上限。"); else if (Date.now() - session.lease > 15_000) stop("浏览器已断线，停止后续步骤。"); }, 500);
-      const hardTimeout = setTimeout(() => stop("任务已达到 4 分钟上限。"), Math.max(1, Math.min(TEAM_TIMEOUT_MS, deadline - Date.now())));
+      const watchdog = setInterval(() => { if (Date.now() >= deadline) stop("任务已达到 4 分钟上限。", "limit"); else if (Date.now() - session.lease > 15_000) stop("浏览器已断线，停止后续步骤。", "stopped"); }, 500);
+      const hardTimeout = setTimeout(() => stop("任务已达到 4 分钟上限。", "limit"), Math.max(1, Math.min(TEAM_TIMEOUT_MS, deadline - Date.now())));
       send({ type: "session", protocol: TEAM_PROTOCOL, taskId, projectId: body.projectId, token, deadline });
       record("team", "启动 MetaGPT 四角色", "started", "原生 Team/MGXEnv 调度；每任务最多 4 分钟、20 次模型请求。请保持页面打开。");
       child.stdin.write(JSON.stringify({ taskId, projectId: body.projectId, requirement: body.requirement.trim(), deadline }) + "\n");
@@ -98,7 +98,7 @@ export async function startTeam(request: Request, started = Date.now()) {
       let candidateResult: { html: string; assistantReply: string; codeHash: string } | undefined;
       const handle = (message: Record<string, unknown>) => {
         if (terminal) return;
-        if (Date.now() >= deadline) return stop("任务已超时，拒绝迟到结果。");
+        if (Date.now() >= deadline) return stop("任务已超时，拒绝迟到结果。", "limit");
         if (message.type === "call") {
           const call = message as unknown as ModelCall;
           if (!Number.isInteger(call.call) || call.call < 1 || call.call > 20 || !["Mike", "Requirements", "Engineer", "Reviewer"].includes(call.actor)) throw new Error("模型调用计量无效");
@@ -115,17 +115,26 @@ export async function startTeam(request: Request, started = Date.now()) {
           record(`parse-${team.calls.length}`, "平台 · 模型产物解析失败", "failed", JSON.stringify({actor:message.actor,error:message.detail,rawOutput:message.content}));
         } else if (message.type === "delivery") {
           const delivery = message as unknown as Delivery;
-          if (!['Mike','Requirements','Engineer','Reviewer'].includes(delivery.role) || typeof delivery.content !== "string" || delivery.content.length > 150_000) throw new Error("角色交付无效");
-          if (delivery.role === "Requirements") { if (frozenSpec) throw new Error("需求规格不能替换"); frozenSpec = JSON.parse(delivery.content); }
-          if (delivery.role === "Engineer") generatedHash = JSON.parse(delivery.content).codeHash;
+          if (!['Mike','Requirements','Engineer','Reviewer'].includes(delivery.role) || typeof delivery.content !== "string" || delivery.content.length > 650_000) throw new Error("角色交付无效");
+          if (delivery.role === "Requirements" && JSON.parse(delivery.content).requirements) { if (frozenSpec) throw new Error("需求规格不能替换"); frozenSpec = JSON.parse(delivery.content); }
+          if (delivery.role === "Engineer") {
+            const artifact = JSON.parse(delivery.content);
+            if (typeof artifact.html !== "string" || hash(artifact.html) !== artifact.codeHash || previewHeadOffset(artifact.html) === null) throw new Error("工程师代码与身份不符");
+            generatedHash = artifact.codeHash; team.review = undefined;
+            // The executor owns full rejected code for repair; saved records keep
+            // identities and explanations, not every historical HTML snapshot.
+            delete artifact.html; delivery.content = JSON.stringify(artifact);
+          }
           if (delivery.role === "Reviewer") {
             const review = JSON.parse(delivery.content);
-            if (!generatedHash || team.review || !validReview(review, generatedHash)) throw new Error("代码审查与当前代码不符");
+            if (!generatedHash || team.review || !validReview(review, generatedHash) || review.taskId !== taskId) throw new Error("代码审查与当前代码不符");
             team.review = review;
-            record("review", "Reviewer · 代码审查", review.approved ? "completed" : "failed", review.summary);
+            record(`review-${team.deliveries.length}`, "Reviewer · 代码审查", review.approved ? "completed" : "failed", review.summary);
           }
+          // Clarification/unsupported is a terminal Requirements response, not a spec.
+          if (!(delivery.role === "Requirements" && !JSON.parse(delivery.content).requirements)) inspectDeliveries(taskId, [...team.deliveries, delivery]);
           team.deliveries.push(delivery); send({ type: "delivery", taskId, delivery });
-        } else if (message.type === "failure") stop(typeof message.error === "string" ? message.error : "团队执行失败");
+        } else if (message.type === "failure") stop(typeof message.error === "string" ? message.error : "团队执行失败", isTeamOutcome(message.outcome) && message.outcome !== "passed" ? message.outcome : "failed");
         else if (message.type === "result") {
           if (candidateResult || !frozenSpec || typeof message.html !== "string" || hash(message.html) !== generatedHash || message.codeHash !== generatedHash || previewHeadOffset(message.html) === null || typeof message.assistantReply !== "string" || !message.assistantReply.trim() || !reviewedTeam({...team,codeHash:generatedHash}, generatedHash)) throw new Error("缺少当前代码的通过审查或四角色执行证据");
           candidateResult = message as unknown as typeof candidateResult;
@@ -147,8 +156,9 @@ export async function startTeam(request: Request, started = Date.now()) {
       child.on("close", code => {
         if (terminal) return;
         buffer += decoder.end();
-        if (code !== 0 || buffer.trim() || !candidateResult || Date.now() >= deadline) return stop("团队进程未正常完成，未交付结果。");
-        team.codeHash = generatedHash; team.durationMs = Date.now() - started;
+        if (Date.now() >= deadline) return stop("任务已达到 4 分钟上限，拒绝迟到结果。", "limit");
+        if (code !== 0 || buffer.trim() || !candidateResult) return stop("团队进程未正常完成，未交付结果。");
+        team.outcome = "passed"; team.codeHash = generatedHash; team.durationMs = Date.now() - started;
         record("review-scope", "代码审查完成", "completed", "已审查需求与代码；未执行自动化业务运行验证。");
         record("team", "TeamLeader 确认交付", "completed", `${team.calls.length} 次实际请求，总耗时 ${team.durationMs} ms。`);
         send({ type: "result", protocol: TEAM_PROTOCOL, taskId, team, assistantReply: candidateResult.assistantReply, result: { html: candidateResult.html, model: team.calls.filter(c => c.responseModel).at(-1)?.responseModel ?? "deepseek-flash", durationMs: team.durationMs, generatedAt: new Date().toISOString() } });
@@ -156,7 +166,7 @@ export async function startTeam(request: Request, started = Date.now()) {
       });
       if (request.signal.aborted) abort();
     },
-    cancel() { cancelled = true; stop(); },
+    cancel() { cancelled = true; stop("任务连接已取消。", "stopped"); },
   });
   return new Response(stream, { headers: { "Content-Type": "application/x-ndjson; charset=utf-8", "Cache-Control": "no-store, no-transform", "X-Accel-Buffering": "no" } });
 }

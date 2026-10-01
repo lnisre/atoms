@@ -1,0 +1,552 @@
+{
+  "kind": "independent zero-model replay, not original task receipt",
+  "originalTaskId": "issue26-independent-generated.html",
+  "result": {
+    "protocol": "atoms-qa/1",
+    "taskId": "e2695897-8c11-43e7-8cb5-2b6e11579afb",
+    "requestId": "644453af-b97e-4e79-8b8b-4c7791d7f5df",
+    "codeHash": "37aa6ea6aad62f7f62fa86315cd32d4e9aedfdc70eb30084cb11963a0185905e",
+    "planHash": "90d51f2e374af976419c468600a1f7d7d88232bf2ab03dcc3495a73af2b3ca41",
+    "status": "passed",
+    "results": [
+      {
+        "scenarioId": "platform-timing",
+        "checkId": "platform-timing-0",
+        "command": {
+          "op": "assert",
+          "selector": "button:not(:disabled),input:not(:disabled),select:not(:disabled),textarea:not(:disabled)",
+          "property": "count",
+          "equals": 0
+        },
+        "expected": 0,
+        "actual": 0,
+        "status": "passed",
+        "startedAt": 1790828356065,
+        "endedAt": 1790828356078
+      },
+      {
+        "scenarioId": "platform-timing",
+        "checkId": "platform-timing-1",
+        "command": {
+          "op": "bridge",
+          "property": "saveAttempts",
+          "equals": 0
+        },
+        "expected": 0,
+        "actual": 0,
+        "status": "passed",
+        "startedAt": 1790828356078,
+        "endedAt": 1790828356078
+      },
+      {
+        "scenarioId": "platform-timing",
+        "checkId": "platform-timing-2",
+        "command": {
+          "op": "wait",
+          "ms": 700
+        },
+        "expected": 700,
+        "actual": 700,
+        "status": "passed",
+        "startedAt": 1790828356078,
+        "endedAt": 1790828356781
+      },
+      {
+        "scenarioId": "platform-timing",
+        "checkId": "platform-timing-3",
+        "command": {
+          "op": "click",
+          "selector": "#btnInc"
+        },
+        "expected": "executed",
+        "actual": "executed",
+        "status": "passed",
+        "startedAt": 1790828356781,
+        "endedAt": 1790828356783
+      },
+      {
+        "scenarioId": "platform-timing",
+        "checkId": "platform-timing-4",
+        "command": {
+          "op": "assert",
+          "selector": "body",
+          "property": "inert",
+          "equals": true
+        },
+        "expected": true,
+        "actual": true,
+        "status": "passed",
+        "startedAt": 1790828356783,
+        "endedAt": 1790828356784
+      },
+      {
+        "scenarioId": "platform-timing",
+        "checkId": "platform-timing-5",
+        "command": {
+          "op": "assert",
+          "selector": "[data-atoms-status]",
+          "property": "text",
+          "equals": "正在保存"
+        },
+        "expected": "正在保存",
+        "actual": "正在保存",
+        "status": "passed",
+        "startedAt": 1790828356784,
+        "endedAt": 1790828356784
+      },
+      {
+        "scenarioId": "platform-timing",
+        "checkId": "platform-timing-6",
+        "command": {
+          "op": "click",
+          "selector": "#btnInc",
+          "probeWhileInert": true
+        },
+        "expected": "executed",
+        "actual": "executed",
+        "status": "passed",
+        "startedAt": 1790828356784,
+        "endedAt": 1790828356784
+      },
+      {
+        "scenarioId": "platform-timing",
+        "checkId": "platform-timing-7",
+        "command": {
+          "op": "data",
+          "path": [],
+          "equals": {
+            "count": 4,
+            "futureField": "preserve-me"
+          }
+        },
+        "expected": {
+          "count": 4,
+          "futureField": "preserve-me"
+        },
+        "actual": {
+          "count": 4,
+          "futureField": "preserve-me"
+        },
+        "status": "passed",
+        "startedAt": 1790828356784,
+        "endedAt": 1790828356784
+      },
+      {
+        "scenarioId": "platform-timing",
+        "checkId": "platform-timing-8",
+        "command": {
+          "op": "wait",
+          "ms": 700
+        },
+        "expected": 700,
+        "actual": 700,
+        "status": "passed",
+        "startedAt": 1790828356784,
+        "endedAt": 1790828357488
+      },
+      {
+        "scenarioId": "platform-timing",
+        "checkId": "platform-timing-9",
+        "command": {
+          "op": "assert",
+          "selector": "body",
+          "property": "inert",
+          "equals": false
+        },
+        "expected": false,
+        "actual": false,
+        "status": "passed",
+        "startedAt": 1790828357488,
+        "endedAt": 1790828357488
+      },
+      {
+        "scenarioId": "platform-timing",
+        "checkId": "platform-timing-10",
+        "command": {
+          "op": "assert",
+          "selector": "[data-atoms-status]",
+          "property": "text",
+          "equals": "已保存"
+        },
+        "expected": "已保存",
+        "actual": "已保存",
+        "status": "passed",
+        "startedAt": 1790828357488,
+        "endedAt": 1790828357488
+      },
+      {
+        "scenarioId": "platform-timing",
+        "checkId": "platform-timing-11",
+        "command": {
+          "op": "data",
+          "path": [
+            "count"
+          ],
+          "equals": 5
+        },
+        "expected": 5,
+        "actual": 5,
+        "status": "passed",
+        "startedAt": 1790828357488,
+        "endedAt": 1790828357488
+      },
+      {
+        "scenarioId": "platform-timing",
+        "checkId": "platform-timing-12",
+        "command": {
+          "op": "bridge",
+          "property": "saveAttempts",
+          "equals": 1
+        },
+        "expected": 1,
+        "actual": 1,
+        "status": "passed",
+        "startedAt": 1790828357488,
+        "endedAt": 1790828357488
+      },
+      {
+        "scenarioId": "platform-timing",
+        "checkId": "platform-timing-13",
+        "command": {
+          "op": "bridge",
+          "property": "commits",
+          "equals": 1
+        },
+        "expected": 1,
+        "actual": 1,
+        "status": "passed",
+        "startedAt": 1790828357488,
+        "endedAt": 1790828357488
+      },
+      {
+        "scenarioId": "platform-read-failure",
+        "checkId": "platform-read-failure-0",
+        "command": {
+          "op": "wait",
+          "ms": 700
+        },
+        "expected": 700,
+        "actual": 700,
+        "status": "passed",
+        "startedAt": 1790828357514,
+        "endedAt": 1790828358232
+      },
+      {
+        "scenarioId": "platform-read-failure",
+        "checkId": "platform-read-failure-1",
+        "command": {
+          "op": "assert",
+          "selector": "[data-atoms-status]",
+          "property": "text",
+          "equals": "读取失败"
+        },
+        "expected": "读取失败",
+        "actual": "读取失败",
+        "status": "passed",
+        "startedAt": 1790828358232,
+        "endedAt": 1790828358233
+      },
+      {
+        "scenarioId": "platform-read-failure",
+        "checkId": "platform-read-failure-2",
+        "command": {
+          "op": "assert",
+          "selector": "button:not(:disabled),input:not(:disabled),select:not(:disabled),textarea:not(:disabled)",
+          "property": "count",
+          "equals": 0
+        },
+        "expected": 0,
+        "actual": 0,
+        "status": "passed",
+        "startedAt": 1790828358233,
+        "endedAt": 1790828358233
+      },
+      {
+        "scenarioId": "platform-read-failure",
+        "checkId": "platform-read-failure-3",
+        "command": {
+          "op": "bridge",
+          "property": "saveAttempts",
+          "equals": 0
+        },
+        "expected": 0,
+        "actual": 0,
+        "status": "passed",
+        "startedAt": 1790828358233,
+        "endedAt": 1790828358233
+      },
+      {
+        "scenarioId": "platform-read-failure",
+        "checkId": "platform-read-failure-4",
+        "command": {
+          "op": "bridge",
+          "property": "commits",
+          "equals": 0
+        },
+        "expected": 0,
+        "actual": 0,
+        "status": "passed",
+        "startedAt": 1790828358233,
+        "endedAt": 1790828358233
+      },
+      {
+        "scenarioId": "platform-read-failure",
+        "checkId": "platform-read-failure-5",
+        "command": {
+          "op": "data",
+          "path": [],
+          "equals": {
+            "count": 4,
+            "futureField": "preserve-me"
+          }
+        },
+        "expected": {
+          "count": 4,
+          "futureField": "preserve-me"
+        },
+        "actual": {
+          "count": 4,
+          "futureField": "preserve-me"
+        },
+        "status": "passed",
+        "startedAt": 1790828358233,
+        "endedAt": 1790828358233
+      },
+      {
+        "scenarioId": "platform-save-failure",
+        "checkId": "platform-save-failure-0",
+        "command": {
+          "op": "wait",
+          "ms": 700
+        },
+        "expected": 700,
+        "actual": 700,
+        "status": "passed",
+        "startedAt": 1790828358247,
+        "endedAt": 1790828358967
+      },
+      {
+        "scenarioId": "platform-save-failure",
+        "checkId": "platform-save-failure-1",
+        "command": {
+          "op": "click",
+          "selector": "#btnInc"
+        },
+        "expected": "executed",
+        "actual": "executed",
+        "status": "passed",
+        "startedAt": 1790828358967,
+        "endedAt": 1790828358968
+      },
+      {
+        "scenarioId": "platform-save-failure",
+        "checkId": "platform-save-failure-2",
+        "command": {
+          "op": "assert",
+          "selector": "body",
+          "property": "inert",
+          "equals": true
+        },
+        "expected": true,
+        "actual": true,
+        "status": "passed",
+        "startedAt": 1790828358968,
+        "endedAt": 1790828358970
+      },
+      {
+        "scenarioId": "platform-save-failure",
+        "checkId": "platform-save-failure-3",
+        "command": {
+          "op": "wait",
+          "ms": 700
+        },
+        "expected": 700,
+        "actual": 700,
+        "status": "passed",
+        "startedAt": 1790828358970,
+        "endedAt": 1790828359674
+      },
+      {
+        "scenarioId": "platform-save-failure",
+        "checkId": "platform-save-failure-4",
+        "command": {
+          "op": "assert",
+          "selector": "[data-atoms-status]",
+          "property": "text",
+          "equals": "保存失败"
+        },
+        "expected": "保存失败",
+        "actual": "保存失败",
+        "status": "passed",
+        "startedAt": 1790828359674,
+        "endedAt": 1790828359674
+      },
+      {
+        "scenarioId": "platform-save-failure",
+        "checkId": "platform-save-failure-5",
+        "command": {
+          "op": "data",
+          "path": [],
+          "equals": {
+            "count": 4,
+            "futureField": "preserve-me"
+          }
+        },
+        "expected": {
+          "count": 4,
+          "futureField": "preserve-me"
+        },
+        "actual": {
+          "count": 4,
+          "futureField": "preserve-me"
+        },
+        "status": "passed",
+        "startedAt": 1790828359674,
+        "endedAt": 1790828359674
+      },
+      {
+        "scenarioId": "platform-save-failure",
+        "checkId": "platform-save-failure-6",
+        "command": {
+          "op": "bridge",
+          "property": "saveAttempts",
+          "equals": 1
+        },
+        "expected": 1,
+        "actual": 1,
+        "status": "passed",
+        "startedAt": 1790828359674,
+        "endedAt": 1790828359674
+      },
+      {
+        "scenarioId": "platform-save-failure",
+        "checkId": "platform-save-failure-7",
+        "command": {
+          "op": "bridge",
+          "property": "rejectedSaves",
+          "equals": 1
+        },
+        "expected": 1,
+        "actual": 1,
+        "status": "passed",
+        "startedAt": 1790828359674,
+        "endedAt": 1790828359674
+      },
+      {
+        "scenarioId": "platform-save-failure",
+        "checkId": "platform-save-failure-8",
+        "command": {
+          "op": "bridge",
+          "property": "commits",
+          "equals": 0
+        },
+        "expected": 0,
+        "actual": 0,
+        "status": "passed",
+        "startedAt": 1790828359674,
+        "endedAt": 1790828359674
+      },
+      {
+        "scenarioId": "independent-business",
+        "checkId": "load",
+        "command": {
+          "op": "wait",
+          "ms": 200
+        },
+        "expected": 200,
+        "actual": 200,
+        "status": "passed",
+        "startedAt": 1790828359699,
+        "endedAt": 1790828359923
+      },
+      {
+        "scenarioId": "independent-business",
+        "checkId": "increment",
+        "command": {
+          "op": "click",
+          "selector": "#btnInc"
+        },
+        "expected": "executed",
+        "actual": "executed",
+        "status": "passed",
+        "startedAt": 1790828359923,
+        "endedAt": 1790828359924
+      },
+      {
+        "scenarioId": "independent-business",
+        "checkId": "settle",
+        "command": {
+          "op": "wait",
+          "ms": 300
+        },
+        "expected": 300,
+        "actual": 300,
+        "status": "passed",
+        "startedAt": 1790828359924,
+        "endedAt": 1790828360229
+      },
+      {
+        "scenarioId": "independent-business",
+        "checkId": "render",
+        "command": {
+          "op": "assert",
+          "selector": "output",
+          "property": "text",
+          "equals": "5"
+        },
+        "expected": "5",
+        "actual": "5",
+        "status": "passed",
+        "startedAt": 1790828360229,
+        "endedAt": 1790828360230
+      },
+      {
+        "scenarioId": "independent-business",
+        "checkId": "persist",
+        "command": {
+          "op": "data",
+          "path": [
+            "count"
+          ],
+          "equals": 5
+        },
+        "expected": 5,
+        "actual": 5,
+        "status": "passed",
+        "startedAt": 1790828360230,
+        "endedAt": 1790828360230
+      },
+      {
+        "scenarioId": "independent-business",
+        "checkId": "unknown",
+        "command": {
+          "op": "data",
+          "path": [
+            "futureField"
+          ],
+          "equals": "preserve-me"
+        },
+        "expected": "preserve-me",
+        "actual": "preserve-me",
+        "status": "passed",
+        "startedAt": 1790828360230,
+        "endedAt": 1790828360230
+      },
+      {
+        "scenarioId": "independent-business",
+        "checkId": "attempts",
+        "command": {
+          "op": "bridge",
+          "property": "saveAttempts",
+          "equals": 1
+        },
+        "expected": 1,
+        "actual": 1,
+        "status": "passed",
+        "startedAt": 1790828360230,
+        "endedAt": 1790828360230
+      }
+    ],
+    "detail": "所有计划项实际执行完成。"
+  }
+}

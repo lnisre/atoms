@@ -18,11 +18,11 @@ export async function fulfillGeneration(route: Route, options: NonNullable<Param
   const taskId = route.request().headers()["x-atoms-task-id"], projectId = route.request().postDataJSON().projectId;
   const hash = (s: string) => createHash("sha256").update(s).digest("hex");
   const codeHash = hash(result.html);
-  const review = {kind:"code-review",codeHash,approved:true,summary:"SYNTHETIC REVIEW FIXTURE",issues:[]};
-  const roles = ["Mike","Requirements","Engineer","Reviewer"];
-  const team = {protocol:"atoms-team/2",taskId,projectId,codeHash,review,
-    deliveries:roles.map(role=>({role,content:JSON.stringify(role === "Reviewer" ? review : {fixture:true})})),
-    calls:roles.map((actor,i)=>({call:i+1,actor,requestedModel:"fixture",status:"completed"}))};
+  const review = {kind:"code-review",taskId,codeHash,approved:true,summary:"SYNTHETIC REVIEW FIXTURE",issues:[]};
+  const assign = (to: string) => ({role:"Mike",content:JSON.stringify({command:"assign",to,reason:"synthetic fixture",instruction:"synthetic fixture"})});
+  const deliveries = [assign("Requirements"),{role:"Requirements",content:JSON.stringify({requirements:[{id:"synthetic",description:"synthetic"}]})},assign("Engineer"),{role:"Engineer",content:JSON.stringify({codeHash})},assign("Reviewer"),{role:"Reviewer",content:JSON.stringify(review)},{role:"Mike",content:JSON.stringify({command:"finish"})}];
+  const team = {protocol:"atoms-team/2",taskId,projectId,codeHash,review,deliveries,
+    calls:deliveries.map((d,i)=>({call:i+1,actor:d.role,requestedModel:"fixture",status:"completed"}))};
   await route.request().frame().page().route("**/api/team", r => r.fulfill({json:{ok:true}}));
   const messages = [{type:"session",protocol:"atoms-team/2",taskId,projectId,token:"synthetic-fixture",deadline:Date.now()+240000},{type:"result",protocol:"atoms-team/2",taskId,team,result,assistantReply}];
   return route.fulfill({contentType:"application/x-ndjson",body:messages.map(m=>JSON.stringify(m)).join("\n")+"\n"});
