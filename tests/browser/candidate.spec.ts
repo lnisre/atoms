@@ -220,3 +220,22 @@ test('采用事务未完成不显示成功；中止保留候选和此前采用�
   await expect(page.getByLabel('已采用修改记录').locator(':scope > .adopted-group')).toHaveCount(2);
   await expect(page.getByText('运行预览 · 已采用应用')).toBeVisible();
 });
+
+test('停止修改后迟到响应不能替换已有候选，正式数据仍可恢复', async ({page}) => {
+  await setup(page);
+  await page.route('**/api/generate',route=>fulfillGeneration(route,{json:{html:candidateHtml(1),model:'fixture',durationMs:1,generatedAt:'candidate-one'}}));
+  await modify(page);await expect(page.frameLocator('iframe').getByRole('heading',{name:'候选第1轮'})).toBeVisible();
+  await page.unroute('**/api/generate');
+  let release:()=>void=()=>{},entered=false;
+  const late=new Promise<void>(resolve=>{release=resolve});
+  await page.route('**/api/generate',async route=>{entered=true;await late;await fulfillGeneration(route,{json:{html:candidateHtml(2),model:'late-fixture',durationMs:1,generatedAt:'late-two'}}).catch(()=>{});});
+  await modify(page,'受控迟到修改');await expect.poll(()=>entered).toBe(true);
+  await page.getByRole('button',{name:'停止任务'}).click();
+  await expect(page.getByRole('region',{name:'对话修改'}).getByRole('alert')).toContainText('任务已停止');
+  await expect(page.getByRole('button',{name:'生成候选',exact:true})).toBeEnabled();
+  release();await page.waitForTimeout(100);
+  await expect(page.frameLocator('iframe').getByRole('heading',{name:'候选第1轮'})).toBeVisible();
+  await expect(page.frameLocator('iframe').getByRole('heading',{name:'候选第2轮'})).toHaveCount(0);
+  await expect(page.frameLocator('iframe').getByText('原任务甲',{exact:true})).toBeVisible();
+  await page.reload();await originalIntact(page);
+});

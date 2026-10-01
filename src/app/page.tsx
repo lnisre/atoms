@@ -21,7 +21,7 @@ import {
 
 import { createRecorder, type InitialGeneration, type ModificationGeneration, type RecordStep } from "@/lib/execution";
 import { readTeam } from "@/lib/team/client";
-import { TEAM_TIMEOUT_MS } from "@/lib/team/contract";
+import { TEAM_TIMEOUT_MS, TeamError, outcomeLabels, type TeamOutcome } from "@/lib/team/contract";
 import { readGeneration } from "@/lib/generation-client";
 import { GenerationRecord } from "@/components/generation-record";
 import { ConversationScroll } from "@/components/conversation-scroll";
@@ -36,7 +36,7 @@ type ModificationSession = {
 type Project = { id: string; requirement: string };
 type Task =
   | { status: "waiting" }
-  | { status: "failed"; error: string }
+  | { status: "failed"; error: string; outcome?: TeamOutcome }
   | { status: "complete"; result: GenerationResult };
 
 const examples = [
@@ -57,6 +57,8 @@ const examples = [
 export default function Home() {
   const modificationSessions = useRef<ModificationSession[]>([]);
   const [sessionRecords, setSessionRecords] = useState<ModificationGeneration[]>([]);
+  const [previousAttempts, setPreviousAttempts] = useState<{ requirement: string; record: InitialGeneration }[]>([]);
+  const [supplement, setSupplement] = useState("");
   const [generationRecord, setGenerationRecord] = useState<InitialGeneration | null>(null);
   const [logSavePending, setLogSavePending] = useState(false);
   const pendingRecordWrites = useRef(0);
@@ -137,6 +139,7 @@ export default function Home() {
   }
 
   function openProject(saved: SavedProject) {
+    setPreviousAttempts([]); setSupplement("");
     generationSession.current = null;
     setPreviewStep(undefined);
     setGenerationRecord(saved.initialGeneration ?? null);
@@ -161,6 +164,7 @@ export default function Home() {
     )
       return;
     discardChanges();
+    setPreviousAttempts([]); setSupplement("");
     generationSession.current = null;
     setPreviewStep(undefined);
     setGenerationRecord(null);
@@ -205,10 +209,16 @@ export default function Home() {
     return () => window.removeEventListener("beforeunload", beforeUnload);
   }, []);
 
+  function stopTask() {
+    active.current?.abort(new TeamError("stopped", "任务已停止，已有成果保留。可修改需求后重新发起。"));
+  }
+
   async function generate(nextProject: Project) {
     if (active.current || adoptionPending.current) return;
+    if (task?.status === "failed" && generationRecord && project) setPreviousAttempts(items => [...items, {requirement: project.requirement, record: generationRecord}]);
     const controller = new AbortController();
     active.current = controller;
+    setSupplement("");
     setProject(nextProject);
     setRecords([]);
     discardChanges();
@@ -244,7 +254,7 @@ export default function Home() {
     session.step = createRecorder(taskId, "browser", append);
     setPreviewStep(() => session.step);
     session.step("transport", "接收生成结果", "started", "向服务端提交需求并持续读取实际执行事件。");
-    const timer = setTimeout(() => controller.abort(), TEAM_TIMEOUT_MS);
+    const timer = setTimeout(() => controller.abort(new TeamError("limit", "任务已达到 4 分钟上限，已结束本次执行。")), TEAM_TIMEOUT_MS);
     try {
       const response = await fetch("/api/generate", {
         method: "POST",
@@ -289,15 +299,12 @@ export default function Home() {
         setProjectSave("failed");
       }
     } catch (error) {
-      session.step("transport", "接收生成结果", "failed", controller.signal.aborted ? "等待超时，本次请求已结束。" : error instanceof Error ? error.message : "连接失败，未取得完整结果。");
-      setTask({
-        status: "failed",
-        error: controller.signal.aborted
-          ? "等待超时，已结束本次请求。请稍后重新生成。"
-          : error instanceof Error
-            ? error.message
-            : "网络连接失败，请重试。",
-      });
+      const failure = controller.signal.aborted ? controller.signal.reason : error;
+      const outcome = failure instanceof TeamError ? failure.outcome : "failed";
+      const detail = failure instanceof Error ? failure.message : "连接失败，未取得完整结果。";
+      if (record.team) record.team = {...record.team, outcome};
+      session.step("transport", outcomeLabels[outcome], "failed", detail);
+      setTask({ status: "failed", outcome, error: detail });
     } finally {
       clearTimeout(timer);
       active.current = null;
@@ -325,7 +332,7 @@ export default function Home() {
     setModificationError("");
     setAdoptionError("");
     setSeconds(0);
-    const timer = setTimeout(() => controller.abort(), CLIENT_TIMEOUT_MS);
+    const timer = setTimeout(() => controller.abort(new TeamError("limit", "修改等待超时，已有成果保留。")), CLIENT_TIMEOUT_MS);
     try {
       const response = await fetch("/api/generate", {
         method: "POST",
@@ -334,6 +341,7 @@ export default function Home() {
         signal: controller.signal,
       });
       const { result, assistantReply } = await readGeneration(response, taskId, append);
+      controller.signal.throwIfAborted();
       record.assistantReply = assistantReply;
       session.step("transport", "接收修改结果", "completed", "完整 HTML 与正常传输终态已收到。");
       session.step("trial", "准备试用副本", "started", candidate ? "沿用当前会话的试用数据。" : "读取正式数据并创建会话内副本。");
@@ -345,6 +353,7 @@ export default function Home() {
         session.step("trial", "准备试用副本", "failed", "未成功读取正式数据，未开始空数据试用。");
         throw error;
       }
+      controller.signal.throwIfAborted();
       record.outcome = "complete";
       session.step("trial", "准备试用副本", "completed", "试用副本已准备；不会写入正式业务数据。");
       setCandidate({ result, trial, revision: (candidate?.revision ?? 0) + 1, session });
@@ -354,8 +363,8 @@ export default function Home() {
       record.outcome = "failed";
       if (!record.events.some(event => event.stepId === "transport" && event.status === "completed"))
         session.step("transport", "接收修改结果", "failed", "未取得完整且匹配的结果，接收已结束。");
-      session.step("modification", "本轮修改", "failed", controller.signal.aborted ? "等待超时；已有候选与正式成果保留。" : error instanceof Error ? error.message : "修改失败，已有成果保留。");
-      setModificationError(controller.signal.aborted ? "等待超时，已结束本次修改。已有应用与候选保留，可手动重新发起。" : error instanceof Error ? error.message : "修改失败，请重新发起。");
+      session.step("modification", "本轮修改", "failed", controller.signal.aborted ? controller.signal.reason?.message ?? "任务已停止，已有成果保留。" : error instanceof Error ? error.message : "修改失败，已有成果保留。");
+      setModificationError(controller.signal.aborted ? controller.signal.reason?.message ?? "任务已停止，已有成果保留。" : error instanceof Error ? error.message : "修改失败，请重新发起。");
     } finally {
       clearTimeout(timer);
       active.current = null;
@@ -444,12 +453,14 @@ export default function Home() {
               <section className={`task-state ${task?.status}`} aria-live="polite" aria-atomic="true">
                 <div className="state-title">
                   <span className={initialBusy ? "spinner" : "state-symbol"} aria-hidden="true">{initialBusy ? "" : task?.status === "failed" ? "!" : "✓"}</span>
-                  <h2>{initialBusy ? "正在生成应用" : task?.status === "failed" ? "生成未完成" : restored ? "已恢复保存的应用" : "代码已生成"}</h2>
+                  <h2>{initialBusy ? "正在生成应用" : task?.status === "failed" ? (task.outcome && task.outcome !== "failed" ? outcomeLabels[task.outcome] : "生成未完成") : restored ? "已恢复保存的应用" : "代码已生成"}</h2>
                 </div>
-                {initialBusy && <><p>正在处理需求，实际进展见平台执行记录。完整结果保存后会展示预览。</p><p className="elapsed">已等待 {seconds} 秒 · 最多约 2 分钟</p></>}
-                {task?.status === "failed" && <><p role="alert">{task.error}</p><button className="primary-button" onClick={() => void generate(project)}>重新生成</button></>}
+                {initialBusy && <><p>正在处理需求，实际进展见平台执行记录。完整结果保存后会展示预览。</p><p className="elapsed">已等待 {seconds} 秒 · 最多 4 分钟</p></>}
+                {task?.status === "waiting" && <button className="text-button" onClick={stopTask}>停止任务</button>}
+                {task?.status === "failed" && <><p role="alert" style={{whiteSpace:"pre-wrap"}}>{task.error}</p><button className="primary-button" onClick={() => void generate(project)}>重新生成</button></>}
                 {task?.status === "complete" && <p>{restored ? "已读取保存的需求和代码，没有重新调用模型。" : "现在可以在预览中操作应用。生成完成不代表所有功能都已验证。"}</p>}
               </section>
+              {previousAttempts.map(attempt => <GenerationRecord key={attempt.record.taskId} title="此前任务" requirement={attempt.requirement} record={attempt.record} live={false} pending={false} saveError={false} saving={false} />)}
               {generationRecord && <GenerationRecord record={generationRecord} live={!restored && task?.status !== "failed"} pending={task?.status === "waiting"} saveError={logSaveError} saving={logSavePending} resultLabel={task?.status === "complete" ? (projectSave === "saved" ? "首次生成 · 已保存" : "首次生成 · 尚未保存") : undefined} />}
               <section className="record-history" aria-label="已采用修改记录">
                 {records.length === 0 && <p className="empty-history">还没有已采用的修改记录。</p>}
@@ -466,6 +477,7 @@ export default function Home() {
             </p>
             {task?.status === "complete" && projectSave === "saved" && <section className="modification-panel" aria-label="对话修改">
               <div className="modification-feedback" aria-live="polite">
+                {modifying && <button className="text-button" onClick={stopTask}>停止任务</button>}
                 {modifying && <p role="status">正在基于{candidate ? "最新候选" : "已采用代码"}修改，已等待 {seconds} 秒，最多约 2 分钟。现有预览仍可使用。</p>}
                 {modificationError && <p className="save-error" role="alert">{modificationError} 原应用与正式数据未被替换，可点击“生成候选”手动重试。</p>}
               </div>
@@ -476,7 +488,18 @@ export default function Home() {
               </form>
               {!candidate && modificationError && <button className="text-button" disabled={busy} onClick={discardChanges}>放弃本轮修改</button>}
             </section>}
-            {!(task?.status === "complete" && projectSave === "saved") && <section className="modification-panel"><textarea aria-label="追加修改需求（生成完成后可用）" disabled placeholder="生成并保存后，可在这里继续修改" /><div className="composer-footer"><Unavailable label="添加附件">＋</Unavailable><span>等待当前任务完成</span><Unavailable label="发送修改">↑</Unavailable></div></section>}
+            {task?.status === "failed" && <form className="modification-panel" onSubmit={event => {
+              event.preventDefault();
+              const next = `${project.requirement}\n\n此前问题与限制：${task.error}\n用户补充：${supplement.trim()}`;
+              if (supplement.trim() && next.length <= MAX_REQUIREMENT_LENGTH) void generate({...project, requirement:next});
+            }}>
+              <label htmlFor="supplement">补充或调整需求</label>
+              <textarea id="supplement" value={supplement} onChange={event => setSupplement(event.target.value)} maxLength={MAX_REQUIREMENT_LENGTH} required placeholder="回答上方问题，或说明需要调整的要求" />
+              <p>本轮执行已结束。此前需求与问题保留在当前会话，补充后发起新任务。</p>
+              {`${project.requirement}\n\n此前问题与限制：${task.error}\n用户补充：${supplement.trim()}`.length > MAX_REQUIREMENT_LENGTH && <p role="alert">合并后的需求超过 4000 字，请缩短补充内容或返回首页重新整理需求。</p>}
+              <button className="primary-button" disabled={!supplement.trim() || `${project.requirement}\n\n此前问题与限制：${task.error}\n用户补充：${supplement.trim()}`.length > MAX_REQUIREMENT_LENGTH}>补充后重新发起</button>
+            </form>}
+            {task?.status !== "failed" && !(task?.status === "complete" && projectSave === "saved") && <section className="modification-panel"><textarea aria-label="追加修改需求（生成完成后可用）" disabled placeholder="生成并保存后，可在这里继续修改" /><div className="composer-footer"><Unavailable label="添加附件">＋</Unavailable><span>等待当前任务完成</span><Unavailable label="发送修改">↑</Unavailable></div></section>}
           </aside>
           {task?.status === "complete" && projectSave !== "saving" ? (
             <AppPreview
@@ -497,8 +520,7 @@ export default function Home() {
               projectId={project.id}
               projectSaved={projectSave === "saved"}
               onRetry={() => {
-                if (candidate) document.getElementById("modification")?.focus();
-                else if (!modifying) void generate({ ...project, id: crypto.randomUUID() });
+                document.getElementById("modification")?.focus();
               }}
             />
           ) : (

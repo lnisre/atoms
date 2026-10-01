@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>阅读记录</title>
+<style>
+  body {
+    font-family: system-ui, -apple-system, "Segoe UI", "Microsoft YaHei", sans-serif;
+    max-width: 560px;
+    margin: 32px auto;
+    padding: 0 16px;
+    color: #222;
+    background: #fafafa;
+  }
+  h1 { font-size: 22px; }
+  .form-row { display: flex; gap: 8px; margin-bottom: 12px; }
+  input[type="text"] {
+    flex: 1;
+    padding: 8px 10px;
+    border: 1px solid #bbb;
+    border-radius: 6px;
+    font-size: 15px;
+  }
+  button {
+    padding: 8px 14px;
+    border: 1px solid #888;
+    border-radius: 6px;
+    background: #fff;
+    cursor: pointer;
+    font-size: 14px;
+  }
+  button:disabled { opacity: 0.5; cursor: default; }
+  button.primary { background: #2b6cb0; color: #fff; border-color: #2b6cb0; }
+  ul { list-style: none; padding: 0; }
+  li {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    margin-bottom: 8px;
+    background: #fff;
+  }
+  .title { flex: 1; word-break: break-all; }
+  .status { font-size: 13px; color: #666; min-width: 32px; }
+  .status.done { color: #2f855a; }
+  #atoms-status { margin-top: 16px; font-size: 14px; color: #555; min-height: 20px; }
+  .empty { color: #888; padding: 8px 0; }
+</style>
+</head>
+<body inert>
+  <h1>阅读记录</h1>
+  <div class="form-row">
+    <input type="text" id="title-input" name="书名" aria-label="书名" placeholder="输入书名">
+    <button type="button" id="add-btn" class="primary" disabled>添加</button>
+  </div>
+  <ul id="book-list"></ul>
+  <p class="empty" id="empty-tip" hidden>还没有记录</p>
+  <div data-atoms-status id="atoms-status">正在读取</div>
+
+<script>
+(function () {
+  "use strict";
+
+  var state = null;          // 当前已成功保存/加载的完整状态（源真相）
+  var busy = false;          // 保存流程进行中
+  var loaded = false;        // 加载是否成功完成
+
+  var input = document.getElementById("title-input");
+  var addBtn = document.getElementById("add-btn");
+  var list = document.getElementById("book-list");
+  var emptyTip = document.getElementById("empty-tip");
+  var statusEl = document.getElementById("atoms-status");
+
+  function setStatus(text) {
+    statusEl.textContent = text;
+  }
+
+  function setControlsEnabled(enabled) {
+    input.disabled = !enabled;
+    addBtn.disabled = !enabled;
+  }
+
+  function isDone(book) {
+    return book && book.done === true;
+  }
+
+  // 规范化一条书目：保留未知字段，仅补齐可访问的已知字段
+  function normalizeBook(book) {
+    var copy = {};
+    if (book && typeof book === "object") {
+      for (var k in book) {
+        if (Object.prototype.hasOwnProperty.call(book, k)) copy[k] = book[k];
+      }
+    }
+    if (typeof copy.id !== "string") {
+      copy.id = String(copy.id == null ? genId() : copy.id);
+    }
+    if (typeof copy.title !== "string") {
+      copy.title = copy.title == null ? "" : String(copy.title);
+    }
+    copy.done = copy.done === true;
+    return copy;
+  }
+
+  // 规范化顶层状态：保留顶层未知字段
+  function normalizeState(raw) {
+    var copy = {};
+    if (raw && typeof raw === "object") {
+      for (var k in raw) {
+        if (Object.prototype.hasOwnProperty.call(raw, k)) copy[k] = raw[k];
+      }
+    }
+    var arr = Array.isArray(copy.books) ? copy.books : [];
+    copy.books = arr.map(normalizeBook);
+    return copy;
+  }
+
+  function deepClone(obj) {
+    // state 仅由 JSON 值构成（来自 loadState 或被我们修改的 JSON），可用 JSON 深拷贝
+    return JSON.parse(JSON.stringify(obj));
+  }
+
+  var idCounter = 0;
+  function genId() {
+    idCounter += 1;
+    return "b" + Date.now().toString(36) + "-" + idCounter.toString(36) + "-" + Math.floor(Math.random() * 1e6).toString(36);
+  }
+
+  function render() {
+    list.textContent = "";
+    var books = state && Array.isArray(state.books) ? state.books : [];
+    if (books.length === 0) {
+      emptyTip.hidden = false;
+    } else {
+      emptyTip.hidden = true;
+    }
+    books.forEach(function (book) {
+      var li = document.createElement("li");
+
+      var titleSpan = document.createElement("span");
+      titleSpan.className = "title";
+      titleSpan.textContent = typeof book.title === "string" ? book.title : "";
+
+      var statusSpan = document.createElement("span");
+      statusSpan.className = "status" + (isDone(book) ? " done" : "");
+      statusSpan.textContent = isDone(book) ? "已读" : "未读";
+
+      var readBtn = document.createElement("button");
+      readBtn.type = "button";
+      readBtn.textContent = "标记已读";
+      readBtn.disabled = !loaded || busy;
+      readBtn.addEventListener("click", function () {
+        markRead(book.id);
+      });
+
+      var delBtn = document.createElement("button");
+      delBtn.type = "button";
+      delBtn.textContent = "删除";
+      delBtn.disabled = !loaded || busy;
+      delBtn.addEventListener("click", function () {
+        deleteBook(book.id);
+      });
+
+      li.appendChild(titleSpan);
+      li.appendChild(statusSpan);
+      li.appendChild(readBtn);
+      li.appendChild(delBtn);
+      list.appendChild(li);
+    });
+  }
+
+  // 统一提交：克隆完整状态 -> 修改副本 -> 同步 saveState -> 成功才提交，失败恢复快照
+  function commit(mutator) {
+    if (!loaded || busy) return;
+    busy = true;
+    setControlsEnabled(false);
+
+    var snapshot = state;                 // 完整前状态快照
+    var next = deepClone(state);          // 在副本上修改
+    try {
+      mutator(next);
+    } catch (e) {
+      busy = false;
+      setControlsEnabled(true);
+      return;
+    }
+
+    setStatus("正在保存");
+
+    var savePromise;
+    try {
+      savePromise = window.atoms.saveState(next);
+    } catch (e) {
+      // 同步抛错：恢复快照并回滚 UI
+      state = snapshot;
+      busy = false;
+      render();
+      setControlsEnabled(true);
+      setStatus("保存失败");
+      return;
+    }
+
+    Promise.resolve(savePromise).then(function () {
+      state = next;                       // 保存成功后才提交新状态
+      busy = false;
+      render();
+      setControlsEnabled(true);
+      setStatus("已保存");
+    }, function () {
+      state = snapshot;                   // 保存失败：恢复完整前状态
+      busy = false;
+      render();
+      setControlsEnabled(true);
+      setStatus("保存失败");
+    });
+  }
+
+  function addBook() {
+    var title = input.value;
+    if (typeof title !== "string" || title.trim() === "") return; // 空输入不添加不保存
+    commit(function (next) {
+      if (!Array.isArray(next.books)) next.books = [];
+      var book = { id: genId(), title: title, done: false };
+      next.books.push(book);
+    });
+    input.value = "";
+  }
+
+  function markRead(id) {
+    commit(function (next) {
+      if (!Array.isArray(next.books)) return;
+      next.books.forEach(function (b) {
+        if (b && b.id === id) b.done = true;
+      });
+    });
+  }
+
+  function deleteBook(id) {
+    commit(function (next) {
+      if (!Array.isArray(next.books)) return;
+      next.books = next.books.filter(function (b) {
+        return !(b && b.id === id);
+      });
+    });
+  }
+
+  addBtn.addEventListener("click", addBook);
+  input.addEventListener("keydown", function (e) {
+    if (e.key === "Enter") addBook();
+  });
+
+  // 初始渲染空列表占位
+  render();
+
+  var loadPromise;
+  try {
+    loadPromise = window.atoms.loadState();
+  } catch (e) {
+    setStatus("读取失败");
+    loaded = false;
+    setControlsEnabled(false);
+    document.body.inert = false;
+    return;
+  }
+
+  Promise.resolve(loadPromise).then(function (raw) {
+    var base = (raw === null || raw === undefined) ? { books: [] } : raw;
+    state = normalizeState(base);
+    loaded = true;
+    render();
+    setControlsEnabled(true);
+    setStatus("已读取");
+    document.body.inert = false;
+  }, function () {
+    // 读取失败：保持所有控件禁用，绝不尝试保存
+    loaded = false;
+    setControlsEnabled(false);
+    setStatus("读取失败");
+    document.body.inert = false;
+  });
+})();
+</script>
+</body>
+</html>

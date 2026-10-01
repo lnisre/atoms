@@ -4,7 +4,7 @@ import type { GenerationResult } from "../generation";
 import { previewHeadOffset } from "../html-document";
 import { reviewedTeam } from "./review";
 import { sha256 } from "../qa/contract";
-import { TEAM_PROTOCOL, type TeamRecord } from "./contract";
+import { TEAM_PROTOCOL, TeamError, isTeamOutcome, type TeamRecord } from "./contract";
 
 export async function readTeam(response: Response, taskId: string, projectId: string, signal: AbortSignal, onStep: (event: ExecutionEvent) => void, onTeam: (team: TeamRecord) => void) {
   if (!response.ok) throw new Error((await response.json().catch(() => null))?.error || "团队服务不可用");
@@ -25,10 +25,12 @@ export async function readTeam(response: Response, taskId: string, projectId: st
     if (!r.ok) throw new Error((await r.json()).error || "团队控制连接中断");
   };
   const cancel = () => { if(socket) {socket.close(); return;} if (token) void fetch("/api/team", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ action: "cancel", taskId, token }), keepalive: true }).catch(() => {}); };
-  signal.addEventListener("abort", cancel, { once: true });
+  const onAbort = () => { cancel(); void reader.cancel().catch(() => {}); };
+  signal.addEventListener("abort", onAbort, { once: true });
   window.addEventListener("pagehide", cancel);
   const reader = response.body.getReader();
   const decoder = new TextDecoder("utf-8", { fatal: true });
+  if (signal.aborted) onAbort();
   let transportError: Error | undefined;
   try {
     while (true) {
@@ -55,9 +57,14 @@ export async function readTeam(response: Response, taskId: string, projectId: st
           token = m.token;
           heartbeat = setInterval(() => { void control("heartbeat").catch(error => { if (!receivedTerminal) { transportError = error; void reader.cancel(); cancel(); } }); }, 4000);
         } else if (!token) throw new Error("缺少团队会话");
-        else if (m.type === "delivery") { team = { ...team, deliveries: [...team.deliveries, m.delivery], ...(m.delivery.role === "Reviewer" ? {review:JSON.parse(m.delivery.content)} : {}) }; onTeam(team); }
+        else if (m.type === "delivery") { team = { ...team, deliveries: [...team.deliveries, m.delivery], ...(m.delivery.role === "Engineer" ? {review:undefined} : {}), ...(m.delivery.role === "Reviewer" ? {review:JSON.parse(m.delivery.content)} : {}) }; onTeam(team); }
         else if (m.type === "call") { team = { ...team, calls: [...team.calls.filter(c => c.call !== m.call.call), m.call].sort((a,b) => a.call-b.call) }; onTeam(team); }
-        else if (m.type === "error") throw new Error(m.error || "团队执行失败");
+        else if (m.type === "error") {
+          receivedTerminal = true; clearInterval(heartbeat);
+          const outcome = isTeamOutcome(m.outcome) && m.outcome !== "passed" ? m.outcome : "failed";
+          team = {...team, outcome}; onTeam(team);
+          throw new TeamError(outcome, m.error || "团队执行失败");
+        }
         else if (m.type === "result") {
           receivedTerminal = true; clearInterval(heartbeat);
           if (m.protocol !== TEAM_PROTOCOL || !m.team || m.team.taskId !== taskId || m.team.projectId !== projectId || typeof m.result?.html !== "string" || !reviewedTeam(m.team, await sha256(m.result.html)) || previewHeadOffset(m.result.html) === null || !Number.isFinite(m.result.durationMs) || (m.assistantReply !== null && typeof m.assistantReply !== "string")) throw new Error("缺少完整团队交付或当前代码的通过审查");
@@ -70,7 +77,7 @@ export async function readTeam(response: Response, taskId: string, projectId: st
     return outcome;
   } finally {
     clearInterval(heartbeat); if (!outcome) cancel(); socket?.close();
-    signal.removeEventListener("abort", cancel); window.removeEventListener("pagehide", cancel);
+    signal.removeEventListener("abort", onAbort); window.removeEventListener("pagehide", cancel);
     await reader.cancel().catch(() => {}); reader.releaseLock();
   }
 }

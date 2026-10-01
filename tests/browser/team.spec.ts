@@ -67,12 +67,78 @@ test.describe('native Team and code review using scripted test provider',()=>{
     expect(tampered).toBe(true);
     await expect(page.getByText('项目已保存',{exact:true})).toHaveCount(0);await expect(page.locator('iframe')).toHaveCount(0);
   });
-  test('Reviewer rejection ends the task without delivery or a saved project',async({page})=>{
+  test('Reviewer rejection after one repair ends without delivery or a saved project',async({page})=>{
     await page.goto('/');await page.getByLabel('你想做什么？').fill('审查拒绝受控验证');await page.getByRole('button',{name:'开始生成'}).click();
-    await expect(page.getByRole('heading',{name:'生成未完成'})).toBeVisible({timeout:65000});
+    await expect(page.getByRole('heading',{name:'审查未通过'})).toBeVisible({timeout:65000});
     await expect(page.getByText(/代码审查：未通过/)).toBeVisible();
     await expect(page.getByText('项目已保存',{exact:true})).toHaveCount(0);
     await expect(page.locator('iframe')).toHaveCount(0);
+  });
+
+  test('one real native repair is shown, saved and restored with rejection history',async({page})=>{
+    const events: Record<string,unknown>[]=[];
+    page.on('websocket',ws=>ws.on('framereceived',e=>{const m=JSON.parse(String(e.payload));if(m.type==='delivery')events.push(m.delivery)}));
+    await page.goto('/');await page.getByLabel('你想做什么？').fill('一次修复受控验证');await page.getByRole('button',{name:'开始生成'}).click();
+    await expect(page.getByText('项目已保存',{exact:true})).toBeVisible({timeout:65000});
+    await expect(page.getByText('实现工程师 · 交付 · 一次整体返工',{exact:true})).toBeVisible();
+    await expect(page.getByText('Reviewer · 代码审查 · 新代码复审',{exact:true})).toBeVisible();
+    const reviews=events.filter(e=>e.role==='Reviewer').map(e=>JSON.parse(String(e.content)));
+    expect(reviews.map(r=>r.approved)).toEqual([false,true]);expect(reviews[0].codeHash).not.toBe(reviews[1].codeHash);
+    expect(events.filter(e=>e.role==='Engineer')).toHaveLength(2);
+    await page.frameLocator('iframe').getByRole('button',{name:'增加'}).click();
+    await expect(page.frameLocator('iframe').locator('output')).toHaveText('1');
+    await expect(page.getByText('执行记录正在保存，请等待完成再离开。')).toHaveCount(0);
+    await page.reload();await expect(page.frameLocator('iframe').locator('output')).toHaveText('1');
+    await expect(page.getByText('Reviewer · 代码审查 · 新代码复审',{exact:true})).toBeVisible();
+  });
+  test('stop during rereview releases waiting and prevents a late delivery',async({page})=>{
+    let reviews=0,closed=false,callsAfterClose=0;
+    await page.routeWebSocket('**/api/team/socket',ws=>{
+      const upstream=ws.connectToServer();upstream.onMessage(raw=>{const m=JSON.parse(String(raw));if(m.type==='call'&&m.call.status==='started'){if(closed)callsAfterClose++;if(m.call.actor==='Reviewer')reviews++;}ws.send(raw)});
+      ws.onClose(()=>{closed=true;upstream.close()});
+    });
+    await page.goto('/');await page.getByLabel('你想做什么？').fill('一次修复 停止返工');await page.getByRole('button',{name:'开始生成'}).click();
+    await expect.poll(()=>reviews,{timeout:65000}).toBe(2);await page.getByRole('button',{name:'停止任务'}).click();
+    await expect(page.getByRole('heading',{name:'任务已停止'})).toBeVisible();await expect.poll(()=>closed).toBe(true);
+    await expect(page.getByRole('button',{name:'停止任务'})).toHaveCount(0);await expect(page.locator('iframe')).toHaveCount(0);expect(callsAfterClose).toBe(0);
+    await page.reload();await expect(page.getByRole('heading',{name:'还没有已保存的项目'})).toBeVisible();
+  });
+  test('clarification ends its task, retains questions and restarts with a new identity',async({page})=>{
+    const taskIds: string[]=[];let calls=0;
+    page.on('request',r=>{if(r.url().endsWith('/api/generate'))taskIds.push(r.headers()['x-atoms-task-id'])});
+    page.on('websocket',ws=>ws.on('framereceived',e=>{const m=JSON.parse(String(e.payload));if(m.type==='call'&&m.call.status==='started')calls++;}));
+    await page.goto('/');await page.getByLabel('你想做什么？').fill('关键歧义计数器');await page.getByRole('button',{name:'开始生成'}).click();
+    await expect(page.getByRole('heading',{name:'需要补充需求'})).toBeVisible({timeout:65000});expect(calls).toBe(2);
+    await expect(page.getByRole('alert').filter({hasText:'计数是否允许负数'})).toContainText('计数是否允许负数');await expect(page.getByRole('button',{name:'停止任务'})).toHaveCount(0);
+    await page.getByLabel('补充或调整需求').fill('允许负数，重置归零');await page.getByRole('button',{name:'补充后重新发起'}).click();
+    await expect(page.getByText('项目已保存',{exact:true})).toBeVisible({timeout:65000});expect(taskIds).toHaveLength(2);expect(taskIds[0]).not.toBe(taskIds[1]);
+    await expect(page.getByRole('region',{name:'此前任务记录'})).toContainText('计数是否允许负数');
+  });
+  test('format correction is not code repair and repeated invalid output fails',async({page})=>{
+    await page.goto('/');await page.getByLabel('你想做什么？').fill('格式纠正 持续无效');await page.getByRole('button',{name:'开始生成'}).click();
+    await expect(page.getByRole('heading',{name:'生成未完成'})).toBeVisible({timeout:65000});await expect(page.getByRole('alert').filter({hasText:'格式重试后仍无效'})).toBeVisible();
+    await expect(page.getByText('实现工程师 · 交付',{exact:true})).toHaveCount(1);await expect(page.getByText('实现工程师 · 交付 · 一次整体返工',{exact:true})).toHaveCount(0);
+  });
+  test('unsupported requirements explain a feasible adjustment and end',async({page})=>{
+    await page.goto('/');await page.getByLabel('你想做什么？').fill('任意后端');await page.getByRole('button',{name:'开始生成'}).click();
+    await expect(page.getByRole('heading',{name:'暂不支持此需求'})).toBeVisible({timeout:65000});await expect(page.getByRole('alert').filter({hasText:'同浏览器保存'})).toContainText('同浏览器保存');await expect(page.locator('iframe')).toHaveCount(0);
+  });
+
+  test('one review format correction succeeds without an Engineer repair',async({page})=>{
+    let calls=0;page.on('websocket',ws=>ws.on('framereceived',e=>{const m=JSON.parse(String(e.payload));if(m.type==='call'&&m.call.status==='started')calls++;}));
+    await page.goto('/');await page.getByLabel('你想做什么？').fill('格式纠正成功');await page.getByRole('button',{name:'开始生成'}).click();
+    await expect(page.getByText('项目已保存',{exact:true})).toBeVisible({timeout:65000});expect(calls).toBe(8);
+    await expect(page.getByText('实现工程师 · 交付',{exact:true})).toHaveCount(1);await expect(page.getByText('Reviewer · 代码审查 · 新代码复审',{exact:true})).toHaveCount(0);
+  });
+  test('an old approval cannot be substituted for the repaired-code review',async({page})=>{
+    let firstReview: Record<string,unknown>|undefined,tampered=false;
+    await page.routeWebSocket('**/api/team/socket',ws=>{const upstream=ws.connectToServer();upstream.onMessage(raw=>{
+      const m=JSON.parse(String(raw));if(m.type==='delivery'&&m.delivery.role==='Reviewer'&&!firstReview)firstReview=JSON.parse(m.delivery.content);
+      if(m.type==='result'){m.team.review={...firstReview,approved:true,issues:[]};tampered=true;}ws.send(JSON.stringify(m));
+    });});
+    await page.goto('/');await page.getByLabel('你想做什么？').fill('一次修复 旧批准替换');await page.getByRole('button',{name:'开始生成'}).click();
+    await expect(page.getByRole('heading',{name:'生成未完成'})).toBeVisible({timeout:65000});expect(tampered).toBe(true);
+    await expect(page.getByText('项目已保存',{exact:true})).toHaveCount(0);await expect(page.locator('iframe')).toHaveCount(0);
   });
 
 });
