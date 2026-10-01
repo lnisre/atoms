@@ -1,0 +1,245 @@
+{
+  "kind": "offline handwritten artifacts and scripted reviews; no real provider requests",
+  "baseline": "45e0515e72bc390189ac624801a316186a9855f0",
+  "interface": {
+    "passed": 25,
+    "total": 25
+  },
+  "python": {
+    "passed": 17,
+    "total": 17
+  },
+  "lint": "passed",
+  "typecheck": "passed",
+  "webpackBuild": "passed",
+  "crossAppRun4": {
+    "passed": 6,
+    "failed": 1,
+    "total": 7,
+    "limitation": "todo independent tool ended before save-failure scenario; same todo case passed in next full run"
+  },
+  "fullRun1": {
+    "passed": 12,
+    "failed": 4,
+    "interrupted": 1,
+    "notRun": 53
+  },
+  "fullRun2": {
+    "passed": 5,
+    "failed": 2,
+    "interrupted": 1,
+    "notRun": 64
+  },
+  "browserFinalGate": "NOT PASSED",
+  "realModelRequests": 0,
+  "deployment": null,
+  "independentProofs": [
+    {
+      "artifact": "baseline.json",
+      "test": "cross-app-acceptance-singl-291be-explicitly-scripted-reviews",
+      "codeHash": "4c8122e5dd114cc9203cbc50c03eb7f66eaca7cbf6b2a04a6142aba23305cb82",
+      "planHash": "ec3fa143804852e3d341012897d5467c784c655fb2af316e18d6d67c495c69e3",
+      "status": "passed",
+      "passed": 49,
+      "total": 49,
+      "failedChecks": []
+    },
+    {
+      "artifact": "repaired.json",
+      "test": "cross-app-acceptance-singl-291be-explicitly-scripted-reviews",
+      "codeHash": "3befeb64b14ddc6b312bad04a532132fbe5e861c2dc5e2bc32b28d0e9e1e3324",
+      "planHash": "f0bdcc3c688e0a636bfeaca201c9401ed829447a1efb68c535036b5faba3d083",
+      "status": "passed",
+      "passed": 61,
+      "total": 61,
+      "failedChecks": []
+    },
+    {
+      "artifact": "before-injection.json",
+      "test": "cross-app-acceptance-singl-291be-explicitly-scripted-reviews",
+      "codeHash": "3befeb64b14ddc6b312bad04a532132fbe5e861c2dc5e2bc32b28d0e9e1e3324",
+      "planHash": "f0bdcc3c688e0a636bfeaca201c9401ed829447a1efb68c535036b5faba3d083",
+      "status": "passed",
+      "passed": 61,
+      "total": 61,
+      "failedChecks": []
+    },
+    {
+      "artifact": "rejected.json",
+      "test": "cross-app-acceptance-singl-291be-explicitly-scripted-reviews",
+      "codeHash": "10cbe332fb8b6b6202752f28ea14e972d8c1b418c31d63b7ffc23526880945c8",
+      "planHash": "f0bdcc3c688e0a636bfeaca201c9401ed829447a1efb68c535036b5faba3d083",
+      "status": "failed",
+      "passed": 43,
+      "total": 61,
+      "failedChecks": [
+        {
+          "scenarioId": "core-defaults-preservation-timing",
+          "checkId": "core-defaults-preservation-timing-9",
+          "expected": true,
+          "actual": false,
+          "status": "failed"
+        },
+        {
+          "scenarioId": "core-defaults-preservation-timing",
+          "checkId": "core-defaults-preservation-timing-10",
+          "expected": "正在保存",
+          "actual": "已保存",
+          "status": "failed"
+        },
+        {
+          "scenarioId": "core-defaults-preservation-timing",
+          "checkId": "core-defaults-preservation-timing-16",
+          "expected": 2,
+          "actual": 1,
+          "status": "failed"
+        },
+        {
+          "scenarioId": "core-defaults-preservation-timing",
+          "checkId": "core-defaults-preservation-timing-17",
+          "expected": "独立新增",
+          "actual": null,
+          "status": "failed"
+        },
+        {
+          "scenarioId": "core-defaults-preservation-timing",
+          "checkId": "core-defaults-preservation-timing-20",
+          "expected": 1,
+          "actual": 0,
+          "status": "failed"
+        },
+        {
+          "scenarioId": "core-defaults-preservation-timing",
+          "checkId": "core-defaults-preservation-timing-21",
+          "expected": 1,
+          "actual": 0,
+          "status": "failed"
+        },
+        {
+          "scenarioId": "core-defaults-preservation-timing",
+          "checkId": "core-defaults-preservation-timing-24",
+          "expected": "finished",
+          "actual": null,
+          "status": "failed"
+        },
+        {
+          "scenarioId": "core-defaults-preservation-timing",
+          "checkId": "core-defaults-preservation-timing-29",
+          "expected": 4,
+          "actual": null,
+          "status": "failed"
+        },
+        {
+          "scenarioId": "core-defaults-preservation-timing",
+          "checkId": "core-defaults-preservation-timing-31",
+          "expected": 1,
+          "actual": 2,
+          "status": "failed"
+        },
+        {
+          "scenarioId": "core-defaults-preservation-timing",
+          "checkId": "core-defaults-preservation-timing-32",
+          "expected": "独立新增",
+          "actual": "Error: selector must match exactly one element: 2",
+          "status": "tool-error"
+        },
+        {
+          "scenarioId": "core-defaults-preservation-timing",
+          "checkId": "core-defaults-preservation-timing-37",
+          "expected": 2,
+          "actual": 3,
+          "status": "failed"
+        },
+        {
+          "scenarioId": "core-defaults-preservation-timing",
+          "checkId": "core-defaults-preservation-timing-43",
+          "expected": 4,
+          "actual": 0,
+          "status": "failed"
+        },
+        {
+          "scenarioId": "save-failure",
+          "checkId": "save-failure-3",
+          "expected": true,
+          "actual": false,
+          "status": "failed"
+        },
+        {
+          "scenarioId": "save-failure",
+          "checkId": "save-failure-4",
+          "expected": "保存失败",
+          "actual": "已保存",
+          "status": "failed"
+        },
+        {
+          "scenarioId": "save-failure",
+          "checkId": "save-failure-5",
+          "expected": "保存失败",
+          "actual": "已保存",
+          "status": "failed"
+        },
+        {
+          "scenarioId": "save-failure",
+          "checkId": "save-failure-6",
+          "expected": 1,
+          "actual": 2,
+          "status": "failed"
+        },
+        {
+          "scenarioId": "save-failure",
+          "checkId": "save-failure-8",
+          "expected": 1,
+          "actual": 0,
+          "status": "failed"
+        },
+        {
+          "scenarioId": "save-failure",
+          "checkId": "save-failure-9",
+          "expected": 1,
+          "actual": 0,
+          "status": "failed"
+        }
+      ]
+    },
+    {
+      "artifact": "todo-initial-independent.json",
+      "test": "cross-app-acceptance-todo--c4016--explicit-offline-responses",
+      "codeHash": "a038d52327739fc9f6a667e0d1607c7f10a6d47d9d66f19411b6cf2f3a45c005",
+      "planHash": "36205449b3ba1df5452a2098c5e12b4fdb79bb09f1e5e7cd8664a41c189f29f0",
+      "status": "passed",
+      "passed": 49,
+      "total": 49,
+      "failedChecks": []
+    },
+    {
+      "artifact": "reading-initial-independent.json",
+      "test": "cross-app-acceptance-readi-bc6e6--explicit-offline-responses",
+      "codeHash": "4c8122e5dd114cc9203cbc50c03eb7f66eaca7cbf6b2a04a6142aba23305cb82",
+      "planHash": "ec3fa143804852e3d341012897d5467c784c655fb2af316e18d6d67c495c69e3",
+      "status": "passed",
+      "passed": 49,
+      "total": 49,
+      "failedChecks": []
+    },
+    {
+      "artifact": "reading-first-candidate-independent.json",
+      "test": "cross-app-acceptance-readi-bc6e6--explicit-offline-responses",
+      "codeHash": "3befeb64b14ddc6b312bad04a532132fbe5e861c2dc5e2bc32b28d0e9e1e3324",
+      "planHash": "f0bdcc3c688e0a636bfeaca201c9401ed829447a1efb68c535036b5faba3d083",
+      "status": "passed",
+      "passed": 61,
+      "total": 61,
+      "failedChecks": []
+    },
+    {
+      "artifact": "reading-adopted-independent.json",
+      "test": "cross-app-acceptance-readi-bc6e6--explicit-offline-responses",
+      "codeHash": "0052c685d092fe9e6839a54acb1d69bd1e7145140c77619c1f68d3d4df3f732a",
+      "planHash": "f0bdcc3c688e0a636bfeaca201c9401ed829447a1efb68c535036b5faba3d083",
+      "status": "passed",
+      "passed": 61,
+      "total": 61,
+      "failedChecks": []
+    }
+  ]
+}

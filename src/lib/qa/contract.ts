@@ -5,7 +5,7 @@ export type Command =
   | { op: "input"; selector: string; value: string }
   | { op: "click"; selector: string; probeWhileInert?: true }
   | { op: "wait"; ms: number }
-  | { op: "assert"; selector: string; property: Observation; equals: Json }
+  | { op: "assert" | "wait-for"; selector: string; property: Observation; equals: Json }
   | { op: "data"; path: string[]; equals: Json }
   | { op: "bridge"; property: "saveAttempts" | "rejectedSaves" | "commits"; equals: number };
 export type Check = { id: string; label: string; command: Command };
@@ -91,13 +91,13 @@ export function validateRequest(request: ToolRequest): void {
       if (!check.id || ids.has(check.id)) throw new Error("duplicate check");
       ids.add(check.id);
       const c = check.command;
-      if (!["observe", "input", "click", "wait", "assert", "data", "bridge"].includes(c.op)) throw new Error("unsupported operation");
+      if (!["observe", "input", "click", "wait", "assert", "wait-for", "data", "bridge"].includes(c.op)) throw new Error("unsupported operation");
       if ("selector" in c && (typeof c.selector !== "string" || !c.selector || c.selector.length > 300)) throw new Error("invalid selector");
-      if (["assert", "data", "bridge"].includes(c.op) && (!("equals" in c) || JSON.stringify(c.equals) === undefined)) throw new Error("missing expectation");
+      if (["assert", "wait-for", "data", "bridge"].includes(c.op) && (!("equals" in c) || JSON.stringify(c.equals) === undefined)) throw new Error("missing expectation");
       if (c.op === "wait" && (!Number.isFinite(c.ms) || c.ms < 0 || c.ms > 2500)) throw new Error("invalid wait");
       if (c.op === "input" && (typeof c.value !== "string" || c.value.length > 8000)) throw new Error("invalid input");
       if (c.op === "data" && (!Array.isArray(c.path) || c.path.length > 16 || c.path.some(k => typeof k !== "string" || ["__proto__", "prototype", "constructor"].includes(k)))) throw new Error("invalid data path");
-      if ((c.op === "assert" || c.op === "observe") && !["text", "count", "value", "disabled", "inert"].includes(c.property)) throw new Error("invalid observation");
+      if ((c.op === "assert" || c.op === "wait-for" || c.op === "observe") && !["text", "count", "value", "disabled", "inert"].includes(c.property)) throw new Error("invalid observation");
       if (c.op === "bridge" && !["saveAttempts", "rejectedSaves", "commits"].includes(c.property)) throw new Error("invalid bridge observation");
     }
   }
