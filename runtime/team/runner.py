@@ -35,7 +35,7 @@ CONTRACT = '''Build a complete single HTML with explicit head/body, inline CSS a
 SPEC = '''Return JSON {summary:string,dataContract:string,requirements:[{id:"lowercase-id",description:string}]}. Define 2-6 core BUSINESS requirements covering all requested actions and restoring old/missing fields. Define the persisted JSON shape and ordinary defaults in dataContract. Specify observable behavior, not coding patterns, object identity or immutability requirements. Normalizing known fields in local memory after a successful load is allowed; it must not automatically persist on load. Keep under 700 words. Do not invent unrequested features. Keep the data shape minimal: do not add version/schemaVersion fields, migration machinery or other metadata unless the user requested them. Preserve any unknown fields already present in loaded data. Platform read/save/status protections are independently mandatory; do not duplicate them as business requirements. No browser probes or test commands. Reviewer will inspect the delivered code against this specification. For ordinary presentation details choose reasonable defaults. If core functionality or data behavior is consequentially ambiguous, collect all questions and return ONLY {clarification:["question"]} (1-5 concrete Chinese questions). End this execution; a user answer starts a new task. For requests requiring backend, accounts, arbitrary network or other unsupported capabilities return ONLY {unsupported:"Chinese limitation and feasible lightweight alternative"}.'''
 REVIEW_SCHEMA = json.loads(Path(__file__).with_name('review.schema.json').read_text())
 REVIEW_VALIDATOR = Draft202012Validator(REVIEW_SCHEMA)
-REVIEW = """You are an independent code Reviewer. Review the original user requirement, frozen specification, full delivered HTML and platform contract. Check core features, persistence, restore/defaults, read/save error handling, data preservation and forbidden capabilities. Report only concrete blocking defects supported by the code: missing requested behavior, observable wrong results, data loss or explicit platform violations. Coding patterns or internal object identity without a concrete behavior difference are not blockers. Treat the platform contract snapshot/copy advice as a means to preserve data and rollback behavior, not an independent ban on local assignments or load-time normalization. Do not reject intended defaults/coercion of known fields prescribed by the data contract. Return JSON conforming to this schema: """ + json.dumps(REVIEW_SCHEMA) + """. approved must be true exactly when issues is empty. Explain your conclusion concisely in Chinese. This is static code review only: never claim browser execution, runtime tests or business acceptance. Do not generate code, test plans, selectors, tool calls or substitute expectations. Do not approve a missing core feature or a clear platform contract violation. For each blocking issue cite the offending expression and a concrete reachable user action or loaded-data condition. The supplied runtimeFacts describe guarantees already implemented by the platform: do not invent races that these guarantees prevent or demand duplicated application locks. Check that saved state preserves loaded unknown fields, not just the declared schema fields. Do not propose speculative concurrent clicks without a reachable path through the actual event guards."""
+REVIEW = """You are an independent code Reviewer. Statically review the original requirement, frozen spec, full HTML and platform contract. Return JSON matching this schema: """ + json.dumps(REVIEW_SCHEMA) + """. approved is true exactly when issues is empty. Every issue needs a stable lowercase id, severity major or minor, category, an EXACT codeQuote from current HTML, concrete reachable trigger and consequence. Major means core behavior broken, wrong results, actual data loss or failed persistence; minor means local non-core defects. Do not report style preferences or hypothetical risks excluded by runtimeFacts. No fatal grade: the platform owns execution permission; nonfatal defects do not prohibit isolated preview. Persistence/data-loss findings must include observable data consequences, not merely mutable object identity. Preserve unknown fields. For every prior data-loss or persistence issue, provide current-code resolution evidence even if an earlier version already resolved it. Provide resolutions for prior issues actually fixed, with their same id, an exact current-code quote and explanation. A changed hash or empty issue list alone does NOT resolve prior data risks. Concise Chinese explanations. Never claim browser tests or business acceptance. Do not generate code or test plans."""
 
 
 
@@ -80,12 +80,12 @@ class Task:
             raise TaskEnd('limit', '任务已达到 4 分钟上限')
 
     def input_context(self):
-        return {k: self.request[k] for k in ("requirement", "modification", "baseHtml", "context") if k in self.request}
+        return {k: self.request[k] for k in ("requirement", "modification", "baseHtml", "context", "baseDataIssues") if k in self.request}
 
     def state(self):
         return dict(**self.input_context(), spec=self.spec,
                     codeHash=self.code_hash(), review=self.review, implementations=self.implementations,
-                    repairsRemaining=max(0, 1-max(0, self.implementations-1)), priorReviews=self.reviews)
+                    repairsRemaining=max(0, 2-max(0, self.implementations-1)), priorReviews=self.reviews)
 
     def code_hash(self):
         return hashlib.sha256(self.html.encode()).hexdigest() if self.html else None
@@ -169,16 +169,16 @@ class GuardedAction(Action):
 class Decide(GuardedAction):
     async def perform(self, history):
         t = self.task
-        decision = await t.ask('Mike', '''You are TeamLeader. Decide actual delegation from available artifacts. Return JSON {command:"assign"|"finish"|"abort",to:"Requirements"|"Engineer"|"Reviewer",reason:string,instruction:string}. Workers: Requirements freezes spec ONCE; Engineer implements; Reviewer reviews current code against frozen requirements and the platform contract. Require spec then HTML then approved review for current code before finish. If the first review rejects with concrete blockers, assign Engineer ONE overall repair using the rejected code and actual review. Then assign Reviewer to review the changed full code and resolution of original issues. At most TWO Engineer artifacts (initial plus one repair), never a second repair. Never reassign Reviewer for unchanged code or change the specification. Abort unresolved rejection; technical failures end execution. Do not implement yourself.''', {'state': t.state(), 'messages':[str(m) for m in history][-6:]}, 1100)
+        decision = await t.ask('Mike', '''You are TeamLeader. Decide actual delegation from available artifacts. Return JSON {command:"assign"|"finish"|"abort",to:"Requirements"|"Engineer"|"Reviewer",reason:string,instruction:string}. Workers: Requirements freezes spec ONCE; Engineer implements; Reviewer reviews current code against frozen requirements and the platform contract. Require spec then HTML then a valid review for current code before finish. If review has major issues and repairsRemaining is positive, assign Engineer another whole-code repair with actual issues. Then assign Reviewer for the changed full code. At most THREE Engineer artifacts: initial plus TWO repairs. Minor issues do not need automatic repair; finish with them. After two repairs finish even with remaining major issues; the platform decides preview and data access independently. Never reassign Reviewer for unchanged code or change the specification. Do not abort merely because issues remain; technical failures end execution. Do not implement yourself.''', {'state': t.state(), 'messages':[str(m) for m in history][-6:]}, 1100)
         t.deliver('Mike', decision)
         if decision['command'] == 'finish':
-            if not t.review or not t.review['approved'] or t.review['codeHash'] != t.code_hash():
+            if not t.review or t.review['codeHash'] != t.code_hash():
                 raise RuntimeError('Leader 试图绕过当前代码的代码审查')
             t.finished = True
         elif decision['command'] == 'assign':
             target = decision['to']
-            if target not in ('Requirements', 'Engineer', 'Reviewer') or (target == 'Requirements' and t.spec is not None) or (target == 'Engineer' and (not t.spec or t.implementations >= 2 or (t.html and (not t.review or t.review['approved'] or t.review['codeHash'] != t.code_hash())))) or (target == 'Reviewer' and (not t.html or t.review)):
-                raise RuntimeError('Leader 分派违反冻结规格、一次返工或新代码复审边界')
+            if target not in ('Requirements', 'Engineer', 'Reviewer') or (target == 'Requirements' and t.spec is not None) or (target == 'Engineer' and (not t.spec or t.implementations >= 3 or (t.html and (not t.review or not any(i['severity'] == 'major' for i in t.review['issues']) or t.review['codeHash'] != t.code_hash())))) or (target == 'Reviewer' and (not t.html or t.review)):
+                raise RuntimeError('Leader 分派违反冻结规格、两次返工或新代码复审边界')
             t.instructions[target] = decision['instruction']
             t.leader.publish_team_message(json.dumps({'instruction':decision['instruction'], 'reason':decision['reason'], 'state':t.state()}, ensure_ascii=False), target)
         else:
@@ -216,8 +216,8 @@ class Specify(GuardedAction):
 class Implement(GuardedAction):
     async def perform(self, history):
         t = self.task
-        if not t.spec or t.implementations >= 2 or (t.html and (not t.review or t.review['approved'] or t.review['codeHash'] != t.code_hash())):
-            raise RuntimeError('没有有效审查意见或已用完一次整体返工')
+        if not t.spec or t.implementations >= 3 or (t.html and (not t.review or not any(i['severity'] == 'major' for i in t.review['issues']) or t.review['codeHash'] != t.code_hash())):
+            raise RuntimeError('没有有效审查意见或已用完两次整体返工')
         prior_html, prior_review = t.html, t.review
         artifact = await t.ask('Engineer', 'You implement the specification. '+CONTRACT+' Return ONLY JSON {html:string,assistantReply:string}. Complete code and concise Chinese explanation of usage and limitations. When rejectedHtml and review are provided, fix ALL actual blocking findings, preserve frozen requirements, and explain each change. Return the full changed HTML, not a patch. No claims of tests you have not run.', {**t.input_context(),'spec':t.spec,'leaderInstruction':t.instructions.get('Engineer'),'rejectedHtml':prior_html,'review':prior_review}, 9500)
         html, reply = artifact.get('html'), artifact.get('assistantReply')
@@ -253,6 +253,14 @@ class Review(GuardedAction):
             if not problems and result['approved'] != (len(result['issues']) == 0):
                 problems.append('approved must be true exactly when issues is empty')
             if not problems:
+                quotes = result['issues'] + result['resolutions']
+                if any(v['codeQuote'] not in t.html for v in quotes): problems.append('codeQuote must exactly match current HTML')
+                if len({v['id'] for v in result['issues']}) != len(result['issues']): problems.append('issue ids must be unique')
+                if len({v['id'] for v in result['resolutions']}) != len(result['resolutions']): problems.append('resolution ids must be unique')
+                prior_ids = {i['id'] for r in t.reviews for i in r['issues']} | {i['id'] for i in t.request.get('baseDataIssues', [])}
+                if any(v['id'] not in prior_ids for v in result['resolutions']): problems.append('resolution must refer to a prior issue')
+                if any(v['id'] in {i['id'] for i in result['issues']} for v in result['resolutions']): problems.append('an issue cannot be open and resolved')
+            if not problems:
                 break
             if t.format_corrected:
                 raise RuntimeError('Reviewer 审查结果格式重试后仍无效')
@@ -260,11 +268,9 @@ class Review(GuardedAction):
             send('notice', actor='Reviewer', kind='review-validation', detail='审查结果格式需修正；正在重试一次。')
             context['previousResponse'] = result
             context['validationErrors'] = problems
-        t.review = dict(kind='code-review', taskId=t.request.get('taskId'), codeHash=t.code_hash(), **result)
+        t.review = dict(kind='code-review', schemaVersion=1, taskId=t.request.get('taskId'), codeHash=t.code_hash(), **result)
         t.reviews.append(t.review)
         t.deliver('Reviewer', t.review)
-        if not result['approved'] and t.implementations >= 2:
-            raise TaskEnd('rejected', '复审仍未通过，一次整体返工已用完，未交付应用：' + result['summary'] + '；' + '；'.join(result['issues']))
         return AIMessage(content=json.dumps(t.review,ensure_ascii=False),sent_from='Reviewer',send_to={'Mike'},cause_by=RunCommand)
 
 

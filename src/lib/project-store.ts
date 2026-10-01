@@ -1,4 +1,5 @@
-import { reviewedTeam } from "./team/review";
+import { previewPolicy, type PreviewPolicy } from "./team/preview-policy";
+import { reviewedTeam, artifactTeam } from "./team/review";
 import { sha256 } from "./qa/contract";
 import type { ExecutionEvent, InitialGeneration, ModificationGeneration } from "./execution";
 import type { GenerationResult } from "./generation";
@@ -20,6 +21,9 @@ export type SavedProject = {
   result: GenerationResult;
   modificationRecords?: ModificationRecord[];
   initialGeneration?: InitialGeneration;
+  previewPolicy?: PreviewPolicy;
+  // Older clients only know result: keep executable draft code out of that field.
+  draftResult?: GenerationResult;
 };
 
 // Keep the database name/version stable across compatible deployments.
@@ -90,14 +94,17 @@ export function listProjects() {
   return transaction<SavedProject[]>(["projects"], "readonly", (tx, done) => {
     tx.objectStore("projects").getAll().onsuccess = (event) => {
       const projects: SavedProject[] = (event.target as IDBRequest).result;
-      done(projects.sort((a, b) => b.updatedAt.localeCompare(a.updatedAt)));
+      done(projects.map(p=>p.draftResult ? {...p,result:p.draftResult} : p).sort((a, b) => b.updatedAt.localeCompare(a.updatedAt)));
     };
   });
 }
 
-export function saveProject(project: SavedProject) {
+export async function saveProject(project: SavedProject) {
+  const team = project.initialGeneration?.team;
+  if (team?.protocol === "atoms-team/3" && (!artifactTeam(team,await sha256(project.result.html),true) || JSON.stringify(project.previewPolicy) !== JSON.stringify(previewPolicy(team,project.result.html)))) throw new Error("项目代码、审查与预览策略不一致");
   return transaction<void>(["projects"], "readwrite", (tx) => {
-    tx.objectStore("projects").put(project);
+    const isolated = project.previewPolicy?.dataMode === "trial" || project.previewPolicy?.status === "blocked";
+    tx.objectStore("projects").put(isolated ? {...project,draftResult:project.result,result:{...project.result,html:'<!doctype html><html><head></head><body>此项目为待验证代码，请使用最新版工作台打开。旧版不会运行待验证代码。</body></html>'}} : project);
   });
 }
 
@@ -113,13 +120,15 @@ export async function adoptCandidate(
     throw new Error("候选消息与项目或需求不匹配，未采用。");
   for (const [index, generation] of generations.entries()) {
     const team = generation.team;
-    if (team && (team.protocol !== "atoms-team/2" || team.taskId !== generation.taskId || team.projectId !== projectId || !team.codeHash || !reviewedTeam(team, team.codeHash)))
+    if (team && (team.taskId !== generation.taskId || team.projectId !== projectId || !team.codeHash || !(team.protocol === "atoms-team/3" ? artifactTeam(team,team.codeHash,true) : reviewedTeam(team,team.codeHash))))
       throw new Error("候选缺少对应任务的通过审查，未采用。");
     const previous = generations[index - 1]?.team;
     if (team && previous && team.baseCodeHash !== previous.codeHash) throw new Error("成功修改轮次的代码来源不连续，未采用。");
   }
   const latest = generations.at(-1)?.team;
   if (latest && latest.codeHash !== await sha256(result.html)) throw new Error("候选代码与最后成功任务不符，未采用。");
+  const policy = latest?.protocol === "atoms-team/3" ? previewPolicy(latest,result.html) : undefined;
+  if (policy?.adoption === "blocked") throw new Error("存在执行或数据风险，暂不可采用；可继续修改。");
   const record: ModificationRecord = {
     id: crypto.randomUUID(),
     adoptedAt: new Date().toISOString(),
@@ -135,6 +144,8 @@ export async function adoptCandidate(
       const saved: SavedProject = {
         ...current,
         result,
+        draftResult: undefined,
+        previewPolicy: policy ? {...policy,dataMode:"formal"} : undefined,
         updatedAt: record.adoptedAt,
         modificationRecords: [...(current.modificationRecords ?? []), record],
       };
@@ -195,6 +206,23 @@ export function appendGenerationEvents(projectId: string, taskId: string, events
       generation.events = [...generation.events, ...additions];
       try { projects.put(current); }
       catch { tx.abort(); }
+    };
+  });
+}
+
+// Explicit first use of an unreviewed draft only changes the code's data mode.
+// No trial data is an input, and a racing code change aborts the transaction.
+export async function activateProject(projectId: string, html: string) {
+  const saved = (await listProjects()).find(p=>p.id === projectId);
+  const team = saved?.modificationRecords?.at(-1)?.generations?.at(-1)?.team ?? saved?.initialGeneration?.team;
+  if (!saved || saved.result.html !== html || !team || !artifactTeam(team,await sha256(html),true) || previewPolicy(team,html).adoption !== "allowed") throw new Error("该版本尚不能用于正式数据");
+  return transaction<SavedProject>(["projects"],"readwrite",(tx,done)=>{
+    const store=tx.objectStore("projects");
+    store.get(projectId).onsuccess = event => {
+      const current=(event.target as IDBRequest).result as SavedProject | undefined;
+      if (!current || (current.draftResult ?? current.result).html !== html) return tx.abort();
+      const next={...current,result:saved.result,draftResult:undefined,previewPolicy:{...previewPolicy(team,html),dataMode:"formal" as const}};
+      store.put(next); done(next);
     };
   });
 }

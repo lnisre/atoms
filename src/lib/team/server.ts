@@ -5,7 +5,7 @@ import { createHash, createHmac, randomBytes, timingSafeEqual } from "node:crypt
 import path from "node:path";
 import { createRecorder } from "../execution";
 import { previewHeadOffset } from "../html-document";
-import { validReview, reviewedTeam, inspectDeliveries } from "./review";
+import { validClassifiedReview, artifactTeam, inspectDeliveries } from "./review";
 import { TEAM_PROTOCOL, TEAM_TIMEOUT_MS, isTeamOutcome, type TeamOutcome, type Delivery, type ModelCall, type Specification, type TeamRecord } from "./contract";
 
 // Ephemeral, single process task ownership. A missing owner fails closed (410),
@@ -72,18 +72,27 @@ export async function startTeam(request: Request, started = Date.now()) {
   const deadline = started + TEAM_TIMEOUT_MS;
   const token = randomBytes(32).toString("hex");
   let cancelled = false;
-  let stop: (reason?: string, outcome?: TeamOutcome) => void = () => {};
+  let stop: (reason?: string, outcome?: TeamOutcome, preserve?: boolean) => void = () => {};
   const stream = new ReadableStream({
     start(controller) {
       let terminal = false;
       const send = (value: unknown) => { if (!cancelled && !terminal) controller.enqueue(new TextEncoder().encode(JSON.stringify(value) + "\n")); };
       const record = createRecorder(taskId, "server", event => send({ type: "step", event }));
-      const team: TeamRecord = { protocol: TEAM_PROTOCOL, taskId, projectId: body.projectId, calls: [], deliveries: [], ...(body.baseHtml ? { baseCodeHash: hash(body.baseHtml) } : {}) };
+      const team: TeamRecord = { protocol: TEAM_PROTOCOL, taskId, projectId: body.projectId, calls: [], deliveries: [], ...(body.baseHtml ? { baseCodeHash: hash(body.baseHtml), baseDataIssues: body.baseDataIssues ?? [] } : {}) };
       const child = spawn(process.env.ATOMS_TEAM_PYTHON!, [path.join(process.cwd(), "runtime/team/runner.py")], { env: { NODE_ENV: process.env.NODE_ENV, HTTPS_PROXY: process.env.HTTPS_PROXY, HTTP_PROXY: process.env.HTTP_PROXY, ALL_PROXY: process.env.ALL_PROXY, NO_PROXY: process.env.NO_PROXY, PATH: process.env.PATH, HOME: process.env.ATOMS_TEAM_HOME ?? process.env.HOME, METAGPT_PROJECT_ROOT: process.env.METAGPT_PROJECT_ROOT, DEEPSEEK_API_KEY: process.env.DEEPSEEK_API_KEY, PYTHONUNBUFFERED: "1" }, stdio: "pipe" });
       // Never forward framework stderr: it may include full prompts/tracebacks.
       child.stderr.resume();
       const cleanup = () => { clearInterval(watchdog); clearTimeout(hardTimeout); request.signal.removeEventListener("abort", abort); tasks.delete(taskId); child.stdin.destroy(); child.kill("SIGKILL"); };
-      stop = (reason = "任务已停止", outcome = "failed") => { if (terminal) return; team.outcome = outcome; record("team", "四角色生成", "failed", reason); send({ type: "error", taskId, error: reason, outcome, team }); terminal = true; cleanup(); if (!cancelled) controller.close(); };
+      let artifact: { html: string; assistantReply: string; codeHash: string } | undefined;
+      const resultOf = () => artifact && ({ html: artifact.html, model: team.calls.filter(c=>c.responseModel).at(-1)?.responseModel ?? "deepseek-flash", durationMs: Date.now()-started, generatedAt: new Date().toISOString() });
+      stop = (reason = "任务已停止", outcome = "failed", preserve = true) => {
+        if (terminal) return;
+        team.outcome = outcome; team.durationMs = Date.now()-started;
+        record("team", "四角色执行结束", "failed", reason);
+        const available = preserve && artifact && !["stopped","clarification","unsupported"].includes(outcome) && artifactTeam(team,artifact.codeHash,true);
+        send({ type: "error", protocol: TEAM_PROTOCOL, taskId, error: reason, outcome, team, ...(available ? {result:resultOf(),assistantReply:artifact!.assistantReply} : {}) });
+        terminal = true; cleanup(); if (!cancelled) controller.close();
+      };
       const session: Session = { token, deadline, lease: Date.now(), process: child, stop };
       tasks.set(taskId, session);
       const abort = () => stop("生成连接已断开，停止后续步骤。", "stopped");
@@ -120,25 +129,27 @@ export async function startTeam(request: Request, started = Date.now()) {
           if (!['Mike','Requirements','Engineer','Reviewer'].includes(delivery.role) || typeof delivery.content !== "string" || delivery.content.length > 650_000) throw new Error("角色交付无效");
           if (delivery.role === "Requirements" && JSON.parse(delivery.content).requirements) { if (frozenSpec) throw new Error("需求规格不能替换"); frozenSpec = JSON.parse(delivery.content); }
           if (delivery.role === "Engineer") {
-            const artifact = JSON.parse(delivery.content);
-            if (typeof artifact.html !== "string" || hash(artifact.html) !== artifact.codeHash || previewHeadOffset(artifact.html) === null) throw new Error("工程师代码与身份不符");
-            generatedHash = artifact.codeHash; team.review = undefined;
+            const value = JSON.parse(delivery.content);
+            if (typeof value.html !== "string" || value.html.length > 500_000 || typeof value.assistantReply !== "string" || !value.assistantReply.trim() || value.assistantReply.length > 32000 || hash(value.html) !== value.codeHash || previewHeadOffset(value.html) === null) throw new Error("工程师代码与身份不符");
+            generatedHash = value.codeHash; team.codeHash = generatedHash; team.review = undefined;
             // The executor owns full rejected code for repair; saved records keep
             // identities and explanations, not every historical HTML snapshot.
-            delete artifact.html; delivery.content = JSON.stringify(artifact);
+            artifact = {html:value.html,assistantReply:value.assistantReply,codeHash:value.codeHash};
+            delete value.html; delivery.content = JSON.stringify(value);
           }
           if (delivery.role === "Reviewer") {
             const review = JSON.parse(delivery.content);
-            if (!generatedHash || team.review || !validReview(review, generatedHash) || review.taskId !== taskId) throw new Error("代码审查与当前代码不符");
+            if (!generatedHash || team.review || !validClassifiedReview(review, generatedHash, artifact?.html) || review.taskId !== taskId) throw new Error("代码审查与当前代码不符");
             team.review = review;
-            record(`review-${team.deliveries.length}`, "Reviewer · 代码审查", review.approved ? "completed" : "failed", review.summary);
+            record(`review-${team.deliveries.length}`, "Reviewer · 代码审查", "completed", review.summary);
           }
           // Clarification/unsupported is a terminal Requirements response, not a spec.
-          if (!(delivery.role === "Requirements" && !JSON.parse(delivery.content).requirements)) inspectDeliveries(taskId, [...team.deliveries, delivery]);
+          if (!(delivery.role === "Requirements" && !JSON.parse(delivery.content).requirements)) inspectDeliveries(taskId, [...team.deliveries, delivery], TEAM_PROTOCOL);
           team.deliveries.push(delivery); send({ type: "delivery", taskId, delivery });
+          if (delivery.role === "Engineer") send({type:"artifact",protocol:TEAM_PROTOCOL,taskId,team,result:resultOf(),assistantReply:artifact!.assistantReply});
         } else if (message.type === "failure") stop(typeof message.error === "string" ? message.error : "团队执行失败", isTeamOutcome(message.outcome) && message.outcome !== "passed" ? message.outcome : "failed");
         else if (message.type === "result") {
-          if (candidateResult || !frozenSpec || typeof message.html !== "string" || hash(message.html) !== generatedHash || message.codeHash !== generatedHash || previewHeadOffset(message.html) === null || typeof message.assistantReply !== "string" || !message.assistantReply.trim() || !reviewedTeam({...team,codeHash:generatedHash}, generatedHash)) throw new Error("缺少当前代码的通过审查或四角色执行证据");
+          if (candidateResult || !frozenSpec || typeof message.html !== "string" || hash(message.html) !== generatedHash || message.codeHash !== generatedHash || previewHeadOffset(message.html) === null || typeof message.assistantReply !== "string" || !message.assistantReply.trim() || !artifactTeam({...team,codeHash:generatedHash}, generatedHash) || !inspectDeliveries(taskId,team.deliveries,TEAM_PROTOCOL).finished) throw new Error("缺少当前代码的有效审查或四角色执行证据");
           candidateResult = message as unknown as typeof candidateResult;
         } else throw new Error("未知团队事件");
       };
@@ -149,7 +160,7 @@ export async function startTeam(request: Request, started = Date.now()) {
           if (bytes > 4_000_000) throw new Error("团队输出超过限制");
           let newline;
           while ((newline = buffer.indexOf("\n")) !== -1) { const line = buffer.slice(0, newline); buffer = buffer.slice(newline + 1); if (line.trim()) handle(JSON.parse(line)); }
-        } catch (error) { stop(error instanceof Error ? error.message : "团队协议错误"); }
+        } catch (error) { stop(error instanceof Error ? error.message : "团队协议错误", "failed", false); }
       });
       const decoder = new StringDecoder("utf8");
       child.stdin.on("error", () => stop("团队输入通道已关闭，未交付结果。"));
@@ -159,9 +170,10 @@ export async function startTeam(request: Request, started = Date.now()) {
         if (terminal) return;
         buffer += decoder.end();
         if (Date.now() >= deadline) return stop("任务已达到 4 分钟上限，拒绝迟到结果。", "limit");
-        if (code !== 0 || buffer.trim() || !candidateResult) return stop("团队进程未正常完成，未交付结果。");
-        team.outcome = "passed"; team.codeHash = generatedHash; team.durationMs = Date.now() - started;
-        record("review-scope", "代码审查完成", "completed", "已审查需求与代码；未执行自动化业务运行验证。");
+        if (buffer.trim()) return stop("团队输出不完整，未交付新结果。", "failed", false);
+        if (code !== 0 || !candidateResult) return stop("团队进程未正常完成，已保留完整代码。");
+        team.outcome = team.review?.issues.length ? "issues" : "passed"; team.codeHash = generatedHash; team.durationMs = Date.now() - started;
+        record("review-scope", "代码审查完成", "completed", "已保留静态审查意见；预览资格独立判断，未执行业务运行验证。");
         record("team", "TeamLeader 确认交付", "completed", `${team.calls.length} 次实际请求，总耗时 ${team.durationMs} ms。`);
         send({ type: "result", protocol: TEAM_PROTOCOL, taskId, team, assistantReply: candidateResult.assistantReply, result: { html: candidateResult.html, model: team.calls.filter(c => c.responseModel).at(-1)?.responseModel ?? "deepseek-flash", durationMs: team.durationMs, generatedAt: new Date().toISOString() } });
         terminal = true; cleanup(); controller.close();

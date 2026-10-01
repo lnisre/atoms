@@ -60,18 +60,18 @@ test('single repair acceptance driver verifies three artifacts and one modificat
   await page.close();
   await context.route('**/api/generate', async route => {
     const taskId = route.request().headers()['x-atoms-task-id'], body = route.request().postDataJSON();
-    const review = (html: string, approved: boolean) => ({ kind: 'code-review', taskId, codeHash: hash(html), approved, summary: 'OFFLINE SCRIPTED REVIEW', issues: approved ? [] : ['Promise.resolve(next) never persists when adding a record'] });
+    const review = (html: string, approved: boolean) => ({ kind: 'code-review', schemaVersion: 1, resolutions: approved ? [{id:'save',codeQuote:'window.atoms.saveState(next)',explanation:'恢复真实保存'}] : [], taskId, codeHash: hash(html), approved, summary: 'OFFLINE SCRIPTED REVIEW', issues: approved ? [] : [{id:'save',severity:'major',category:'persistence',codeQuote:'Promise.resolve(next)',trigger:'add record',consequence:'not persisted'}] });
     const assign = (to: string) => ({ role: 'Mike', content: JSON.stringify({ command: 'assign', to }) });
     const deliver = (role: string, value: unknown) => ({ role, content: JSON.stringify(value) });
     const approved = review(repaired, true);
     const deliveries = [assign('Requirements'), deliver('Requirements', { requirements: [{ id: 'reading', description: 'OFFLINE FIXTURE' }] }),
-      assign('Engineer'), deliver('Engineer', { codeHash: hash(rejected) }), assign('Reviewer'), deliver('Reviewer', review(rejected, false)),
-      assign('Engineer'), deliver('Engineer', { codeHash: hash(repaired) }), assign('Reviewer'), deliver('Reviewer', approved), deliver('Mike', { command: 'finish' })];
-    const team = { protocol: 'atoms-team/2', taskId, projectId: body.projectId, baseCodeHash: hash(body.baseHtml), codeHash: hash(repaired), review: approved, deliveries,
+      assign('Engineer'), deliver('Engineer', { codeHash: hash(rejected), iteration: 1 }), assign('Reviewer'), deliver('Reviewer', review(rejected, false)),
+      assign('Engineer'), deliver('Engineer', { codeHash: hash(repaired), iteration: 2 }), assign('Reviewer'), deliver('Reviewer', approved), deliver('Mike', { command: 'finish' })];
+    const team = { protocol: 'atoms-team/3', taskId, projectId: body.projectId, baseCodeHash: hash(body.baseHtml), codeHash: hash(repaired), review: approved, outcome: "passed", deliveries,
       calls: deliveries.map((d, i) => ({ call: i + 1, actor: d.role, requestedModel: 'OFFLINE FIXTURE', status: 'completed' })) };
     await route.fulfill({ contentType: 'application/x-ndjson', body: [
-      { type: 'session', protocol: 'atoms-team/2', taskId, projectId: body.projectId, token: 'offline-fixture', deadline: Date.now() + 240000 },
-      { type: 'result', protocol: 'atoms-team/2', taskId, team, result: { html: repaired, model: 'OFFLINE FIXTURE', durationMs: 1, generatedAt: 'fixture' }, assistantReply: 'OFFLINE FIXTURE' },
+      { type: 'session', protocol: 'atoms-team/3', taskId, projectId: body.projectId, token: 'offline-fixture', deadline: Date.now() + 240000 },
+      { type: 'result', protocol: 'atoms-team/3', taskId, team, result: { html: repaired, model: 'OFFLINE FIXTURE', durationMs: 1, generatedAt: 'fixture' }, assistantReply: 'OFFLINE FIXTURE' },
     ].map(m => JSON.stringify(m)).join('\n') + '\n' });
   });
   await repairWorkflow(context, baseURL!, (label, value) => writeFileSync(testInfo.outputPath(`${label}.json`), JSON.stringify(value, null, 2)), { proofPath, injectionDir });

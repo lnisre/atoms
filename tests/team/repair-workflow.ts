@@ -4,7 +4,7 @@ import { expect, type BrowserContext } from '@playwright/test';
 import { acceptanceScenarios, readingChanges, syntheticRequirement } from './cross-app-scenarios';
 import { snapshot } from './cross-app-workflow';
 import { independentCheck, hash } from './independent-check';
-import { reviewedTeam } from '../../src/lib/team/review';
+import { artifactTeam } from '../../src/lib/team/review';
 
 // A single modification task, using ONLY an earlier synthetic reading proof.
 // The provider-side test launcher injects the defect; this driver cannot repair it.
@@ -56,7 +56,7 @@ export async function repairWorkflow(context: BrowserContext, base: string, evid
     await expect(page.getByText('执行记录正在保存，请等待完成再离开。')).toBeHidden();
     const adopted = await snapshot(page), final = adopted.projects[0], team = final.modificationRecords![0].generations![0].team!;
     assert.deepEqual(adopted.data, original.data);
-    assert(reviewedTeam(team, hash(final.result.html)));
+    assert(artifactTeam(team, hash(final.result.html), true));
     assert.equal(team.deliveries.filter(d => d.role === 'Engineer').length, 2);
     const reviews = team.deliveries.filter(d => d.role === 'Reviewer').map(d => JSON.parse(d.content));
     assert.equal(reviews.length, 2); assert.equal(reviews[0].approved, false); assert.equal(reviews[1].approved, true);

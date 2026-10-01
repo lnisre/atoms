@@ -104,7 +104,7 @@ test('修改等待期间展示真实事件，原候选可用，错误终态结�
       if(args[0]!=='/api/generate')return original(...args);
       const taskId=new Headers(args[1]?.headers).get('X-Atoms-Task-Id');const encoder=new TextEncoder();
       return new Response(new ReadableStream({start(controller){
-        controller.enqueue(encoder.encode(JSON.stringify({type:'session',protocol:'atoms-team/2',taskId,projectId:JSON.parse(String(args[1]?.body)).projectId,token:'fixture'})+'\n'));
+        controller.enqueue(encoder.encode(JSON.stringify({type:'session',protocol:'atoms-team/3',taskId,projectId:JSON.parse(String(args[1]?.body)).projectId,token:'fixture'})+'\n'));
         controller.enqueue(encoder.encode(JSON.stringify({type:'step',event:{taskId,source:'server',sequence:1,stepId:'model',label:'调用模型',status:'started',at:new Date().toISOString(),detail:'受控等待'}})+'\n'));
         Object.assign(window,{finishModification:()=>{controller.enqueue(encoder.encode(JSON.stringify({type:'error',taskId,error:'受控连接终态'})+'\n'));controller.close()}});
       }}),{headers:{'Content-Type':'application/x-ndjson'}});

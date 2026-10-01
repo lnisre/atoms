@@ -15,6 +15,7 @@ export function AppPreview({
   trial,
   actions,
   recordStep,
+  reviewNotice,
 }: {
   html: string;
   projectId: string;
@@ -23,6 +24,7 @@ export function AppPreview({
   trial?: TrialData;
   actions?: ReactNode;
   recordStep?: RecordStep;
+  reviewNotice?: string;
 }) {
   // Keep event callbacks fresh without remounting the document on log updates.
   const recorder = useRef(recordStep);
@@ -197,6 +199,7 @@ export function AppPreview({
     <section className="preview-panel" aria-label="应用预览">
       <PreviewNavigation />
       {actions}
+      {reviewNotice && <p role="status">{reviewNotice}</p>}
       <div className="preview-toolbar">
         <span>
           <span className="status-dot" />
