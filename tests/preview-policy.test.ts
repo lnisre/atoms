@@ -37,6 +37,8 @@ test('review evidence is bound to current code; unsupported fatal labels cannot 
   assert.equal(validClassifiedReview(team.review,hash(html),html),true);
   assert.equal(validClassifiedReview({...team.review,issues:[{...issue,severity:'fatal'}]},hash(html),html),false);
   assert.equal(validClassifiedReview({...team.review,issues:[{...issue,codeQuote:'not present'}]},hash(html),html),false);
+  const resolution={id:'previous',codeQuote:'count+=2',explanation:'fixture'};
+  assert.equal(validClassifiedReview({...team.review,resolutions:[resolution,resolution]},hash(html),html),false);
   assert.equal(artifactTeam({...team,taskId:'other'},hash(html),true),false);
   assert.equal(artifactTeam({...team,codeHash:'0'.repeat(64)},hash(html),true),false);
 });
@@ -56,9 +58,17 @@ test('changing code without a resolution cannot erase data risk; current-code re
   assert.equal(unresolvedDataIssues(team).length,0);
   assert.equal(previewPolicy(team,html).adoption,'allowed');
 });
+test('a third artifact with unavailable review cannot inherit second-artifact data resolution',()=>{
+  const {html,team}=teamFixture(3);
+  const first=JSON.parse(team.deliveries[5].content); first.issues=[{...issue,category:'data-loss'}];team.deliveries[5].content=JSON.stringify(first);
+  const second=JSON.parse(team.deliveries[9].content);second.issues=[{...issue,id:'other'}];second.resolutions=[{id:issue.id,codeQuote:'count+=2',explanation:'synthetic second-version fix'}];team.deliveries[9].content=JSON.stringify(second);
+  team.review=undefined;team.deliveries=team.deliveries.slice(0,12);team.calls=team.calls.slice(0,12);team.outcome='failed';
+  assert.equal(artifactTeam(team,hash(html),true),true);
+  assert.equal(previewPolicy(team,html).status,'allowed');assert.equal(previewPolicy(team,html).adoption,'blocked');
+});
 test('only platform structural and proven empty-loop rules block; normal errors, strings, finite loops do not',()=>{
   for(const code of ['while(true){}','for(;;);']) assert.equal(executionBlockers(document(code)).length,1);
-  for(const code of ['const text="while(true){}"','// while(true){}','for(let i=0;i<3;i++){}','while(true){break}','function unused(){while(true){}}','throw new Error("ordinary error")']) assert.equal(executionBlockers(document(code)).length,0,code);
+  for(const code of ['const text="while(true){}"','// while(true){}','for(let i=0;i<3;i++){}','while(true){break}','function unused(){while(true){}}','throw new Error("ordinary error")','throw new Error("ordinary");while(true){}','for(throwing();;throwing()){}']) assert.equal(executionBlockers(document(code)).length,0,code);
   assert.equal(executionBlockers('<html><body>truncated').length,1);
 });
 test('client keeps a complete artifact on local deadline but not on explicit stop or malformed terminal',async()=>{

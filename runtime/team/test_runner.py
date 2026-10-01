@@ -275,6 +275,18 @@ class Controls(unittest.IsolatedAsyncioTestCase):
             await r.Implement(task=task).run([])
         self.assertIn('没有有效审查意见',task.failure);self.assertEqual(task.calls,0)
 
+    async def test_duplicate_resolution_ids_use_format_correction_instead_of_delivery(self):
+        task=r.Task({'deadline':time.time()*1000+240000,'taskId':'duplicate','requirement':'counter','baseDataIssues':[finding('old','data-loss')]})
+        task.html='fixed';task.spec={};seen=[]
+        resolution={'id':'increment','codeQuote':'fixed','explanation':'fixed in this version'}
+        async def ask(*args):
+            seen.append(args)
+            return {'approved':True,'summary':'fixture','issues':[],'resolutions':[resolution,resolution]}
+        task.ask=ask
+        await r.Review(task=task).run([])
+        self.assertEqual(len(seen),2);self.assertIsNone(task.review)
+        self.assertIn('格式重试后仍无效',task.failure)
+
     def test_six_core_files_match_fixed_upstream(self):
         import metagpt
         import hashlib

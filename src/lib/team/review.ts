@@ -76,9 +76,12 @@ export function unresolvedDataIssues(team: TeamRecord): ReviewIssue[] {
   for (const d of team.deliveries) if (d.role === "Reviewer") {
     const r = JSON.parse(d.content) as CodeReview;
     if (isClassified(r)) {
-      for (const v of r.resolutions) pending.delete(v.id);
       for (const i of r.issues) if (i.category === "data-loss" || i.category === "persistence") pending.set(i.id,i);
     }
+  }
+  // A resolution is evidence for one artifact, never a transferable approval.
+  if (isClassified(team.review) && team.review.codeHash === team.codeHash) {
+    for (const v of team.review.resolutions) pending.delete(v.id);
   }
   return [...pending.values()];
 }
