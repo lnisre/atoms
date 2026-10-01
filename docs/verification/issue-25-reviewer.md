@@ -21,3 +21,17 @@
 ## 范围限制
 
 真实操作验收只覆盖所列计数器样本，不代表通用生成成功率。产品中的 Reviewer 是静态审查，不能替代自动化业务 QA；未实现自动返工。原 #25 自动 QA 验收条件由本次用户指令调整，旧 QA 失败证据保留，#25 与 PR #30 在验收范围同步前继续保持 OPEN / Draft。
+
+## 首场云端拒绝与修正
+
+`reviewer-cloud-1` 在第一次 Reviewer 部署上执行 6 次真实请求，Reviewer 以并发保存风险拒绝，平台未交付或保存应用。代码核对发现这一理由忽略了平台同步保存锁，但该产物确实另有未知字段丢失问题。零模型独立诊断执行 8 项，7 项通过：保存锁、第二次点击被阻断、仅一次 saveState、计数增加均符合预期；只有 futureField 从 preserve-me 变为 null，确认数据丢失。诊断没有改写原审查、没有交付失败产物。
+
+修正为 Reviewer 明确注入已实现的运行保证（同步 inert、捕获阶段事件拦截、引用计数及解锁时序），要求问题引用具体代码和可触发条件；工程师的合同明确在保留整个旧数据对象的基础上更新自有字段，不得重建仅含已知字段的对象。修正后 Python 11/11 再次通过。未改变审查拒绝门槛、未增加自动返工。
+
+零模型复现：
+
+```sh
+pnpm exec node tests/team/replay.mjs docs/verification/assets/issue-25-reviewer/reviewer-cloud-1-diagnosis.json /tmp/atoms-reviewer-diagnosis.json
+```
+
+预期 failed，7/8，唯一失败为未知字段保留。此为独立诊断，不冒充首次生成中的自动业务 QA。

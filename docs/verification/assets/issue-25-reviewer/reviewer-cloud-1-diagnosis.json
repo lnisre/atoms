@@ -1,0 +1,100 @@
+{
+  "artifact": "reviewer-cloud-1-rejected.html",
+  "request": {
+    "protocol": "atoms-qa/1",
+    "taskId": "independent-diagnosis-of-rejected-output",
+    "codeHash": "bdc303e05c87b035f5ed2265da5b21fe6da68cfe1bf6de123ff5fc6bfc5860d5",
+    "planHash": "d194b727043de0e0e1292c654ef430ac3bd9aa1026cb708d1893281b23c913a4",
+    "scenarios": [
+      {
+        "id": "diagnostic",
+        "seed": {
+          "count": 4,
+          "version": 1,
+          "futureField": "preserve-me"
+        },
+        "saveDelayMs": 500,
+        "checks": [
+          {
+            "id": "1",
+            "label": "independent diagnosis",
+            "command": {
+              "op": "wait",
+              "ms": 200
+            }
+          },
+          {
+            "id": "2",
+            "label": "independent diagnosis",
+            "command": {
+              "op": "click",
+              "selector": "#btn-inc"
+            }
+          },
+          {
+            "id": "3",
+            "label": "independent diagnosis",
+            "command": {
+              "op": "assert",
+              "selector": "body",
+              "property": "inert",
+              "equals": true
+            }
+          },
+          {
+            "id": "4",
+            "label": "independent diagnosis",
+            "command": {
+              "op": "click",
+              "selector": "#btn-inc",
+              "probeWhileInert": true
+            }
+          },
+          {
+            "id": "5",
+            "label": "independent diagnosis",
+            "command": {
+              "op": "bridge",
+              "property": "saveAttempts",
+              "equals": 1
+            }
+          },
+          {
+            "id": "6",
+            "label": "independent diagnosis",
+            "command": {
+              "op": "wait",
+              "ms": 700
+            }
+          },
+          {
+            "id": "7",
+            "label": "independent diagnosis",
+            "command": {
+              "op": "data",
+              "path": [
+                "count"
+              ],
+              "equals": 5
+            }
+          },
+          {
+            "id": "8",
+            "label": "independent diagnosis",
+            "command": {
+              "op": "data",
+              "path": [
+                "futureField"
+              ],
+              "equals": "preserve-me"
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "result": {
+    "status": "failed"
+  },
+  "kind": "Independent diagnostic plan, not original reviewer evidence or original QA receipt"
+}

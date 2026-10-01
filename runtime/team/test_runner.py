@@ -105,6 +105,7 @@ class Controls(unittest.IsolatedAsyncioTestCase):
             contexts.append(json.loads(json.dumps(context)))
             self.assertEqual(actor,'Reviewer')
             self.assertIn('window.atoms.loadState',system)
+            self.assertIn('synchronously',context['runtimeFacts']['saveLock'])
             return bad if len(contexts)==1 else {'approved':True,'summary':'审查通过','issues':[]}
         task.ask=ask
         await r.Review(task=task).perform([])
