@@ -1,0 +1,11 @@
+{
+  "deploymentId": "dpl_7K4heFkBWX1MwHF6oqMAYmpreec9",
+  "url": "https://v0-test0-mlhy02yoc-lnisres-projects.vercel.app",
+  "target": "staging",
+  "readyState": "READY",
+  "sourceDigest": "cedfa923257a4de503677a7d43cd8bab5fabafbf3f42bc58d04b1af74d58e0c9",
+  "productionDeployment": "dpl_68LXQuH7oBNajTAM7JJKZMpVAJRH",
+  "projectFramework": "nextjs",
+  "retainedAutomationCredentialPresent": true,
+  "checkedAt": "2026-10-01T02:29:00.696Z"
+}

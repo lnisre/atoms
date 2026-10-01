@@ -47,3 +47,13 @@ pnpm exec node tests/team/replay.mjs docs/verification/assets/issue-25-reviewer/
 `reviewer-local-3` 执行 6 次请求后被 Reviewer 拒绝，理由是读取后的 count 在内存中就地规范化。对照 app-preview 的 postMessage 回传和存储边界，这一理由没有证明功能错误或持久化数据损坏：读取值是应用独占的结构化克隆，仅修改它不会保存；规范化已知字段本就是规格允许的行为。
 
 最终补充 loadIsolation 运行事实，并明确 Reviewer 只以缺失功能、可观察错误、数据丢失或平台违规作为阻断依据，不以没有行为差异的对象身份/写法偏好阻断。需求规格描述可观察的数据语义，不增加克隆或不可变写法要求。完整回滚、保留未知字段和禁止读取时自动保存仍然必须满足；Python 11/11 补验通过。第三个中间 Preview 在最终语义修正部署前被替代，未用于真实模型验收。
+
+对 `reviewer-local-3` 另做零模型独立浏览器诊断，7/7 通过：种子 count=1.5 在加载规范化后仍原样留在父存储，saveAttempts=0；点击增加后才出现一次保存，futureField 保留。可用同一 replay 脚本执行 `assets/issue-25-reviewer/reviewer-local-3-diagnosis.json`，预期 passed。此证据支持读取副本语义修正，不改写原 Reviewer 拒绝。
+
+## 最终 Preview 验收通过
+
+[最终 Preview](https://v0-test0-mlhy02yoc-lnisres-projects.vercel.app/)：`dpl_7K4heFkBWX1MwHF6oqMAYmpreec9`，READY / staging。部署源码哈希与当前分支一致，生产部署仍为 `dpl_68LXQuH7oBNajTAM7JJKZMpVAJRH`，原保留访问凭据未改变。
+
+`reviewer-cloud-3`：7 次真实请求，四个角色均实际执行，Reviewer 一次通过，无格式重试，Leader 正常交付并保存。任务耗时 27,824 ms，包含浏览器实际操作与恢复的脚本耗时 44,302 ms。真实操作顺序增加、增加、减少、重置、增加，依次观察到 1、2、1、0、1；应用数据保存、刷新、关闭页面并在同一隔离浏览器重开恢复均通过，重开新增生成请求 0。
+
+本轮账本共 6 场首次生成尝试（其中首次协议失败 0 模型调用），合计 33 次模型请求；每场仍在独立 4 分钟/20 次预算内。所有失败保留，未修改旧结果，未用重复调用替换同一任务审查。该通过证明最终部署的计数器样本主链路，不代表通用成功率，也不将 Reviewer 代码审查称为自动业务 QA。

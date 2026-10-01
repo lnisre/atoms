@@ -574,5 +574,182 @@
     "errors": [
       "代码审查未通过，未交付应用：整体实现基本符合冻结规格：唯一 output 用 textContent 渲染、三按钮语义正确、加载前禁用控件、以加载对象浅拷贝为真源并保留未知字段、每次变更同步调用 window.atoms.saveState、状态文案精确。但保存流程存在一处确定性缺陷：persist() 在调用 saveState 之前就把 state.version = 1，而构建 payload 时又读取 state 与 payload 中的 version，回滚路径没有恢复 version。这会在保存失败时污染真源对象，与“失败时回退到变更前的数值”以及“以加载对象为唯一真源”的规格不一致。；persist(prevCount) 在第 118 行先执行 state.version = 1，再构造 payload 并在 saveState 失败时由 handleSaveFailure 仅执行 state.count = prevCount，未将 state.version 回滚到原值。可复现路径：加载得到旧数据（无 version 字段或 version 为其他值），点击“增加”，若 window.atoms.saveState 返回的 Promise 被拒绝，则 handleSaveFailure 之后 state.version 仍为 1，真源对象被永久改成与变更前不同的状态；用户再次点击保存时会把这个被污染的 version 一并写出，违反“失败时回退到变更前数值”及“以加载对象为唯一真源、仅更新 owned 字段”的约定。"
     ]
+  },
+  {
+    "run": "reviewer-cloud-3",
+    "requirement": "做一个中文计数器，初始数值为 0，三个按钮分别叫“增加”“减少”“重置”，每次加一、减一或归零并保存，同浏览器重开恢复数值。用一个 output 元素只显示当前数字。普通样式自行决定。",
+    "url": "https://v0-test0-mlhy02yoc-lnisres-projects.vercel.app",
+    "elapsedMs": 44302,
+    "generationSaved": true,
+    "requestCount": 1,
+    "modelRequests": 7,
+    "calls": [
+      {
+        "call": 1,
+        "actor": "Mike",
+        "requestedModel": "deepseek-flash",
+        "responseModel": "deepseek-flash",
+        "responseId": "b8e12bd1-d8ca-4873-83ec-e01e7c2d68b4",
+        "status": "completed",
+        "usage": {
+          "prompt_tokens": 289,
+          "completion_tokens": 105,
+          "total_tokens": 394,
+          "prompt_tokens_details": {
+            "cached_tokens": 128
+          },
+          "prompt_cache_hit_tokens": 128,
+          "prompt_cache_miss_tokens": 161
+        },
+        "elapsedMs": 1166
+      },
+      {
+        "call": 2,
+        "actor": "Requirements",
+        "requestedModel": "deepseek-flash",
+        "responseModel": "deepseek-flash",
+        "responseId": "a66d606a-923d-4b5b-8834-824e208752fe",
+        "status": "completed",
+        "usage": {
+          "prompt_tokens": 898,
+          "completion_tokens": 484,
+          "total_tokens": 1382,
+          "prompt_tokens_details": {
+            "cached_tokens": 256
+          },
+          "prompt_cache_hit_tokens": 256,
+          "prompt_cache_miss_tokens": 642
+        },
+        "elapsedMs": 3075
+      },
+      {
+        "call": 3,
+        "actor": "Mike",
+        "requestedModel": "deepseek-flash",
+        "responseModel": "deepseek-flash",
+        "responseId": "4b046c48-60b1-44a8-b5df-b939f86b3e91",
+        "status": "completed",
+        "usage": {
+          "prompt_tokens": 1365,
+          "completion_tokens": 258,
+          "total_tokens": 1623,
+          "prompt_tokens_details": {
+            "cached_tokens": 0
+          },
+          "prompt_cache_hit_tokens": 0,
+          "prompt_cache_miss_tokens": 1365
+        },
+        "elapsedMs": 1866
+      },
+      {
+        "call": 4,
+        "actor": "Engineer",
+        "requestedModel": "deepseek-flash",
+        "responseModel": "deepseek-flash",
+        "responseId": "5ece8ffd-e476-4e8e-b03a-00688265b351",
+        "status": "completed",
+        "usage": {
+          "prompt_tokens": 1958,
+          "completion_tokens": 2388,
+          "total_tokens": 4346,
+          "prompt_tokens_details": {
+            "cached_tokens": 256
+          },
+          "prompt_cache_hit_tokens": 256,
+          "prompt_cache_miss_tokens": 1702
+        },
+        "elapsedMs": 7991
+      },
+      {
+        "call": 5,
+        "actor": "Mike",
+        "requestedModel": "deepseek-flash",
+        "responseModel": "deepseek-flash",
+        "responseId": "cf1d7bd9-80d4-429c-8c71-0333089e1ef4",
+        "status": "completed",
+        "usage": {
+          "prompt_tokens": 1850,
+          "completion_tokens": 323,
+          "total_tokens": 2173,
+          "prompt_tokens_details": {
+            "cached_tokens": 512
+          },
+          "prompt_cache_hit_tokens": 512,
+          "prompt_cache_miss_tokens": 1338
+        },
+        "elapsedMs": 1892
+      },
+      {
+        "call": 6,
+        "actor": "Reviewer",
+        "requestedModel": "deepseek-flash",
+        "responseModel": "deepseek-flash",
+        "responseId": "d3941a46-a463-415c-a983-b2000ca4b66f",
+        "status": "completed",
+        "usage": {
+          "prompt_tokens": 3924,
+          "completion_tokens": 160,
+          "total_tokens": 4084,
+          "prompt_tokens_details": {
+            "cached_tokens": 0
+          },
+          "prompt_cache_hit_tokens": 0,
+          "prompt_cache_miss_tokens": 3924
+        },
+        "elapsedMs": 1560
+      },
+      {
+        "call": 7,
+        "actor": "Mike",
+        "requestedModel": "deepseek-flash",
+        "responseModel": "deepseek-flash",
+        "responseId": "5b9fdab8-7928-4300-8a3b-f4053b0f39ae",
+        "status": "completed",
+        "usage": {
+          "prompt_tokens": 2215,
+          "completion_tokens": 66,
+          "total_tokens": 2281,
+          "prompt_tokens_details": {
+            "cached_tokens": 512
+          },
+          "prompt_cache_hit_tokens": 512,
+          "prompt_cache_miss_tokens": 1703
+        },
+        "elapsedMs": 954
+      }
+    ],
+    "errors": [],
+    "operations": {
+      "sequence": [
+        "增加",
+        "增加",
+        "减少",
+        "重置",
+        "增加"
+      ],
+      "expected": [
+        "1",
+        "2",
+        "1",
+        "0",
+        "1"
+      ],
+      "passed": true
+    },
+    "taskId": "2fbd7e85-bed8-41b6-89dc-3fcced1283ec",
+    "review": {
+      "kind": "code-review",
+      "codeHash": "139ea12c77f367aaae5a7fe003fcb4398243215b259ca884566345fd838a8d37",
+      "approved": true,
+      "summary": "代码满足冻结规格与平台契约。仅使用 window.atoms.loadState/saveState；加载前控件禁用；null 视为新数据且首次操作前不写入；增加/减少/重置分别在事件处理内同步保存，成功后提交完整新状态再更新显示；失败时恢复完整 prevState 与显示并显示“保存失败”；保存期间显示“正在保存”，成功显示“已保存”；加载时进行整对象浅拷贝保留未知字段，仅在副本上修改 count；非法/缺失 count 显示 0 且下次操作写回有效数字；当前数字仅由一个 output#counter-value 显示。未发现可由加载数据或用户操作触达的阻断性缺陷。",
+      "issues": []
+    },
+    "durationMs": 27824,
+    "codeHash": "139ea12c77f367aaae5a7fe003fcb4398243215b259ca884566345fd838a8d37",
+    "restore": {
+      "firstRequests": 1,
+      "reopenedRequests": 0,
+      "restored": true
+    }
   }
 ]

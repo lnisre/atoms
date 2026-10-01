@@ -1,0 +1,114 @@
+{
+  "kind": "independent zero-model replay, not original task receipt",
+  "originalTaskId": "independent-load-isolation-diagnosis",
+  "result": {
+    "protocol": "atoms-qa/1",
+    "taskId": "6e1edb91-d244-4e3c-8fcb-3562522a159d",
+    "requestId": "94e711d7-d5b1-40d3-8041-f566ec93da5d",
+    "codeHash": "44a2927eb1e035e360f53b4d3ceb99039a140dc4f3341faa190f4b8014a9790b",
+    "planHash": "5caac0ad03d73184d44c4e280ae77ef95d7ce9a2498bb14dac2767793732c9c5",
+    "status": "passed",
+    "results": [
+      {
+        "scenarioId": "load-isolation",
+        "checkId": "1",
+        "command": {
+          "op": "wait",
+          "ms": 200
+        },
+        "expected": 200,
+        "actual": 200,
+        "status": "passed",
+        "startedAt": 1790821462196,
+        "endedAt": 1790821462460
+      },
+      {
+        "scenarioId": "load-isolation",
+        "checkId": "2",
+        "command": {
+          "op": "data",
+          "path": [
+            "count"
+          ],
+          "equals": 1.5
+        },
+        "expected": 1.5,
+        "actual": 1.5,
+        "status": "passed",
+        "startedAt": 1790821462460,
+        "endedAt": 1790821462460
+      },
+      {
+        "scenarioId": "load-isolation",
+        "checkId": "3",
+        "command": {
+          "op": "bridge",
+          "property": "saveAttempts",
+          "equals": 0
+        },
+        "expected": 0,
+        "actual": 0,
+        "status": "passed",
+        "startedAt": 1790821462460,
+        "endedAt": 1790821462460
+      },
+      {
+        "scenarioId": "load-isolation",
+        "checkId": "4",
+        "command": {
+          "op": "click",
+          "selector": "#inc"
+        },
+        "expected": "executed",
+        "actual": "executed",
+        "status": "passed",
+        "startedAt": 1790821462460,
+        "endedAt": 1790821462461
+      },
+      {
+        "scenarioId": "load-isolation",
+        "checkId": "5",
+        "command": {
+          "op": "wait",
+          "ms": 200
+        },
+        "expected": 200,
+        "actual": 200,
+        "status": "passed",
+        "startedAt": 1790821462461,
+        "endedAt": 1790821462668
+      },
+      {
+        "scenarioId": "load-isolation",
+        "checkId": "6",
+        "command": {
+          "op": "data",
+          "path": [
+            "futureField"
+          ],
+          "equals": "preserve-me"
+        },
+        "expected": "preserve-me",
+        "actual": "preserve-me",
+        "status": "passed",
+        "startedAt": 1790821462668,
+        "endedAt": 1790821462668
+      },
+      {
+        "scenarioId": "load-isolation",
+        "checkId": "7",
+        "command": {
+          "op": "bridge",
+          "property": "saveAttempts",
+          "equals": 1
+        },
+        "expected": 1,
+        "actual": 1,
+        "status": "passed",
+        "startedAt": 1790821462668,
+        "endedAt": 1790821462668
+      }
+    ],
+    "detail": "所有计划项实际执行完成。"
+  }
+}

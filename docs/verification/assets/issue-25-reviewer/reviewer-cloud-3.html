@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>中文计数器</title>
+<style>
+  html, body {
+    margin: 0;
+    padding: 0;
+    background: #f5f6f8;
+    color: #222;
+    font-family: "PingFang SC", "Microsoft YaHei", system-ui, sans-serif;
+  }
+  .wrap {
+    max-width: 420px;
+    margin: 64px auto;
+    padding: 32px 28px;
+    background: #ffffff;
+    border-radius: 14px;
+    box-shadow: 0 6px 24px rgba(0,0,0,0.08);
+    text-align: center;
+  }
+  h1 {
+    font-size: 20px;
+    font-weight: 600;
+    margin: 0 0 24px;
+    color: #333;
+  }
+  #counter-value {
+    display: block;
+    font-size: 64px;
+    font-weight: 700;
+    line-height: 1.1;
+    margin: 8px 0 28px;
+    color: #1a6fe0;
+    font-variant-numeric: tabular-nums;
+  }
+  .btns {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+  }
+  .btns button {
+    flex: 1;
+    padding: 12px 0;
+    font-size: 16px;
+    font-family: inherit;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    color: #fff;
+    background: #1a6fe0;
+    transition: filter 0.15s ease, opacity 0.15s ease;
+  }
+  .btns button:hover:not(:disabled) { filter: brightness(1.08); }
+  .btns button:active:not(:disabled) { filter: brightness(0.94); }
+  #btn-decrease { background: #6b7280; }
+  #btn-reset { background: #d9534f; }
+  .btns button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+  .status {
+    margin-top: 22px;
+    min-height: 20px;
+    font-size: 13px;
+    color: #777;
+  }
+</style>
+</head>
+<body>
+<main class="wrap">
+  <h1>中文计数器</h1>
+  <output id="counter-value">0</output>
+  <div class="btns">
+    <button id="btn-increase" type="button" disabled>增加</button>
+    <button id="btn-decrease" type="button" disabled>减少</button>
+    <button id="btn-reset" type="button" disabled>重置</button>
+  </div>
+  <div class="status" data-atoms-status></div>
+</main>
+<script>
+(function () {
+  "use strict";
+
+  var outputEl = document.getElementById("counter-value");
+  var statusEl = document.querySelector("[data-atoms-status]");
+  var btnIncrease = document.getElementById("btn-increase");
+  var btnDecrease = document.getElementById("btn-decrease");
+  var btnReset = document.getElementById("btn-reset");
+  var buttons = [btnIncrease, btnDecrease, btnReset];
+
+  // 完整状态对象（保留未知字段）
+  var currentState = null;
+  var loaded = false;
+
+  function setStatus(text) {
+    statusEl.textContent = text;
+  }
+
+  function setButtonsEnabled(enabled) {
+    for (var i = 0; i < buttons.length; i++) {
+      buttons[i].disabled = !enabled;
+    }
+  }
+
+  function displayCount(value) {
+    outputEl.textContent = String(value);
+  }
+
+  // 从状态对象中解析出有效数字，非法/缺失均为 0
+  function effectiveCount(state) {
+    if (state && typeof state === "object") {
+      var c = state.count;
+      if (typeof c === "number" && isFinite(c)) {
+        return c;
+      }
+    }
+    return 0;
+  }
+
+  // 浅拷贝完整对象，保留全部未知字段
+  function cloneState(state) {
+    var copy = {};
+    if (state && typeof state === "object") {
+      for (var key in state) {
+        if (Object.prototype.hasOwnProperty.call(state, key)) {
+          copy[key] = state[key];
+        }
+      }
+    }
+    return copy;
+  }
+
+  // 执行一次变更：先构造 nextState（完整副本 + 新 count），
+  // 同步调用 saveState，成功后才提交 currentState 并更新显示。
+  function applyChange(nextCount) {
+    if (!loaded) {
+      return;
+    }
+    var base = currentState && typeof currentState === "object" ? currentState : {};
+    var nextState = cloneState(base);
+    nextState.count = nextCount;
+
+    var prevState = currentState;
+    var prevDisplay = outputEl.textContent;
+
+    setStatus("正在保存");
+    setButtonsEnabled(false);
+
+    // 同步发起保存，事件处理内先保存
+    var savePromise;
+    try {
+      savePromise = window.atoms.saveState(nextState);
+    } catch (err) {
+      currentState = prevState;
+      displayCount(prevDisplay);
+      setStatus("保存失败");
+      setButtonsEnabled(true);
+      return;
+    }
+
+    Promise.resolve(savePromise).then(function () {
+      // 保存成功后才提交完整新状态
+      currentState = nextState;
+      displayCount(nextCount);
+      setStatus("已保存");
+      setButtonsEnabled(true);
+    }, function () {
+      // 保存失败：恢复操作前完整状态与显示
+      currentState = prevState;
+      displayCount(prevDisplay);
+      setStatus("保存失败");
+      setButtonsEnabled(true);
+    });
+  }
+
+  function onClickIncrease() {
+    applyChange(effectiveCount(currentState) + 1);
+  }
+  function onClickDecrease() {
+    applyChange(effectiveCount(currentState) - 1);
+  }
+  function onClickReset() {
+    applyChange(0);
+  }
+
+  btnIncrease.addEventListener("click", onClickIncrease);
+  btnDecrease.addEventListener("click", onClickDecrease);
+  btnReset.addEventListener("click", onClickReset);
+
+  // 初始：所有控件禁用，直到加载完成
+  setButtonsEnabled(false);
+  displayCount(0);
+
+  var loadPromise;
+  try {
+    loadPromise = window.atoms.loadState();
+  } catch (err) {
+    setStatus("读取失败");
+    setButtonsEnabled(false);
+    return;
+  }
+
+  Promise.resolve(loadPromise).then(function (data) {
+    if (data === null || data === undefined) {
+      // 新数据：从 0 开始，首次操作前不写入
+      currentState = null;
+      loaded = true;
+      displayCount(0);
+      setStatus("已读取");
+      setButtonsEnabled(true);
+    } else if (typeof data === "object") {
+      // 保留完整加载对象作为状态来源
+      currentState = cloneState(data);
+      loaded = true;
+      displayCount(effectiveCount(data));
+      setStatus("已读取");
+      setButtonsEnabled(true);
+    } else {
+      // 非对象数据：本地按 0 处理，首次操作时基于新对象保存
+      currentState = null;
+      loaded = true;
+      displayCount(0);
+      setStatus("已读取");
+      setButtonsEnabled(true);
+    }
+  }, function () {
+    setStatus("读取失败");
+    setButtonsEnabled(false);
+  });
+})();
+</script>
+</body>
+</html>
