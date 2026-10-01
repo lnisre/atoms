@@ -1,0 +1,52 @@
+
+Running 10 tests using 1 worker
+
+(node:9869) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓   1 tests/browser/qa.spec.ts:30:48 › QA todo: real browser and HTTP round trip (7.2s)
+  ✓   2 tests/browser/qa.spec.ts:30:48 › QA reading: real browser and HTTP round trip (6.8s)
+  ✓   3 tests/browser/qa.spec.ts:44:87 › QA detects read-bug (6.2s)
+  ✓   4 tests/browser/qa.spec.ts:44:87 › QA detects save-bug (6.4s)
+  ✓   5 tests/browser/qa.spec.ts:44:87 › QA detects tamper (6.5s)
+  ✓   6 tests/browser/qa.spec.ts:44:87 › QA detects no-result (7.9s)
+  ✓   7 tests/browser/qa.spec.ts:44:87 › QA detects timeout (4.9s)
+  ✓   8 tests/browser/qa.spec.ts:63:5 › QA stops in flight and a new task never receives its results (6.4s)
+  ✘   9 tests/browser/qa.spec.ts:81:5 › QA rejects wrong code/task/plan, missing and late results at the HTTP boundary (1.0m)
+(node:14822) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  10 tests/browser/qa.spec.ts:104:5 › QA synthetic data never enters active formal or trial data (9.9s)
+
+
+  1) tests/browser/qa.spec.ts:81:5 › QA rejects wrong code/task/plan, missing and late results at the HTTP boundary
+
+    Test timeout of 60000ms exceeded.
+
+    Error: apiRequestContext.post: Request context disposed.
+    Call log:
+      - → POST https://v0-test0-l5zm5773h-lnisres-projects.vercel.app/api/qa
+        - user-agent: Playwright/1.63.0 (arm64; macOS 15.6) node/24.18
+        - accept: */*
+        - accept-encoding: gzip,deflate,br
+        - x-vercel-protection-bypass: [redacted]
+        - content-type: application/json
+        - content-length: 15287
+
+
+      86 |   const record = await evidence(page, "protocol-baseline");
+      87 |   for (const patch of [{ taskId: "other" }, { codeHash: "other" }, { results: [] }, { planHash: "other" }, { results: record.result.results.map((r: object, i: number) => i === 0 ? { ...r, status: "not-run" } : r) }, { results: record.result.results.map((r: object, i: number) => i === 0 ? { ...r, expected: "lowered" } : r) }]) {
+    > 88 |     const response = await request.post("/api/qa", { headers: qaHeaders, data: { action: "complete", envelope, result: { ...record.result, ...patch } } });
+         |                                    ^
+      89 |     expect(response.status()).toBe(400);
+      90 |   }
+      91 |   // Acquire a server-signed short deadline and wait for its actual expiry.
+        at /Users/gaowenlong/.codex/worktrees/issue-24-qa/atoms/tests/browser/qa.spec.ts:88:36
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/qa-QA-rejects-wrong-code-t-8082f-esults-at-the-HTTP-boundary/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/qa-QA-rejects-wrong-code-t-8082f-esults-at-the-HTTP-boundary/error-context.md
+
+  1 failed
+    tests/browser/qa.spec.ts:81:5 › QA rejects wrong code/task/plan, missing and late results at the HTTP boundary
+  9 passed (2.2m)

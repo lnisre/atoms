@@ -1,0 +1,20 @@
+{
+  "deploymentId": "dpl_98ybMX8Q9MdAvjKSPSU6FocaeL4P",
+  "origin": "https://v0-test0-l5zm5773h-lnisres-projects.vercel.app",
+  "readyState": "READY",
+  "target": null,
+  "startedAt": "2026-09-30T14:33:24.980Z",
+  "productionBefore": "dpl_68LXQuH7oBNajTAM7JJKZMpVAJRH",
+  "created": false,
+  "revoked": false,
+  "reused": true,
+  "authorizedStatus": 200,
+  "testExitCode": 0,
+  "retained": true,
+  "productionAfter": "dpl_68LXQuH7oBNajTAM7JJKZMpVAJRH",
+  "productionUnchanged": true,
+  "protectionUnchanged": true,
+  "existingBypassesPreserved": true,
+  "retainedAccessStatus": 200,
+  "finishedAt": "2026-09-30T14:33:49.197Z"
+}
