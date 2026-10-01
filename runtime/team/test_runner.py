@@ -106,6 +106,7 @@ class Controls(unittest.IsolatedAsyncioTestCase):
             self.assertEqual(actor,'Reviewer')
             self.assertIn('window.atoms.loadState',system)
             self.assertIn('synchronously',context['runtimeFacts']['saveLock'])
+            self.assertIn('structured-cloned',context['runtimeFacts']['loadIsolation'])
             return bad if len(contexts)==1 else {'approved':True,'summary':'审查通过','issues':[]}
         task.ask=ask
         await r.Review(task=task).perform([])

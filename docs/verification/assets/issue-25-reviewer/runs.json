@@ -192,6 +192,134 @@
     }
   },
   {
+    "run": "reviewer-local-3",
+    "requirement": "做一个中文计数器，初始数值为 0，三个按钮分别叫“增加”“减少”“重置”，每次加一、减一或归零并保存，同浏览器重开恢复数值。用一个 output 元素只显示当前数字。普通样式自行决定。",
+    "url": "http://localhost:3115",
+    "elapsedMs": 28808,
+    "generationSaved": false,
+    "requestCount": 1,
+    "modelRequests": 6,
+    "calls": [
+      {
+        "call": 1,
+        "actor": "Mike",
+        "requestedModel": "deepseek-flash",
+        "responseModel": "deepseek-flash",
+        "responseId": "c83a52d7-ebd4-4da0-a0e4-9236d334ccb6",
+        "status": "completed",
+        "usage": {
+          "prompt_tokens": 289,
+          "completion_tokens": 106,
+          "total_tokens": 395,
+          "prompt_tokens_details": {
+            "cached_tokens": 128
+          },
+          "prompt_cache_hit_tokens": 128,
+          "prompt_cache_miss_tokens": 161
+        },
+        "elapsedMs": 1361
+      },
+      {
+        "call": 2,
+        "actor": "Requirements",
+        "requestedModel": "deepseek-flash",
+        "responseModel": "deepseek-flash",
+        "responseId": "e9bb7674-b3b1-4cd3-9cfe-5928fa80b805",
+        "status": "completed",
+        "usage": {
+          "prompt_tokens": 861,
+          "completion_tokens": 431,
+          "total_tokens": 1292,
+          "prompt_tokens_details": {
+            "cached_tokens": 0
+          },
+          "prompt_cache_hit_tokens": 0,
+          "prompt_cache_miss_tokens": 861
+        },
+        "elapsedMs": 2215
+      },
+      {
+        "call": 3,
+        "actor": "Mike",
+        "requestedModel": "deepseek-flash",
+        "responseModel": "deepseek-flash",
+        "responseId": "a9defda3-06f6-48c9-8ff4-e33e95f2f518",
+        "status": "completed",
+        "usage": {
+          "prompt_tokens": 1111,
+          "completion_tokens": 264,
+          "total_tokens": 1375,
+          "prompt_tokens_details": {
+            "cached_tokens": 0
+          },
+          "prompt_cache_hit_tokens": 0,
+          "prompt_cache_miss_tokens": 1111
+        },
+        "elapsedMs": 1559
+      },
+      {
+        "call": 4,
+        "actor": "Engineer",
+        "requestedModel": "deepseek-flash",
+        "responseModel": "deepseek-flash",
+        "responseId": "573cfcf4-4a61-47fe-a890-0c526561b34d",
+        "status": "completed",
+        "usage": {
+          "prompt_tokens": 1696,
+          "completion_tokens": 2482,
+          "total_tokens": 4178,
+          "prompt_tokens_details": {
+            "cached_tokens": 0
+          },
+          "prompt_cache_hit_tokens": 0,
+          "prompt_cache_miss_tokens": 1696
+        },
+        "elapsedMs": 7945
+      },
+      {
+        "call": 5,
+        "actor": "Mike",
+        "requestedModel": "deepseek-flash",
+        "responseModel": "deepseek-flash",
+        "responseId": "4769c312-06a1-4a45-a6c4-215afe01cd50",
+        "status": "completed",
+        "usage": {
+          "prompt_tokens": 1625,
+          "completion_tokens": 279,
+          "total_tokens": 1904,
+          "prompt_tokens_details": {
+            "cached_tokens": 384
+          },
+          "prompt_cache_hit_tokens": 384,
+          "prompt_cache_miss_tokens": 1241
+        },
+        "elapsedMs": 1639
+      },
+      {
+        "call": 6,
+        "actor": "Reviewer",
+        "requestedModel": "deepseek-flash",
+        "responseModel": "deepseek-flash",
+        "responseId": "006f89b3-54d1-48dc-8f49-a00d13b54dd3",
+        "status": "completed",
+        "usage": {
+          "prompt_tokens": 3701,
+          "completion_tokens": 290,
+          "total_tokens": 3991,
+          "prompt_tokens_details": {
+            "cached_tokens": 384
+          },
+          "prompt_cache_hit_tokens": 384,
+          "prompt_cache_miss_tokens": 3317
+        },
+        "elapsedMs": 2485
+      }
+    ],
+    "errors": [
+      "代码审查未通过，未交付应用：实现整体符合规范，但加载成功路径中有一处与数据契约冲突的行为：加载到的非 null 对象被当作“当期状态”直接就地修改（currentState = loaded; currentState.count = normaliseCount(...)），当 count 为浮点/字符串时会在内存中把规范化后的值写回加载对象，偏离“保留加载对象中所有未知字段、仅在副本上更新 count”的源事实来源约束。其余核对项（output 仅显示数字、null 走默认 {count:0}、保存前同步调用 saveState 且传整份克隆对象、失败恢复完整快照、状态串精确、加载前/读失败禁用控件、无网络/存储/eval）均通过。；加载成功且 count 不是整数的普通数值（如 {count:1.5}）或字符串（如 {count:\"3\"}）时，已读取路径执行 currentState = loaded; currentState.count = normaliseCount(currentState.count)，直接改写加载对象而非副本，未满足数据契约“加载到的对象作为完整事实来源：保留其中所有未知字段，仅在副本上更新 count”。触发条件：持久化数据中 count 为非整数数值或数字字符串，加载成功后 output 显示被截断的值，且当前状态对象已被就地修改。"
+    ]
+  },
+  {
     "run": "reviewer-cloud-1",
     "requirement": "做一个中文计数器，初始数值为 0，三个按钮分别叫“增加”“减少”“重置”，每次加一、减一或归零并保存，同浏览器重开恢复数值。用一个 output 元素只显示当前数字。普通样式自行决定。",
     "url": "https://v0-test0-9y3covmbz-lnisres-projects.vercel.app",
@@ -317,6 +445,134 @@
     ],
     "errors": [
       "代码审查未通过，未交付应用：整体实现基本符合规范，但存在一处违反平台契约的状态显示缺陷：在保存进行中再次触发变更时，状态会停留在“正在保存”而不能正确反映最终结果，且保存失败时无法恢复为最近一次成功保存的状态。此外读取完成前未清空状态文本虽可接受，但关键缺陷在于保存并发处理。；并发保存导致状态与数据不一致：persist() 在每次变更时同步调用 saveState 后立即将按钮禁用，但如果用户在保存失败后按钮重新启用的瞬间、或在前一次保存尚未 resolve 时（按钮被禁用的时序依赖于 saveState 的实现与微任务调度）触发第二次变更，两个 Promise 的回调会交错执行。先完成的保存会把 status 设为“已保存”并启用按钮，即使另有保存仍在进行；若后一次保存失败，它会把 count 回滚到它自己的 prevCount（即第一次变更后的值），而该值可能从未被成功持久化，从而违反“失败则恢复此前状态”和“已保存”语义。这与规范中“等待期间显示 正在保存，resolve 后显示 已保存，失败则恢复此前状态并显示 保存失败”的确定性状态机要求不符。"
+    ]
+  },
+  {
+    "run": "reviewer-cloud-2",
+    "requirement": "做一个中文计数器，初始数值为 0，三个按钮分别叫“增加”“减少”“重置”，每次加一、减一或归零并保存，同浏览器重开恢复数值。用一个 output 元素只显示当前数字。普通样式自行决定。",
+    "url": "https://v0-test0-3ldxocrdh-lnisres-projects.vercel.app",
+    "elapsedMs": 38018,
+    "generationSaved": false,
+    "requestCount": 1,
+    "modelRequests": 6,
+    "calls": [
+      {
+        "call": 1,
+        "actor": "Mike",
+        "requestedModel": "deepseek-flash",
+        "responseModel": "deepseek-flash",
+        "responseId": "e1108f55-cf82-44e3-8dbe-7582e837c497",
+        "status": "completed",
+        "usage": {
+          "prompt_tokens": 289,
+          "completion_tokens": 125,
+          "total_tokens": 414,
+          "prompt_tokens_details": {
+            "cached_tokens": 128
+          },
+          "prompt_cache_hit_tokens": 128,
+          "prompt_cache_miss_tokens": 161
+        },
+        "elapsedMs": 1468
+      },
+      {
+        "call": 2,
+        "actor": "Requirements",
+        "requestedModel": "deepseek-flash",
+        "responseModel": "deepseek-flash",
+        "responseId": "aad021f4-7f77-4568-9826-d268694b4eb7",
+        "status": "completed",
+        "usage": {
+          "prompt_tokens": 774,
+          "completion_tokens": 493,
+          "total_tokens": 1267,
+          "prompt_tokens_details": {
+            "cached_tokens": 0
+          },
+          "prompt_cache_hit_tokens": 0,
+          "prompt_cache_miss_tokens": 774
+        },
+        "elapsedMs": 3349
+      },
+      {
+        "call": 3,
+        "actor": "Mike",
+        "requestedModel": "deepseek-flash",
+        "responseModel": "deepseek-flash",
+        "responseId": "05deb185-a2fd-4b6b-95d4-555934cfd6b2",
+        "status": "completed",
+        "usage": {
+          "prompt_tokens": 1372,
+          "completion_tokens": 239,
+          "total_tokens": 1611,
+          "prompt_tokens_details": {
+            "cached_tokens": 0
+          },
+          "prompt_cache_hit_tokens": 0,
+          "prompt_cache_miss_tokens": 1372
+        },
+        "elapsedMs": 1782
+      },
+      {
+        "call": 4,
+        "actor": "Engineer",
+        "requestedModel": "deepseek-flash",
+        "responseModel": "deepseek-flash",
+        "responseId": "49fc0571-fa5b-47e4-b86f-4d6ec206d085",
+        "status": "completed",
+        "usage": {
+          "prompt_tokens": 1863,
+          "completion_tokens": 2241,
+          "total_tokens": 4104,
+          "prompt_tokens_details": {
+            "cached_tokens": 0
+          },
+          "prompt_cache_hit_tokens": 0,
+          "prompt_cache_miss_tokens": 1863
+        },
+        "elapsedMs": 7594
+      },
+      {
+        "call": 5,
+        "actor": "Mike",
+        "requestedModel": "deepseek-flash",
+        "responseModel": "deepseek-flash",
+        "responseId": "8d24aeef-c0cc-44a3-8ae4-934926c2691e",
+        "status": "completed",
+        "usage": {
+          "prompt_tokens": 1802,
+          "completion_tokens": 248,
+          "total_tokens": 2050,
+          "prompt_tokens_details": {
+            "cached_tokens": 512
+          },
+          "prompt_cache_hit_tokens": 512,
+          "prompt_cache_miss_tokens": 1290
+        },
+        "elapsedMs": 1818
+      },
+      {
+        "call": 6,
+        "actor": "Reviewer",
+        "requestedModel": "deepseek-flash",
+        "responseModel": "deepseek-flash",
+        "responseId": "8cd138c8-5dc5-4f90-9eb3-f8b7976a373b",
+        "status": "completed",
+        "usage": {
+          "prompt_tokens": 3558,
+          "completion_tokens": 313,
+          "total_tokens": 3871,
+          "prompt_tokens_details": {
+            "cached_tokens": 0
+          },
+          "prompt_cache_hit_tokens": 0,
+          "prompt_cache_miss_tokens": 3558
+        },
+        "elapsedMs": 2633
+      }
+    ],
+    "errors": [
+      "代码审查未通过，未交付应用：整体实现基本符合冻结规格：唯一 output 用 textContent 渲染、三按钮语义正确、加载前禁用控件、以加载对象浅拷贝为真源并保留未知字段、每次变更同步调用 window.atoms.saveState、状态文案精确。但保存流程存在一处确定性缺陷：persist() 在调用 saveState 之前就把 state.version = 1，而构建 payload 时又读取 state 与 payload 中的 version，回滚路径没有恢复 version。这会在保存失败时污染真源对象，与“失败时回退到变更前的数值”以及“以加载对象为唯一真源”的规格不一致。；persist(prevCount) 在第 118 行先执行 state.version = 1，再构造 payload 并在 saveState 失败时由 handleSaveFailure 仅执行 state.count = prevCount，未将 state.version 回滚到原值。可复现路径：加载得到旧数据（无 version 字段或 version 为其他值），点击“增加”，若 window.atoms.saveState 返回的 Promise 被拒绝，则 handleSaveFailure 之后 state.version 仍为 1，真源对象被永久改成与变更前不同的状态；用户再次点击保存时会把这个被污染的 version 一并写出，违反“失败时回退到变更前数值”及“以加载对象为唯一真源、仅更新 owned 字段”的约定。"
     ]
   }
 ]
