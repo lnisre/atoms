@@ -60,10 +60,13 @@ test("添加、完成、删除后刷新和关闭重开，恢复需求与业务�
     // The first pointer can hit the opaque iframe host in headless Chrome.
     .press("Space");
   await expect(page.frameLocator("iframe").getByLabel("完成 保留并完成", { exact: true })).toBeChecked();
+  await expect(page.frameLocator("iframe").locator("body")).not.toHaveAttribute("inert", "");
   await page
     .frameLocator("iframe")
     .getByRole("button", { name: "删除 删除临时项", exact: true })
-    .click();
+    // Match the other activations: avoid the documented opaque-frame pointer race.
+    .press("Enter");
+  await expect(page.frameLocator("iframe").getByText("删除临时项", { exact: true })).toHaveCount(0);
   await expect(page.getByText("应用数据已保存", { exact: true })).toBeVisible();
   const url = page.url();
   await page.reload();

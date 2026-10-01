@@ -36,7 +36,7 @@ export function GenerationRecord({ record, live, pending, saveError, saving, tit
         <p className="record-note">结构检查和预览载入不代表业务功能已验证。</p>
         <ol>{[...steps.entries()].map(([key, events]) => {
           const last = events.at(-1)!;
-          const status = last.status === "completed" ? "完成" : last.status === "failed" ? "失败" : live && !(record.team?.outcome && last.stepId.startsWith("model-")) ? "进行中" : "执行已结束，未取得结果";
+          const status = last.status === "completed" ? "完成" : last.status === "failed" ? "失败" : record.team?.outcome && last.stepId.startsWith("model-") ? "执行已结束，未取得结果" : live ? "进行中" : "未记录结束状态";
           return <li key={key} data-status={last.status}><details>
             <summary><span>{last.label}</span><small>{status}</small></summary>
             <p>{last.source === "server" ? "服务端" : "浏览器"}执行 · {last.detail}</p>
