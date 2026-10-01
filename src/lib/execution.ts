@@ -11,6 +11,7 @@ export type ExecutionEvent = {
   detail: string;
 };
 export type InitialGeneration = {
+  team?: import("./team/contract").TeamRecord;
   taskId: string;
   startedAt: string;
   assistantReply: string | null;

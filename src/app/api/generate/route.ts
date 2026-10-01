@@ -1,3 +1,4 @@
+import { teamEntry } from "@/lib/team/server";
 import { createRecorder, type GenerationEvent } from "@/lib/execution";
 import { MAX_ASSISTANT_LENGTH } from "@/lib/generation";
 import { previewHeadOffset } from "@/lib/html-document";
@@ -10,7 +11,7 @@ import {
 } from "@/lib/generation";
 
 export const runtime = "nodejs";
-export const maxDuration = 180;
+export const maxDuration = 300;
 
 const systemPrompt = `You build lightweight frontend applications from the user's requirements.
 Return ONLY one complete HTML document, starting with <!DOCTYPE html> and ending with </html>. Include explicit head and body tags, inline CSS in style and vanilla JavaScript in script. No markdown or explanation.
@@ -26,6 +27,8 @@ function failure(error: string, status: number) {
 }
 
 export async function POST(request: Request) {
+  if (request.headers.get("x-atoms-protocol") === "atoms-team/2") return teamEntry(request);
+  if (request.headers.has("x-atoms-protocol")) return failure("团队协议已更新，请刷新页面后重试。", 409);
   // Negotiated streaming keeps the existing M2 JSON contract available.
   if (!request.headers.get("accept")?.includes("application/x-ndjson")) return generate(request);
   const taskId = request.headers.get("x-atoms-task-id");

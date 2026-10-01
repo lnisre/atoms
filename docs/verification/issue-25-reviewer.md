@@ -1,0 +1,59 @@
+# Issue #25：Reviewer 四角色修正
+
+用户在实际体验中反复遇到“平台 · 检查计划格式校验”失败，要求将 QA 角色改为 Reviewer，先跑通四角色。当前首次生成使用 Leader → Requirements → Engineer → Reviewer → Leader 交付；Reviewer 依据原始需求、完整规格、实际 HTML 和平台约定做静态代码审查。它不生成测试计划或调用浏览器工具，阻断问题仍使任务结束。
+
+审查输出仅有 approved、summary、issues 三个字段；共享 schema 定义类型与边界，Python 验证后由平台绑定代码哈希，服务端和客户端拒绝缺角色、未通过审查或错误代码的交付。格式纠正最多一次，并携带原输出与字段错误，沿用原 4 分钟/20 次请求预算。协议升级为 atoms-team/2，旧协议请求在调用模型前明确拒绝；历史 QA 记录与独立 /qa 工具保留。界面和恢复记录明确显示“代码审查通过 · 业务运行尚未验证”。参见 [ADR 0009](../adr/0009-reviewer-first-generation.md)。
+
+## 工程验证
+
+接口测试 20/20、Python 11/11、完整浏览器回归 55/55、lint、typecheck、webpack 生产构建通过。受控真实 MetaGPT 流程覆盖：审查通过后保存与重开、审查拒绝不交付、审查期间离开取消、错误代码哈希被拒绝。既有 M4、项目/业务数据恢复和独立 QA 回归保留。
+
+首次集成发现网关内部仍发送旧协议版本，模型调用前就被拒绝。已修正并重新完成完整浏览器回归；初次中断回归不作为通过证据。
+
+## 真实本地验收
+
+`reviewer-local-1` 在网关协议检查时失败，真实模型请求数 0，未保存项目。
+
+`reviewer-local-2`：8 次真实 deepseek-flash 请求，Reviewer 格式纠正一次；任务耗时 44,647 ms，包含实际操作与恢复的脚本耗时 48,135 ms。四角色均实际执行并交接，Reviewer 审查通过且 Leader 确认交付；真实点击增加、保存、刷新、关闭页面并在同一隔离浏览器重开恢复成功，重开新增生成请求 0。
+
+[运行与调用记录](assets/issue-25-reviewer/runs.json)只保留白名单元数据、审查结论、代码哈希和恢复结果；[本地生成代码](assets/issue-25-reviewer/reviewer-local-2.html)与记录绑定。所有输入均为本 agent 编写的合成计数器需求，浏览器使用全新上下文，无用户业务数据。未导出原始事件、票据、凭据、请求头、cookies 或浏览器 profile。
+
+## 范围限制
+
+真实操作验收只覆盖所列计数器样本，不代表通用生成成功率。产品中的 Reviewer 是静态审查，不能替代自动化业务 QA；未实现自动返工。原 #25 自动 QA 验收条件由本次用户指令调整，旧 QA 失败证据保留，#25 与 PR #30 在验收范围同步前继续保持 OPEN / Draft。
+
+## 首场云端拒绝与修正
+
+`reviewer-cloud-1` 在第一次 Reviewer 部署上执行 6 次真实请求，Reviewer 以并发保存风险拒绝，平台未交付或保存应用。代码核对发现这一理由忽略了平台同步保存锁，但该产物确实另有未知字段丢失问题。零模型独立诊断执行 8 项，7 项通过：保存锁、第二次点击被阻断、仅一次 saveState、计数增加均符合预期；只有 futureField 从 preserve-me 变为 null，确认数据丢失。诊断没有改写原审查、没有交付失败产物。
+
+修正为 Reviewer 明确注入已实现的运行保证（同步 inert、捕获阶段事件拦截、引用计数及解锁时序），要求问题引用具体代码和可触发条件；工程师的合同明确在保留整个旧数据对象的基础上更新自有字段，不得重建仅含已知字段的对象。修正后 Python 11/11 再次通过。未改变审查拒绝门槛、未增加自动返工。
+
+零模型复现：
+
+```sh
+pnpm exec node tests/team/replay.mjs docs/verification/assets/issue-25-reviewer/reviewer-cloud-1-diagnosis.json /tmp/atoms-reviewer-diagnosis.json
+```
+
+预期 failed，7/8，唯一失败为未知字段保留。此为独立诊断，不冒充首次生成中的自动业务 QA。
+
+## 第二场云端拒绝与最小规格修正
+
+`reviewer-cloud-2` 的 6 次真实请求完成至 Reviewer。审查指出保存路径新增 version=1，但失败分支仅回滚 count；核对生成代码确认该路径存在。该 version 字段来自需求角色自行添加，而非用户要求。任务未交付、未保存，原拒绝保留。
+
+后续收紧需求规格：未被要求时不增加 schemaVersion/version 或迁移元数据；工程师对完整状态副本进行变更，成功后提交，或失败时恢复完整的变更前快照。Reviewer 标准不变，不对原拒绝结果重审。Python 11/11 再次通过。
+
+## 读取副本语义与阻断范围
+
+`reviewer-local-3` 执行 6 次请求后被 Reviewer 拒绝，理由是读取后的 count 在内存中就地规范化。对照 app-preview 的 postMessage 回传和存储边界，这一理由没有证明功能错误或持久化数据损坏：读取值是应用独占的结构化克隆，仅修改它不会保存；规范化已知字段本就是规格允许的行为。
+
+最终补充 loadIsolation 运行事实，并明确 Reviewer 只以缺失功能、可观察错误、数据丢失或平台违规作为阻断依据，不以没有行为差异的对象身份/写法偏好阻断。需求规格描述可观察的数据语义，不增加克隆或不可变写法要求。完整回滚、保留未知字段和禁止读取时自动保存仍然必须满足；Python 11/11 补验通过。第三个中间 Preview 在最终语义修正部署前被替代，未用于真实模型验收。
+
+对 `reviewer-local-3` 另做零模型独立浏览器诊断，7/7 通过：种子 count=1.5 在加载规范化后仍原样留在父存储，saveAttempts=0；点击增加后才出现一次保存，futureField 保留。可用同一 replay 脚本执行 `assets/issue-25-reviewer/reviewer-local-3-diagnosis.json`，预期 passed。此证据支持读取副本语义修正，不改写原 Reviewer 拒绝。
+
+## 最终 Preview 验收通过
+
+[最终 Preview](https://v0-test0-mlhy02yoc-lnisres-projects.vercel.app/)：`dpl_7K4heFkBWX1MwHF6oqMAYmpreec9`，READY / staging。部署源码哈希与当前分支一致，生产部署仍为 `dpl_68LXQuH7oBNajTAM7JJKZMpVAJRH`，原保留访问凭据未改变。
+
+`reviewer-cloud-3`：7 次真实请求，四个角色均实际执行，Reviewer 一次通过，无格式重试，Leader 正常交付并保存。任务耗时 27,824 ms，包含浏览器实际操作与恢复的脚本耗时 44,302 ms。真实操作顺序增加、增加、减少、重置、增加，依次观察到 1、2、1、0、1；应用数据保存、刷新、关闭页面并在同一隔离浏览器重开恢复均通过，重开新增生成请求 0。
+
+本轮账本共 6 场首次生成尝试（其中首次协议失败 0 模型调用），合计 33 次模型请求；每场仍在独立 4 分钟/20 次预算内。所有失败保留，未修改旧结果，未用重复调用替换同一任务审查。该通过证明最终部署的计数器样本主链路，不代表通用成功率，也不将 Reviewer 代码审查称为自动业务 QA。

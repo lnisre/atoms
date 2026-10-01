@@ -1,0 +1,88 @@
+{
+  "artifact": "reviewer-local-3-rejected.html",
+  "request": {
+    "protocol": "atoms-qa/1",
+    "taskId": "independent-load-isolation-diagnosis",
+    "codeHash": "44a2927eb1e035e360f53b4d3ceb99039a140dc4f3341faa190f4b8014a9790b",
+    "planHash": "5caac0ad03d73184d44c4e280ae77ef95d7ce9a2498bb14dac2767793732c9c5",
+    "scenarios": [
+      {
+        "id": "load-isolation",
+        "seed": {
+          "count": 1.5,
+          "futureField": "preserve-me"
+        },
+        "checks": [
+          {
+            "id": "1",
+            "label": "independent load isolation diagnosis",
+            "command": {
+              "op": "wait",
+              "ms": 200
+            }
+          },
+          {
+            "id": "2",
+            "label": "independent load isolation diagnosis",
+            "command": {
+              "op": "data",
+              "path": [
+                "count"
+              ],
+              "equals": 1.5
+            }
+          },
+          {
+            "id": "3",
+            "label": "independent load isolation diagnosis",
+            "command": {
+              "op": "bridge",
+              "property": "saveAttempts",
+              "equals": 0
+            }
+          },
+          {
+            "id": "4",
+            "label": "independent load isolation diagnosis",
+            "command": {
+              "op": "click",
+              "selector": "#inc"
+            }
+          },
+          {
+            "id": "5",
+            "label": "independent load isolation diagnosis",
+            "command": {
+              "op": "wait",
+              "ms": 200
+            }
+          },
+          {
+            "id": "6",
+            "label": "independent load isolation diagnosis",
+            "command": {
+              "op": "data",
+              "path": [
+                "futureField"
+              ],
+              "equals": "preserve-me"
+            }
+          },
+          {
+            "id": "7",
+            "label": "independent load isolation diagnosis",
+            "command": {
+              "op": "bridge",
+              "property": "saveAttempts",
+              "equals": 1
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "result": {
+    "status": "passed"
+  },
+  "kind": "Independent diagnostic plan, not original reviewer evidence or original QA receipt"
+}

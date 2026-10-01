@@ -1,3 +1,4 @@
+import { fulfillGeneration } from "./team-fixture";
 import { expect, test, type Page } from "@playwright/test";
 
 const html = (round: number) => `<!DOCTYPE html><html><head></head><body><h1>版本${round}</h1><button disabled>增加</button><output>0</output><script>
@@ -23,7 +24,7 @@ async function setup(page: Page) {
     const end= control.failure==='mismatch' ? {type:'result',taskId:'obsolete-task',result:{html:html(round),model:'fixture',durationMs:1,generatedAt:String(round)},assistantReply:'旧任务'}
       : control.failure==='model' ? {type:'error',taskId,error:'受控模型失败'}
       : {type:'result',taskId,result:{html:control.failure==='html'?'<!DOCTYPE html><html>截断':html(round),model:'fixture',durationMs:1,generatedAt:String(round)},assistantReply:control.missing?null:`真实协议测试说明${round}`};
-    return route.fulfill({contentType:'application/x-ndjson',body:[{type:'step',event},{type:'step',event:{...event,sequence:2,status:control.failure==='model'?'failed':'completed'}},end].map(x=>JSON.stringify(x)).join('\n')+'\n'});
+    return fulfillGeneration(route, {contentType:'application/x-ndjson',body:[{type:'step',event},{type:'step',event:{...event,sequence:2,status:control.failure==='model'?'failed':'completed'}},end].map(x=>JSON.stringify(x)).join('\n')+'\n'});
   });
   await page.goto('/'); await page.getByLabel('你想做什么？').fill('多轮记录验收');
   await page.getByRole('button',{name:'开始生成'}).click();

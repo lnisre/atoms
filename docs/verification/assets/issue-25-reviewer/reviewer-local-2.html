@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>中文计数器</title>
+<style>
+  body {
+    margin: 0;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #f2f4f8;
+    font-family: system-ui, -apple-system, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+    color: #1f2430;
+  }
+  .card {
+    background: #ffffff;
+    padding: 32px 36px;
+    border-radius: 16px;
+    box-shadow: 0 10px 30px rgba(20, 30, 60, 0.12);
+    text-align: center;
+    min-width: 260px;
+  }
+  h1 {
+    font-size: 18px;
+    font-weight: 600;
+    margin: 0 0 20px;
+    color: #3a4256;
+  }
+  output {
+    display: block;
+    font-size: 56px;
+    font-weight: 700;
+    line-height: 1.1;
+    margin: 8px 0 24px;
+    color: #2b5cff;
+    font-variant-numeric: tabular-nums;
+  }
+  .buttons {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+  }
+  button {
+    flex: 1;
+    padding: 12px 16px;
+    font-size: 16px;
+    font-weight: 500;
+    border: 1px solid #d5dae6;
+    border-radius: 10px;
+    background: #f7f9fc;
+    color: #1f2430;
+    cursor: pointer;
+    transition: background 0.15s ease, transform 0.05s ease;
+  }
+  button:hover:not(:disabled) {
+    background: #eaeffb;
+  }
+  button:active:not(:disabled) {
+    transform: scale(0.97);
+  }
+  button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+  [data-atoms-status] {
+    margin-top: 18px;
+    font-size: 13px;
+    color: #6b7385;
+    min-height: 18px;
+  }
+</style>
+</head>
+<body>
+  <main class="card">
+    <h1>计数器</h1>
+    <output id="countOut" aria-live="polite">0</output>
+    <div class="buttons">
+      <button id="incBtn" type="button" disabled>增加</button>
+      <button id="decBtn" type="button" disabled>减少</button>
+      <button id="resetBtn" type="button" disabled>重置</button>
+    </div>
+    <div data-atoms-status></div>
+  </main>
+
+<script>
+(function () {
+  "use strict";
+
+  var outEl = document.getElementById("countOut");
+  var incBtn = document.getElementById("incBtn");
+  var decBtn = document.getElementById("decBtn");
+  var resetBtn = document.getElementById("resetBtn");
+  var statusEl = document.querySelector("[data-atoms-status]");
+
+  var data = { count: 0 };
+  var ready = false;
+
+  function renderCount(value) {
+    outEl.textContent = String(value);
+  }
+
+  function setStatus(text) {
+    statusEl.textContent = text;
+  }
+
+  function setControlsEnabled(enabled) {
+    incBtn.disabled = !enabled;
+    decBtn.disabled = !enabled;
+    resetBtn.disabled = !enabled;
+  }
+
+  function sanitize(loaded) {
+    if (loaded === null || typeof loaded !== "object") {
+      return { count: 0 };
+    }
+    var c = loaded.count;
+    if (typeof c !== "number" || !isFinite(c)) {
+      c = 0;
+    }
+    var result = {};
+    for (var k in loaded) {
+      if (Object.prototype.hasOwnProperty.call(loaded, k)) {
+        result[k] = loaded[k];
+      }
+    }
+    result.count = c;
+    return result;
+  }
+
+  function initiateLoad() {
+    setControlsEnabled(false);
+    var p;
+    try {
+      p = window.atoms.loadState();
+    } catch (e) {
+      setStatus("读取失败");
+      return;
+    }
+    Promise.resolve(p).then(function (loaded) {
+      data = sanitize(loaded);
+      renderCount(data.count);
+      ready = true;
+      setControlsEnabled(true);
+      setStatus("已读取");
+    }, function () {
+      setStatus("读取失败");
+    });
+  }
+
+  function mutate(nextCount) {
+    if (!ready) {
+      return;
+    }
+    var previous = data.count;
+    var nextData = {};
+    for (var k in data) {
+      if (Object.prototype.hasOwnProperty.call(data, k)) {
+        nextData[k] = data[k];
+      }
+    }
+    nextData.count = nextCount;
+
+    data = nextData;
+    renderCount(nextCount);
+    setStatus("正在保存");
+
+    var p;
+    try {
+      p = window.atoms.saveState(nextData);
+    } catch (e) {
+      data.count = previous;
+      renderCount(previous);
+      setStatus("保存失败");
+      return;
+    }
+
+    Promise.resolve(p).then(function () {
+      setStatus("已保存");
+    }, function () {
+      data.count = previous;
+      renderCount(previous);
+      setStatus("保存失败");
+    });
+  }
+
+  incBtn.addEventListener("click", function () {
+    mutate(data.count + 1);
+  });
+  decBtn.addEventListener("click", function () {
+    mutate(data.count - 1);
+  });
+  resetBtn.addEventListener("click", function () {
+    mutate(0);
+  });
+
+  renderCount(0);
+  setControlsEnabled(false);
+  initiateLoad();
+})();
+</script>
+</body>
+</html>

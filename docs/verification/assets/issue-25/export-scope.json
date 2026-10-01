@@ -1,0 +1,17 @@
+{
+  "inputs": "Three exact agent-authored synthetic requests, fresh browser contexts; no existing user business data loaded.",
+  "runsAudited": 29,
+  "credentialMarkerFindings": 0,
+  "excluded": [
+    "raw event streams",
+    "session tokens",
+    "HMAC tickets",
+    "request headers",
+    "environment values",
+    "cookies",
+    "traces",
+    "unselected model prose",
+    "screenshots"
+  ],
+  "authorization": "Issue #25 explicitly requires actual model identifiers, counts, usage, full timing, all failures and necessary reproducible acceptance evidence."
+}

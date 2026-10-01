@@ -1,3 +1,4 @@
+import { fulfillGeneration } from "./team-fixture";
 import { readFileSync } from "node:fs";
 import { expect, test } from "@playwright/test";
 
@@ -7,7 +8,7 @@ const html = readFileSync("docs/verification/assets/issue-3/production-todo.html
 test("真实旧产物保存时禁止新修改，下一次修改确认后立即关闭可恢复", async ({ page, context }) => {
   let generations = 0;
   context.on("request", request => { if (request.url().endsWith("/api/generate")) generations++; });
-  await page.route("**/api/generate", route => route.fulfill({ json: {
+  await page.route("**/api/generate", route => fulfillGeneration(route, { json: {
     html, model: "real-artifact-replay", durationMs: 1, generatedAt: "test",
   } }));
   await page.goto("/");

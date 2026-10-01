@@ -1,3 +1,4 @@
+import { fulfillGeneration } from "./team-fixture";
 import { expect, test } from '@playwright/test';
 
 const html = '<!DOCTYPE html><html><head></head><body><button>增加</button><output>0</output><script>let n=0;atoms.loadState().then(s=>{n=s??0;document.querySelector("output").textContent=n});document.querySelector("button").onclick=()=>{document.querySelector("output").textContent=++n;atoms.saveState(n)}</script></body></html>';
@@ -7,7 +8,7 @@ for (const viewport of [{width:1440,height:900},{width:1280,height:720}]) {
     let calls=0;
     await page.route('**/api/generate', route => {
       calls++; const taskId=route.request().headers()['x-atoms-task-id'];
-      return route.fulfill({contentType:'application/x-ndjson',body:JSON.stringify({type:'result',taskId,result:{html,model:'fixture',durationMs:1,generatedAt:String(calls)},assistantReply:'完整说明\n'+('长回复用于检验滚动。\n'.repeat(90))})+'\n'});
+      return fulfillGeneration(route, {contentType:'application/x-ndjson',body:JSON.stringify({type:'result',taskId,result:{html,model:'fixture',durationMs:1,generatedAt:String(calls)},assistantReply:'完整说明\n'+('长回复用于检验滚动。\n'.repeat(90))})+'\n'});
     });
     await page.goto('/');await page.getByLabel('你想做什么？').fill('顺序测试初始需求');await page.getByRole('button',{name:'开始生成'}).click();
     await expect(page.getByText('项目已保存',{exact:true})).toBeVisible();

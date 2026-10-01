@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>中文计数器</title>
+<style>
+  body {
+    margin: 0;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #f2f4f7;
+    font-family: system-ui, -apple-system, "Segoe UI", "Microsoft YaHei", sans-serif;
+    color: #1f2933;
+  }
+  .app {
+    background: #ffffff;
+    padding: 32px 36px;
+    border-radius: 14px;
+    box-shadow: 0 8px 24px rgba(15, 23, 42, 0.1);
+    text-align: center;
+    min-width: 280px;
+  }
+  h1 {
+    margin: 0 0 16px;
+    font-size: 20px;
+    font-weight: 600;
+  }
+  output[data-counter-value] {
+    display: block;
+    font-size: 56px;
+    font-weight: 700;
+    line-height: 1.1;
+    margin-bottom: 20px;
+    font-variant-numeric: tabular-nums;
+    word-break: break-all;
+  }
+  .buttons {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+  }
+  button {
+    flex: 1;
+    padding: 10px 16px;
+    font-size: 15px;
+    border: 1px solid #cbd2d9;
+    border-radius: 8px;
+    background: #ffffff;
+    color: #1f2933;
+    cursor: pointer;
+    transition: background 0.15s, border-color 0.15s;
+  }
+  button:hover:not(:disabled) {
+    background: #f0f4f8;
+    border-color: #9aa5b1;
+  }
+  button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+  [data-atoms-status] {
+    display: block;
+    margin-top: 18px;
+    font-size: 13px;
+    color: #52606d;
+    min-height: 18px;
+  }
+</style>
+</head>
+<body>
+<div class="app">
+  <h1>中文计数器</h1>
+  <output data-counter-value aria-live="polite">0</output>
+  <div class="buttons">
+    <button type="button" data-action="increment" disabled>增加</button>
+    <button type="button" data-action="decrement" disabled>减少</button>
+    <button type="button" data-action="reset" disabled>重置</button>
+  </div>
+  <span data-atoms-status aria-live="polite"></span>
+</div>
+<script>
+(function () {
+  "use strict";
+
+  var outputEl = document.querySelector('[data-counter-value]');
+  var statusEl = document.querySelector('[data-atoms-status]');
+  var incrementBtn = document.querySelector('[data-action="increment"]');
+  var decrementBtn = document.querySelector('[data-action="decrement"]');
+  var resetBtn = document.querySelector('[data-action="reset"]');
+  var buttons = [incrementBtn, decrementBtn, resetBtn];
+
+  var count = 0;
+  var settled = false;
+  var pending = false;
+
+  function setStatus(text) {
+    statusEl.textContent = text;
+  }
+
+  function renderCount() {
+    outputEl.textContent = String(count);
+  }
+
+  function setControlsDisabled(disabled) {
+    for (var i = 0; i < buttons.length; i++) {
+      buttons[i].disabled = disabled;
+    }
+  }
+
+  function normalizeCount(value) {
+    if (typeof value === 'number' && isFinite(value) && Number.isInteger(value)) {
+      return value;
+    }
+    return 0;
+  }
+
+  function isValidSave(data) {
+    return data && typeof data === 'object' && typeof data.count === 'number';
+  }
+
+  function saveState(nextCount, previousCount) {
+    if (pending) {
+      return;
+    }
+    count = nextCount;
+    renderCount();
+    pending = true;
+    setControlsDisabled(true);
+    setStatus('正在保存');
+    var result;
+    try {
+      result = window.atoms.saveState({ count: nextCount });
+    } catch (err) {
+      pending = false;
+      count = previousCount;
+      renderCount();
+      setStatus('保存失败');
+      if (settled) {
+        setControlsDisabled(false);
+      }
+      return;
+    }
+    Promise.resolve(result).then(function (saved) {
+      pending = false;
+      if (isValidSave(saved) && typeof saved.count === 'number') {
+        count = normalizeCount(saved.count);
+        renderCount();
+      }
+      setStatus('已保存');
+      if (settled) {
+        setControlsDisabled(false);
+      }
+    }, function () {
+      pending = false;
+      count = previousCount;
+      renderCount();
+      setStatus('保存失败');
+      if (settled) {
+        setControlsDisabled(false);
+      }
+    });
+  }
+
+  function applyChange(mutator) {
+    if (!settled || pending) {
+      return;
+    }
+    var previous = count;
+    var next = mutator(count);
+    saveState(next, previous);
+  }
+
+  incrementBtn.addEventListener('click', function () {
+    applyChange(function (current) { return current + 1; });
+  });
+
+  decrementBtn.addEventListener('click', function () {
+    applyChange(function (current) { return current - 1; });
+  });
+
+  resetBtn.addEventListener('click', function () {
+    applyChange(function () { return 0; });
+  });
+
+  setControlsDisabled(true);
+  setStatus('');
+
+  var loadResult;
+  try {
+    loadResult = window.atoms.loadState();
+  } catch (err) {
+    setStatus('读取失败');
+    return;
+  }
+
+  Promise.resolve(loadResult).then(function (data) {
+    if (data !== null && data !== undefined && typeof data === 'object' && 'count' in data) {
+      count = normalizeCount(data.count);
+    } else if (data === null || data === undefined) {
+      count = 0;
+    } else {
+      count = 0;
+    }
+    renderCount();
+    settled = true;
+    setStatus('已读取');
+    setControlsDisabled(false);
+  }, function () {
+    setStatus('读取失败');
+    setControlsDisabled(true);
+  });
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>中文计数器</title>
+<style>
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: system-ui, -apple-system, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+    background: #f2f4f7;
+    color: #1f2733;
+  }
+  .card {
+    width: 340px;
+    max-width: 92vw;
+    background: #ffffff;
+    border-radius: 16px;
+    padding: 28px 24px;
+    box-shadow: 0 10px 30px rgba(20, 30, 50, 0.12);
+    text-align: center;
+  }
+  h1 {
+    margin: 0 0 18px;
+    font-size: 20px;
+    font-weight: 600;
+    letter-spacing: 2px;
+  }
+  output {
+    display: block;
+    font-size: 56px;
+    font-weight: 700;
+    line-height: 1.2;
+    margin: 4px 0 22px;
+    color: #1a6cf0;
+    font-variant-numeric: tabular-nums;
+    word-break: break-all;
+  }
+  .row {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+  }
+  button {
+    flex: 1;
+    padding: 12px 0;
+    font-size: 16px;
+    font-family: inherit;
+    border: none;
+    border-radius: 10px;
+    background: #e8edf5;
+    color: #1f2733;
+    cursor: pointer;
+    transition: background 0.15s ease, transform 0.05s ease;
+  }
+  button:hover:not(:disabled) { background: #dbe4f0; }
+  button:active:not(:disabled) { transform: scale(0.97); }
+  button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+  #reset { background: #ffe9e6; color: #b3261e; }
+  #reset:hover:not(:disabled) { background: #ffd9d4; }
+  .status {
+    margin-top: 18px;
+    min-height: 20px;
+    font-size: 13px;
+    color: #667085;
+  }
+</style>
+</head>
+<body>
+  <main class="card">
+    <h1>中文计数器</h1>
+    <output id="count" aria-live="polite">0</output>
+    <div class="row">
+      <button id="inc" type="button" disabled>增加</button>
+      <button id="dec" type="button" disabled>减少</button>
+      <button id="reset" type="button" disabled>重置</button>
+    </div>
+    <p class="status" data-atoms-status></p>
+  </main>
+
+<script>
+(function () {
+  "use strict";
+
+  var statusEl = document.querySelector("[data-atoms-status]");
+  var outputEl = document.getElementById("count");
+  var incBtn = document.getElementById("inc");
+  var decBtn = document.getElementById("dec");
+  var resetBtn = document.getElementById("reset");
+  var buttons = [incBtn, decBtn, resetBtn];
+
+  // Whole loaded object is the source of truth for the current state.
+  var currentState = null;
+  var busy = false;
+  var ready = false;
+
+  function setStatus(text) {
+    statusEl.textContent = text;
+  }
+
+  function setButtonsEnabled(enabled) {
+    for (var i = 0; i < buttons.length; i++) {
+      buttons[i].disabled = !enabled;
+    }
+  }
+
+  // Only the numeric value is written; textContent is used for rendering.
+  function renderCount(state) {
+    var value = state && typeof state.count === "number" ? state.count : 0;
+    outputEl.textContent = String(value);
+  }
+
+  function cloneState(state) {
+    var copy = {};
+    if (state && typeof state === "object") {
+      for (var k in state) {
+        if (Object.prototype.hasOwnProperty.call(state, k)) {
+          copy[k] = state[k];
+        }
+      }
+    }
+    return copy;
+  }
+
+  function normaliseCount(raw) {
+    if (typeof raw === "number" && isFinite(raw) && Math.floor(raw) === raw) {
+      return raw;
+    }
+    if (typeof raw === "number" && isFinite(raw)) {
+      return Math.trunc(raw);
+    }
+    if (typeof raw === "string") {
+      var n = Number(raw);
+      if (isFinite(n)) { return Math.trunc(n); }
+    }
+    return 0;
+  }
+
+  // Apply a mutation: clone whole state, change count on the copy,
+  // synchronously save the whole copy, commit only on success.
+  function mutate(nextCount) {
+    if (!ready || busy) { return; }
+
+    var priorState = currentState;
+    var nextState = cloneState(currentState);
+    nextState.count = nextCount;
+
+    busy = true;
+    setButtonsEnabled(false);
+    setStatus("正在保存");
+
+    var savePromise;
+    try {
+      savePromise = window.atoms.saveState(nextState);
+    } catch (err) {
+      busy = false;
+      currentState = priorState;
+      renderCount(currentState);
+      setButtonsEnabled(true);
+      setStatus("保存失败");
+      return;
+    }
+
+    Promise.resolve(savePromise).then(function () {
+      // Commit the new state only after a successful save.
+      currentState = nextState;
+      renderCount(currentState);
+      busy = false;
+      setButtonsEnabled(true);
+      setStatus("已保存");
+    }, function () {
+      // Restore the complete pre-mutation snapshot.
+      currentState = priorState;
+      renderCount(currentState);
+      busy = false;
+      setButtonsEnabled(true);
+      setStatus("保存失败");
+    });
+  }
+
+  incBtn.addEventListener("click", function () {
+    var base = currentState && typeof currentState.count === "number" ? currentState.count : 0;
+    mutate(base + 1);
+  });
+
+  decBtn.addEventListener("click", function () {
+    var base = currentState && typeof currentState.count === "number" ? currentState.count : 0;
+    mutate(base - 1);
+  });
+
+  resetBtn.addEventListener("click", function () {
+    mutate(0);
+  });
+
+  // All controls stay disabled until load resolves.
+  setButtonsEnabled(false);
+  setStatus("正在加载");
+
+  var loadPromise;
+  try {
+    loadPromise = window.atoms.loadState();
+  } catch (err) {
+    setStatus("读取失败");
+    setButtonsEnabled(false);
+    return;
+  }
+
+  Promise.resolve(loadPromise).then(function (loaded) {
+    if (loaded === null || loaded === undefined) {
+      // New data: use the default, still keeping the object shape.
+      currentState = { count: 0 };
+    } else if (typeof loaded === "object") {
+      // Keep the loaded object as the whole source of truth, all unknown fields included.
+      currentState = loaded;
+      currentState.count = normaliseCount(currentState.count);
+    } else {
+      currentState = { count: normaliseCount(loaded) };
+    }
+
+    renderCount(currentState);
+    ready = true;
+    busy = false;
+    setButtonsEnabled(true);
+    setStatus("已读取");
+  }, function () {
+    // Read error: show the message and keep ALL controls disabled. Never save.
+    setStatus("读取失败");
+    ready = false;
+    busy = false;
+    setButtonsEnabled(false);
+  });
+})();
+</script>
+</body>
+</html>

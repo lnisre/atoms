@@ -1,3 +1,4 @@
+import { fulfillGeneration } from "./team-fixture";
 import { expect, test, type Locator } from '@playwright/test';
 
 // Controlled long-content fixture; real production projects are verified separately.
@@ -17,7 +18,7 @@ for (const viewport of [{ width: 1280, height: 720 }, { width: 1440, height: 900
   test(`长内容桌面路径、独立滚动与详情状态保全 ${viewport.width}×${viewport.height}`, async ({ page }, testInfo) => {
     await page.setViewportSize(viewport);
     let generations = 0;
-    await page.route('**/api/generate', route => route.fulfill({ json: { html, model: 'desktop-fixture', durationMs: 1234, generatedAt: String(++generations) } }));
+    await page.route('**/api/generate', route => fulfillGeneration(route, { json: { html, model: 'desktop-fixture', durationMs: 1234, generatedAt: String(++generations) } }));
     await page.goto('/');
     await page.getByRole('button', { name: '待办清单' }).click();
     await expect(page.getByLabel('你想做什么？')).toHaveValue(/添加、完成、删除/);

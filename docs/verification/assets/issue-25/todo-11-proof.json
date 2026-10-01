@@ -1,0 +1,3117 @@
+{
+  "provenance": "Fresh isolated browser context, agent-authored synthetic request; actual MetaGPT + provider + browser + IndexedDB. Normalized field allowlist, not a raw stream.",
+  "taskId": "70dc9374-bfa0-4d60-abc9-bd9eeee0bf7b",
+  "artifact": "todo-11.html",
+  "codeHash": "dcfe92f88281423c9f80203282632b1d8a76c9dbb8197249b1c5a3d7bdbc2fce",
+  "specification": {
+    "summary": "冻结中文待办应用规格：单页应用，文本输入无障碍名称为“待办内容”，添加按钮名称“添加任务”；支持添加、切换完成、删除任务，完成项视觉区分（删除线+弱化色）；数据经 window.atoms 持久化，重开恢复。数据 schema：根对象 { items:[ {id:string, text:string, done:boolean} ] }。稳定选择器：#todo-input、#add-btn、#todo-list、li[data-id]、li[data-id] .toggle、li[data-id] .text、li[data-id] .del、li[data-id].done。渲染一律用 textContent。",
+    "requirements": [
+      {
+        "id": "add-task",
+        "description": "输入框 #todo-input（aria-label 与 placeholder 均为“待办内容”），按钮 #add-btn 文本“添加任务”。点击添加或输入框回车时，读取文本（trim 后非空才添加），向状态 items 追加 {id:唯一字符串, text:文本, done:false}，用 textContent 渲染进 #todo-list 的 li[data-id]，新项包含 .text（显示文本）、.toggle（完成切换按钮）、.del（删除按钮）。添加后清空输入框。"
+      },
+      {
+        "id": "toggle-done",
+        "description": "点击某任务的 li[data-id] .toggle 切换该任务 done 布尔值（true↔false），并立即重渲染：done 为 true 时给 li 加类 done，.text 呈现删除线且颜色变浅（视觉区分完成状态）；done 为 false 时移除该类恢复正常样式。切换按钮自身无障碍名称反映状态（如“标记完成”/“取消完成”）。"
+      },
+      {
+        "id": "delete-task",
+        "description": "点击某任务的 li[data-id] .del 按 id 从状态 items 中移除该项，并从 #todo-list 移除对应 li[data-id]；其余任务顺序与状态保持不变。删除后 DOM 项数与状态 items 长度一致。"
+      },
+      {
+        "id": "restore-fields",
+        "description": "加载 window.atoms.loadState() 返回对象后，按 schema {items:[{id,text,done}]} 完整还原所有字段：为每个 item 渲染 li[data-id] 并设置文本、done 类与切换按钮状态，顺序保持。对缺失字段回退：无 text 用空字符串，无 done 用 false，无 id 生成占位 id；根对象或 items 缺失/非数组时按空列表渲染，不抛错。仅在 load 解析为 null 时视为新数据（空列表）。"
+      },
+      {
+        "id": "persist-exact",
+        "description": "每次业务变更（添加/切换/删除）在其事件处理器内同步调用 window.atoms.saveState(stateObject)（传对象本身，绝不 JSON.stringify）。断言：添加一次后保存数据的 items 长度等于操作后条数；切换后对应项 done 精确翻转；删除后对应 id 不再存在于 items 且长度减一。"
+      }
+    ],
+    "probe": {
+      "seed": {
+        "items": [
+          {
+            "id": "s1",
+            "text": "买牛奶",
+            "done": false
+          },
+          {
+            "id": "s2",
+            "text": "写报告",
+            "done": true
+          }
+        ]
+      },
+      "prepare": [
+        {
+          "op": "input",
+          "selector": "#todo-input",
+          "value": "晨跑"
+        }
+      ],
+      "commitSelector": "#add-btn",
+      "changed": {
+        "path": [
+          "items",
+          "2",
+          "text"
+        ],
+        "equals": "晨跑"
+      }
+    }
+  },
+  "toolRequest": {
+    "protocol": "atoms-qa/1",
+    "taskId": "70dc9374-bfa0-4d60-abc9-bd9eeee0bf7b",
+    "requestId": "09d47449-4449-451c-a05b-a9a810a0d409",
+    "codeHash": "dcfe92f88281423c9f80203282632b1d8a76c9dbb8197249b1c5a3d7bdbc2fce",
+    "planHash": "1f3147cfcefc2379d3203bf4328762d38953d72ecc30c9c0b3b5167d5c465334",
+    "deadline": 1790785056683,
+    "scenarios": [
+      {
+        "id": "platform-timing",
+        "seed": {
+          "items": [
+            {
+              "id": "s1",
+              "text": "买牛奶",
+              "done": false
+            },
+            {
+              "id": "s2",
+              "text": "写报告",
+              "done": true
+            }
+          ]
+        },
+        "loadDelayMs": 500,
+        "saveDelayMs": 500,
+        "checks": [
+          {
+            "id": "platform-timing-0",
+            "label": "platform-timing 1",
+            "command": {
+              "op": "assert",
+              "selector": "button:not(:disabled),input:not(:disabled),select:not(:disabled),textarea:not(:disabled)",
+              "property": "count",
+              "equals": 0
+            }
+          },
+          {
+            "id": "platform-timing-1",
+            "label": "platform-timing 2",
+            "command": {
+              "op": "bridge",
+              "property": "saveAttempts",
+              "equals": 0
+            }
+          },
+          {
+            "id": "platform-timing-2",
+            "label": "platform-timing 3",
+            "command": {
+              "op": "wait",
+              "ms": 700
+            }
+          },
+          {
+            "id": "platform-timing-3",
+            "label": "platform-timing 4",
+            "command": {
+              "op": "input",
+              "selector": "#todo-input",
+              "value": "晨跑"
+            }
+          },
+          {
+            "id": "platform-timing-4",
+            "label": "platform-timing 5",
+            "command": {
+              "op": "click",
+              "selector": "#add-btn"
+            }
+          },
+          {
+            "id": "platform-timing-5",
+            "label": "platform-timing 6",
+            "command": {
+              "op": "assert",
+              "selector": "body",
+              "property": "inert",
+              "equals": true
+            }
+          },
+          {
+            "id": "platform-timing-6",
+            "label": "platform-timing 7",
+            "command": {
+              "op": "assert",
+              "selector": "[data-atoms-status]",
+              "property": "text",
+              "equals": "正在保存"
+            }
+          },
+          {
+            "id": "platform-timing-7",
+            "label": "platform-timing 8",
+            "command": {
+              "op": "click",
+              "selector": "#add-btn",
+              "probeWhileInert": true
+            }
+          },
+          {
+            "id": "platform-timing-8",
+            "label": "platform-timing 9",
+            "command": {
+              "op": "data",
+              "path": [],
+              "equals": {
+                "items": [
+                  {
+                    "id": "s1",
+                    "text": "买牛奶",
+                    "done": false
+                  },
+                  {
+                    "id": "s2",
+                    "text": "写报告",
+                    "done": true
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "id": "platform-timing-9",
+            "label": "platform-timing 10",
+            "command": {
+              "op": "wait",
+              "ms": 700
+            }
+          },
+          {
+            "id": "platform-timing-10",
+            "label": "platform-timing 11",
+            "command": {
+              "op": "assert",
+              "selector": "body",
+              "property": "inert",
+              "equals": false
+            }
+          },
+          {
+            "id": "platform-timing-11",
+            "label": "platform-timing 12",
+            "command": {
+              "op": "assert",
+              "selector": "[data-atoms-status]",
+              "property": "text",
+              "equals": "已保存"
+            }
+          },
+          {
+            "id": "platform-timing-12",
+            "label": "platform-timing 13",
+            "command": {
+              "op": "data",
+              "path": [
+                "items",
+                "2",
+                "text"
+              ],
+              "equals": "晨跑"
+            }
+          },
+          {
+            "id": "platform-timing-13",
+            "label": "platform-timing 14",
+            "command": {
+              "op": "bridge",
+              "property": "saveAttempts",
+              "equals": 1
+            }
+          },
+          {
+            "id": "platform-timing-14",
+            "label": "platform-timing 15",
+            "command": {
+              "op": "bridge",
+              "property": "commits",
+              "equals": 1
+            }
+          }
+        ]
+      },
+      {
+        "id": "platform-read-failure",
+        "seed": {
+          "items": [
+            {
+              "id": "s1",
+              "text": "买牛奶",
+              "done": false
+            },
+            {
+              "id": "s2",
+              "text": "写报告",
+              "done": true
+            }
+          ]
+        },
+        "fault": "read",
+        "checks": [
+          {
+            "id": "platform-read-failure-0",
+            "label": "platform-read-failure 1",
+            "command": {
+              "op": "wait",
+              "ms": 700
+            }
+          },
+          {
+            "id": "platform-read-failure-1",
+            "label": "platform-read-failure 2",
+            "command": {
+              "op": "assert",
+              "selector": "[data-atoms-status]",
+              "property": "text",
+              "equals": "读取失败"
+            }
+          },
+          {
+            "id": "platform-read-failure-2",
+            "label": "platform-read-failure 3",
+            "command": {
+              "op": "assert",
+              "selector": "button:not(:disabled),input:not(:disabled),select:not(:disabled),textarea:not(:disabled)",
+              "property": "count",
+              "equals": 0
+            }
+          },
+          {
+            "id": "platform-read-failure-3",
+            "label": "platform-read-failure 4",
+            "command": {
+              "op": "bridge",
+              "property": "saveAttempts",
+              "equals": 0
+            }
+          },
+          {
+            "id": "platform-read-failure-4",
+            "label": "platform-read-failure 5",
+            "command": {
+              "op": "bridge",
+              "property": "commits",
+              "equals": 0
+            }
+          },
+          {
+            "id": "platform-read-failure-5",
+            "label": "platform-read-failure 6",
+            "command": {
+              "op": "data",
+              "path": [],
+              "equals": {
+                "items": [
+                  {
+                    "id": "s1",
+                    "text": "买牛奶",
+                    "done": false
+                  },
+                  {
+                    "id": "s2",
+                    "text": "写报告",
+                    "done": true
+                  }
+                ]
+              }
+            }
+          }
+        ]
+      },
+      {
+        "id": "platform-save-failure",
+        "seed": {
+          "items": [
+            {
+              "id": "s1",
+              "text": "买牛奶",
+              "done": false
+            },
+            {
+              "id": "s2",
+              "text": "写报告",
+              "done": true
+            }
+          ]
+        },
+        "fault": "save",
+        "saveDelayMs": 500,
+        "checks": [
+          {
+            "id": "platform-save-failure-0",
+            "label": "platform-save-failure 1",
+            "command": {
+              "op": "wait",
+              "ms": 700
+            }
+          },
+          {
+            "id": "platform-save-failure-1",
+            "label": "platform-save-failure 2",
+            "command": {
+              "op": "input",
+              "selector": "#todo-input",
+              "value": "晨跑"
+            }
+          },
+          {
+            "id": "platform-save-failure-2",
+            "label": "platform-save-failure 3",
+            "command": {
+              "op": "click",
+              "selector": "#add-btn"
+            }
+          },
+          {
+            "id": "platform-save-failure-3",
+            "label": "platform-save-failure 4",
+            "command": {
+              "op": "assert",
+              "selector": "body",
+              "property": "inert",
+              "equals": true
+            }
+          },
+          {
+            "id": "platform-save-failure-4",
+            "label": "platform-save-failure 5",
+            "command": {
+              "op": "wait",
+              "ms": 700
+            }
+          },
+          {
+            "id": "platform-save-failure-5",
+            "label": "platform-save-failure 6",
+            "command": {
+              "op": "assert",
+              "selector": "[data-atoms-status]",
+              "property": "text",
+              "equals": "保存失败"
+            }
+          },
+          {
+            "id": "platform-save-failure-6",
+            "label": "platform-save-failure 7",
+            "command": {
+              "op": "data",
+              "path": [],
+              "equals": {
+                "items": [
+                  {
+                    "id": "s1",
+                    "text": "买牛奶",
+                    "done": false
+                  },
+                  {
+                    "id": "s2",
+                    "text": "写报告",
+                    "done": true
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "id": "platform-save-failure-7",
+            "label": "platform-save-failure 8",
+            "command": {
+              "op": "bridge",
+              "property": "saveAttempts",
+              "equals": 1
+            }
+          },
+          {
+            "id": "platform-save-failure-8",
+            "label": "platform-save-failure 9",
+            "command": {
+              "op": "bridge",
+              "property": "rejectedSaves",
+              "equals": 1
+            }
+          },
+          {
+            "id": "platform-save-failure-9",
+            "label": "platform-save-failure 10",
+            "command": {
+              "op": "bridge",
+              "property": "commits",
+              "equals": 0
+            }
+          }
+        ]
+      },
+      {
+        "id": "add-task",
+        "seed": {
+          "items": []
+        },
+        "checks": [
+          {
+            "id": "platform-startup-wait",
+            "label": "等待检查页面读取合成数据",
+            "command": {
+              "op": "wait",
+              "ms": 150
+            }
+          },
+          {
+            "id": "a-input-value",
+            "label": "输入框接受文本",
+            "command": {
+              "op": "input",
+              "selector": "#todo-input",
+              "value": "  晨跑  "
+            }
+          },
+          {
+            "id": "a-click-add",
+            "label": "点击添加按钮",
+            "command": {
+              "op": "click",
+              "selector": "#add-btn"
+            }
+          },
+          {
+            "id": "a-wait",
+            "label": "等待渲染/保存",
+            "command": {
+              "op": "wait",
+              "ms": 150
+            }
+          },
+          {
+            "id": "a-count",
+            "label": "列表新增一项",
+            "command": {
+              "op": "assert",
+              "selector": "#todo-list li[data-id]",
+              "property": "count",
+              "equals": 1
+            }
+          },
+          {
+            "id": "a-text-ok",
+            "label": "新项文本已 trim",
+            "command": {
+              "op": "assert",
+              "selector": "#todo-list li[data-id] .text",
+              "property": "text",
+              "equals": "晨跑"
+            }
+          },
+          {
+            "id": "a-toggle-exists",
+            "label": "新项含切换按钮",
+            "command": {
+              "op": "assert",
+              "selector": "#todo-list li[data-id] .toggle",
+              "property": "count",
+              "equals": 1
+            }
+          },
+          {
+            "id": "a-del-exists",
+            "label": "新项含删除按钮",
+            "command": {
+              "op": "assert",
+              "selector": "#todo-list li[data-id] .del",
+              "property": "count",
+              "equals": 1
+            }
+          },
+          {
+            "id": "a-input-cleared",
+            "label": "添加后清空输入框",
+            "command": {
+              "op": "assert",
+              "selector": "#todo-input",
+              "property": "value",
+              "equals": ""
+            }
+          },
+          {
+            "id": "a-persist-len",
+            "label": "持久化 items 长度 1",
+            "command": {
+              "op": "data",
+              "path": [
+                "items",
+                "length"
+              ],
+              "equals": 1
+            }
+          },
+          {
+            "id": "a-persist-text",
+            "label": "持久化文本 晨跑",
+            "command": {
+              "op": "data",
+              "path": [
+                "items",
+                "0",
+                "text"
+              ],
+              "equals": "晨跑"
+            }
+          },
+          {
+            "id": "a-persist-done",
+            "label": "持久化 done 为 false",
+            "command": {
+              "op": "data",
+              "path": [
+                "items",
+                "0",
+                "done"
+              ],
+              "equals": false
+            }
+          },
+          {
+            "id": "a-enter-input",
+            "label": "输入第二项文本",
+            "command": {
+              "op": "input",
+              "selector": "#todo-input",
+              "value": "写报告"
+            }
+          },
+          {
+            "id": "a-enter-key",
+            "label": "回车添加",
+            "command": {
+              "op": "click",
+              "selector": "#add-btn"
+            }
+          },
+          {
+            "id": "a-wait2",
+            "label": "等待渲染",
+            "command": {
+              "op": "wait",
+              "ms": 150
+            }
+          },
+          {
+            "id": "a-count2",
+            "label": "列表共两项",
+            "command": {
+              "op": "assert",
+              "selector": "#todo-list li[data-id]",
+              "property": "count",
+              "equals": 2
+            }
+          },
+          {
+            "id": "a-blank-input",
+            "label": "输入空白",
+            "command": {
+              "op": "input",
+              "selector": "#todo-input",
+              "value": "   "
+            }
+          },
+          {
+            "id": "a-blank-add",
+            "label": "点击添加（应无效果）",
+            "command": {
+              "op": "click",
+              "selector": "#add-btn"
+            }
+          },
+          {
+            "id": "a-wait3",
+            "label": "等待",
+            "command": {
+              "op": "wait",
+              "ms": 150
+            }
+          },
+          {
+            "id": "a-count3",
+            "label": "空白不添加，仍两项",
+            "command": {
+              "op": "assert",
+              "selector": "#todo-list li[data-id]",
+              "property": "count",
+              "equals": 2
+            }
+          },
+          {
+            "id": "a-persist-len2",
+            "label": "持久化仍两项",
+            "command": {
+              "op": "data",
+              "path": [
+                "items",
+                "length"
+              ],
+              "equals": 2
+            }
+          }
+        ]
+      },
+      {
+        "id": "toggle-done",
+        "seed": {
+          "items": [
+            {
+              "id": "s1",
+              "text": "买牛奶",
+              "done": false
+            },
+            {
+              "id": "s2",
+              "text": "写报告",
+              "done": true
+            }
+          ]
+        },
+        "checks": [
+          {
+            "id": "platform-startup-wait",
+            "label": "等待检查页面读取合成数据",
+            "command": {
+              "op": "wait",
+              "ms": 150
+            }
+          },
+          {
+            "id": "t-wait-load",
+            "label": "等待加载",
+            "command": {
+              "op": "wait",
+              "ms": 150
+            }
+          },
+          {
+            "id": "t-count",
+            "label": "加载两项",
+            "command": {
+              "op": "assert",
+              "selector": "#todo-list li[data-id]",
+              "property": "count",
+              "equals": 2
+            }
+          },
+          {
+            "id": "t-s1-not-done",
+            "label": "s1 初始无 done 类",
+            "command": {
+              "op": "assert",
+              "selector": "#todo-list li[data-id=\"s1\"].done",
+              "property": "count",
+              "equals": 0
+            }
+          },
+          {
+            "id": "t-s2-done",
+            "label": "s2 初始带 done 类",
+            "command": {
+              "op": "assert",
+              "selector": "#todo-list li[data-id=\"s2\"].done",
+              "property": "count",
+              "equals": 1
+            }
+          },
+          {
+            "id": "t-s1-toggle-label",
+            "label": "s1 切换按钮名 标记完成",
+            "command": {
+              "op": "assert",
+              "selector": "#todo-list li[data-id=\"s1\"] .toggle",
+              "property": "text",
+              "equals": "标记完成"
+            }
+          },
+          {
+            "id": "t-s2-toggle-label",
+            "label": "s2 切换按钮名 取消完成",
+            "command": {
+              "op": "assert",
+              "selector": "#todo-list li[data-id=\"s2\"] .toggle",
+              "property": "text",
+              "equals": "取消完成"
+            }
+          },
+          {
+            "id": "t-click-s1",
+            "label": "点击 s1 切换",
+            "command": {
+              "op": "click",
+              "selector": "#todo-list li[data-id=\"s1\"] .toggle"
+            }
+          },
+          {
+            "id": "t-wait1",
+            "label": "等待渲染",
+            "command": {
+              "op": "wait",
+              "ms": 150
+            }
+          },
+          {
+            "id": "t-s1-done",
+            "label": "s1 出现 done 类",
+            "command": {
+              "op": "assert",
+              "selector": "#todo-list li[data-id=\"s1\"].done",
+              "property": "count",
+              "equals": 1
+            }
+          },
+          {
+            "id": "t-s1-label2",
+            "label": "s1 按钮名变 取消完成",
+            "command": {
+              "op": "assert",
+              "selector": "#todo-list li[data-id=\"s1\"] .toggle",
+              "property": "text",
+              "equals": "取消完成"
+            }
+          },
+          {
+            "id": "t-persist-s1-done",
+            "label": "持久化 s1 done 为 true",
+            "command": {
+              "op": "data",
+              "path": [
+                "items",
+                "0",
+                "done"
+              ],
+              "equals": true
+            }
+          },
+          {
+            "id": "t-persist-s2-done",
+            "label": "持久化 s2 done 仍 true",
+            "command": {
+              "op": "data",
+              "path": [
+                "items",
+                "1",
+                "done"
+              ],
+              "equals": true
+            }
+          },
+          {
+            "id": "t-click-s1-again",
+            "label": "再次点击 s1 切换回来",
+            "command": {
+              "op": "click",
+              "selector": "#todo-list li[data-id=\"s1\"] .toggle"
+            }
+          },
+          {
+            "id": "t-wait2",
+            "label": "等待渲染",
+            "command": {
+              "op": "wait",
+              "ms": 150
+            }
+          },
+          {
+            "id": "t-s1-not-done2",
+            "label": "s1 done 类移除",
+            "command": {
+              "op": "assert",
+              "selector": "#todo-list li[data-id=\"s1\"].done",
+              "property": "count",
+              "equals": 0
+            }
+          },
+          {
+            "id": "t-s1-label3",
+            "label": "s1 按钮名恢复 标记完成",
+            "command": {
+              "op": "assert",
+              "selector": "#todo-list li[data-id=\"s1\"] .toggle",
+              "property": "text",
+              "equals": "标记完成"
+            }
+          },
+          {
+            "id": "t-persist-s1-false",
+            "label": "持久化 s1 done 翻回 false",
+            "command": {
+              "op": "data",
+              "path": [
+                "items",
+                "0",
+                "done"
+              ],
+              "equals": false
+            }
+          }
+        ]
+      },
+      {
+        "id": "delete-task",
+        "seed": {
+          "items": [
+            {
+              "id": "s1",
+              "text": "买牛奶",
+              "done": false
+            },
+            {
+              "id": "s2",
+              "text": "写报告",
+              "done": true
+            },
+            {
+              "id": "s3",
+              "text": "晨跑",
+              "done": false
+            }
+          ]
+        },
+        "checks": [
+          {
+            "id": "platform-startup-wait",
+            "label": "等待检查页面读取合成数据",
+            "command": {
+              "op": "wait",
+              "ms": 150
+            }
+          },
+          {
+            "id": "d-wait-load",
+            "label": "等待加载",
+            "command": {
+              "op": "wait",
+              "ms": 150
+            }
+          },
+          {
+            "id": "d-count",
+            "label": "加载三项",
+            "command": {
+              "op": "assert",
+              "selector": "#todo-list li[data-id]",
+              "property": "count",
+              "equals": 3
+            }
+          },
+          {
+            "id": "d-del-s2",
+            "label": "删除 s2",
+            "command": {
+              "op": "click",
+              "selector": "#todo-list li[data-id=\"s2\"] .del"
+            }
+          },
+          {
+            "id": "d-wait1",
+            "label": "等待渲染",
+            "command": {
+              "op": "wait",
+              "ms": 150
+            }
+          },
+          {
+            "id": "d-count2",
+            "label": "列表剩两项",
+            "command": {
+              "op": "assert",
+              "selector": "#todo-list li[data-id]",
+              "property": "count",
+              "equals": 2
+            }
+          },
+          {
+            "id": "d-s2-removed",
+            "label": "s2 已移除",
+            "command": {
+              "op": "assert",
+              "selector": "#todo-list li[data-id=\"s2\"]",
+              "property": "count",
+              "equals": 0
+            }
+          },
+          {
+            "id": "d-order-s1",
+            "label": "s1 顺序保持第一",
+            "command": {
+              "op": "assert",
+              "selector": "#todo-list li[data-id]:nth-of-type(1)",
+              "property": "count",
+              "equals": 1
+            }
+          },
+          {
+            "id": "d-persist-len",
+            "label": "持久化长度减一为 2",
+            "command": {
+              "op": "data",
+              "path": [
+                "items",
+                "length"
+              ],
+              "equals": 2
+            }
+          },
+          {
+            "id": "d-persist-s1-text",
+            "label": "持久化 s1 保持",
+            "command": {
+              "op": "data",
+              "path": [
+                "items",
+                "0",
+                "text"
+              ],
+              "equals": "买牛奶"
+            }
+          },
+          {
+            "id": "d-persist-s3-text",
+            "label": "持久化 s3 保持",
+            "command": {
+              "op": "data",
+              "path": [
+                "items",
+                "1",
+                "text"
+              ],
+              "equals": "晨跑"
+            }
+          },
+          {
+            "id": "d-persist-s3-done",
+            "label": "s3 done 保持 false",
+            "command": {
+              "op": "data",
+              "path": [
+                "items",
+                "1",
+                "done"
+              ],
+              "equals": false
+            }
+          }
+        ]
+      },
+      {
+        "id": "restore-fields",
+        "seed": {
+          "items": [
+            {
+              "id": "s1",
+              "text": "买牛奶",
+              "done": false
+            },
+            {
+              "id": "s2",
+              "text": "写报告",
+              "done": true
+            }
+          ]
+        },
+        "checks": [
+          {
+            "id": "platform-startup-wait",
+            "label": "等待检查页面读取合成数据",
+            "command": {
+              "op": "wait",
+              "ms": 150
+            }
+          },
+          {
+            "id": "r-wait-load",
+            "label": "等待加载",
+            "command": {
+              "op": "wait",
+              "ms": 150
+            }
+          },
+          {
+            "id": "r-count",
+            "label": "还原两项",
+            "command": {
+              "op": "assert",
+              "selector": "#todo-list li[data-id]",
+              "property": "count",
+              "equals": 2
+            }
+          },
+          {
+            "id": "r-s1-text",
+            "label": "s1 文本还原",
+            "command": {
+              "op": "assert",
+              "selector": "#todo-list li[data-id=\"s1\"] .text",
+              "property": "text",
+              "equals": "买牛奶"
+            }
+          },
+          {
+            "id": "r-s2-text",
+            "label": "s2 文本还原",
+            "command": {
+              "op": "assert",
+              "selector": "#todo-list li[data-id=\"s2\"] .text",
+              "property": "text",
+              "equals": "写报告"
+            }
+          },
+          {
+            "id": "r-s1-done",
+            "label": "s1 done=false 无类",
+            "command": {
+              "op": "assert",
+              "selector": "#todo-list li[data-id=\"s1\"].done",
+              "property": "count",
+              "equals": 0
+            }
+          },
+          {
+            "id": "r-s2-done",
+            "label": "s2 done=true 有类",
+            "command": {
+              "op": "assert",
+              "selector": "#todo-list li[data-id=\"s2\"].done",
+              "property": "count",
+              "equals": 1
+            }
+          },
+          {
+            "id": "r-order1",
+            "label": "顺序第 1 为 s1",
+            "command": {
+              "op": "assert",
+              "selector": "#todo-list li[data-id=\"s1\"]:nth-of-type(1)",
+              "property": "count",
+              "equals": 1
+            }
+          },
+          {
+            "id": "r-order2",
+            "label": "顺序第 2 为 s2",
+            "command": {
+              "op": "assert",
+              "selector": "#todo-list li[data-id=\"s2\"]:nth-of-type(2)",
+              "property": "count",
+              "equals": 1
+            }
+          },
+          {
+            "id": "r-s2-toggle",
+            "label": "s2 切换按钮状态 取消完成",
+            "command": {
+              "op": "assert",
+              "selector": "#todo-list li[data-id=\"s2\"] .toggle",
+              "property": "text",
+              "equals": "取消完成"
+            }
+          }
+        ]
+      },
+      {
+        "id": "persist-exact",
+        "seed": {
+          "items": [
+            {
+              "id": "s1",
+              "text": "买牛奶",
+              "done": false
+            },
+            {
+              "id": "s2",
+              "text": "写报告",
+              "done": true
+            }
+          ]
+        },
+        "checks": [
+          {
+            "id": "platform-startup-wait",
+            "label": "等待检查页面读取合成数据",
+            "command": {
+              "op": "wait",
+              "ms": 150
+            }
+          },
+          {
+            "id": "p-wait-load",
+            "label": "等待加载",
+            "command": {
+              "op": "wait",
+              "ms": 150
+            }
+          },
+          {
+            "id": "p-count",
+            "label": "加载两项",
+            "command": {
+              "op": "assert",
+              "selector": "#todo-list li[data-id]",
+              "property": "count",
+              "equals": 2
+            }
+          },
+          {
+            "id": "p-add-input",
+            "label": "输入 晨跑",
+            "command": {
+              "op": "input",
+              "selector": "#todo-input",
+              "value": "晨跑"
+            }
+          },
+          {
+            "id": "p-add-click",
+            "label": "点击添加",
+            "command": {
+              "op": "click",
+              "selector": "#add-btn"
+            }
+          },
+          {
+            "id": "p-wait1",
+            "label": "等待保存",
+            "command": {
+              "op": "wait",
+              "ms": 150
+            }
+          },
+          {
+            "id": "p-add-len",
+            "label": "添加后持久化长度 3",
+            "command": {
+              "op": "data",
+              "path": [
+                "items",
+                "length"
+              ],
+              "equals": 3
+            }
+          },
+          {
+            "id": "p-add-text",
+            "label": "持久化 items[2].text 晨跑",
+            "command": {
+              "op": "data",
+              "path": [
+                "items",
+                "2",
+                "text"
+              ],
+              "equals": "晨跑"
+            }
+          },
+          {
+            "id": "p-add-done",
+            "label": "持久化 items[2].done false",
+            "command": {
+              "op": "data",
+              "path": [
+                "items",
+                "2",
+                "done"
+              ],
+              "equals": false
+            }
+          },
+          {
+            "id": "p-toggle-s1",
+            "label": "切换 s1",
+            "command": {
+              "op": "click",
+              "selector": "#todo-list li[data-id=\"s1\"] .toggle"
+            }
+          },
+          {
+            "id": "p-wait2",
+            "label": "等待保存",
+            "command": {
+              "op": "wait",
+              "ms": 150
+            }
+          },
+          {
+            "id": "p-toggle-done",
+            "label": "持久化 s1 done 精确翻转为 true",
+            "command": {
+              "op": "data",
+              "path": [
+                "items",
+                "0",
+                "done"
+              ],
+              "equals": true
+            }
+          },
+          {
+            "id": "p-toggle-len",
+            "label": "切换后长度仍 3",
+            "command": {
+              "op": "data",
+              "path": [
+                "items",
+                "length"
+              ],
+              "equals": 3
+            }
+          },
+          {
+            "id": "p-del-s2",
+            "label": "删除 s2",
+            "command": {
+              "op": "click",
+              "selector": "#todo-list li[data-id=\"s2\"] .del"
+            }
+          },
+          {
+            "id": "p-wait3",
+            "label": "等待保存",
+            "command": {
+              "op": "wait",
+              "ms": 150
+            }
+          },
+          {
+            "id": "p-del-len",
+            "label": "删除后长度 2",
+            "command": {
+              "op": "data",
+              "path": [
+                "items",
+                "length"
+              ],
+              "equals": 2
+            }
+          },
+          {
+            "id": "p-del-text-first",
+            "label": "剩余首项为 s1 文本",
+            "command": {
+              "op": "data",
+              "path": [
+                "items",
+                "0",
+                "text"
+              ],
+              "equals": "买牛奶"
+            }
+          },
+          {
+            "id": "p-del-text-second",
+            "label": "剩余次项为 s3 文本",
+            "command": {
+              "op": "data",
+              "path": [
+                "items",
+                "1",
+                "text"
+              ],
+              "equals": "晨跑"
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "roleDeliveries": [
+    {
+      "role": "Mike",
+      "contentSha256": "0f2a9550284b7d4fad4535fab12d36651e9de86c4723ec8e682ba8c33b114918"
+    },
+    {
+      "role": "Requirements",
+      "contentSha256": "ef2e11666f2f4610557f8fe8438a23b151f22645b3d68219188d2c46cb22271c"
+    },
+    {
+      "role": "Mike",
+      "contentSha256": "2a13fc8aa6e943a2a9bbce1cae9e6928772420f367a4be3c45622f9a2aa43b9d"
+    },
+    {
+      "role": "Engineer",
+      "contentSha256": "915ab8099733e4d5df3b4c6b1e1c3e263855f3131139d898fd0a308bb2e3d00a"
+    },
+    {
+      "role": "Mike",
+      "contentSha256": "a749a0d37eba4285e53444576c613b3933c65d92108d3c35746531bffc821c4d"
+    },
+    {
+      "role": "Verifier",
+      "contentSha256": "39e45c2a7ad9e65d7f6528594e9e53fe1847430e652ef872055c8e0547f55874"
+    },
+    {
+      "role": "Verifier",
+      "contentSha256": "9ec6092ccc8788b97ea6eb3664e53f195515e5cbcf6d64531117aa4b237f2701"
+    },
+    {
+      "role": "Mike",
+      "contentSha256": "41b811b508e769d8a494c308db38a98afc927c345540b1adab125c3740b047c6"
+    }
+  ],
+  "check": {
+    "protocol": "atoms-qa/1",
+    "taskId": "70dc9374-bfa0-4d60-abc9-bd9eeee0bf7b",
+    "requestId": "09d47449-4449-451c-a05b-a9a810a0d409",
+    "codeHash": "dcfe92f88281423c9f80203282632b1d8a76c9dbb8197249b1c5a3d7bdbc2fce",
+    "planHash": "1f3147cfcefc2379d3203bf4328762d38953d72ecc30c9c0b3b5167d5c465334",
+    "status": "passed",
+    "results": [
+      {
+        "scenarioId": "platform-timing",
+        "checkId": "platform-timing-0",
+        "command": {
+          "op": "assert",
+          "selector": "button:not(:disabled),input:not(:disabled),select:not(:disabled),textarea:not(:disabled)",
+          "property": "count",
+          "equals": 0
+        },
+        "expected": 0,
+        "actual": 0,
+        "status": "passed",
+        "startedAt": 1790784854469,
+        "endedAt": 1790784854663
+      },
+      {
+        "scenarioId": "platform-timing",
+        "checkId": "platform-timing-1",
+        "command": {
+          "op": "bridge",
+          "property": "saveAttempts",
+          "equals": 0
+        },
+        "expected": 0,
+        "actual": 0,
+        "status": "passed",
+        "startedAt": 1790784854663,
+        "endedAt": 1790784854663
+      },
+      {
+        "scenarioId": "platform-timing",
+        "checkId": "platform-timing-2",
+        "command": {
+          "op": "wait",
+          "ms": 700
+        },
+        "expected": 700,
+        "actual": 700,
+        "status": "passed",
+        "startedAt": 1790784854663,
+        "endedAt": 1790784855368
+      },
+      {
+        "scenarioId": "platform-timing",
+        "checkId": "platform-timing-3",
+        "command": {
+          "op": "input",
+          "selector": "#todo-input",
+          "value": "晨跑"
+        },
+        "expected": "晨跑",
+        "actual": "晨跑",
+        "status": "passed",
+        "startedAt": 1790784855368,
+        "endedAt": 1790784855369
+      },
+      {
+        "scenarioId": "platform-timing",
+        "checkId": "platform-timing-4",
+        "command": {
+          "op": "click",
+          "selector": "#add-btn"
+        },
+        "expected": "executed",
+        "actual": "executed",
+        "status": "passed",
+        "startedAt": 1790784855370,
+        "endedAt": 1790784855371
+      },
+      {
+        "scenarioId": "platform-timing",
+        "checkId": "platform-timing-5",
+        "command": {
+          "op": "assert",
+          "selector": "body",
+          "property": "inert",
+          "equals": true
+        },
+        "expected": true,
+        "actual": true,
+        "status": "passed",
+        "startedAt": 1790784855371,
+        "endedAt": 1790784855372
+      },
+      {
+        "scenarioId": "platform-timing",
+        "checkId": "platform-timing-6",
+        "command": {
+          "op": "assert",
+          "selector": "[data-atoms-status]",
+          "property": "text",
+          "equals": "正在保存"
+        },
+        "expected": "正在保存",
+        "actual": "正在保存",
+        "status": "passed",
+        "startedAt": 1790784855372,
+        "endedAt": 1790784855372
+      },
+      {
+        "scenarioId": "platform-timing",
+        "checkId": "platform-timing-7",
+        "command": {
+          "op": "click",
+          "selector": "#add-btn",
+          "probeWhileInert": true
+        },
+        "expected": "executed",
+        "actual": "executed",
+        "status": "passed",
+        "startedAt": 1790784855372,
+        "endedAt": 1790784855372
+      },
+      {
+        "scenarioId": "platform-timing",
+        "checkId": "platform-timing-8",
+        "command": {
+          "op": "data",
+          "path": [],
+          "equals": {
+            "items": [
+              {
+                "id": "s1",
+                "text": "买牛奶",
+                "done": false
+              },
+              {
+                "id": "s2",
+                "text": "写报告",
+                "done": true
+              }
+            ]
+          }
+        },
+        "expected": {
+          "items": [
+            {
+              "id": "s1",
+              "text": "买牛奶",
+              "done": false
+            },
+            {
+              "id": "s2",
+              "text": "写报告",
+              "done": true
+            }
+          ]
+        },
+        "actual": {
+          "items": [
+            {
+              "id": "s1",
+              "text": "买牛奶",
+              "done": false
+            },
+            {
+              "id": "s2",
+              "text": "写报告",
+              "done": true
+            }
+          ]
+        },
+        "status": "passed",
+        "startedAt": 1790784855372,
+        "endedAt": 1790784855372
+      },
+      {
+        "scenarioId": "platform-timing",
+        "checkId": "platform-timing-9",
+        "command": {
+          "op": "wait",
+          "ms": 700
+        },
+        "expected": 700,
+        "actual": 700,
+        "status": "passed",
+        "startedAt": 1790784855372,
+        "endedAt": 1790784856075
+      },
+      {
+        "scenarioId": "platform-timing",
+        "checkId": "platform-timing-10",
+        "command": {
+          "op": "assert",
+          "selector": "body",
+          "property": "inert",
+          "equals": false
+        },
+        "expected": false,
+        "actual": false,
+        "status": "passed",
+        "startedAt": 1790784856075,
+        "endedAt": 1790784856076
+      },
+      {
+        "scenarioId": "platform-timing",
+        "checkId": "platform-timing-11",
+        "command": {
+          "op": "assert",
+          "selector": "[data-atoms-status]",
+          "property": "text",
+          "equals": "已保存"
+        },
+        "expected": "已保存",
+        "actual": "已保存",
+        "status": "passed",
+        "startedAt": 1790784856076,
+        "endedAt": 1790784856076
+      },
+      {
+        "scenarioId": "platform-timing",
+        "checkId": "platform-timing-12",
+        "command": {
+          "op": "data",
+          "path": [
+            "items",
+            "2",
+            "text"
+          ],
+          "equals": "晨跑"
+        },
+        "expected": "晨跑",
+        "actual": "晨跑",
+        "status": "passed",
+        "startedAt": 1790784856076,
+        "endedAt": 1790784856076
+      },
+      {
+        "scenarioId": "platform-timing",
+        "checkId": "platform-timing-13",
+        "command": {
+          "op": "bridge",
+          "property": "saveAttempts",
+          "equals": 1
+        },
+        "expected": 1,
+        "actual": 1,
+        "status": "passed",
+        "startedAt": 1790784856076,
+        "endedAt": 1790784856076
+      },
+      {
+        "scenarioId": "platform-timing",
+        "checkId": "platform-timing-14",
+        "command": {
+          "op": "bridge",
+          "property": "commits",
+          "equals": 1
+        },
+        "expected": 1,
+        "actual": 1,
+        "status": "passed",
+        "startedAt": 1790784856076,
+        "endedAt": 1790784856076
+      },
+      {
+        "scenarioId": "platform-read-failure",
+        "checkId": "platform-read-failure-0",
+        "command": {
+          "op": "wait",
+          "ms": 700
+        },
+        "expected": 700,
+        "actual": 700,
+        "status": "passed",
+        "startedAt": 1790784856095,
+        "endedAt": 1790784856798
+      },
+      {
+        "scenarioId": "platform-read-failure",
+        "checkId": "platform-read-failure-1",
+        "command": {
+          "op": "assert",
+          "selector": "[data-atoms-status]",
+          "property": "text",
+          "equals": "读取失败"
+        },
+        "expected": "读取失败",
+        "actual": "读取失败",
+        "status": "passed",
+        "startedAt": 1790784856798,
+        "endedAt": 1790784856799
+      },
+      {
+        "scenarioId": "platform-read-failure",
+        "checkId": "platform-read-failure-2",
+        "command": {
+          "op": "assert",
+          "selector": "button:not(:disabled),input:not(:disabled),select:not(:disabled),textarea:not(:disabled)",
+          "property": "count",
+          "equals": 0
+        },
+        "expected": 0,
+        "actual": 0,
+        "status": "passed",
+        "startedAt": 1790784856799,
+        "endedAt": 1790784856799
+      },
+      {
+        "scenarioId": "platform-read-failure",
+        "checkId": "platform-read-failure-3",
+        "command": {
+          "op": "bridge",
+          "property": "saveAttempts",
+          "equals": 0
+        },
+        "expected": 0,
+        "actual": 0,
+        "status": "passed",
+        "startedAt": 1790784856799,
+        "endedAt": 1790784856799
+      },
+      {
+        "scenarioId": "platform-read-failure",
+        "checkId": "platform-read-failure-4",
+        "command": {
+          "op": "bridge",
+          "property": "commits",
+          "equals": 0
+        },
+        "expected": 0,
+        "actual": 0,
+        "status": "passed",
+        "startedAt": 1790784856799,
+        "endedAt": 1790784856799
+      },
+      {
+        "scenarioId": "platform-read-failure",
+        "checkId": "platform-read-failure-5",
+        "command": {
+          "op": "data",
+          "path": [],
+          "equals": {
+            "items": [
+              {
+                "id": "s1",
+                "text": "买牛奶",
+                "done": false
+              },
+              {
+                "id": "s2",
+                "text": "写报告",
+                "done": true
+              }
+            ]
+          }
+        },
+        "expected": {
+          "items": [
+            {
+              "id": "s1",
+              "text": "买牛奶",
+              "done": false
+            },
+            {
+              "id": "s2",
+              "text": "写报告",
+              "done": true
+            }
+          ]
+        },
+        "actual": {
+          "items": [
+            {
+              "id": "s1",
+              "text": "买牛奶",
+              "done": false
+            },
+            {
+              "id": "s2",
+              "text": "写报告",
+              "done": true
+            }
+          ]
+        },
+        "status": "passed",
+        "startedAt": 1790784856799,
+        "endedAt": 1790784856799
+      },
+      {
+        "scenarioId": "platform-save-failure",
+        "checkId": "platform-save-failure-0",
+        "command": {
+          "op": "wait",
+          "ms": 700
+        },
+        "expected": 700,
+        "actual": 700,
+        "status": "passed",
+        "startedAt": 1790784856818,
+        "endedAt": 1790784857521
+      },
+      {
+        "scenarioId": "platform-save-failure",
+        "checkId": "platform-save-failure-1",
+        "command": {
+          "op": "input",
+          "selector": "#todo-input",
+          "value": "晨跑"
+        },
+        "expected": "晨跑",
+        "actual": "晨跑",
+        "status": "passed",
+        "startedAt": 1790784857521,
+        "endedAt": 1790784857522
+      },
+      {
+        "scenarioId": "platform-save-failure",
+        "checkId": "platform-save-failure-2",
+        "command": {
+          "op": "click",
+          "selector": "#add-btn"
+        },
+        "expected": "executed",
+        "actual": "executed",
+        "status": "passed",
+        "startedAt": 1790784857522,
+        "endedAt": 1790784857522
+      },
+      {
+        "scenarioId": "platform-save-failure",
+        "checkId": "platform-save-failure-3",
+        "command": {
+          "op": "assert",
+          "selector": "body",
+          "property": "inert",
+          "equals": true
+        },
+        "expected": true,
+        "actual": true,
+        "status": "passed",
+        "startedAt": 1790784857522,
+        "endedAt": 1790784857523
+      },
+      {
+        "scenarioId": "platform-save-failure",
+        "checkId": "platform-save-failure-4",
+        "command": {
+          "op": "wait",
+          "ms": 700
+        },
+        "expected": 700,
+        "actual": 700,
+        "status": "passed",
+        "startedAt": 1790784857523,
+        "endedAt": 1790784858224
+      },
+      {
+        "scenarioId": "platform-save-failure",
+        "checkId": "platform-save-failure-5",
+        "command": {
+          "op": "assert",
+          "selector": "[data-atoms-status]",
+          "property": "text",
+          "equals": "保存失败"
+        },
+        "expected": "保存失败",
+        "actual": "保存失败",
+        "status": "passed",
+        "startedAt": 1790784858224,
+        "endedAt": 1790784858225
+      },
+      {
+        "scenarioId": "platform-save-failure",
+        "checkId": "platform-save-failure-6",
+        "command": {
+          "op": "data",
+          "path": [],
+          "equals": {
+            "items": [
+              {
+                "id": "s1",
+                "text": "买牛奶",
+                "done": false
+              },
+              {
+                "id": "s2",
+                "text": "写报告",
+                "done": true
+              }
+            ]
+          }
+        },
+        "expected": {
+          "items": [
+            {
+              "id": "s1",
+              "text": "买牛奶",
+              "done": false
+            },
+            {
+              "id": "s2",
+              "text": "写报告",
+              "done": true
+            }
+          ]
+        },
+        "actual": {
+          "items": [
+            {
+              "id": "s1",
+              "text": "买牛奶",
+              "done": false
+            },
+            {
+              "id": "s2",
+              "text": "写报告",
+              "done": true
+            }
+          ]
+        },
+        "status": "passed",
+        "startedAt": 1790784858225,
+        "endedAt": 1790784858225
+      },
+      {
+        "scenarioId": "platform-save-failure",
+        "checkId": "platform-save-failure-7",
+        "command": {
+          "op": "bridge",
+          "property": "saveAttempts",
+          "equals": 1
+        },
+        "expected": 1,
+        "actual": 1,
+        "status": "passed",
+        "startedAt": 1790784858225,
+        "endedAt": 1790784858225
+      },
+      {
+        "scenarioId": "platform-save-failure",
+        "checkId": "platform-save-failure-8",
+        "command": {
+          "op": "bridge",
+          "property": "rejectedSaves",
+          "equals": 1
+        },
+        "expected": 1,
+        "actual": 1,
+        "status": "passed",
+        "startedAt": 1790784858225,
+        "endedAt": 1790784858225
+      },
+      {
+        "scenarioId": "platform-save-failure",
+        "checkId": "platform-save-failure-9",
+        "command": {
+          "op": "bridge",
+          "property": "commits",
+          "equals": 0
+        },
+        "expected": 0,
+        "actual": 0,
+        "status": "passed",
+        "startedAt": 1790784858225,
+        "endedAt": 1790784858225
+      },
+      {
+        "scenarioId": "add-task",
+        "checkId": "platform-startup-wait",
+        "command": {
+          "op": "wait",
+          "ms": 150
+        },
+        "expected": 150,
+        "actual": 150,
+        "status": "passed",
+        "startedAt": 1790784858237,
+        "endedAt": 1790784858389
+      },
+      {
+        "scenarioId": "add-task",
+        "checkId": "a-input-value",
+        "command": {
+          "op": "input",
+          "selector": "#todo-input",
+          "value": "  晨跑  "
+        },
+        "expected": "  晨跑  ",
+        "actual": "  晨跑  ",
+        "status": "passed",
+        "startedAt": 1790784858390,
+        "endedAt": 1790784858390
+      },
+      {
+        "scenarioId": "add-task",
+        "checkId": "a-click-add",
+        "command": {
+          "op": "click",
+          "selector": "#add-btn"
+        },
+        "expected": "executed",
+        "actual": "executed",
+        "status": "passed",
+        "startedAt": 1790784858390,
+        "endedAt": 1790784858391
+      },
+      {
+        "scenarioId": "add-task",
+        "checkId": "a-wait",
+        "command": {
+          "op": "wait",
+          "ms": 150
+        },
+        "expected": 150,
+        "actual": 150,
+        "status": "passed",
+        "startedAt": 1790784858391,
+        "endedAt": 1790784858542
+      },
+      {
+        "scenarioId": "add-task",
+        "checkId": "a-count",
+        "command": {
+          "op": "assert",
+          "selector": "#todo-list li[data-id]",
+          "property": "count",
+          "equals": 1
+        },
+        "expected": 1,
+        "actual": 1,
+        "status": "passed",
+        "startedAt": 1790784858542,
+        "endedAt": 1790784858543
+      },
+      {
+        "scenarioId": "add-task",
+        "checkId": "a-text-ok",
+        "command": {
+          "op": "assert",
+          "selector": "#todo-list li[data-id] .text",
+          "property": "text",
+          "equals": "晨跑"
+        },
+        "expected": "晨跑",
+        "actual": "晨跑",
+        "status": "passed",
+        "startedAt": 1790784858543,
+        "endedAt": 1790784858544
+      },
+      {
+        "scenarioId": "add-task",
+        "checkId": "a-toggle-exists",
+        "command": {
+          "op": "assert",
+          "selector": "#todo-list li[data-id] .toggle",
+          "property": "count",
+          "equals": 1
+        },
+        "expected": 1,
+        "actual": 1,
+        "status": "passed",
+        "startedAt": 1790784858544,
+        "endedAt": 1790784858544
+      },
+      {
+        "scenarioId": "add-task",
+        "checkId": "a-del-exists",
+        "command": {
+          "op": "assert",
+          "selector": "#todo-list li[data-id] .del",
+          "property": "count",
+          "equals": 1
+        },
+        "expected": 1,
+        "actual": 1,
+        "status": "passed",
+        "startedAt": 1790784858544,
+        "endedAt": 1790784858544
+      },
+      {
+        "scenarioId": "add-task",
+        "checkId": "a-input-cleared",
+        "command": {
+          "op": "assert",
+          "selector": "#todo-input",
+          "property": "value",
+          "equals": ""
+        },
+        "expected": "",
+        "actual": "",
+        "status": "passed",
+        "startedAt": 1790784858544,
+        "endedAt": 1790784858545
+      },
+      {
+        "scenarioId": "add-task",
+        "checkId": "a-persist-len",
+        "command": {
+          "op": "data",
+          "path": [
+            "items",
+            "length"
+          ],
+          "equals": 1
+        },
+        "expected": 1,
+        "actual": 1,
+        "status": "passed",
+        "startedAt": 1790784858545,
+        "endedAt": 1790784858545
+      },
+      {
+        "scenarioId": "add-task",
+        "checkId": "a-persist-text",
+        "command": {
+          "op": "data",
+          "path": [
+            "items",
+            "0",
+            "text"
+          ],
+          "equals": "晨跑"
+        },
+        "expected": "晨跑",
+        "actual": "晨跑",
+        "status": "passed",
+        "startedAt": 1790784858545,
+        "endedAt": 1790784858545
+      },
+      {
+        "scenarioId": "add-task",
+        "checkId": "a-persist-done",
+        "command": {
+          "op": "data",
+          "path": [
+            "items",
+            "0",
+            "done"
+          ],
+          "equals": false
+        },
+        "expected": false,
+        "actual": false,
+        "status": "passed",
+        "startedAt": 1790784858545,
+        "endedAt": 1790784858545
+      },
+      {
+        "scenarioId": "add-task",
+        "checkId": "a-enter-input",
+        "command": {
+          "op": "input",
+          "selector": "#todo-input",
+          "value": "写报告"
+        },
+        "expected": "写报告",
+        "actual": "写报告",
+        "status": "passed",
+        "startedAt": 1790784858545,
+        "endedAt": 1790784858545
+      },
+      {
+        "scenarioId": "add-task",
+        "checkId": "a-enter-key",
+        "command": {
+          "op": "click",
+          "selector": "#add-btn"
+        },
+        "expected": "executed",
+        "actual": "executed",
+        "status": "passed",
+        "startedAt": 1790784858545,
+        "endedAt": 1790784858546
+      },
+      {
+        "scenarioId": "add-task",
+        "checkId": "a-wait2",
+        "command": {
+          "op": "wait",
+          "ms": 150
+        },
+        "expected": 150,
+        "actual": 150,
+        "status": "passed",
+        "startedAt": 1790784858546,
+        "endedAt": 1790784858698
+      },
+      {
+        "scenarioId": "add-task",
+        "checkId": "a-count2",
+        "command": {
+          "op": "assert",
+          "selector": "#todo-list li[data-id]",
+          "property": "count",
+          "equals": 2
+        },
+        "expected": 2,
+        "actual": 2,
+        "status": "passed",
+        "startedAt": 1790784858698,
+        "endedAt": 1790784858699
+      },
+      {
+        "scenarioId": "add-task",
+        "checkId": "a-blank-input",
+        "command": {
+          "op": "input",
+          "selector": "#todo-input",
+          "value": "   "
+        },
+        "expected": "   ",
+        "actual": "   ",
+        "status": "passed",
+        "startedAt": 1790784858699,
+        "endedAt": 1790784858700
+      },
+      {
+        "scenarioId": "add-task",
+        "checkId": "a-blank-add",
+        "command": {
+          "op": "click",
+          "selector": "#add-btn"
+        },
+        "expected": "executed",
+        "actual": "executed",
+        "status": "passed",
+        "startedAt": 1790784858700,
+        "endedAt": 1790784858701
+      },
+      {
+        "scenarioId": "add-task",
+        "checkId": "a-wait3",
+        "command": {
+          "op": "wait",
+          "ms": 150
+        },
+        "expected": 150,
+        "actual": 150,
+        "status": "passed",
+        "startedAt": 1790784858701,
+        "endedAt": 1790784858852
+      },
+      {
+        "scenarioId": "add-task",
+        "checkId": "a-count3",
+        "command": {
+          "op": "assert",
+          "selector": "#todo-list li[data-id]",
+          "property": "count",
+          "equals": 2
+        },
+        "expected": 2,
+        "actual": 2,
+        "status": "passed",
+        "startedAt": 1790784858852,
+        "endedAt": 1790784858853
+      },
+      {
+        "scenarioId": "add-task",
+        "checkId": "a-persist-len2",
+        "command": {
+          "op": "data",
+          "path": [
+            "items",
+            "length"
+          ],
+          "equals": 2
+        },
+        "expected": 2,
+        "actual": 2,
+        "status": "passed",
+        "startedAt": 1790784858853,
+        "endedAt": 1790784858853
+      },
+      {
+        "scenarioId": "toggle-done",
+        "checkId": "platform-startup-wait",
+        "command": {
+          "op": "wait",
+          "ms": 150
+        },
+        "expected": 150,
+        "actual": 150,
+        "status": "passed",
+        "startedAt": 1790784858893,
+        "endedAt": 1790784859046
+      },
+      {
+        "scenarioId": "toggle-done",
+        "checkId": "t-wait-load",
+        "command": {
+          "op": "wait",
+          "ms": 150
+        },
+        "expected": 150,
+        "actual": 150,
+        "status": "passed",
+        "startedAt": 1790784859046,
+        "endedAt": 1790784859199
+      },
+      {
+        "scenarioId": "toggle-done",
+        "checkId": "t-count",
+        "command": {
+          "op": "assert",
+          "selector": "#todo-list li[data-id]",
+          "property": "count",
+          "equals": 2
+        },
+        "expected": 2,
+        "actual": 2,
+        "status": "passed",
+        "startedAt": 1790784859199,
+        "endedAt": 1790784859200
+      },
+      {
+        "scenarioId": "toggle-done",
+        "checkId": "t-s1-not-done",
+        "command": {
+          "op": "assert",
+          "selector": "#todo-list li[data-id=\"s1\"].done",
+          "property": "count",
+          "equals": 0
+        },
+        "expected": 0,
+        "actual": 0,
+        "status": "passed",
+        "startedAt": 1790784859200,
+        "endedAt": 1790784859201
+      },
+      {
+        "scenarioId": "toggle-done",
+        "checkId": "t-s2-done",
+        "command": {
+          "op": "assert",
+          "selector": "#todo-list li[data-id=\"s2\"].done",
+          "property": "count",
+          "equals": 1
+        },
+        "expected": 1,
+        "actual": 1,
+        "status": "passed",
+        "startedAt": 1790784859201,
+        "endedAt": 1790784859202
+      },
+      {
+        "scenarioId": "toggle-done",
+        "checkId": "t-s1-toggle-label",
+        "command": {
+          "op": "assert",
+          "selector": "#todo-list li[data-id=\"s1\"] .toggle",
+          "property": "text",
+          "equals": "标记完成"
+        },
+        "expected": "标记完成",
+        "actual": "标记完成",
+        "status": "passed",
+        "startedAt": 1790784859202,
+        "endedAt": 1790784859202
+      },
+      {
+        "scenarioId": "toggle-done",
+        "checkId": "t-s2-toggle-label",
+        "command": {
+          "op": "assert",
+          "selector": "#todo-list li[data-id=\"s2\"] .toggle",
+          "property": "text",
+          "equals": "取消完成"
+        },
+        "expected": "取消完成",
+        "actual": "取消完成",
+        "status": "passed",
+        "startedAt": 1790784859202,
+        "endedAt": 1790784859203
+      },
+      {
+        "scenarioId": "toggle-done",
+        "checkId": "t-click-s1",
+        "command": {
+          "op": "click",
+          "selector": "#todo-list li[data-id=\"s1\"] .toggle"
+        },
+        "expected": "executed",
+        "actual": "executed",
+        "status": "passed",
+        "startedAt": 1790784859203,
+        "endedAt": 1790784859203
+      },
+      {
+        "scenarioId": "toggle-done",
+        "checkId": "t-wait1",
+        "command": {
+          "op": "wait",
+          "ms": 150
+        },
+        "expected": 150,
+        "actual": 150,
+        "status": "passed",
+        "startedAt": 1790784859203,
+        "endedAt": 1790784859356
+      },
+      {
+        "scenarioId": "toggle-done",
+        "checkId": "t-s1-done",
+        "command": {
+          "op": "assert",
+          "selector": "#todo-list li[data-id=\"s1\"].done",
+          "property": "count",
+          "equals": 1
+        },
+        "expected": 1,
+        "actual": 1,
+        "status": "passed",
+        "startedAt": 1790784859357,
+        "endedAt": 1790784859357
+      },
+      {
+        "scenarioId": "toggle-done",
+        "checkId": "t-s1-label2",
+        "command": {
+          "op": "assert",
+          "selector": "#todo-list li[data-id=\"s1\"] .toggle",
+          "property": "text",
+          "equals": "取消完成"
+        },
+        "expected": "取消完成",
+        "actual": "取消完成",
+        "status": "passed",
+        "startedAt": 1790784859357,
+        "endedAt": 1790784859358
+      },
+      {
+        "scenarioId": "toggle-done",
+        "checkId": "t-persist-s1-done",
+        "command": {
+          "op": "data",
+          "path": [
+            "items",
+            "0",
+            "done"
+          ],
+          "equals": true
+        },
+        "expected": true,
+        "actual": true,
+        "status": "passed",
+        "startedAt": 1790784859358,
+        "endedAt": 1790784859358
+      },
+      {
+        "scenarioId": "toggle-done",
+        "checkId": "t-persist-s2-done",
+        "command": {
+          "op": "data",
+          "path": [
+            "items",
+            "1",
+            "done"
+          ],
+          "equals": true
+        },
+        "expected": true,
+        "actual": true,
+        "status": "passed",
+        "startedAt": 1790784859358,
+        "endedAt": 1790784859358
+      },
+      {
+        "scenarioId": "toggle-done",
+        "checkId": "t-click-s1-again",
+        "command": {
+          "op": "click",
+          "selector": "#todo-list li[data-id=\"s1\"] .toggle"
+        },
+        "expected": "executed",
+        "actual": "executed",
+        "status": "passed",
+        "startedAt": 1790784859358,
+        "endedAt": 1790784859360
+      },
+      {
+        "scenarioId": "toggle-done",
+        "checkId": "t-wait2",
+        "command": {
+          "op": "wait",
+          "ms": 150
+        },
+        "expected": 150,
+        "actual": 150,
+        "status": "passed",
+        "startedAt": 1790784859360,
+        "endedAt": 1790784859513
+      },
+      {
+        "scenarioId": "toggle-done",
+        "checkId": "t-s1-not-done2",
+        "command": {
+          "op": "assert",
+          "selector": "#todo-list li[data-id=\"s1\"].done",
+          "property": "count",
+          "equals": 0
+        },
+        "expected": 0,
+        "actual": 0,
+        "status": "passed",
+        "startedAt": 1790784859513,
+        "endedAt": 1790784859514
+      },
+      {
+        "scenarioId": "toggle-done",
+        "checkId": "t-s1-label3",
+        "command": {
+          "op": "assert",
+          "selector": "#todo-list li[data-id=\"s1\"] .toggle",
+          "property": "text",
+          "equals": "标记完成"
+        },
+        "expected": "标记完成",
+        "actual": "标记完成",
+        "status": "passed",
+        "startedAt": 1790784859514,
+        "endedAt": 1790784859515
+      },
+      {
+        "scenarioId": "toggle-done",
+        "checkId": "t-persist-s1-false",
+        "command": {
+          "op": "data",
+          "path": [
+            "items",
+            "0",
+            "done"
+          ],
+          "equals": false
+        },
+        "expected": false,
+        "actual": false,
+        "status": "passed",
+        "startedAt": 1790784859515,
+        "endedAt": 1790784859515
+      },
+      {
+        "scenarioId": "delete-task",
+        "checkId": "platform-startup-wait",
+        "command": {
+          "op": "wait",
+          "ms": 150
+        },
+        "expected": 150,
+        "actual": 150,
+        "status": "passed",
+        "startedAt": 1790784859541,
+        "endedAt": 1790784859709
+      },
+      {
+        "scenarioId": "delete-task",
+        "checkId": "d-wait-load",
+        "command": {
+          "op": "wait",
+          "ms": 150
+        },
+        "expected": 150,
+        "actual": 150,
+        "status": "passed",
+        "startedAt": 1790784859709,
+        "endedAt": 1790784859861
+      },
+      {
+        "scenarioId": "delete-task",
+        "checkId": "d-count",
+        "command": {
+          "op": "assert",
+          "selector": "#todo-list li[data-id]",
+          "property": "count",
+          "equals": 3
+        },
+        "expected": 3,
+        "actual": 3,
+        "status": "passed",
+        "startedAt": 1790784859861,
+        "endedAt": 1790784859862
+      },
+      {
+        "scenarioId": "delete-task",
+        "checkId": "d-del-s2",
+        "command": {
+          "op": "click",
+          "selector": "#todo-list li[data-id=\"s2\"] .del"
+        },
+        "expected": "executed",
+        "actual": "executed",
+        "status": "passed",
+        "startedAt": 1790784859862,
+        "endedAt": 1790784859863
+      },
+      {
+        "scenarioId": "delete-task",
+        "checkId": "d-wait1",
+        "command": {
+          "op": "wait",
+          "ms": 150
+        },
+        "expected": 150,
+        "actual": 150,
+        "status": "passed",
+        "startedAt": 1790784859863,
+        "endedAt": 1790784860015
+      },
+      {
+        "scenarioId": "delete-task",
+        "checkId": "d-count2",
+        "command": {
+          "op": "assert",
+          "selector": "#todo-list li[data-id]",
+          "property": "count",
+          "equals": 2
+        },
+        "expected": 2,
+        "actual": 2,
+        "status": "passed",
+        "startedAt": 1790784860015,
+        "endedAt": 1790784860017
+      },
+      {
+        "scenarioId": "delete-task",
+        "checkId": "d-s2-removed",
+        "command": {
+          "op": "assert",
+          "selector": "#todo-list li[data-id=\"s2\"]",
+          "property": "count",
+          "equals": 0
+        },
+        "expected": 0,
+        "actual": 0,
+        "status": "passed",
+        "startedAt": 1790784860017,
+        "endedAt": 1790784860018
+      },
+      {
+        "scenarioId": "delete-task",
+        "checkId": "d-order-s1",
+        "command": {
+          "op": "assert",
+          "selector": "#todo-list li[data-id]:nth-of-type(1)",
+          "property": "count",
+          "equals": 1
+        },
+        "expected": 1,
+        "actual": 1,
+        "status": "passed",
+        "startedAt": 1790784860018,
+        "endedAt": 1790784860018
+      },
+      {
+        "scenarioId": "delete-task",
+        "checkId": "d-persist-len",
+        "command": {
+          "op": "data",
+          "path": [
+            "items",
+            "length"
+          ],
+          "equals": 2
+        },
+        "expected": 2,
+        "actual": 2,
+        "status": "passed",
+        "startedAt": 1790784860018,
+        "endedAt": 1790784860018
+      },
+      {
+        "scenarioId": "delete-task",
+        "checkId": "d-persist-s1-text",
+        "command": {
+          "op": "data",
+          "path": [
+            "items",
+            "0",
+            "text"
+          ],
+          "equals": "买牛奶"
+        },
+        "expected": "买牛奶",
+        "actual": "买牛奶",
+        "status": "passed",
+        "startedAt": 1790784860018,
+        "endedAt": 1790784860018
+      },
+      {
+        "scenarioId": "delete-task",
+        "checkId": "d-persist-s3-text",
+        "command": {
+          "op": "data",
+          "path": [
+            "items",
+            "1",
+            "text"
+          ],
+          "equals": "晨跑"
+        },
+        "expected": "晨跑",
+        "actual": "晨跑",
+        "status": "passed",
+        "startedAt": 1790784860018,
+        "endedAt": 1790784860018
+      },
+      {
+        "scenarioId": "delete-task",
+        "checkId": "d-persist-s3-done",
+        "command": {
+          "op": "data",
+          "path": [
+            "items",
+            "1",
+            "done"
+          ],
+          "equals": false
+        },
+        "expected": false,
+        "actual": false,
+        "status": "passed",
+        "startedAt": 1790784860018,
+        "endedAt": 1790784860018
+      },
+      {
+        "scenarioId": "restore-fields",
+        "checkId": "platform-startup-wait",
+        "command": {
+          "op": "wait",
+          "ms": 150
+        },
+        "expected": 150,
+        "actual": 150,
+        "status": "passed",
+        "startedAt": 1790784860035,
+        "endedAt": 1790784860208
+      },
+      {
+        "scenarioId": "restore-fields",
+        "checkId": "r-wait-load",
+        "command": {
+          "op": "wait",
+          "ms": 150
+        },
+        "expected": 150,
+        "actual": 150,
+        "status": "passed",
+        "startedAt": 1790784860208,
+        "endedAt": 1790784860360
+      },
+      {
+        "scenarioId": "restore-fields",
+        "checkId": "r-count",
+        "command": {
+          "op": "assert",
+          "selector": "#todo-list li[data-id]",
+          "property": "count",
+          "equals": 2
+        },
+        "expected": 2,
+        "actual": 2,
+        "status": "passed",
+        "startedAt": 1790784860360,
+        "endedAt": 1790784860362
+      },
+      {
+        "scenarioId": "restore-fields",
+        "checkId": "r-s1-text",
+        "command": {
+          "op": "assert",
+          "selector": "#todo-list li[data-id=\"s1\"] .text",
+          "property": "text",
+          "equals": "买牛奶"
+        },
+        "expected": "买牛奶",
+        "actual": "买牛奶",
+        "status": "passed",
+        "startedAt": 1790784860362,
+        "endedAt": 1790784860362
+      },
+      {
+        "scenarioId": "restore-fields",
+        "checkId": "r-s2-text",
+        "command": {
+          "op": "assert",
+          "selector": "#todo-list li[data-id=\"s2\"] .text",
+          "property": "text",
+          "equals": "写报告"
+        },
+        "expected": "写报告",
+        "actual": "写报告",
+        "status": "passed",
+        "startedAt": 1790784860362,
+        "endedAt": 1790784860363
+      },
+      {
+        "scenarioId": "restore-fields",
+        "checkId": "r-s1-done",
+        "command": {
+          "op": "assert",
+          "selector": "#todo-list li[data-id=\"s1\"].done",
+          "property": "count",
+          "equals": 0
+        },
+        "expected": 0,
+        "actual": 0,
+        "status": "passed",
+        "startedAt": 1790784860363,
+        "endedAt": 1790784860364
+      },
+      {
+        "scenarioId": "restore-fields",
+        "checkId": "r-s2-done",
+        "command": {
+          "op": "assert",
+          "selector": "#todo-list li[data-id=\"s2\"].done",
+          "property": "count",
+          "equals": 1
+        },
+        "expected": 1,
+        "actual": 1,
+        "status": "passed",
+        "startedAt": 1790784860364,
+        "endedAt": 1790784860364
+      },
+      {
+        "scenarioId": "restore-fields",
+        "checkId": "r-order1",
+        "command": {
+          "op": "assert",
+          "selector": "#todo-list li[data-id=\"s1\"]:nth-of-type(1)",
+          "property": "count",
+          "equals": 1
+        },
+        "expected": 1,
+        "actual": 1,
+        "status": "passed",
+        "startedAt": 1790784860364,
+        "endedAt": 1790784860365
+      },
+      {
+        "scenarioId": "restore-fields",
+        "checkId": "r-order2",
+        "command": {
+          "op": "assert",
+          "selector": "#todo-list li[data-id=\"s2\"]:nth-of-type(2)",
+          "property": "count",
+          "equals": 1
+        },
+        "expected": 1,
+        "actual": 1,
+        "status": "passed",
+        "startedAt": 1790784860365,
+        "endedAt": 1790784860366
+      },
+      {
+        "scenarioId": "restore-fields",
+        "checkId": "r-s2-toggle",
+        "command": {
+          "op": "assert",
+          "selector": "#todo-list li[data-id=\"s2\"] .toggle",
+          "property": "text",
+          "equals": "取消完成"
+        },
+        "expected": "取消完成",
+        "actual": "取消完成",
+        "status": "passed",
+        "startedAt": 1790784860366,
+        "endedAt": 1790784860367
+      },
+      {
+        "scenarioId": "persist-exact",
+        "checkId": "platform-startup-wait",
+        "command": {
+          "op": "wait",
+          "ms": 150
+        },
+        "expected": 150,
+        "actual": 150,
+        "status": "passed",
+        "startedAt": 1790784860380,
+        "endedAt": 1790784860547
+      },
+      {
+        "scenarioId": "persist-exact",
+        "checkId": "p-wait-load",
+        "command": {
+          "op": "wait",
+          "ms": 150
+        },
+        "expected": 150,
+        "actual": 150,
+        "status": "passed",
+        "startedAt": 1790784860547,
+        "endedAt": 1790784860700
+      },
+      {
+        "scenarioId": "persist-exact",
+        "checkId": "p-count",
+        "command": {
+          "op": "assert",
+          "selector": "#todo-list li[data-id]",
+          "property": "count",
+          "equals": 2
+        },
+        "expected": 2,
+        "actual": 2,
+        "status": "passed",
+        "startedAt": 1790784860700,
+        "endedAt": 1790784860701
+      },
+      {
+        "scenarioId": "persist-exact",
+        "checkId": "p-add-input",
+        "command": {
+          "op": "input",
+          "selector": "#todo-input",
+          "value": "晨跑"
+        },
+        "expected": "晨跑",
+        "actual": "晨跑",
+        "status": "passed",
+        "startedAt": 1790784860701,
+        "endedAt": 1790784860702
+      },
+      {
+        "scenarioId": "persist-exact",
+        "checkId": "p-add-click",
+        "command": {
+          "op": "click",
+          "selector": "#add-btn"
+        },
+        "expected": "executed",
+        "actual": "executed",
+        "status": "passed",
+        "startedAt": 1790784860702,
+        "endedAt": 1790784860703
+      },
+      {
+        "scenarioId": "persist-exact",
+        "checkId": "p-wait1",
+        "command": {
+          "op": "wait",
+          "ms": 150
+        },
+        "expected": 150,
+        "actual": 150,
+        "status": "passed",
+        "startedAt": 1790784860703,
+        "endedAt": 1790784860855
+      },
+      {
+        "scenarioId": "persist-exact",
+        "checkId": "p-add-len",
+        "command": {
+          "op": "data",
+          "path": [
+            "items",
+            "length"
+          ],
+          "equals": 3
+        },
+        "expected": 3,
+        "actual": 3,
+        "status": "passed",
+        "startedAt": 1790784860855,
+        "endedAt": 1790784860855
+      },
+      {
+        "scenarioId": "persist-exact",
+        "checkId": "p-add-text",
+        "command": {
+          "op": "data",
+          "path": [
+            "items",
+            "2",
+            "text"
+          ],
+          "equals": "晨跑"
+        },
+        "expected": "晨跑",
+        "actual": "晨跑",
+        "status": "passed",
+        "startedAt": 1790784860855,
+        "endedAt": 1790784860855
+      },
+      {
+        "scenarioId": "persist-exact",
+        "checkId": "p-add-done",
+        "command": {
+          "op": "data",
+          "path": [
+            "items",
+            "2",
+            "done"
+          ],
+          "equals": false
+        },
+        "expected": false,
+        "actual": false,
+        "status": "passed",
+        "startedAt": 1790784860855,
+        "endedAt": 1790784860855
+      },
+      {
+        "scenarioId": "persist-exact",
+        "checkId": "p-toggle-s1",
+        "command": {
+          "op": "click",
+          "selector": "#todo-list li[data-id=\"s1\"] .toggle"
+        },
+        "expected": "executed",
+        "actual": "executed",
+        "status": "passed",
+        "startedAt": 1790784860855,
+        "endedAt": 1790784860856
+      },
+      {
+        "scenarioId": "persist-exact",
+        "checkId": "p-wait2",
+        "command": {
+          "op": "wait",
+          "ms": 150
+        },
+        "expected": 150,
+        "actual": 150,
+        "status": "passed",
+        "startedAt": 1790784860856,
+        "endedAt": 1790784861008
+      },
+      {
+        "scenarioId": "persist-exact",
+        "checkId": "p-toggle-done",
+        "command": {
+          "op": "data",
+          "path": [
+            "items",
+            "0",
+            "done"
+          ],
+          "equals": true
+        },
+        "expected": true,
+        "actual": true,
+        "status": "passed",
+        "startedAt": 1790784861008,
+        "endedAt": 1790784861008
+      },
+      {
+        "scenarioId": "persist-exact",
+        "checkId": "p-toggle-len",
+        "command": {
+          "op": "data",
+          "path": [
+            "items",
+            "length"
+          ],
+          "equals": 3
+        },
+        "expected": 3,
+        "actual": 3,
+        "status": "passed",
+        "startedAt": 1790784861008,
+        "endedAt": 1790784861008
+      },
+      {
+        "scenarioId": "persist-exact",
+        "checkId": "p-del-s2",
+        "command": {
+          "op": "click",
+          "selector": "#todo-list li[data-id=\"s2\"] .del"
+        },
+        "expected": "executed",
+        "actual": "executed",
+        "status": "passed",
+        "startedAt": 1790784861008,
+        "endedAt": 1790784861009
+      },
+      {
+        "scenarioId": "persist-exact",
+        "checkId": "p-wait3",
+        "command": {
+          "op": "wait",
+          "ms": 150
+        },
+        "expected": 150,
+        "actual": 150,
+        "status": "passed",
+        "startedAt": 1790784861010,
+        "endedAt": 1790784861162
+      },
+      {
+        "scenarioId": "persist-exact",
+        "checkId": "p-del-len",
+        "command": {
+          "op": "data",
+          "path": [
+            "items",
+            "length"
+          ],
+          "equals": 2
+        },
+        "expected": 2,
+        "actual": 2,
+        "status": "passed",
+        "startedAt": 1790784861162,
+        "endedAt": 1790784861162
+      },
+      {
+        "scenarioId": "persist-exact",
+        "checkId": "p-del-text-first",
+        "command": {
+          "op": "data",
+          "path": [
+            "items",
+            "0",
+            "text"
+          ],
+          "equals": "买牛奶"
+        },
+        "expected": "买牛奶",
+        "actual": "买牛奶",
+        "status": "passed",
+        "startedAt": 1790784861162,
+        "endedAt": 1790784861162
+      },
+      {
+        "scenarioId": "persist-exact",
+        "checkId": "p-del-text-second",
+        "command": {
+          "op": "data",
+          "path": [
+            "items",
+            "1",
+            "text"
+          ],
+          "equals": "晨跑"
+        },
+        "expected": "晨跑",
+        "actual": "晨跑",
+        "status": "passed",
+        "startedAt": 1790784861162,
+        "endedAt": 1790784861162
+      }
+    ],
+    "detail": "所有计划项实际执行完成。"
+  },
+  "taskDurationMs": 47317,
+  "restoration": {
+    "restored": true,
+    "initialRequests": 1,
+    "reopenedRequests": 0
+  }
+}

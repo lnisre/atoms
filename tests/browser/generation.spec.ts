@@ -1,3 +1,4 @@
+import { fulfillGeneration } from "./team-fixture";
 import { expect, test } from "@playwright/test";
 
 // These fixtures test platform behavior only. Real-model acceptance is recorded separately.
@@ -17,7 +18,7 @@ test("需求留在工作台，等待结束后运行隔离预览并保存项目",
   await page.route("**/api/generate", async (route) => {
     expect(route.request().postDataJSON().requirement).toBe("做一个计数器");
     await gate;
-    await route.fulfill({ json: result });
+    await fulfillGeneration(route, { json: result });
   });
   await page.goto("/");
   await expect(page.getByRole("button", { name: "开始生成" })).toBeDisabled();
@@ -60,7 +61,7 @@ test("失败后保留需求并允许手动重新生成", async ({ page }) => {
   let attempts = 0;
   await page.route("**/api/generate", async (route) => {
     attempts += 1;
-    await route.fulfill(
+    await fulfillGeneration(route,
       attempts === 1
         ? {
             status: 502,
@@ -92,7 +93,7 @@ test("浏览器等待超时后结束等待并提供重试", async ({ page }) => 
   await expect(
     page.getByRole("heading", { name: "正在生成应用" }),
   ).toBeVisible();
-  await page.clock.fastForward(136_000);
+  await page.clock.fastForward(241_000);
   await expect(page.getByRole("main").getByRole("alert")).toContainText(
     "等待超时",
   );
@@ -103,7 +104,7 @@ test("浏览器等待超时后结束等待并提供重试", async ({ page }) => 
 
 test("生成应用运行异常时提示而非宣称验证通过", async ({ page }) => {
   await page.route("**/api/generate", (route) =>
-    route.fulfill({
+    fulfillGeneration(route, {
       json: {
         ...result,
         html: html.replace(

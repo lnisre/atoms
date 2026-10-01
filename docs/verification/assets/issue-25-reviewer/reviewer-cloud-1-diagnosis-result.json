@@ -1,0 +1,129 @@
+{
+  "kind": "independent zero-model replay, not original task receipt",
+  "originalTaskId": "independent-diagnosis-of-rejected-output",
+  "result": {
+    "protocol": "atoms-qa/1",
+    "taskId": "df56271d-3ea6-4c27-b600-ebba49accfa8",
+    "requestId": "2afebf23-8b97-439d-b57f-22f7b9d35a95",
+    "codeHash": "bdc303e05c87b035f5ed2265da5b21fe6da68cfe1bf6de123ff5fc6bfc5860d5",
+    "planHash": "d194b727043de0e0e1292c654ef430ac3bd9aa1026cb708d1893281b23c913a4",
+    "status": "failed",
+    "results": [
+      {
+        "scenarioId": "diagnostic",
+        "checkId": "1",
+        "command": {
+          "op": "wait",
+          "ms": 200
+        },
+        "expected": 200,
+        "actual": 200,
+        "status": "passed",
+        "startedAt": 1790820421741,
+        "endedAt": 1790820422022
+      },
+      {
+        "scenarioId": "diagnostic",
+        "checkId": "2",
+        "command": {
+          "op": "click",
+          "selector": "#btn-inc"
+        },
+        "expected": "executed",
+        "actual": "executed",
+        "status": "passed",
+        "startedAt": 1790820422022,
+        "endedAt": 1790820422023
+      },
+      {
+        "scenarioId": "diagnostic",
+        "checkId": "3",
+        "command": {
+          "op": "assert",
+          "selector": "body",
+          "property": "inert",
+          "equals": true
+        },
+        "expected": true,
+        "actual": true,
+        "status": "passed",
+        "startedAt": 1790820422023,
+        "endedAt": 1790820422035
+      },
+      {
+        "scenarioId": "diagnostic",
+        "checkId": "4",
+        "command": {
+          "op": "click",
+          "selector": "#btn-inc",
+          "probeWhileInert": true
+        },
+        "expected": "executed",
+        "actual": "executed",
+        "status": "passed",
+        "startedAt": 1790820422036,
+        "endedAt": 1790820422036
+      },
+      {
+        "scenarioId": "diagnostic",
+        "checkId": "5",
+        "command": {
+          "op": "bridge",
+          "property": "saveAttempts",
+          "equals": 1
+        },
+        "expected": 1,
+        "actual": 1,
+        "status": "passed",
+        "startedAt": 1790820422036,
+        "endedAt": 1790820422036
+      },
+      {
+        "scenarioId": "diagnostic",
+        "checkId": "6",
+        "command": {
+          "op": "wait",
+          "ms": 700
+        },
+        "expected": 700,
+        "actual": 700,
+        "status": "passed",
+        "startedAt": 1790820422036,
+        "endedAt": 1790820422737
+      },
+      {
+        "scenarioId": "diagnostic",
+        "checkId": "7",
+        "command": {
+          "op": "data",
+          "path": [
+            "count"
+          ],
+          "equals": 5
+        },
+        "expected": 5,
+        "actual": 5,
+        "status": "passed",
+        "startedAt": 1790820422737,
+        "endedAt": 1790820422738
+      },
+      {
+        "scenarioId": "diagnostic",
+        "checkId": "8",
+        "command": {
+          "op": "data",
+          "path": [
+            "futureField"
+          ],
+          "equals": "preserve-me"
+        },
+        "expected": "preserve-me",
+        "actual": null,
+        "status": "failed",
+        "startedAt": 1790820422738,
+        "endedAt": 1790820422738
+      }
+    ],
+    "detail": "实际检查存在失败；未交付应用。"
+  }
+}

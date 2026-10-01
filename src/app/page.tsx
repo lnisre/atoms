@@ -20,6 +20,8 @@ import {
 } from "@/lib/generation";
 
 import { createRecorder, type InitialGeneration, type ModificationGeneration, type RecordStep } from "@/lib/execution";
+import { readTeam } from "@/lib/team/client";
+import { TEAM_TIMEOUT_MS } from "@/lib/team/contract";
 import { readGeneration } from "@/lib/generation-client";
 import { GenerationRecord } from "@/components/generation-record";
 import { ConversationScroll } from "@/components/conversation-scroll";
@@ -187,7 +189,11 @@ export default function Home() {
     );
     return () => clearInterval(timer);
   }, [busy]);
-  useEffect(() => () => active.current?.abort(), []);
+  useEffect(() => {
+    const abort = () => active.current?.abort();
+    window.addEventListener("pagehide", abort);
+    return () => { abort(); window.removeEventListener("pagehide", abort); };
+  }, []);
   useEffect(() => {
     const beforeUnload = (event: BeforeUnloadEvent) => {
       if (adoptionPending.current || pendingRecordWrites.current > 0) {
@@ -212,7 +218,7 @@ export default function Home() {
     setTask({ status: "waiting" });
     setSeconds(0);
     const taskId = crypto.randomUUID();
-    const record: InitialGeneration = { taskId, startedAt: new Date().toISOString(), assistantReply: null, events: [] };
+    const record: InitialGeneration = { team: { protocol: "atoms-team/2", taskId, projectId: nextProject.id, deliveries: [], calls: [] }, taskId, startedAt: new Date().toISOString(), assistantReply: null, events: [] };
     let persisted = false;
     const session = { record, step: null as unknown as RecordStep, projectId: nextProject.id, writes: Promise.resolve() };
     generationSession.current = session;
@@ -238,15 +244,20 @@ export default function Home() {
     session.step = createRecorder(taskId, "browser", append);
     setPreviewStep(() => session.step);
     session.step("transport", "接收生成结果", "started", "向服务端提交需求并持续读取实际执行事件。");
-    const timer = setTimeout(() => controller.abort(), CLIENT_TIMEOUT_MS);
+    const timer = setTimeout(() => controller.abort(), TEAM_TIMEOUT_MS);
     try {
       const response = await fetch("/api/generate", {
         method: "POST",
-        headers: { "Content-Type": "application/json", Accept: "application/x-ndjson", "X-Atoms-Task-Id": taskId },
-        body: JSON.stringify({ requirement: nextProject.requirement }),
+        headers: { "Content-Type": "application/json", Accept: "application/x-ndjson", "X-Atoms-Task-Id": taskId, "X-Atoms-Protocol": "atoms-team/2" },
+        body: JSON.stringify({ requirement: nextProject.requirement, projectId: nextProject.id }),
         signal: controller.signal,
       });
-      const { result: data, assistantReply } = await readGeneration(response, taskId, append);
+      const { result: data, assistantReply, team } = await readTeam(response, taskId, nextProject.id, controller.signal, append, team => {
+        record.team = team;
+        if (generationSession.current === session) setGenerationRecord({ ...record });
+      });
+      controller.signal.throwIfAborted();
+      record.team = team;
       record.assistantReply = assistantReply;
       session.step("transport", "接收生成结果", "completed", "完整结果与正常传输终态已收到。");
       setTask({ status: "complete", result: data });
