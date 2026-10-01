@@ -141,13 +141,16 @@ class Controls(unittest.IsolatedAsyncioTestCase):
         self.assertIn('格式重试后仍无效',task.failure)
 
     async def test_native_repair_receives_full_rejected_code_frozen_spec_and_review(self):
-        task=r.Task({'deadline':time.time()*1000+240000,'taskId':'controlled-task','requirement':'increment by one'})
+        task=r.Task({'deadline':time.time()*1000+240000,'taskId':'controlled-task','requirement':'increment by one','modification':'add decrement','baseHtml':'<!doctype html><html><head></head><body>existing code</body></html>','context':['retain reset']})
         original='<!doctype html><html><head></head><body>count+=2</body></html>'
         repaired=original.replace('count+=2','count++')
         frozen={'summary':'counter','dataContract':'{count:number}','requirements':[{'id':'increment','description':'one per click'}]}
         contexts=[];seen=[]
         async def ask(actor, system, context, tokens):
             seen.append(actor);task.calls+=1;contexts.append((actor,json.loads(json.dumps(context))))
+            received=context['state'] if actor=='Mike' else context
+            for key in ('requirement','modification','baseHtml','context'):
+                self.assertEqual(received[key],task.request[key])
             if actor=='Mike':
                 target='Requirements' if task.spec is None else 'Engineer' if task.html is None or task.review and not task.review['approved'] else 'Reviewer' if task.review is None else None
                 return {'command':'assign' if target else 'finish','to':target,'reason':'controlled actual delegation','instruction':'repair all actual blockers'}

@@ -98,3 +98,29 @@ test("cancel and original deadline terminate the actual supervised process", asy
     }
   } finally {if(oldPython===undefined)delete process.env.ATOMS_TEAM_PYTHON;else process.env.ATOMS_TEAM_PYTHON=oldPython;if(oldKey===undefined)delete process.env.DEEPSEEK_API_KEY;else process.env.DEEPSEEK_API_KEY=oldKey;await rm(dir,{recursive:true,force:true});}
 });
+
+
+test("modification input admits complete large code but rejects missing context and business records", async () => {
+  const { validTeamInput } = await import("../src/lib/team/input");
+  const input = {projectId:crypto.randomUUID(),requirement:"counter",modification:"add reset",baseHtml:"<!DOCTYPE html><html><head></head><body>"+"x".repeat(40000)+"</body></html>",context:["add decrement"]};
+  assert.equal(validTeamInput(input),true);
+  for (const bad of [{...input,context:undefined},{...input,baseHtml:"fragment"},{...input,state:{count:123}},{...input,context:["x".repeat(32001)]}]) assert.equal(validTeamInput(bad),false);
+});
+
+
+test("adoption rejects wrong project, stale final code and broken successful-round lineage before storage", async () => {
+  const { adoptCandidate } = await import("../src/lib/project-store");
+  const { createHash } = await import("node:crypto");
+  const projectId=crypto.randomUUID(), taskId=crypto.randomUUID();
+  const html="<!DOCTYPE html><html><head></head><body>latest</body></html>";
+  const codeHash=createHash("sha256").update(html).digest("hex");
+  const review={kind:"code-review" as const,taskId,codeHash,approved:true,summary:"fixture",issues:[]};
+  const assign=(to:string)=>({role:"Mike" as const,content:JSON.stringify({command:"assign",to})});
+  const deliveries=[assign("Requirements"),{role:"Requirements" as const,content:JSON.stringify({requirements:[{id:"x"}]})},assign("Engineer"),{role:"Engineer" as const,content:JSON.stringify({codeHash})},assign("Reviewer"),{role:"Reviewer" as const,content:JSON.stringify(review)},{role:"Mike" as const,content:JSON.stringify({command:"finish"})}];
+  const team={protocol:"atoms-team/2" as const,taskId,projectId,codeHash,baseCodeHash:"a".repeat(64),review,deliveries,calls:deliveries.map((d,i)=>({call:i+1,actor:d.role,status:"completed" as const,requestedModel:"fixture"}))};
+  const generation={taskId,projectId,requirement:"change",outcome:"complete" as const,startedAt:"now",assistantReply:"changed",events:[],team};
+  const result={html:html.replace("latest","stale"),model:"fixture",durationMs:1,generatedAt:"now"};
+  await assert.rejects(adoptCandidate(projectId,result,["change"],[generation]),/最后成功任务/);
+  await assert.rejects(adoptCandidate("other",result,["change"],[generation]),/项目或需求/);
+  await assert.rejects(adoptCandidate(projectId,{...result,html},["change","change"],[generation,generation]),/来源不连续/);
+});

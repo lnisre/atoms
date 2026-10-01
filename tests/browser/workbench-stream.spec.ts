@@ -20,10 +20,18 @@ for (const viewport of [{width:1440,height:900},{width:1280,height:720}]) {
       window.fetch=async(...args)=>{
         if(args[0]!=='/api/generate')return original(...args);
         const taskId=new Headers(args[1]?.headers).get('X-Atoms-Task-Id'),encoder=new TextEncoder();let sequence=0;
+        const input=JSON.parse(String(args[1]?.body)),projectId=input.projectId;
+        const hash=async(s:string)=>Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256',encoder.encode(s)))).map(b=>b.toString(16).padStart(2,'0')).join('');
+        const codeHash=await hash(html),baseCodeHash=await hash(input.baseHtml);
+        const review={kind:'code-review',taskId,codeHash,approved:true,summary:'synthetic',issues:[]};
+        const assign=(to:string)=>({role:'Mike',content:JSON.stringify({command:'assign',to})});
+        const deliveries=[assign('Requirements'),{role:'Requirements',content:JSON.stringify({requirements:[{id:'fixture'}]})},assign('Engineer'),{role:'Engineer',content:JSON.stringify({codeHash})},assign('Reviewer'),{role:'Reviewer',content:JSON.stringify(review)},{role:'Mike',content:JSON.stringify({command:'finish'})}];
+        const team={protocol:'atoms-team/2',taskId,projectId,codeHash,baseCodeHash,review,deliveries,calls:deliveries.map((d,i)=>({call:i+1,actor:d.role,status:'completed',requestedModel:'fixture'}))};
         return new Response(new ReadableStream({start(controller){
           const emit=(stepId:string,status:string)=>controller.enqueue(encoder.encode(JSON.stringify({type:'step',event:{taskId,source:'server',sequence:++sequence,stepId,label:'受控实际步骤 '+stepId,status,at:new Date().toISOString(),detail:'上游夹具事件'}})+'\n'));
+          controller.enqueue(encoder.encode(JSON.stringify({type:'session',protocol:'atoms-team/2',taskId,projectId,token:'fixture'})+'\n'));
           emit('model','started');
-          Object.assign(window,{appendWorkbenchEvents:()=>{for(let i=0;i<20;i++)emit('extra-'+i,'completed')},finishWorkbench:()=>{emit('model','completed');controller.enqueue(encoder.encode(JSON.stringify({type:'result',taskId,result:{html,model:'fixture',durationMs:1,generatedAt:'second'},assistantReply:'第二轮模型说明'})+'\n'));controller.close()}});
+          Object.assign(window,{appendWorkbenchEvents:()=>{for(let i=0;i<20;i++)emit('extra-'+i,'completed')},finishWorkbench:()=>{emit('model','completed');controller.enqueue(encoder.encode(JSON.stringify({type:'result',protocol:'atoms-team/2',taskId,team,result:{html,model:'fixture',durationMs:1,generatedAt:'second'},assistantReply:'第二轮模型说明'})+'\n'));controller.close()}});
         }}),{headers:{'Content-Type':'application/x-ndjson'}});
       };
     },{html});

@@ -110,8 +110,8 @@ test('修改超时结束等待，保留已采用应用供继续使用', async ({
   await page.route('**/api/generate', () => {});
   await page.clock.install();
   await modify(page);
-  await page.clock.fastForward(136000);
-  await expect(page.getByRole('region', { name: '对话修改' }).getByRole('alert')).toContainText('等待超时');
+  await page.clock.fastForward(241000);
+  await expect(page.getByRole('region', { name: '对话修改' }).getByRole('alert')).toContainText('4 分钟上限');
   await originalIntact(page);
   await expect(page.getByRole('button', { name: '生成候选', exact: true })).toBeEnabled();
 });
@@ -155,7 +155,7 @@ test('明确采用最新候选只保存代码与多轮记录；旧通道失效�
   await modify(page, '第三轮已采用修改');
   await expect(f.getByRole('heading', { name: '候选第3轮' })).toBeVisible();
   expect(requests[2].baseHtml).toBe(candidateHtml(2));
-  expect(requests[2].context).toEqual([]);
+  expect(requests[2].context).toEqual(['增加优先级与筛选', '把筛选放到顶部']);
   await page.getByRole('button', { name: '采用修改', exact: true }).click();
   await expect(page.getByLabel('已采用修改记录').locator(':scope > .adopted-group')).toHaveCount(2);
   await modify(page, '不保存的修改');

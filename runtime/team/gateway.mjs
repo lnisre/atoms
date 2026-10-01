@@ -19,7 +19,7 @@ const server=http.createServer((req,res)=>{
   upstream.on('error',()=>{if(!res.headersSent)res.writeHead(503);res.end('Application is starting')});
   req.on('aborted',()=>upstream.destroy());res.on('close',()=>upstream.destroy());req.pipe(upstream);
 });
-const sockets=new WebSocketServer({noServer:true,maxPayload:3_000_000});
+const sockets=new WebSocketServer({noServer:true,maxPayload:8_000_000});
 server.on('upgrade',(req,socket,head)=>{
   const url=new URL(req.url,'http://localhost');
   const expectedOrigin=`${req.headers['x-forwarded-proto']||'http'}://${req.headers.host}`;
@@ -34,7 +34,7 @@ sockets.on('connection',ws=>{
   ws.on('close',()=>{clearTimeout(startTimer);if(taskId&&token){void fetch(transportOrigin+'/api/team',{method:'POST',headers:{'Content-Type':'application/json','X-Atoms-Internal':internalKey},body:JSON.stringify({action:'cancel',taskId,token}),signal:AbortSignal.timeout(1500)}).then(r=>r.body?.cancel()).catch(()=>{});}abort.abort()});ws.on('error',()=>abort.abort());
   ws.on('message',async raw=>{
     try{
-      bytes+=raw.length;if(bytes>4_000_000)throw new Error('control output too large');
+      bytes+=raw.length;if(bytes>8_000_000)throw new Error('control output too large');
       const message=JSON.parse(raw.toString());
       if(message.action==='start'){
         if(started)throw new Error('already started');started=true;clearTimeout(startTimer);

@@ -66,7 +66,7 @@ test('多轮回复和执行记录随最新代码采用，恢复零调用，首�
   const url=page.url();await page.reload();await expect(page.getByRole('region',{name:'已保存修改记录',exact:true}).filter({has:page.locator('.assistant-reply')})).toHaveCount(2);
   await expect(page.frameLocator('iframe').locator('output')).toHaveText('1');expect(calls()).toBe(3);
   await modify(page,'重开后继续修改');await expect(page.frameLocator('iframe').getByRole('heading',{name:'版本3'})).toBeVisible();
-  expect(requests[3].baseHtml).toBe(html(2));expect(requests[3].context).toEqual([]);
+  expect(requests[3].baseHtml).toBe(html(2));expect(requests[3].context).toEqual(['增加标题', '保留标题调整颜色']);
   await page.close();const reopened=await context.newPage();let extra=0;reopened.on('request',r=>{if(r.url().endsWith('/api/generate'))extra++});await reopened.goto(url);
   await expect(reopened.locator('.assistant-reply')).toHaveText(['真实协议测试说明0','真实协议测试说明1','真实协议测试说明2']);expect(extra).toBe(0);
 });
@@ -104,6 +104,7 @@ test('修改等待期间展示真实事件，原候选可用，错误终态结�
       if(args[0]!=='/api/generate')return original(...args);
       const taskId=new Headers(args[1]?.headers).get('X-Atoms-Task-Id');const encoder=new TextEncoder();
       return new Response(new ReadableStream({start(controller){
+        controller.enqueue(encoder.encode(JSON.stringify({type:'session',protocol:'atoms-team/2',taskId,projectId:JSON.parse(String(args[1]?.body)).projectId,token:'fixture'})+'\n'));
         controller.enqueue(encoder.encode(JSON.stringify({type:'step',event:{taskId,source:'server',sequence:1,stepId:'model',label:'调用模型',status:'started',at:new Date().toISOString(),detail:'受控等待'}})+'\n'));
         Object.assign(window,{finishModification:()=>{controller.enqueue(encoder.encode(JSON.stringify({type:'error',taskId,error:'受控连接终态'})+'\n'));controller.close()}});
       }}),{headers:{'Content-Type':'application/x-ndjson'}});
