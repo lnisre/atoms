@@ -1,3 +1,5 @@
+import { MAX_REQUEST_LENGTH } from "../generation";
+import { validTeamInput } from "./input";
 import { spawn, type ChildProcessWithoutNullStreams } from "node:child_process";
 import { createHash, createHmac, randomBytes, timingSafeEqual } from "node:crypto";
 import path from "node:path";
@@ -25,7 +27,7 @@ export async function teamEntry(request: Request) {
   if (process.env.ATOMS_INTERNAL_KEY && equalSecret(request.headers.get("x-atoms-internal"), process.env.ATOMS_INTERNAL_KEY)) {
     try {
       const { ticket } = await request.json();
-      if (!ticket || typeof ticket.payload !== "string" || ticket.payload.length > 30_000 || !equalSecret(ticket.signature, mac(ticket.payload))) throw new Error();
+      if (!ticket || typeof ticket.payload !== "string" || ticket.payload.length > MAX_REQUEST_LENGTH + 1000 || !equalSecret(ticket.signature, mac(ticket.payload))) throw new Error();
       const payload = JSON.parse(ticket.payload);
       if (!Number.isFinite(payload.started) || payload.started > Date.now() || Date.now() >= payload.started + TEAM_TIMEOUT_MS) throw new Error();
       const internal = new Request(request.url, { method: "POST", headers: { "Content-Type": "application/json", "X-Atoms-Task-Id": payload.taskId }, body: JSON.stringify(payload.body), signal: request.signal });
@@ -35,9 +37,9 @@ export async function teamEntry(request: Request) {
   if (request.headers.get("origin") && request.headers.get("origin") !== new URL(request.url).origin) return Response.json({error:"非法来源"},{status:403});
   if (!process.env.ATOMS_INTERNAL_KEY) return Response.json({error:"四角色需要通过团队连接网关启动，尚未配置运行环境。"},{status:503});
   try {
-    const raw = await request.text(); if(raw.length > 20_000) throw new Error();
+    const raw = await request.text(); if(raw.length > MAX_REQUEST_LENGTH) throw new Error();
     const body = JSON.parse(raw), taskId = request.headers.get("x-atoms-task-id");
-    if(!/^[a-f0-9-]{36}$/.test(taskId ?? "") || typeof body.requirement !== "string" || !body.requirement.trim() || body.requirement.length>4000 || !/^[a-f0-9-]{36}$/.test(body.projectId)) throw new Error();
+    if(!/^[a-f0-9-]{36}$/.test(taskId ?? "") || !validTeamInput(body)) throw new Error();
     const payload = JSON.stringify({taskId, body, started:Date.now()});
     return Response.json({protocol:TEAM_PROTOCOL, transport:"websocket", taskId, ticket:{payload,signature:mac(payload)}},{headers:{"Cache-Control":"no-store"}});
   } catch {return Response.json({error:"团队任务输入无效"},{status:400});}
@@ -62,9 +64,9 @@ export async function startTeam(request: Request, started = Date.now()) {
   if (request.headers.get("origin") && request.headers.get("origin") !== new URL(request.url).origin) return Response.json({ error: "请从本网站发起生成。" }, { status: 403 });
   if (!request.headers.get("content-type")?.includes("application/json")) return Response.json({ error: "请求格式错误" }, { status: 415 });
   let body;
-  try { const raw = await request.text(); if (raw.length > 20_000) throw new Error(); body = JSON.parse(raw); } catch { return Response.json({ error: "请求无效或过大" }, { status: 400 }); }
+  try { const raw = await request.text(); if (raw.length > MAX_REQUEST_LENGTH) throw new Error(); body = JSON.parse(raw); } catch { return Response.json({ error: "请求无效或过大" }, { status: 400 }); }
   const taskId = request.headers.get("x-atoms-task-id") ?? "";
-  if (!body || typeof body !== "object" || Array.isArray(body) || !/^[a-f0-9-]{36}$/.test(taskId) || !/^[a-f0-9-]{36}$/.test(body.projectId) || typeof body.requirement !== "string" || !body.requirement.trim() || body.requirement.length > 4000 || body.modification !== undefined || body.baseHtml !== undefined || body.context !== undefined) return Response.json({ error: "首次团队任务输入无效" }, { status: 400 });
+  if (!/^[a-f0-9-]{36}$/.test(taskId) || !validTeamInput(body)) return Response.json({ error: "团队任务输入无效" }, { status: 400 });
   if (!process.env.DEEPSEEK_API_KEY || !process.env.ATOMS_TEAM_PYTHON) return Response.json({ error: "四角色运行环境尚未配置，未调用模型。" }, { status: 503 });
   if (tasks.has(taskId) || tasks.size >= 2) return Response.json({ error: "生成执行器繁忙，请稍后重试。" }, { status: 429 });
   const deadline = started + TEAM_TIMEOUT_MS;
@@ -76,7 +78,7 @@ export async function startTeam(request: Request, started = Date.now()) {
       let terminal = false;
       const send = (value: unknown) => { if (!cancelled && !terminal) controller.enqueue(new TextEncoder().encode(JSON.stringify(value) + "\n")); };
       const record = createRecorder(taskId, "server", event => send({ type: "step", event }));
-      const team: TeamRecord = { protocol: TEAM_PROTOCOL, taskId, projectId: body.projectId, calls: [], deliveries: [] };
+      const team: TeamRecord = { protocol: TEAM_PROTOCOL, taskId, projectId: body.projectId, calls: [], deliveries: [], ...(body.baseHtml ? { baseCodeHash: hash(body.baseHtml) } : {}) };
       const child = spawn(process.env.ATOMS_TEAM_PYTHON!, [path.join(process.cwd(), "runtime/team/runner.py")], { env: { NODE_ENV: process.env.NODE_ENV, HTTPS_PROXY: process.env.HTTPS_PROXY, HTTP_PROXY: process.env.HTTP_PROXY, ALL_PROXY: process.env.ALL_PROXY, NO_PROXY: process.env.NO_PROXY, PATH: process.env.PATH, HOME: process.env.ATOMS_TEAM_HOME ?? process.env.HOME, METAGPT_PROJECT_ROOT: process.env.METAGPT_PROJECT_ROOT, DEEPSEEK_API_KEY: process.env.DEEPSEEK_API_KEY, PYTHONUNBUFFERED: "1" }, stdio: "pipe" });
       // Never forward framework stderr: it may include full prompts/tracebacks.
       child.stderr.resume();
@@ -90,7 +92,7 @@ export async function startTeam(request: Request, started = Date.now()) {
       const hardTimeout = setTimeout(() => stop("任务已达到 4 分钟上限。", "limit"), Math.max(1, Math.min(TEAM_TIMEOUT_MS, deadline - Date.now())));
       send({ type: "session", protocol: TEAM_PROTOCOL, taskId, projectId: body.projectId, token, deadline });
       record("team", "启动 MetaGPT 四角色", "started", "原生 Team/MGXEnv 调度；每任务最多 4 分钟、20 次模型请求。请保持页面打开。");
-      child.stdin.write(JSON.stringify({ taskId, projectId: body.projectId, requirement: body.requirement.trim(), deadline }) + "\n");
+      child.stdin.write(JSON.stringify({ ...body, taskId, requirement: body.requirement.trim(), deadline }) + "\n");
       let buffer = "";
       let bytes = 0;
       let frozenSpec: Specification | undefined;

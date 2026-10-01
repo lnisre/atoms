@@ -1,3 +1,5 @@
+import { reviewedTeam } from "./team/review";
+import { sha256 } from "./qa/contract";
 import type { ExecutionEvent, InitialGeneration, ModificationGeneration } from "./execution";
 import type { GenerationResult } from "./generation";
 
@@ -100,7 +102,7 @@ export function saveProject(project: SavedProject) {
 }
 
 // Code and its record commit together. Trial data is deliberately not an input.
-export function adoptCandidate(
+export async function adoptCandidate(
   projectId: string,
   result: GenerationResult,
   requests: string[],
@@ -109,6 +111,15 @@ export function adoptCandidate(
   if (generations.some(item => item.projectId !== projectId || item.outcome !== "complete") ||
       (generations.length > 0 && (generations.length !== requests.length || generations.some((item, index) => item.requirement !== requests[index]))))
     throw new Error("候选消息与项目或需求不匹配，未采用。");
+  for (const [index, generation] of generations.entries()) {
+    const team = generation.team;
+    if (team && (team.protocol !== "atoms-team/2" || team.taskId !== generation.taskId || team.projectId !== projectId || !team.codeHash || !reviewedTeam(team, team.codeHash)))
+      throw new Error("候选缺少对应任务的通过审查，未采用。");
+    const previous = generations[index - 1]?.team;
+    if (team && previous && team.baseCodeHash !== previous.codeHash) throw new Error("成功修改轮次的代码来源不连续，未采用。");
+  }
+  const latest = generations.at(-1)?.team;
+  if (latest && latest.codeHash !== await sha256(result.html)) throw new Error("候选代码与最后成功任务不符，未采用。");
   const record: ModificationRecord = {
     id: crypto.randomUUID(),
     adoptedAt: new Date().toISOString(),

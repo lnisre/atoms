@@ -14,7 +14,6 @@ import type { TrialData } from "@/lib/trial-data";
 import { AppPreview } from "@/components/app-preview";
 import { HomeEntry, type HomeView } from "@/components/home-entry";
 import {
-  CLIENT_TIMEOUT_MS,
   MAX_REQUIREMENT_LENGTH,
   type GenerationResult,
 } from "@/lib/generation";
@@ -22,7 +21,6 @@ import {
 import { createRecorder, type InitialGeneration, type ModificationGeneration, type RecordStep } from "@/lib/execution";
 import { readTeam } from "@/lib/team/client";
 import { TEAM_TIMEOUT_MS, TeamError, outcomeLabels, type TeamOutcome } from "@/lib/team/contract";
-import { readGeneration } from "@/lib/generation-client";
 import { GenerationRecord } from "@/components/generation-record";
 import { ConversationScroll } from "@/components/conversation-scroll";
 import { Unavailable, WorkspaceTools, PreviewNavigation, AtomsMark } from "@/components/workbench-controls";
@@ -318,7 +316,7 @@ export default function Home() {
     setPreviewStep(undefined);
     const change = modification.trim();
     const taskId = crypto.randomUUID();
-    const record: ModificationGeneration = { taskId, projectId: project.id, requirement: change, startedAt: new Date().toISOString(), assistantReply: null, events: [], outcome: "waiting" };
+    const record: ModificationGeneration = { team: { protocol: "atoms-team/2", taskId, projectId: project.id, deliveries: [], calls: [] }, taskId, projectId: project.id, requirement: change, startedAt: new Date().toISOString(), assistantReply: null, events: [], outcome: "waiting" };
     const session: ModificationSession = { record, step: null as unknown as RecordStep, active: true };
     modificationSessions.current.push(session);
     const append = (event: ModificationGeneration["events"][number]) => {
@@ -332,15 +330,21 @@ export default function Home() {
     setModificationError("");
     setAdoptionError("");
     setSeconds(0);
-    const timer = setTimeout(() => controller.abort(new TeamError("limit", "修改等待超时，已有成果保留。")), CLIENT_TIMEOUT_MS);
+    const timer = setTimeout(() => controller.abort(new TeamError("limit", "任务已达到 4 分钟上限，已有成果保留。")), TEAM_TIMEOUT_MS);
+    const baseHtml = (candidate?.result ?? task.result).html;
     try {
       const response = await fetch("/api/generate", {
         method: "POST",
-        headers: { "Content-Type": "application/json", Accept: "application/x-ndjson", "X-Atoms-Task-Id": taskId },
-        body: JSON.stringify({ requirement: project.requirement, modification: change, baseHtml: (candidate?.result ?? task.result).html, context: dialogue }),
+        headers: { "Content-Type": "application/json", Accept: "application/x-ndjson", "X-Atoms-Task-Id": taskId, "X-Atoms-Protocol": "atoms-team/2" },
+        body: JSON.stringify({ projectId: project.id, requirement: project.requirement, modification: change, baseHtml, context: [...records.flatMap(item => item.requests), ...dialogue] }),
         signal: controller.signal,
       });
-      const { result, assistantReply } = await readGeneration(response, taskId, append);
+      const { result, assistantReply, team } = await readTeam(response, taskId, project.id, controller.signal, append, team => {
+        if (!session.active) return;
+        record.team = team;
+        setSessionRecords(modificationSessions.current.map(item => ({ ...item.record })));
+      }, baseHtml);
+      record.team = team;
       controller.signal.throwIfAborted();
       record.assistantReply = assistantReply;
       session.step("transport", "接收修改结果", "completed", "完整 HTML 与正常传输终态已收到。");
@@ -361,9 +365,12 @@ export default function Home() {
       setModification("");
     } catch (error) {
       record.outcome = "failed";
+      const failure = controller.signal.aborted ? controller.signal.reason : error;
+      if (record.team) record.team = { ...record.team, outcome: failure instanceof TeamError ? failure.outcome : "failed" };
       if (!record.events.some(event => event.stepId === "transport" && event.status === "completed"))
         session.step("transport", "接收修改结果", "failed", "未取得完整且匹配的结果，接收已结束。");
       session.step("modification", "本轮修改", "failed", controller.signal.aborted ? controller.signal.reason?.message ?? "任务已停止，已有成果保留。" : error instanceof Error ? error.message : "修改失败，已有成果保留。");
+      if (failure instanceof TeamError && failure.outcome === "clarification") setModification(`${change}\n\n此前问题：${failure.message}\n用户补充：`);
       setModificationError(controller.signal.aborted ? controller.signal.reason?.message ?? "任务已停止，已有成果保留。" : error instanceof Error ? error.message : "修改失败，请重新发起。");
     } finally {
       clearTimeout(timer);
@@ -478,7 +485,7 @@ export default function Home() {
             {task?.status === "complete" && projectSave === "saved" && <section className="modification-panel" aria-label="对话修改">
               <div className="modification-feedback" aria-live="polite">
                 {modifying && <button className="text-button" onClick={stopTask}>停止任务</button>}
-                {modifying && <p role="status">正在基于{candidate ? "最新候选" : "已采用代码"}修改，已等待 {seconds} 秒，最多约 2 分钟。现有预览仍可使用。</p>}
+                {modifying && <p role="status">正在基于{candidate ? "最新候选" : "已采用代码"}修改，已等待 {seconds} 秒，最多 4 分钟。现有预览仍可使用。</p>}
                 {modificationError && <p className="save-error" role="alert">{modificationError} 原应用与正式数据未被替换，可点击“生成候选”手动重试。</p>}
               </div>
               <form onSubmit={event => { event.preventDefault(); void modify(); }}>

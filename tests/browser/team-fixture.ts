@@ -21,7 +21,7 @@ export async function fulfillGeneration(route: Route, options: NonNullable<Param
   const review = {kind:"code-review",taskId,codeHash,approved:true,summary:"SYNTHETIC REVIEW FIXTURE",issues:[]};
   const assign = (to: string) => ({role:"Mike",content:JSON.stringify({command:"assign",to,reason:"synthetic fixture",instruction:"synthetic fixture"})});
   const deliveries = [assign("Requirements"),{role:"Requirements",content:JSON.stringify({requirements:[{id:"synthetic",description:"synthetic"}]})},assign("Engineer"),{role:"Engineer",content:JSON.stringify({codeHash})},assign("Reviewer"),{role:"Reviewer",content:JSON.stringify(review)},{role:"Mike",content:JSON.stringify({command:"finish"})}];
-  const team = {protocol:"atoms-team/2",taskId,projectId,codeHash,review,deliveries,
+  const team = {...(route.request().postDataJSON().baseHtml ? {baseCodeHash:hash(route.request().postDataJSON().baseHtml)} : {}),protocol:"atoms-team/2",taskId,projectId,codeHash,review,deliveries,
     calls:deliveries.map((d,i)=>({call:i+1,actor:d.role,requestedModel:"fixture",status:"completed"}))};
   await route.request().frame().page().route("**/api/team", r => r.fulfill({json:{ok:true}}));
   const messages = [{type:"session",protocol:"atoms-team/2",taskId,projectId,token:"synthetic-fixture",deadline:Date.now()+240000},{type:"result",protocol:"atoms-team/2",taskId,team,result,assistantReply}];

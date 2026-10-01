@@ -28,6 +28,7 @@ class Client:
         global review_calls
         assert headers['Authorization']=='Bearer offline-test-placeholder'
         system=json['messages'][0]['content']; data=__import__('json').loads(json['messages'][1]['content'])
+        if data.get('modification'): data['requirement'] += '\n' + data['modification']
         if system.startswith('You are TeamLeader'):
             state=data['state']; target='Requirements' if state['spec'] is None else 'Engineer' if state['codeHash'] is None else 'Reviewer' if state['review'] is None else 'Engineer' if not state['review']['approved'] and state['implementations'] < 2 else None
             result={'command':'assign' if target else 'finish','to':target,'reason':'DETERMINISTIC TEST FIXTURE','instruction':'Execute test fixture responsibility'}

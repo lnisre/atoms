@@ -17,7 +17,7 @@ export function isTeamOutcome(value: unknown): value is TeamOutcome { return typ
 export class TeamError extends Error {
   constructor(public outcome: Exclude<TeamOutcome, "passed">, message: string) { super(message); }
 }
-export type TeamRecord = { protocol: typeof TEAM_PROTOCOL | "atoms-team/1"; taskId: string; projectId: string; deliveries: Delivery[]; calls: ModelCall[]; check?: ToolResult; review?: CodeReview; codeHash?: string; durationMs?: number; outcome?: TeamOutcome };
+export type TeamRecord = { protocol: typeof TEAM_PROTOCOL | "atoms-team/1"; taskId: string; projectId: string; deliveries: Delivery[]; calls: ModelCall[]; check?: ToolResult; review?: CodeReview; codeHash?: string; baseCodeHash?: string; durationMs?: number; outcome?: TeamOutcome };
 export type ToolEnvelope = { request: ToolRequest; ticket: string };
 
 // Platform rules are owned by the platform, never supplied/relaxed by QA.

@@ -6,15 +6,16 @@ import { reviewedTeam } from "./review";
 import { sha256 } from "../qa/contract";
 import { TEAM_PROTOCOL, TeamError, isTeamOutcome, type TeamRecord } from "./contract";
 
-export async function readTeam(response: Response, taskId: string, projectId: string, signal: AbortSignal, onStep: (event: ExecutionEvent) => void, onTeam: (team: TeamRecord) => void) {
+export async function readTeam(response: Response, taskId: string, projectId: string, signal: AbortSignal, onStep: (event: ExecutionEvent) => void, onTeam: (team: TeamRecord) => void, baseHtml?: string) {
   if (!response.ok) throw new Error((await response.json().catch(() => null))?.error || "团队服务不可用");
+  const baseCodeHash = baseHtml === undefined ? undefined : await sha256(baseHtml);
   let socket: Awaited<ReturnType<typeof openTeamSocket>> | undefined;
   if (response.headers.get("content-type")?.includes("application/json")) {
     const handshake = await response.json();
-    if(handshake.protocol !== TEAM_PROTOCOL || handshake.transport !== "websocket" || handshake.taskId !== taskId) throw new Error("首次生成需要四角色审查协议；旧 HTML 响应未被接受。");
+    if(handshake.protocol !== TEAM_PROTOCOL || handshake.transport !== "websocket" || handshake.taskId !== taskId) throw new Error("生成任务需要四角色审查协议；旧 HTML 响应未被接受。");
     socket = await openTeamSocket(handshake.ticket, signal); response = socket.response;
   }
-  if (!response.body || !response.headers.get("content-type")?.includes("application/x-ndjson")) throw new Error("首次生成需要四角色审查协议；旧 HTML 响应未被接受。");
+  if (!response.body || !response.headers.get("content-type")?.includes("application/x-ndjson")) throw new Error("生成任务需要四角色审查协议；旧 HTML 响应未被接受。");
   let token = "", sequence = 0, buffer = "", total = 0, heartbeat: ReturnType<typeof setInterval> | undefined;
   let team: TeamRecord = { protocol: TEAM_PROTOCOL, taskId, projectId, deliveries: [], calls: [] };
   let outcome: { result: GenerationResult; assistantReply: string | null; team: TeamRecord } | undefined;
@@ -67,7 +68,7 @@ export async function readTeam(response: Response, taskId: string, projectId: st
         }
         else if (m.type === "result") {
           receivedTerminal = true; clearInterval(heartbeat);
-          if (m.protocol !== TEAM_PROTOCOL || !m.team || m.team.taskId !== taskId || m.team.projectId !== projectId || typeof m.result?.html !== "string" || !reviewedTeam(m.team, await sha256(m.result.html)) || previewHeadOffset(m.result.html) === null || !Number.isFinite(m.result.durationMs) || (m.assistantReply !== null && typeof m.assistantReply !== "string")) throw new Error("缺少完整团队交付或当前代码的通过审查");
+          if (m.protocol !== TEAM_PROTOCOL || !m.team || m.team.taskId !== taskId || m.team.projectId !== projectId || m.team.baseCodeHash !== baseCodeHash || typeof m.result?.html !== "string" || !reviewedTeam(m.team, await sha256(m.result.html)) || previewHeadOffset(m.result.html) === null || !Number.isFinite(m.result.durationMs) || (m.assistantReply !== null && typeof m.assistantReply !== "string")) throw new Error("缺少完整团队交付或当前代码的通过审查");
           outcome = { result: m.result, assistantReply: m.assistantReply, team: m.team };
         } else throw new Error("未知团队事件");
       }
