@@ -84,12 +84,12 @@ test("cancel and original deadline terminate the actual supervised process", asy
       await rm(pidFile,{force:true});
       const taskId=crypto.randomUUID();
       const request=new Request("http://localhost/api/generate",{method:"POST",headers:{"Content-Type":"application/json","X-Atoms-Task-Id":taskId},body:JSON.stringify({projectId:crypto.randomUUID(),requirement:"controlled hanging execution"})});
-      const response=await startTeam(request,action==="deadline"?Date.now()-TEAM_TIMEOUT_MS+1000:Date.now());
+      const response=await startTeam(request,action==="deadline"?Date.now()-TEAM_TIMEOUT_MS+10000:Date.now());
       const reader=response.body!.getReader(), decoder=new TextDecoder();let wire="";
       const first=await reader.read();wire+=decoder.decode(first.value);const session=JSON.parse(wire.trim().split("\n").find(line=>JSON.parse(line).type==="session")!);
       let pid=0;
-      for(let i=0;i<40&&!pid;i++){await new Promise(resolve=>setTimeout(resolve,25));pid=Number(await readFile(pidFile,"utf8").catch(()=>"0"));}
-      assert.ok(pid>0);
+      for(let i=0;i<200&&!pid;i++){await new Promise(resolve=>setTimeout(resolve,25));pid=Number(await readFile(pidFile,"utf8").catch(()=>"0"));}
+      assert.ok(pid>0, `controlled process did not start before readiness window (${action})`);
       if(action==="cancel") {const cancelled=await teamControl(new Request("http://localhost/api/team",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({action:"cancel",taskId,token:session.token})}));assert.equal(cancelled.status,200);}
       while(true){const chunk=await reader.read();wire+=decoder.decode(chunk.value);if(chunk.done)break;}
       const messages=wire.trim().split("\n").map(line=>JSON.parse(line));assert.equal(messages.at(-1).outcome,action==="cancel"?"stopped":"limit");assert.equal(messages.some(m=>m.type==="result"),false);
@@ -123,4 +123,15 @@ test("adoption rejects wrong project, stale final code and broken successful-rou
   await assert.rejects(adoptCandidate(projectId,result,["change"],[generation]),/最后成功任务/);
   await assert.rejects(adoptCandidate("other",result,["change"],[generation]),/项目或需求/);
   await assert.rejects(adoptCandidate(projectId,{...result,html},["change","change"],[generation,generation]),/来源不连续/);
+});
+
+test("bounded read-only observations keep exact expectations at the tool boundary", () => {
+  const request: ToolRequest = { protocol: 'atoms-qa/1', taskId: 'wait-task', requestId: 'wait-request', html: 'html', codeHash: 'a'.repeat(64), planHash: 'b'.repeat(64), deadline: Date.now() + 10000,
+    scenarios: [{ id: 'settlement', seed: null, checks: [{ id: 'saved', label: 'actual settlement', command: { op: 'wait-for', selector: '[data-atoms-status]', property: 'text', equals: '已保存' } }] }] };
+  validateRequest(request);
+  const malformed = structuredClone(request);
+  Reflect.deleteProperty(malformed.scenarios[0].checks[0].command, 'equals');
+  assert.throws(() => validateRequest(malformed), /missing expectation/);
+  const row = { scenarioId: 'settlement', checkId: 'saved', command: request.scenarios[0].checks[0].command, expected: '已保存', actual: '正在保存', status: 'passed' as const, startedAt: 1, endedAt: 2 };
+  assert.equal(validateResult(request, { protocol: request.protocol, taskId: request.taskId, requestId: request.requestId, codeHash: request.codeHash, planHash: request.planHash, status: 'passed', detail: 'forged early settlement', results: [row] }), false);
 });

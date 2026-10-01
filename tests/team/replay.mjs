@@ -11,7 +11,7 @@ const esbuild=createRequire(require.resolve('tsx'))('esbuild');
 const root=fileURLToPath(new URL('../../',import.meta.url));
 const proofFile=path.resolve(process.argv[2]||'docs/verification/assets/issue-25/cloud-counter-1-failure.json');
 const proof=JSON.parse(fs.readFileSync(proofFile,'utf8'));
-const html=fs.readFileSync(path.resolve(path.dirname(proofFile),proof.artifact),'utf8');
+const html=typeof proof.request.html==='string' ? proof.request.html : fs.readFileSync(path.resolve(path.dirname(proofFile),proof.artifact),'utf8');
 if(createHash('sha256').update(html).digest('hex')!==proof.request.codeHash)throw new Error('Artifact hash mismatch');
 const bundle=await esbuild.build({entryPoints:[root+'/src/lib/qa/browser-tool.ts'],bundle:true,format:'iife',globalName:'QaReplay',platform:'browser',write:false});
 const server=http.createServer((_req,res)=>{res.setHeader('Content-Type','text/html');res.end('<!doctype html><html><head></head><body></body></html>')});

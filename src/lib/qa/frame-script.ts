@@ -11,7 +11,7 @@ export function qaFrameScript(channel: string, origin: string): string {
     const areaValue=Object.getOwnPropertyDescriptor(HTMLTextAreaElement.prototype,'value');
     const selectValue=Object.getOwnPropertyDescriptor(HTMLSelectElement.prototype,'value');
     const click=HTMLElement.prototype.click,dispatch=EventTarget.prototype.dispatchEvent,EventClass=Event;
-    const later=setTimeout.bind(window);
+    const later=setTimeout.bind(window),now=performance.now.bind(performance);
     const port=new MessageChannel();const send=port.port1.postMessage.bind(port.port1);
     let sequence=0;
     function one(selector){const all=query(selector);if(all.length!==1)throw Error('selector must match exactly one element: '+all.length);return all[0];}
@@ -27,6 +27,7 @@ export function qaFrameScript(channel: string, origin: string): string {
       const m=event.data;if(m?.sequence!==sequence+1)return;sequence=m.sequence;
       try{const c=m.command;let actual;
         if(c.op==='observe'||c.op==='assert')actual=observe(c);
+        else if(c.op==='wait-for'){const start=now();do{actual=observe(c);if(actual===c.equals)break;await new Promise(resolve=>later(resolve,25));}while(now()-start<2000);}
         else if(c.op==='input'){const el=one(c.selector);if(blocked(el))throw Error('input is disabled or inert');const d=valueDescriptor(el);if(!d)throw Error('not an input');d.set.call(el,c.value);dispatch.call(el,new EventClass('input',{bubbles:true}));dispatch.call(el,new EventClass('change',{bubbles:true}));actual=d.get.call(el);}
         else if(c.op==='click'){const el=one(c.selector);if(blocked(el)&&!c.probeWhileInert)throw Error('click is disabled or inert');click.call(el);actual='executed';}
         else if(c.op==='wait'){await new Promise(resolve=>later(resolve,c.ms));actual=c.ms;}
