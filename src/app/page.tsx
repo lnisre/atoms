@@ -218,7 +218,7 @@ export default function Home() {
     setTask({ status: "waiting" });
     setSeconds(0);
     const taskId = crypto.randomUUID();
-    const record: InitialGeneration = { team: { protocol: "atoms-team/1", taskId, projectId: nextProject.id, deliveries: [], calls: [] }, taskId, startedAt: new Date().toISOString(), assistantReply: null, events: [] };
+    const record: InitialGeneration = { team: { protocol: "atoms-team/2", taskId, projectId: nextProject.id, deliveries: [], calls: [] }, taskId, startedAt: new Date().toISOString(), assistantReply: null, events: [] };
     let persisted = false;
     const session = { record, step: null as unknown as RecordStep, projectId: nextProject.id, writes: Promise.resolve() };
     generationSession.current = session;
@@ -248,14 +248,14 @@ export default function Home() {
     try {
       const response = await fetch("/api/generate", {
         method: "POST",
-        headers: { "Content-Type": "application/json", Accept: "application/x-ndjson", "X-Atoms-Task-Id": taskId, "X-Atoms-Protocol": "atoms-team/1" },
+        headers: { "Content-Type": "application/json", Accept: "application/x-ndjson", "X-Atoms-Task-Id": taskId, "X-Atoms-Protocol": "atoms-team/2" },
         body: JSON.stringify({ requirement: nextProject.requirement, projectId: nextProject.id }),
         signal: controller.signal,
       });
       const { result: data, assistantReply, team } = await readTeam(response, taskId, nextProject.id, controller.signal, append, team => {
         record.team = team;
         if (generationSession.current === session) setGenerationRecord({ ...record });
-      }, check => session.step(`qa-${check.scenarioId}-${check.checkId}`, `实际检查 · ${check.scenarioId} / ${check.checkId}`, check.status === "passed" ? "completed" : "failed", JSON.stringify(check)));
+      });
       controller.signal.throwIfAborted();
       record.team = team;
       record.assistantReply = assistantReply;

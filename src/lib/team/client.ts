@@ -2,23 +2,22 @@ import { openTeamSocket } from "./socket";
 import type { ExecutionEvent } from "../execution";
 import type { GenerationResult } from "../generation";
 import { previewHeadOffset } from "../html-document";
-import { runBrowserCheck } from "../qa/browser-tool";
-import { sha256, validateResult, type CheckResult } from "../qa/contract";
-import { TEAM_PROTOCOL, type TeamRecord, type ToolEnvelope } from "./contract";
+import { reviewedTeam } from "./review";
+import { sha256 } from "../qa/contract";
+import { TEAM_PROTOCOL, type TeamRecord } from "./contract";
 
-export async function readTeam(response: Response, taskId: string, projectId: string, signal: AbortSignal, onStep: (event: ExecutionEvent) => void, onTeam: (team: TeamRecord) => void, onCheck: (check: CheckResult) => void = () => {}) {
+export async function readTeam(response: Response, taskId: string, projectId: string, signal: AbortSignal, onStep: (event: ExecutionEvent) => void, onTeam: (team: TeamRecord) => void) {
   if (!response.ok) throw new Error((await response.json().catch(() => null))?.error || "团队服务不可用");
   let socket: Awaited<ReturnType<typeof openTeamSocket>> | undefined;
   if (response.headers.get("content-type")?.includes("application/json")) {
     const handshake = await response.json();
-    if(handshake.protocol !== TEAM_PROTOCOL || handshake.transport !== "websocket" || handshake.taskId !== taskId) throw new Error("首次生成需要四角色 QA 协议；旧 HTML 响应未被接受。");
+    if(handshake.protocol !== TEAM_PROTOCOL || handshake.transport !== "websocket" || handshake.taskId !== taskId) throw new Error("首次生成需要四角色审查协议；旧 HTML 响应未被接受。");
     socket = await openTeamSocket(handshake.ticket, signal); response = socket.response;
   }
-  if (!response.body || !response.headers.get("content-type")?.includes("application/x-ndjson")) throw new Error("首次生成需要四角色 QA 协议；旧 HTML 响应未被接受。");
+  if (!response.body || !response.headers.get("content-type")?.includes("application/x-ndjson")) throw new Error("首次生成需要四角色审查协议；旧 HTML 响应未被接受。");
   let token = "", sequence = 0, buffer = "", total = 0, heartbeat: ReturnType<typeof setInterval> | undefined;
   let team: TeamRecord = { protocol: TEAM_PROTOCOL, taskId, projectId, deliveries: [], calls: [] };
   let outcome: { result: GenerationResult; assistantReply: string | null; team: TeamRecord } | undefined;
-  let checked: ToolEnvelope | undefined;
   let receivedTerminal = false;
   const control = async (action: string, extra = {}) => {
     if(socket) return socket.control({action,taskId,token,...extra});
@@ -30,11 +29,6 @@ export async function readTeam(response: Response, taskId: string, projectId: st
   window.addEventListener("pagehide", cancel);
   const reader = response.body.getReader();
   const decoder = new TextDecoder("utf-8", { fatal: true });
-  const host = document.createElement("div");
-  // Independent synthetic-data iframe, never the user's preview or TrialData.
-  host.style.cssText = "position:fixed;left:-12000px;top:0;width:1024px;height:768px";
-  host.setAttribute("aria-hidden", "true");
-  document.body.append(host);
   let transportError: Error | undefined;
   try {
     while (true) {
@@ -61,20 +55,12 @@ export async function readTeam(response: Response, taskId: string, projectId: st
           token = m.token;
           heartbeat = setInterval(() => { void control("heartbeat").catch(error => { if (!receivedTerminal) { transportError = error; void reader.cancel(); cancel(); } }); }, 4000);
         } else if (!token) throw new Error("缺少团队会话");
-        else if (m.type === "delivery") { team = { ...team, deliveries: [...team.deliveries, m.delivery] }; onTeam(team); }
+        else if (m.type === "delivery") { team = { ...team, deliveries: [...team.deliveries, m.delivery], ...(m.delivery.role === "Reviewer" ? {review:JSON.parse(m.delivery.content)} : {}) }; onTeam(team); }
         else if (m.type === "call") { team = { ...team, calls: [...team.calls.filter(c => c.call !== m.call.call), m.call].sort((a,b) => a.call-b.call) }; onTeam(team); }
-        else if (m.type === "tool") {
-          if (checked) throw new Error("首次生成不允许重复检查或隐式返工");
-          checked = m.envelope;
-          if (!checked || checked.request.taskId !== taskId) throw new Error("检查归属错误");
-          const result = await runBrowserCheck(checked.request, host, signal, onCheck);
-          if (!validateResult(checked.request, result)) throw new Error("检查结果不完整");
-          team = { ...team, check: result }; onTeam(team);
-          await control("tool-result", { ticket: checked.ticket, result });
-        } else if (m.type === "error") throw new Error(m.error || "团队执行失败");
+        else if (m.type === "error") throw new Error(m.error || "团队执行失败");
         else if (m.type === "result") {
           receivedTerminal = true; clearInterval(heartbeat);
-          if (m.protocol !== TEAM_PROTOCOL || !checked || !m.team || m.team.taskId !== taskId || m.team.projectId !== projectId || !m.team.check || m.team.check.status !== "passed" || !validateResult(checked.request, m.team.check) || typeof m.result?.html !== "string" || await sha256(m.result.html) !== checked.request.codeHash || previewHeadOffset(m.result.html) === null || !Number.isFinite(m.result.durationMs) || (m.assistantReply !== null && typeof m.assistantReply !== "string")) throw new Error("缺少完整团队交付或当前代码的通过证据");
+          if (m.protocol !== TEAM_PROTOCOL || !m.team || m.team.taskId !== taskId || m.team.projectId !== projectId || typeof m.result?.html !== "string" || !reviewedTeam(m.team, await sha256(m.result.html)) || previewHeadOffset(m.result.html) === null || !Number.isFinite(m.result.durationMs) || (m.assistantReply !== null && typeof m.assistantReply !== "string")) throw new Error("缺少完整团队交付或当前代码的通过审查");
           outcome = { result: m.result, assistantReply: m.assistantReply, team: m.team };
         } else throw new Error("未知团队事件");
       }
@@ -85,6 +71,6 @@ export async function readTeam(response: Response, taskId: string, projectId: st
   } finally {
     clearInterval(heartbeat); if (!outcome) cancel(); socket?.close();
     signal.removeEventListener("abort", cancel); window.removeEventListener("pagehide", cancel);
-    host.remove(); await reader.cancel().catch(() => {}); reader.releaseLock();
+    await reader.cancel().catch(() => {}); reader.releaseLock();
   }
 }

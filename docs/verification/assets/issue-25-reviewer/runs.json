@@ -1,0 +1,194 @@
+[
+  {
+    "run": "reviewer-local-1",
+    "requirement": "做一个中文计数器，初始数值为 0，三个按钮分别叫“增加”“减少”“重置”，每次加一、减一或归零并保存，同浏览器重开恢复数值。用一个 output 元素只显示当前数字。普通样式自行决定。",
+    "url": "http://localhost:3115",
+    "elapsedMs": 1224,
+    "generationSaved": false,
+    "requestCount": 1,
+    "modelRequests": 0,
+    "calls": [],
+    "errors": [
+      "团队协议已更新，请刷新页面后重试。"
+    ]
+  },
+  {
+    "run": "reviewer-local-2",
+    "requirement": "做一个中文计数器，初始数值为 0，三个按钮分别叫“增加”“减少”“重置”，每次加一、减一或归零并保存，同浏览器重开恢复数值。用一个 output 元素只显示当前数字。普通样式自行决定。",
+    "url": "http://localhost:3115",
+    "elapsedMs": 48135,
+    "generationSaved": true,
+    "requestCount": 1,
+    "modelRequests": 8,
+    "calls": [
+      {
+        "call": 1,
+        "actor": "Mike",
+        "requestedModel": "deepseek-flash",
+        "responseModel": "deepseek-flash",
+        "responseId": "979416cc-c398-4a94-acf2-29a68423edec",
+        "status": "completed",
+        "usage": {
+          "prompt_tokens": 289,
+          "completion_tokens": 113,
+          "total_tokens": 402,
+          "prompt_tokens_details": {
+            "cached_tokens": 0
+          },
+          "prompt_cache_hit_tokens": 0,
+          "prompt_cache_miss_tokens": 289
+        },
+        "elapsedMs": 1151
+      },
+      {
+        "call": 2,
+        "actor": "Requirements",
+        "requestedModel": "deepseek-flash",
+        "responseModel": "deepseek-flash",
+        "responseId": "dcadb0ad-40a0-41aa-b4eb-9b0b247fef6e",
+        "status": "completed",
+        "usage": {
+          "prompt_tokens": 723,
+          "completion_tokens": 353,
+          "total_tokens": 1076,
+          "prompt_tokens_details": {
+            "cached_tokens": 128
+          },
+          "prompt_cache_hit_tokens": 128,
+          "prompt_cache_miss_tokens": 595
+        },
+        "elapsedMs": 2904
+      },
+      {
+        "call": 3,
+        "actor": "Mike",
+        "requestedModel": "deepseek-flash",
+        "responseModel": "deepseek-flash",
+        "responseId": "7b59eccd-8bdd-406e-97bc-500be241eb3c",
+        "status": "completed",
+        "usage": {
+          "prompt_tokens": 1087,
+          "completion_tokens": 219,
+          "total_tokens": 1306,
+          "prompt_tokens_details": {
+            "cached_tokens": 0
+          },
+          "prompt_cache_hit_tokens": 0,
+          "prompt_cache_miss_tokens": 1087
+        },
+        "elapsedMs": 1903
+      },
+      {
+        "call": 4,
+        "actor": "Engineer",
+        "requestedModel": "deepseek-flash",
+        "responseModel": "deepseek-flash",
+        "responseId": "3451502e-17bc-493f-9d3e-8e69c6b512bc",
+        "status": "completed",
+        "usage": {
+          "prompt_tokens": 1519,
+          "completion_tokens": 1921,
+          "total_tokens": 3440,
+          "prompt_tokens_details": {
+            "cached_tokens": 128
+          },
+          "prompt_cache_hit_tokens": 128,
+          "prompt_cache_miss_tokens": 1391
+        },
+        "elapsedMs": 6829
+      },
+      {
+        "call": 5,
+        "actor": "Mike",
+        "requestedModel": "deepseek-flash",
+        "responseModel": "deepseek-flash",
+        "responseId": "0db11eff-4291-4353-8cc3-ec301278c954",
+        "status": "completed",
+        "usage": {
+          "prompt_tokens": 1494,
+          "completion_tokens": 259,
+          "total_tokens": 1753,
+          "prompt_tokens_details": {
+            "cached_tokens": 384
+          },
+          "prompt_cache_hit_tokens": 384,
+          "prompt_cache_miss_tokens": 1110
+        },
+        "elapsedMs": 1722
+      },
+      {
+        "call": 6,
+        "actor": "Reviewer",
+        "requestedModel": "deepseek-flash",
+        "responseModel": "deepseek-flash",
+        "responseId": "45c8cb81-e356-4c47-af23-13a5d2f12107",
+        "status": "completed",
+        "usage": {
+          "prompt_tokens": 2859,
+          "completion_tokens": 265,
+          "total_tokens": 3124,
+          "prompt_tokens_details": {
+            "cached_tokens": 0
+          },
+          "prompt_cache_hit_tokens": 0,
+          "prompt_cache_miss_tokens": 2859
+        },
+        "elapsedMs": 2463
+      },
+      {
+        "call": 7,
+        "actor": "Reviewer",
+        "requestedModel": "deepseek-flash",
+        "responseModel": "deepseek-flash",
+        "responseId": "50515139-c0a2-44f4-a3d6-d03f0cf98eaa",
+        "status": "completed",
+        "usage": {
+          "prompt_tokens": 3143,
+          "completion_tokens": 222,
+          "total_tokens": 3365,
+          "prompt_tokens_details": {
+            "cached_tokens": 2816
+          },
+          "prompt_cache_hit_tokens": 2816,
+          "prompt_cache_miss_tokens": 327
+        },
+        "elapsedMs": 1892
+      },
+      {
+        "call": 8,
+        "actor": "Mike",
+        "requestedModel": "deepseek-flash",
+        "responseModel": "deepseek-flash",
+        "responseId": "58468521-bf9f-442d-8374-212151487f8b",
+        "status": "completed",
+        "usage": {
+          "prompt_tokens": 1989,
+          "completion_tokens": 70,
+          "total_tokens": 2059,
+          "prompt_tokens_details": {
+            "cached_tokens": 384
+          },
+          "prompt_cache_hit_tokens": 384,
+          "prompt_cache_miss_tokens": 1605
+        },
+        "elapsedMs": 1084
+      }
+    ],
+    "errors": [],
+    "taskId": "c93bc3c9-e572-4439-99e4-a6911fbbf113",
+    "review": {
+      "kind": "code-review",
+      "codeHash": "6ff5ef408939b23e12b606879ef7f79f2ea7e0f84beb871fc41762464856aa43",
+      "approved": true,
+      "summary": "逐条核对冻结规范与平台契约，未发现具体阻断性缺陷。初始三个按钮均为 disabled，加载解析成功后才启用；按钮标签为“增加”“减少”“重置”。页面恰好一个 output，且以 textContent 渲染纯数字。sanitize 对 null 或非对象返回 {count:0}，count 缺失或非有限数字回退 0，并逐字段复制保留其它已加载字段；恢复成功后状态为“已读取”。三个按钮事件处理器内均同步调用 window.atoms.saveState(nextData)，传入完整数据对象而非 JSON.stringify，且在任何 await/timer 之前；成功显示“已保存”，失败回滚 count 并显示“保存失败”。读取失败分支显示“读取失败”且控件保持禁用、不尝试保存。未使用 localStorage、import、eval、表单、导航、外部资源或网络请求，状态元素为唯一可见 [data-atoms-status]。仅有静态代码审查，未进行浏览器执行或运行时验证。",
+      "issues": []
+    },
+    "durationMs": 44647,
+    "codeHash": "6ff5ef408939b23e12b606879ef7f79f2ea7e0f84beb871fc41762464856aa43",
+    "restore": {
+      "firstRequests": 1,
+      "reopenedRequests": 0,
+      "restored": true
+    }
+  }
+]

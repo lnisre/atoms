@@ -4,6 +4,7 @@ RUN corepack enable && corepack prepare pnpm@10.12.1 --activate
 COPY package.json pnpm-lock.yaml ./
 RUN pnpm install --frozen-lockfile
 COPY src ./src
+COPY runtime/team/review.schema.json ./runtime/team/review.schema.json
 COPY next.config.ts tsconfig.json postcss.config.mjs eslint.config.mjs ./
 RUN pnpm build
 

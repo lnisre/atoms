@@ -34,3 +34,17 @@ test("a missing Python executable emits an explicit terminal error, never a resu
     assert.equal(messages.at(-1).type,'error');assert.equal(messages.some(m=>m.type==='result'),false);assert.equal(messages.some(m=>m.type==='call'),false);
   } finally { if(oldPython===undefined)delete process.env.ATOMS_TEAM_PYTHON;else process.env.ATOMS_TEAM_PYTHON=oldPython;if(oldKey===undefined)delete process.env.DEEPSEEK_API_KEY;else process.env.DEEPSEEK_API_KEY=oldKey; }
 });
+
+
+test("review gate binds approval to this code and all four roles", async () => {
+  const { validReview, reviewedTeam } = await import("../src/lib/team/review");
+  const codeHash="a".repeat(64), review={kind:"code-review",codeHash,approved:true,summary:"静态审查通过",issues:[]};
+  assert.equal(validReview(review,codeHash),true);
+  for (const bad of [{...review,codeHash:"b".repeat(64)},{...review,approved:"true"},{...review,issues:["缺少保存"]},{...review,summary:" "},{...review,issues:null},{...review,extra:true}]) assert.equal(validReview(bad,codeHash),false);
+  const roles=["Mike","Requirements","Engineer","Reviewer"] as const;
+  const team={protocol:"atoms-team/2" as const,taskId:"task",projectId:"project",codeHash,review:{...review,kind:"code-review" as const},calls:roles.map((actor,i)=>({actor,call:i+1,status:"completed" as const,requestedModel:"fixture"})),deliveries:roles.map(role=>({role,content:"fixture"}))};
+  assert.equal(reviewedTeam(team,codeHash),true);
+  assert.equal(reviewedTeam({...team,calls:team.calls.slice(0,3)},codeHash),false);
+  assert.equal(reviewedTeam({...team,review:{...team.review,approved:false,issues:["缺少核心功能"]}},codeHash),false);
+  assert.equal(reviewedTeam({...team,protocol:"atoms-team/1"},codeHash),false);
+});

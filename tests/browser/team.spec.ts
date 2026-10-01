@@ -8,14 +8,14 @@ test("M5 rejects a legacy HTML-only first-generation response",async({page})=>{
   await expect(page.getByRole("alert").filter({hasText:"旧 HTML 响应未被接受"})).toBeVisible();await expect(page.locator('iframe')).toHaveCount(0);
 });
 
-test.describe('native Team and actual browser tool using scripted test provider',()=>{
+test.describe('native Team and code review using scripted test provider',()=>{
   test.skip(process.env.TEAM_FIXTURE !== '1','Requires explicitly configured deterministic transport, never runs against a real provider');
   test.setTimeout(90000);
-  test('HTTP team → actual QA → save → operations → reopen with zero generation requests',async({page,context})=>{
+  test('HTTP team → code review → save → operations → reopen with zero generation requests',async({page,context})=>{
     let calls=0;page.on('request',r=>{if(r.url().endsWith('/api/generate'))calls++});
     await page.goto('/');await page.getByLabel('你想做什么？').fill('受控计数器集成验证');await page.getByRole('button',{name:'开始生成'}).click();
     await expect(page.getByText('项目已保存',{exact:true})).toBeVisible({timeout:65000});
-    await expect(page.getByText(/浏览器检查：passed/)).toBeVisible();
+    await expect(page.getByText(/代码审查：通过/)).toBeVisible();
     await expect(page.frameLocator('iframe').getByRole('button',{name:'增加'})).toBeEnabled();
     await page.frameLocator('iframe').getByRole('button',{name:'增加'}).press('Enter');
     await expect(page.getByText('应用数据已保存',{exact:true})).toBeVisible();
@@ -31,22 +31,22 @@ test.describe('native Team and actual browser tool using scripted test provider'
     if(process.env.TEAM_EVIDENCE_DIR){mkdirSync(process.env.TEAM_EVIDENCE_DIR,{recursive:true});writeFileSync(`${process.env.TEAM_EVIDENCE_DIR}/scripted-native-team.json`,JSON.stringify({kind:'deterministic provider, actual MetaGPT/HTTP/browser/storage',evidence},null,2))}
     const url=page.url();await page.reload();await expect(page.frameLocator('iframe').locator('output')).toHaveText('1');
     await page.close();const reopened=await context.newPage();let extra=0;reopened.on('request',r=>{if(r.url().endsWith('/api/generate'))extra++});await reopened.goto(url);
-    await expect(reopened.frameLocator('iframe').locator('output')).toHaveText('1');await expect(reopened.getByText(/浏览器检查：passed/)).toBeVisible();expect(extra).toBe(0);expect(calls).toBe(1);
+    await expect(reopened.frameLocator('iframe').locator('output')).toHaveText('1');await expect(reopened.getByText(/代码审查：通过/)).toBeVisible();expect(extra).toBe(0);expect(calls).toBe(1);
   });
-  test('leaving while QA waits closes the connection; no hidden delivery',async({page,context})=>{
-    let socketClosed=false, heldTool=false, callsAtClose=0, callsAfterClose=0;
+  test('leaving while Reviewer runs closes the connection; no hidden delivery',async({page,context})=>{
+    let socketClosed=false, reviewStarted=false, callsAtClose=0, callsAfterClose=0;
     await page.routeWebSocket('**/api/team/socket', ws => {
       const upstream=ws.connectToServer();
       upstream.onMessage(raw=>{
         const message=JSON.parse(String(raw));
         if(message.type==='call' && message.call.status==='started') {if(socketClosed)callsAfterClose++;else callsAtClose++;}
-        if(message.type==='tool'){heldTool=true;return;}
+        if(message.type==='call' && message.call.actor==='Reviewer' && message.call.status==='started')reviewStarted=true;
         ws.send(raw);
       });
       ws.onClose(()=>{socketClosed=true;upstream.close();});
     });
     await page.goto('/');await page.getByLabel('你想做什么？').fill('离开中止验证');await page.getByRole('button',{name:'开始生成'}).click();
-    await expect.poll(()=>heldTool,{timeout:45000}).toBe(true);
+    await expect.poll(()=>reviewStarted,{timeout:45000}).toBe(true);
     await page.goto("about:blank");await expect.poll(()=>socketClosed).toBe(true);
     const reopened=await context.newPage();await reopened.goto('/');
     await expect(reopened.getByRole('heading',{name:'还没有已保存的项目'})).toBeVisible();
@@ -56,10 +56,10 @@ test.describe('native Team and actual browser tool using scripted test provider'
     let tampered=false;
     await page.routeWebSocket('**/api/team/socket', ws => {
       const upstream = ws.connectToServer();
-      ws.onMessage(raw => {
+      upstream.onMessage(raw => {
         const body = JSON.parse(String(raw));
-        if(body.action === 'tool-result') {tampered=true;body.result.codeHash='0'.repeat(64);}
-        upstream.send(JSON.stringify(body));
+        if(body.type === 'result') {tampered=true;body.team.review.codeHash='0'.repeat(64);}
+        ws.send(JSON.stringify(body));
       });
     });
     await page.goto('/');await page.getByLabel('你想做什么？').fill('受控错代码结果');await page.getByRole('button',{name:'开始生成'}).click();
@@ -67,4 +67,12 @@ test.describe('native Team and actual browser tool using scripted test provider'
     expect(tampered).toBe(true);
     await expect(page.getByText('项目已保存',{exact:true})).toHaveCount(0);await expect(page.locator('iframe')).toHaveCount(0);
   });
+  test('Reviewer rejection ends the task without delivery or a saved project',async({page})=>{
+    await page.goto('/');await page.getByLabel('你想做什么？').fill('审查拒绝受控验证');await page.getByRole('button',{name:'开始生成'}).click();
+    await expect(page.getByRole('heading',{name:'生成未完成'})).toBeVisible({timeout:65000});
+    await expect(page.getByText(/代码审查：未通过/)).toBeVisible();
+    await expect(page.getByText('项目已保存',{exact:true})).toHaveCount(0);
+    await expect(page.locator('iframe')).toHaveCount(0);
+  });
+
 });

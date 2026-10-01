@@ -1,5 +1,7 @@
 # Issue #25：四角色首次生成、检查与保存
 
+> 后续范围调整：用户要求先跑通四角色，并将 QA 改为 Reviewer。现行实现与验收见 [Reviewer 修正记录](issue-25-reviewer.md)；下文保留原 QA 路线及其失败证据，不作为新流程的运行验收结论。
+
 **本票未完成：#25 保持 OPEN，[PR #30](https://github.com/lnisre/atoms/pull/30) 保持 Draft。** 工程实现与回归已完成，但目标 Preview 未取得完整的真实首次生成通过记录。实现基于 #29 的 `38c8286c084338e9a9d2c7db7779041bef56d737`，依赖 PR 仍未合并；使用隔离分支 `codex/issue-25-team`，不包含共享根目录的历史未提交修改。
 
 首次生成通过原生 MetaGPT Team / MGXEnv / Role / RoleZero / TeamLeader 循环实际分派。需求角色冻结业务条件与数据合同，工程师交付完整 HTML 和说明，QA 依据实际代码提出合成探针及每个必检项的操作，读取实际浏览器结果，Leader 决定交付。只使用受限 Action 和工具；六个核心文件与固定上游 SHA 一致，没有重写调度。完整运行与安装说明见 [runtime/team](../../runtime/team/README.md)，连接取舍见 [ADR 0008](../adr/0008-m5-pinned-team-connection.md)。

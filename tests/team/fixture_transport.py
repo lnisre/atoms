@@ -2,6 +2,7 @@
 No sockets, no provider credentials, no claims of real model reasoning.
 """
 import json
+import asyncio
 import runpy
 import sys
 import httpx
@@ -12,7 +13,7 @@ atoms.loadState().then(s=>{state=s===null?{count:0}:s;render();feedback.textCont
 b.onclick=async()=>{const old=structuredClone(state);state.count++;feedback.textContent='正在保存';try{await atoms.saveState(state);render();feedback.textContent='已保存'}catch{state=old;render();feedback.textContent='保存失败'}};
 </script></body></html>'''
 spec={'dataContract':'{count:number,tag?:string}', 'summary':'受控测试夹具：计数与恢复','requirements':[{'id':'increment','description':'增加并保存 count'},{'id':'restore','description':'恢复旧 count'}],'probe':{'seed':{'count':4,'tag':'synthetic'},'prepare':[],'commitSelector':'#add','changed':{'path':['count'],'equals':5}}}
-plan=[{'id':'increment','seed':{'count':4},'checks':[{'id':'wait','label':'load','command':{'op':'wait','ms':100}},{'id':'click','label':'increase','command':{'op':'click','selector':'#add'}},{'id':'settle','label':'save','command':{'op':'wait','ms':100}},{'id':'data','label':'count','command':{'op':'data','path':['count'],'equals':5}}]},{'id':'restore','seed':{'count':9},'checks':[{'id':'wait','label':'load','command':{'op':'wait','ms':100}},{'id':'restored','label':'restored','command':{'op':'assert','selector':'output','property':'text','equals':'9'}}]}]
+
 class Response:
     status_code=200
     def __init__(self,value): self.value=value
@@ -25,13 +26,15 @@ class Client:
         assert headers['Authorization']=='Bearer offline-test-placeholder'
         system=json['messages'][0]['content']; data=__import__('json').loads(json['messages'][1]['content'])
         if system.startswith('You are TeamLeader'):
-            state=data['state']; target='Requirements' if state['spec'] is None else 'Engineer' if state['codeHash'] is None else 'Verifier' if state['qa'] is None else None
+            state=data['state']; target='Requirements' if state['spec'] is None else 'Engineer' if state['codeHash'] is None else 'Reviewer' if state['review'] is None else None
             result={'command':'assign' if target else 'finish','to':target,'reason':'DETERMINISTIC TEST FIXTURE','instruction':'Execute test fixture responsibility'}
         elif system.startswith('You own requirements'):result={k:v for k,v in spec.items() if k!='probe'}
         elif system.startswith('You implement'):result={'html':html,'assistantReply':'受控测试：增加计数，同浏览器恢复。'}
-        elif system.startswith('You are independent QA. Inspect the actual HTML'):result=spec['probe']
-        elif system.startswith('You are independent QA'):result={'tool':'BrowserAcceptance.run',**next(s for s in plan if s['id']==data['spec']['requirements'][0]['id'])}
-        else:result={'passed':data['result']['status']=='passed','summary':'受控模型根据真实浏览器结果返回'}
+        elif system.startswith('You are an independent code Reviewer'):
+            if '离开中止' in data['requirement']: await asyncio.sleep(30)
+            rejected = '审查拒绝' in data['requirement']
+            result={'approved':not rejected,'summary':'受控审查拒绝' if rejected else '受控静态审查通过，未执行浏览器验收','issues':['受控阻断问题'] if rejected else []}
+        else: raise AssertionError('Unexpected model action')
         return Response(result)
 httpx.AsyncClient=Client
 runpy.run_path(sys.argv[1],run_name='__main__')

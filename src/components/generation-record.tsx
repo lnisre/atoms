@@ -11,10 +11,10 @@ export function GenerationRecord({ record, live, pending, saveError, saving, tit
     <div className="assistant-heading"><span className="assistant-mark" aria-hidden="true">✳</span><h2>助手 <span>{title}</span></h2></div>
     <div className="assistant-content">
       {pending ? <p className="record-note" role="status">等待模型完整说明…</p> : <p className="assistant-reply">{record.assistantReply ?? "本次未取得助手说明"}</p>}
-      <p className="record-note">{record.team ? (record.team.deliveries.length ? "团队已返回实际角色产物；检查结论仅覆盖本次代码、操作和合成样本。" : "等待四角色执行；尚未取得角色交付或检查结果。") : "M4 单模型生成；未执行四角色业务 QA。"}</p>
+      <p className="record-note">{record.team ? (record.team.protocol === "atoms-team/2" ? "四角色代码审查流程；审查结论不代表业务运行已验证。" : "历史 QA 流程；检查结论仅覆盖当次代码、操作和合成样本。") : "M4 单模型生成；未执行四角色业务 QA。"}</p>
       {record.team && <div className="team-deliveries">
-        <p role="status">{record.team.check ? `浏览器检查：${record.team.check.status} · ${record.team.check.results.filter(r => r.status === "passed").length}/${record.team.check.results.length}` : pending ? "团队正在分派、实现或等待检查" : "本次未取得完整检查结果"}</p>
-        {record.team.deliveries.map((delivery, i) => <details key={i}><summary>{{Mike: "TeamLeader · 分派与交付", Requirements: "需求负责人 · 规格", Engineer: "实现工程师 · 交付", Verifier: "验证工程师 · 检查"}[delivery.role]}</summary><pre style={{whiteSpace: "pre-wrap", overflowWrap: "anywhere"}}>{delivery.content}</pre></details>)}
+        <p role="status">{record.team.review ? `代码审查：${record.team.review.approved ? "通过" : "未通过"} · 业务运行尚未验证` : record.team.check ? `浏览器检查：${record.team.check.status} · ${record.team.check.results.filter(r => r.status === "passed").length}/${record.team.check.results.length}` : pending ? "团队正在分派、实现或审查" : "本次未取得完整审查结果"}</p>
+        {record.team.deliveries.map((delivery, i) => <details key={i}><summary>{{Mike: "TeamLeader · 分派与交付", Requirements: "需求负责人 · 规格", Engineer: "实现工程师 · 交付", Reviewer: "Reviewer · 代码审查", Verifier: "验证工程师 · 检查"}[delivery.role]}</summary><pre style={{whiteSpace: "pre-wrap", overflowWrap: "anywhere"}}>{delivery.content}</pre></details>)}
         {record.team.check && <details><summary>完整运行检查结果</summary><pre style={{whiteSpace: "pre-wrap", overflowWrap: "anywhere"}}>{JSON.stringify(record.team.check, null, 2)}</pre></details>}
         <details><summary>模型调用与用量 · {record.team.calls.length} 次</summary><pre style={{whiteSpace: "pre-wrap", overflowWrap: "anywhere"}}>{JSON.stringify(record.team.calls, null, 2)}</pre></details>
       </div>}

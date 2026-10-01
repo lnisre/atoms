@@ -58,7 +58,7 @@ class Controls(unittest.IsolatedAsyncioTestCase):
             async def __aexit__(self,*args): pass
             async def post(self,*args,**kwargs): raise r.httpx.RemoteProtocolError('synthetic disconnect')
         with patch.object(r.httpx,'AsyncClient',BrokenClient):
-            with self.assertRaises(r.ModelTransportError): await task.ask('Verifier','','',1)
+            with self.assertRaises(r.ModelTransportError): await task.ask('Reviewer','','',1)
         self.assertEqual(task.calls,20)
 
     async def test_format_and_transport_retries_are_counted(self):
@@ -95,6 +95,48 @@ class Controls(unittest.IsolatedAsyncioTestCase):
             await team.run(n_round=2,auto_archive=False)
         self.assertIn('20',task.failure)
         self.assertEqual(task.calls,20)
+
+    async def test_review_correction_includes_bad_response_and_field_errors(self):
+        task=r.Task({'deadline':time.time()*1000+240000,'requirement':'counter'})
+        task.html='<html>counter</html>';task.spec={'summary':'counter'}
+        bad={'approved':'yes','summary':'ok','issues':[]}
+        contexts=[]
+        async def ask(actor,system,context,tokens):
+            contexts.append(json.loads(json.dumps(context)))
+            self.assertEqual(actor,'Reviewer')
+            self.assertIn('window.atoms.loadState',system)
+            return bad if len(contexts)==1 else {'approved':True,'summary':'审查通过','issues':[]}
+        task.ask=ask
+        await r.Review(task=task).perform([])
+        self.assertEqual(contexts[1]['previousResponse'],bad)
+        self.assertTrue(any('approved' in error for error in contexts[1]['validationErrors']))
+        self.assertEqual(task.review['codeHash'],task.code_hash())
+        self.assertTrue(task.review['approved'])
+
+    async def test_review_rejection_is_terminal_without_replanning(self):
+        task=r.Task({'deadline':time.time()*1000+240000,'requirement':'counter'})
+        task.html='<html>counter</html>';task.spec={}
+        calls=[]
+        async def ask(*args):
+            calls.append(args)
+            return {'approved':False,'summary':'缺少持久化','issues':['没有调用 saveState']}
+        task.ask=ask
+        await r.Review(task=task).run([])
+        self.assertEqual(len(calls),1)
+        self.assertIn('代码审查未通过',task.failure)
+        self.assertFalse(task.review['approved'])
+
+    async def test_review_cannot_approve_with_blockers_or_after_two_invalid_outputs(self):
+        task=r.Task({'deadline':time.time()*1000+240000,'requirement':'counter'})
+        task.html='code';task.spec={};calls=[]
+        async def ask(*args):
+            calls.append(args)
+            return {'approved':True,'summary':'ok','issues':['blocking defect']}
+        task.ask=ask
+        await r.Review(task=task).run([])
+        self.assertEqual(len(calls),2)
+        self.assertIsNone(task.review)
+        self.assertIn('格式重试后仍无效',task.failure)
 
     def test_six_core_files_match_fixed_upstream(self):
         import metagpt

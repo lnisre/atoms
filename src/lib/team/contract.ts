@@ -1,5 +1,6 @@
+import type { CodeReview } from "./review";
 import type { ToolRequest, ToolResult, Scenario, Command, Json } from "../qa/contract";
-export const TEAM_PROTOCOL = "atoms-team/1";
+export const TEAM_PROTOCOL = "atoms-team/2";
 export const TEAM_TIMEOUT_MS = 240_000;
 export type PlatformProbe = { seed: Json; prepare: Command[]; commitSelector: string; changed: { path: string[]; equals: Json } };
 export type Specification = {
@@ -8,9 +9,9 @@ export type Specification = {
   dataContract?: string;
   probe?: PlatformProbe;
 };
-export type Delivery = { role: "Mike" | "Requirements" | "Engineer" | "Verifier"; content: string };
+export type Delivery = { role: "Mike" | "Requirements" | "Engineer" | "Reviewer" | "Verifier"; content: string };
 export type ModelCall = { call: number; actor: string; requestedModel: string; thinking?: "enabled" | "disabled"; reasoningEffort?: "none" | "low"; responseModel?: string; responseId?: string; usage?: Record<string, Json>; elapsedMs?: number; status: "started" | "completed" | "failed" };
-export type TeamRecord = { protocol: typeof TEAM_PROTOCOL; taskId: string; projectId: string; deliveries: Delivery[]; calls: ModelCall[]; check?: ToolResult; codeHash?: string; durationMs?: number };
+export type TeamRecord = { protocol: typeof TEAM_PROTOCOL | "atoms-team/1"; taskId: string; projectId: string; deliveries: Delivery[]; calls: ModelCall[]; check?: ToolResult; review?: CodeReview; codeHash?: string; durationMs?: number };
 export type ToolEnvelope = { request: ToolRequest; ticket: string };
 
 // Platform rules are owned by the platform, never supplied/relaxed by QA.

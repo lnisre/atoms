@@ -27,7 +27,8 @@ function failure(error: string, status: number) {
 }
 
 export async function POST(request: Request) {
-  if (request.headers.get("x-atoms-protocol") === "atoms-team/1") return teamEntry(request);
+  if (request.headers.get("x-atoms-protocol") === "atoms-team/2") return teamEntry(request);
+  if (request.headers.has("x-atoms-protocol")) return failure("团队协议已更新，请刷新页面后重试。", 409);
   // Negotiated streaming keeps the existing M2 JSON contract available.
   if (!request.headers.get("accept")?.includes("application/x-ndjson")) return generate(request);
   const taskId = request.headers.get("x-atoms-task-id");

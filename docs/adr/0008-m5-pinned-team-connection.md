@@ -1,5 +1,7 @@
 # 首次四角色任务由一条连接绑定原生团队执行实例
 
+首次生成的 QA 交付门槛已由 [ADR 0009](0009-reviewer-first-generation.md) 替代；下文保留原决策背景。
+
 #25 在 Next.js 容器内监督每任务独立的 Python 3.11 子进程，保留固定 MetaGPT SHA 的 Team、MGXEnv、Role、RoleZero 与 TeamLeader 循环。受限 Action 只开放规格、单文件 HTML、浏览器检查和交付决定。调度核心未修改；依赖修正仅 LanceDB 可选化与已验证的 PyArrow 14.0.2 基线。
 
 浏览器先通过生成 HTTP 入口取得有期限的签名任务票据，再打开同源 WebSocket。该连接承载角色事件、QA 请求、工具反馈和心跳；容器网关将其转发给同一 Next 进程。Vercel 容器仍是可伸缩的函数，分开的公网 HTTP 请求不保证命中挂起任务所在实例；[单条 WebSocket 固定到一个实例](https://vercel.com/docs/functions/websockets)，因此不引入分布式队列或持久任务存储。新的连接不恢复原任务，不重新设置原截止时间。#24 的无状态资格接口继续保持独立，不负责挂起团队。
