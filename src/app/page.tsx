@@ -7,6 +7,7 @@ import {
   loadApplicationData,
   saveProject,
   adoptCandidate,
+  activateProject,
   type ModificationRecord,
   type SavedProject,
 } from "@/lib/project-store";
@@ -20,6 +21,8 @@ import {
 
 import { createRecorder, type InitialGeneration, type ModificationGeneration, type RecordStep } from "@/lib/execution";
 import { readTeam } from "@/lib/team/client";
+import { previewPolicy, type PreviewPolicy } from "@/lib/team/preview-policy";
+import { unresolvedDataIssues } from "@/lib/team/review";
 import { TEAM_TIMEOUT_MS, TeamError, outcomeLabels, type TeamOutcome } from "@/lib/team/contract";
 import { GenerationRecord } from "@/components/generation-record";
 import { ConversationScroll } from "@/components/conversation-scroll";
@@ -35,7 +38,7 @@ type Project = { id: string; requirement: string };
 type Task =
   | { status: "waiting" }
   | { status: "failed"; error: string; outcome?: TeamOutcome }
-  | { status: "complete"; result: GenerationResult };
+  | { status: "complete"; result: GenerationResult; policy?: PreviewPolicy };
 
 const examples = [
   {
@@ -75,6 +78,7 @@ export default function Home() {
   >("unsaved");
   const [restored, setRestored] = useState(false);
   const [modification, setModification] = useState("");
+  const [draftTrial, setDraftTrial] = useState<TrialData>();
   const [candidate, setCandidate] = useState<{ result: GenerationResult; trial: TrialData; revision: number; session: ModificationSession } | null>(null);
   const [dialogue, setDialogue] = useState<string[]>([]);
   const [records, setRecords] = useState<ModificationRecord[]>([]);
@@ -87,6 +91,19 @@ export default function Home() {
   const active = useRef<AbortController | null>(null);
   const initialBusy = task?.status === "waiting" || projectSave === "saving";
   const busy = initialBusy || modifying || adopting;
+  const policy = candidate?.session.record.team ? previewPolicy(candidate.session.record.team,candidate.result.html) : task?.status === "complete" ? task.policy : undefined;
+  async function activateDraft() {
+    if (!project || task?.status !== "complete" || busy) return;
+    adoptionPending.current = true;
+    setAdopting(true); setAdoptionError("");
+    try {
+      const saved=await activateProject(project.id,task.result.html);
+      setTask({status:"complete",result:saved.result,policy:saved.previewPolicy}); setDraftTrial(undefined);
+      setProjects(items=>[saved,...items.filter(p=>p.id!==saved.id)]);
+    } catch(error) { setAdoptionError(error instanceof Error ? error.message : "保存失败"); }
+    finally {adoptionPending.current = false;setAdopting(false);}
+  }
+
 
   useEffect(() => {
     let cancelled = false;
@@ -101,7 +118,8 @@ export default function Home() {
           setGenerationRecord(current.initialGeneration ?? null);
           setProject(current);
           setRecords(current.modificationRecords ?? []);
-          setTask({ status: "complete", result: current.result });
+          setTask({ status: "complete", result: current.result, policy:current.previewPolicy });
+          setDraftTrial(current.previewPolicy?.dataMode === "trial" ? {projectId:current.id,state:null,hasData:false} : undefined);
           setProjectSave("saved");
           setRestored(true);
         } else if (id) {
@@ -145,7 +163,8 @@ export default function Home() {
     discardChanges();
     setProject(saved);
     setRecords(saved.modificationRecords ?? []);
-    setTask({ status: "complete", result: saved.result });
+    setTask({ status: "complete", result: saved.result, policy:saved.previewPolicy });
+    setDraftTrial(saved.previewPolicy?.dataMode === "trial" ? {projectId:saved.id,state:null,hasData:false} : undefined);
     setProjectSave("saved");
     setRestored(true);
     window.history.replaceState(
@@ -224,9 +243,10 @@ export default function Home() {
     setRestored(false);
     window.history.replaceState(null, "", "/");
     setTask({ status: "waiting" });
+    setDraftTrial(undefined);
     setSeconds(0);
     const taskId = crypto.randomUUID();
-    const record: InitialGeneration = { team: { protocol: "atoms-team/2", taskId, projectId: nextProject.id, deliveries: [], calls: [] }, taskId, startedAt: new Date().toISOString(), assistantReply: null, events: [] };
+    const record: InitialGeneration = { team: { protocol: "atoms-team/3", taskId, projectId: nextProject.id, deliveries: [], calls: [] }, taskId, startedAt: new Date().toISOString(), assistantReply: null, events: [] };
     let persisted = false;
     const session = { record, step: null as unknown as RecordStep, projectId: nextProject.id, writes: Promise.resolve() };
     generationSession.current = session;
@@ -256,7 +276,7 @@ export default function Home() {
     try {
       const response = await fetch("/api/generate", {
         method: "POST",
-        headers: { "Content-Type": "application/json", Accept: "application/x-ndjson", "X-Atoms-Task-Id": taskId, "X-Atoms-Protocol": "atoms-team/2" },
+        headers: { "Content-Type": "application/json", Accept: "application/x-ndjson", "X-Atoms-Task-Id": taskId, "X-Atoms-Protocol": "atoms-team/3" },
         body: JSON.stringify({ requirement: nextProject.requirement, projectId: nextProject.id }),
         signal: controller.signal,
       });
@@ -264,16 +284,19 @@ export default function Home() {
         record.team = team;
         if (generationSession.current === session) setGenerationRecord({ ...record });
       });
-      controller.signal.throwIfAborted();
+      if (controller.signal.aborted && !(controller.signal.reason instanceof TeamError && controller.signal.reason.outcome === "limit")) controller.signal.throwIfAborted();
       record.team = team;
       record.assistantReply = assistantReply;
-      session.step("transport", "接收生成结果", "completed", "完整结果与正常传输终态已收到。");
-      setTask({ status: "complete", result: data });
+      session.step("transport", "接收生成结果", "completed", "完整代码已收到；实际审查与任务结束状态见团队记录。");
+      const policy = previewPolicy(team,data.html);
+      setTask({ status: "complete", result: data, policy });
+      setDraftTrial(policy.dataMode === "trial" ? {projectId:nextProject.id,state:null,hasData:false} : undefined);
       setProjectSave("saving");
       const saved: SavedProject = {
         ...nextProject,
         title: nextProject.requirement.slice(0, 48),
         result: data,
+        previewPolicy: policy,
         initialGeneration: record,
         updatedAt: new Date().toISOString(),
       };
@@ -316,7 +339,7 @@ export default function Home() {
     setPreviewStep(undefined);
     const change = modification.trim();
     const taskId = crypto.randomUUID();
-    const record: ModificationGeneration = { team: { protocol: "atoms-team/2", taskId, projectId: project.id, deliveries: [], calls: [] }, taskId, projectId: project.id, requirement: change, startedAt: new Date().toISOString(), assistantReply: null, events: [], outcome: "waiting" };
+    const record: ModificationGeneration = { team: { protocol: "atoms-team/3", taskId, projectId: project.id, deliveries: [], calls: [] }, taskId, projectId: project.id, requirement: change, startedAt: new Date().toISOString(), assistantReply: null, events: [], outcome: "waiting" };
     const session: ModificationSession = { record, step: null as unknown as RecordStep, active: true };
     modificationSessions.current.push(session);
     const append = (event: ModificationGeneration["events"][number]) => {
@@ -332,32 +355,35 @@ export default function Home() {
     setSeconds(0);
     const timer = setTimeout(() => controller.abort(new TeamError("limit", "任务已达到 4 分钟上限，已有成果保留。")), TEAM_TIMEOUT_MS);
     const baseHtml = (candidate?.result ?? task.result).html;
+    const baseTeam = candidate?.session.record.team ?? records.at(-1)?.generations?.at(-1)?.team ?? generationRecord?.team;
+    const baseDataIssues = baseTeam?.protocol === "atoms-team/3" ? unresolvedDataIssues(baseTeam) : [];
     try {
       const response = await fetch("/api/generate", {
         method: "POST",
-        headers: { "Content-Type": "application/json", Accept: "application/x-ndjson", "X-Atoms-Task-Id": taskId, "X-Atoms-Protocol": "atoms-team/2" },
-        body: JSON.stringify({ projectId: project.id, requirement: project.requirement, modification: change, baseHtml, context: [...records.flatMap(item => item.requests), ...dialogue] }),
+        headers: { "Content-Type": "application/json", Accept: "application/x-ndjson", "X-Atoms-Task-Id": taskId, "X-Atoms-Protocol": "atoms-team/3" },
+        body: JSON.stringify({ projectId: project.id, requirement: project.requirement, modification: change, baseHtml, baseDataIssues, context: [...records.flatMap(item => item.requests), ...dialogue] }),
         signal: controller.signal,
       });
       const { result, assistantReply, team } = await readTeam(response, taskId, project.id, controller.signal, append, team => {
         if (!session.active) return;
         record.team = team;
         setSessionRecords(modificationSessions.current.map(item => ({ ...item.record })));
-      }, baseHtml);
+      }, baseHtml, baseDataIssues);
       record.team = team;
-      controller.signal.throwIfAborted();
+      if (controller.signal.aborted && !(controller.signal.reason instanceof TeamError && controller.signal.reason.outcome === "limit")) controller.signal.throwIfAborted();
+      if (previewPolicy(team,result.html).status === "blocked") throw new Error(previewPolicy(team,result.html).reasons.join("；"));
       record.assistantReply = assistantReply;
-      session.step("transport", "接收修改结果", "completed", "完整 HTML 与正常传输终态已收到。");
+      session.step("transport", "接收修改结果", "completed", "完整 HTML 已保留；实际审查与任务结束状态见团队记录。");
       session.step("trial", "准备试用副本", "started", candidate ? "沿用当前会话的试用数据。" : "读取正式数据并创建会话内副本。");
       let trial: TrialData;
       try {
-        const data = candidate ? undefined : await loadApplicationData(project.id);
-        trial = candidate?.trial ?? { projectId: project.id, state: structuredClone(data?.state ?? null), hasData: !!data };
+        const data = candidate || draftTrial ? undefined : await loadApplicationData(project.id);
+        trial = candidate?.trial ?? draftTrial ?? { projectId: project.id, state: structuredClone(data?.state ?? null), hasData: !!data };
       } catch (error) {
         session.step("trial", "准备试用副本", "failed", "未成功读取正式数据，未开始空数据试用。");
         throw error;
       }
-      controller.signal.throwIfAborted();
+      if (controller.signal.aborted && !(controller.signal.reason instanceof TeamError && controller.signal.reason.outcome === "limit")) controller.signal.throwIfAborted();
       record.outcome = "complete";
       session.step("trial", "准备试用副本", "completed", "试用副本已准备；不会写入正式业务数据。");
       setCandidate({ result, trial, revision: (candidate?.revision ?? 0) + 1, session });
@@ -404,7 +430,8 @@ export default function Home() {
       }
       saved.modificationRecords!.at(-1)!.generations = sessions.map(item => structuredClone(item.record));
       setPreviewStep(undefined);
-      setTask({ status: "complete", result: saved.result });
+      setTask({ status: "complete", result: saved.result, policy:saved.previewPolicy });
+    setDraftTrial(saved.previewPolicy?.dataMode === "trial" ? {projectId:saved.id,state:null,hasData:false} : undefined);
       setRecords(saved.modificationRecords ?? []);
       setProjects(items => [saved, ...items.filter(item => item.id !== saved.id)]);
       setRestored(false);
@@ -508,22 +535,25 @@ export default function Home() {
             </form>}
             {task?.status !== "failed" && !(task?.status === "complete" && projectSave === "saved") && <section className="modification-panel"><textarea aria-label="追加修改需求（生成完成后可用）" disabled placeholder="生成并保存后，可在这里继续修改" /><div className="composer-footer"><Unavailable label="添加附件">＋</Unavailable><span>等待当前任务完成</span><Unavailable label="发送修改">↑</Unavailable></div></section>}
           </aside>
-          {task?.status === "complete" && projectSave !== "saving" ? (
+          {task?.status === "complete" && projectSave !== "saving" && policy?.status === "blocked" ? (
+            <section className="preview-panel" aria-label="预览已阻止"><PreviewNavigation /><p role="alert">暂未运行：{policy.reasons.join("；")}</p><p>代码和问题已保留，可继续修改。</p></section>
+          ) : task?.status === "complete" && projectSave !== "saving" ? (
             <AppPreview
               key={project.id + task.result.generatedAt + (candidate ? `:trial:${candidate.revision}` : ":adopted")}
               html={(candidate?.result ?? task.result).html}
               recordStep={candidate ? candidate.session.step : previewStep}
-              trial={candidate?.trial}
+              trial={candidate?.trial ?? draftTrial}
+              reviewNotice={policy ? `${policy.review === "unavailable" ? "审查未完成，代码已保留" : policy.review === "issues" ? "可预览，有待修复问题" : "代码审查通过"} · 业务运行尚未验证${policy.adoption === "blocked" ? "；存在待修复的数据问题，暂不可采用" : ""}` : undefined}
               actions={candidate && <div className="candidate-actions" aria-label="候选操作">
                 <div className="candidate-action-row"><strong>第 {candidate.revision} 轮候选 · 等待采用</strong><div>
                   <button className="text-button" disabled={busy} onClick={discardChanges}>放弃本轮修改</button>
-                  <button className="primary-button" disabled={busy} onClick={() => void adopt()}>{adopting ? "正在保存采用…" : "采用修改"}</button>
+                  <button className="primary-button" disabled={busy || policy?.adoption === "blocked"} onClick={() => void adopt()}>{adopting ? "正在保存采用…" : "采用修改"}</button>
                 </div></div>
                 <p>采用保存代码、对应消息与修改记录，试用数据不会写回正式数据。</p>
                 <p>候选、试用数据和本轮对话仅在当前会话保留；放弃、离开项目、刷新或关闭后会丢失。</p>
                 {adopting && <p role="status">正在保存代码与修改记录，完成前仍为未采用候选。请等待保存成功再离开。</p>}
                 {adoptionError && <p className="save-error" role="alert">{adoptionError}</p>}
-              </div>}
+              </div> || (draftTrial && <div className="candidate-actions"><p>待验证项目 · 代码与问题已保存，试用数据仅本次会话有效。</p><button disabled={busy || policy?.adoption === "blocked"} onClick={() => void activateDraft()}>使用此版本</button>{adoptionError && <p role="alert">{adoptionError}</p>}</div>)}
               projectId={project.id}
               projectSaved={projectSave === "saved"}
               onRetry={() => {

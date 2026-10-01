@@ -67,12 +67,16 @@ test.describe('native Team and code review using scripted test provider',()=>{
     expect(tampered).toBe(true);
     await expect(page.getByText('项目已保存',{exact:true})).toHaveCount(0);await expect(page.locator('iframe')).toHaveCount(0);
   });
-  test('Reviewer rejection after one repair ends without delivery or a saved project',async({page})=>{
+  test('remaining nonfatal findings after two native repairs still preview and save',async({page})=>{
+    const events: Record<string,unknown>[]=[];
+    page.on('websocket',ws=>ws.on('framereceived',e=>{const m=JSON.parse(String(e.payload));if(m.type==='delivery')events.push(m.delivery)}));
     await page.goto('/');await page.getByLabel('你想做什么？').fill('审查拒绝受控验证');await page.getByRole('button',{name:'开始生成'}).click();
-    await expect(page.getByRole('heading',{name:'审查未通过'})).toBeVisible({timeout:65000});
-    await expect(page.getByText(/代码审查：未通过/)).toBeVisible();
-    await expect(page.getByText('项目已保存',{exact:true})).toHaveCount(0);
-    await expect(page.locator('iframe')).toHaveCount(0);
+    await expect(page.getByText('项目已保存',{exact:true})).toBeVisible({timeout:65000});
+    await expect(page.getByText(/代码审查：有待修复问题/)).toBeVisible();
+    await expect(page.locator('iframe')).toBeVisible();
+    expect(events.filter(e=>e.role==='Engineer')).toHaveLength(3);
+    expect(events.filter(e=>e.role==='Reviewer')).toHaveLength(3);
+    await expect(page.getByLabel('追加修改需求')).toBeEnabled();
   });
 
   test('one real native repair is shown, saved and restored with rejection history',async({page})=>{
@@ -80,7 +84,7 @@ test.describe('native Team and code review using scripted test provider',()=>{
     page.on('websocket',ws=>ws.on('framereceived',e=>{const m=JSON.parse(String(e.payload));if(m.type==='delivery')events.push(m.delivery)}));
     await page.goto('/');await page.getByLabel('你想做什么？').fill('一次修复受控验证');await page.getByRole('button',{name:'开始生成'}).click();
     await expect(page.getByText('项目已保存',{exact:true})).toBeVisible({timeout:65000});
-    await expect(page.getByText('实现工程师 · 交付 · 一次整体返工',{exact:true})).toBeVisible();
+    await expect(page.getByText('实现工程师 · 交付 · 第 1 次整体返工',{exact:true})).toBeVisible();
     await expect(page.getByText('Reviewer · 代码审查 · 新代码复审',{exact:true})).toBeVisible();
     const reviews=events.filter(e=>e.role==='Reviewer').map(e=>JSON.parse(String(e.content)));
     expect(reviews.map(r=>r.approved)).toEqual([false,true]);expect(reviews[0].codeHash).not.toBe(reviews[1].codeHash);
@@ -116,8 +120,8 @@ test.describe('native Team and code review using scripted test provider',()=>{
   });
   test('format correction is not code repair and repeated invalid output fails',async({page})=>{
     await page.goto('/');await page.getByLabel('你想做什么？').fill('格式纠正 持续无效');await page.getByRole('button',{name:'开始生成'}).click();
-    await expect(page.getByRole('heading',{name:'生成未完成'})).toBeVisible({timeout:65000});await expect(page.getByRole('alert').filter({hasText:'格式重试后仍无效'})).toBeVisible();
-    await expect(page.getByText('实现工程师 · 交付',{exact:true})).toHaveCount(1);await expect(page.getByText('实现工程师 · 交付 · 一次整体返工',{exact:true})).toHaveCount(0);
+    await expect(page.getByText('项目已保存',{exact:true})).toBeVisible({timeout:65000});await expect(page.getByText('执行失败',{exact:true})).toBeVisible();await expect(page.getByText(/审查未完成，代码已保留/)).toBeVisible();await expect(page.locator('iframe')).toBeVisible();
+    await expect(page.getByText('实现工程师 · 交付',{exact:true})).toHaveCount(1);await expect(page.getByText('实现工程师 · 交付 · 第 1 次整体返工',{exact:true})).toHaveCount(0);
   });
   test('unsupported requirements explain a feasible adjustment and end',async({page})=>{
     await page.goto('/');await page.getByLabel('你想做什么？').fill('任意后端');await page.getByRole('button',{name:'开始生成'}).click();

@@ -29,7 +29,7 @@ server.on('upgrade',(req,socket,head)=>{
 sockets.on('connection',ws=>{
   const abort=new AbortController();let started=false;let taskId,token;let bytes=0;
   const send=value=>{if(ws.readyState===1)ws.send(JSON.stringify(value))};
-  const post=(endpoint,body)=>fetch(transportOrigin+endpoint,{method:'POST',headers:{'Content-Type':'application/json','X-Atoms-Internal':internalKey,'X-Atoms-Protocol':'atoms-team/2'},body:JSON.stringify(body),signal:abort.signal});
+  const post=(endpoint,body)=>fetch(transportOrigin+endpoint,{method:'POST',headers:{'Content-Type':'application/json','X-Atoms-Internal':internalKey,'X-Atoms-Protocol':'atoms-team/3'},body:JSON.stringify(body),signal:abort.signal});
   const startTimer=setTimeout(()=>ws.close(1008,'start required'),5000);
   ws.on('close',()=>{clearTimeout(startTimer);if(taskId&&token){void fetch(transportOrigin+'/api/team',{method:'POST',headers:{'Content-Type':'application/json','X-Atoms-Internal':internalKey},body:JSON.stringify({action:'cancel',taskId,token}),signal:AbortSignal.timeout(1500)}).then(r=>r.body?.cancel()).catch(()=>{});}abort.abort()});ws.on('error',()=>abort.abort());
   ws.on('message',async raw=>{

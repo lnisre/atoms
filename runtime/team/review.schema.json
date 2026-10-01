@@ -4,7 +4,8 @@
   "required": [
     "approved",
     "summary",
-    "issues"
+    "issues",
+    "resolutions"
   ],
   "properties": {
     "approved": {
@@ -20,10 +21,85 @@
       "type": "array",
       "maxItems": 20,
       "items": {
-        "type": "string",
-        "minLength": 1,
-        "maxLength": 2000,
-        "pattern": "\\S"
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "severity",
+          "category",
+          "codeQuote",
+          "trigger",
+          "consequence"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[a-z][a-z0-9-]{0,50}$"
+          },
+          "severity": {
+            "enum": [
+              "major",
+              "minor"
+            ]
+          },
+          "category": {
+            "enum": [
+              "functionality",
+              "data-loss",
+              "persistence",
+              "interaction"
+            ]
+          },
+          "codeQuote": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 2000,
+            "pattern": "\\S"
+          },
+          "trigger": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 2000,
+            "pattern": "\\S"
+          },
+          "consequence": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 2000,
+            "pattern": "\\S"
+          }
+        }
+      }
+    },
+    "resolutions": {
+      "type": "array",
+      "maxItems": 20,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "codeQuote",
+          "explanation"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[a-z][a-z0-9-]{0,50}$"
+          },
+          "codeQuote": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 2000,
+            "pattern": "\\S"
+          },
+          "explanation": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 2000,
+            "pattern": "\\S"
+          }
+        }
       }
     }
   }
