@@ -1,0 +1,5 @@
+[
+  "confirmed: running 60s then reopen returns 25:00 (expected recovery 24:00)",
+  "passed: failed start rolls back and unknown field retained",
+  "passed: read failure disables writes"
+]

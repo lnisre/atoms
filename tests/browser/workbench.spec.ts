@@ -93,7 +93,7 @@ for (const viewport of [{ width: 1280, height: 720 }, { width: 1440, height: 900
     await expect(f.locator('output')).toHaveText('1');
     await expect(page.getByLabel('已采用修改记录')).toContainText('已采用 6 轮调整');
     await page.getByRole('button', { name: /新建项目/ }).click();
-    await page.getByRole('region', { name: '已有项目' }).getByRole('button', { name: /打开项目/ }).click();
+    await page.getByRole('region', { name: '已有项目' }).getByRole('button', { name: /长原需求桌面验证/ }).click();
     await expect(page).toHaveURL(url);
     await expect(f.locator('output')).toHaveText('1');
     expect(generations).toBe(7);

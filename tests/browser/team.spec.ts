@@ -26,7 +26,7 @@ test.describe('native Team and code review using scripted test provider',()=>{
     await expect(page.getByText('执行记录正在保存，请等待完成再离开。')).toHaveCount(0);
     const evidence=await page.evaluate(async()=>{
       const db=await new Promise<IDBDatabase>(resolve=>{const r=indexedDB.open('atoms-projects',1);r.onsuccess=()=>resolve(r.result)});
-      const project=await new Promise<unknown>(resolve=>{const r=db.transaction('projects').objectStore('projects').getAll();r.onsuccess=()=>resolve(r.result[0])});db.close();return project;
+      const project=await new Promise<unknown>(resolve=>{const r=db.transaction('projects').objectStore('projects').getAll();r.onsuccess=()=>resolve(r.result.find((p: { id: string }) => p.id === new URLSearchParams(location.search).get("project")))});db.close();return project;
     });
     if(process.env.TEAM_EVIDENCE_DIR){mkdirSync(process.env.TEAM_EVIDENCE_DIR,{recursive:true});writeFileSync(`${process.env.TEAM_EVIDENCE_DIR}/scripted-native-team.json`,JSON.stringify({kind:'deterministic provider, actual MetaGPT/HTTP/browser/storage',evidence},null,2))}
     const url=page.url();await page.reload();await expect(page.frameLocator('iframe').locator('output')).toHaveText('1');
@@ -49,7 +49,8 @@ test.describe('native Team and code review using scripted test provider',()=>{
     await expect.poll(()=>reviewStarted,{timeout:45000}).toBe(true);
     await page.goto("about:blank");await expect.poll(()=>socketClosed).toBe(true);
     const reopened=await context.newPage();await reopened.goto('/');
-    await expect(reopened.getByRole('heading',{name:'还没有已保存的项目'})).toBeVisible();
+    await expect(reopened.getByRole('region',{name:'已有项目'}).getByRole('button',{name:/打开项目/})).toHaveCount(1);
+    await expect(reopened.getByRole('region',{name:'已有项目'}).getByRole('button',{name:/示例 · 专注番茄钟/})).toBeVisible();
     expect(callsAtClose).toBeGreaterThan(0);expect(callsAfterClose).toBe(0);
   });
   test('wrong-code result is rejected and no project is delivered',async({page})=>{
@@ -105,7 +106,8 @@ test.describe('native Team and code review using scripted test provider',()=>{
     await expect.poll(()=>reviews,{timeout:65000}).toBe(2);await page.getByRole('button',{name:'停止任务'}).click();
     await expect(page.getByRole('heading',{name:'任务已停止'})).toBeVisible();await expect.poll(()=>closed).toBe(true);
     await expect(page.getByRole('button',{name:'停止任务'})).toHaveCount(0);await expect(page.locator('iframe')).toHaveCount(0);expect(callsAfterClose).toBe(0);
-    await page.reload();await expect(page.getByRole('heading',{name:'还没有已保存的项目'})).toBeVisible();
+    await page.reload();await expect(page.getByRole('region',{name:'已有项目'}).getByRole('button',{name:/打开项目/})).toHaveCount(1);
+    await expect(page.getByRole('region',{name:'已有项目'}).getByRole('button',{name:/示例 · 专注番茄钟/})).toBeVisible();
   });
   test('clarification ends its task, retains questions and restarts with a new identity',async({page})=>{
     const taskIds: string[]=[];let calls=0;

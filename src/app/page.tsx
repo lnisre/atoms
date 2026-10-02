@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import {
   appendGenerationEvents,
   listProjects,
-  listHomeProjects,
+  initializeHomeWorkspace,
   loadApplicationData,
   saveProject,
   adoptCandidate,
@@ -111,7 +111,7 @@ export default function Home() {
   useEffect(() => {
     let cancelled = false;
     const id = new URLSearchParams(window.location.search).get("project");
-    const load = id ? listProjects().then(projects => ({ projects, exampleError: "" })) : listHomeProjects();
+    const load = id ? listProjects().then(projects => ({ projects, exampleError: "" })) : initializeHomeWorkspace();
     load
       .then(({ projects: saved, exampleError }) => {
         if (cancelled) return;

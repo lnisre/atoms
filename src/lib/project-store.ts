@@ -139,7 +139,7 @@ function initializeWorkspace(example?: SavedProject) {
   );
 }
 
-export async function listHomeProjects() {
+export async function initializeHomeWorkspace() {
   // Read failure is never interpreted as an empty workspace. A failed asset or
   // seed transaction leaves both records absent and allows an explicit retry.
   await listProjects();
