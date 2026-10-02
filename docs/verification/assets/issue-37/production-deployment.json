@@ -1,0 +1,18 @@
+{
+  "sourceCommit": "ac9d5a7536485a9ee88cef6ce2ad476b65da29ac",
+  "sourceDigest": "f9a8a5ffcea9f3e2dc385e16c3acf3ccf39f197346b5f6cb1f9987bb51483bcf",
+  "deploymentId": "dpl_DfYb9orGzdCLPvW78dwx7w9WcBuE",
+  "deploymentURL": "https://v0-test0-qqqqdn3g7-lnisres-projects.vercel.app",
+  "target": "production",
+  "readyState": "READY",
+  "fixedURL": "https://v0-test0-nine.vercel.app",
+  "verifiedAliasDeploymentId": "dpl_DfYb9orGzdCLPvW78dwx7w9WcBuE",
+  "previousProductionDeployment": "dpl_8Ju6PuNVhAf5YE7wGGZgVzMdatMQ",
+  "aliasCheckedAt": "2026-10-02T13:05:29.658Z",
+  "browserTests": {
+    "passed": 15,
+    "failed": 0,
+    "durationSeconds": 57.9
+  },
+  "sourceReleaseSha256": "d1d6944ff3eda19b7f5150e9895cacc71579313be13e1e40232153f5b747871f"
+}
