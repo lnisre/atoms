@@ -43,8 +43,8 @@ test("完整说明安全显示，真实预览/数据步骤保存，刷新和同�
   await expect.poll(() => page.evaluate(async () => {
     const db = await new Promise<IDBDatabase>(resolve => { const r=indexedDB.open("atoms-projects",1); r.onsuccess=()=>resolve(r.result); });
     const tx=db.transaction("projects");
-    const items = await new Promise<Array<{ initialGeneration: { events: Array<{label:string;status:string}> } }>>(resolve=>{const r=tx.objectStore("projects").getAll();r.onsuccess=()=>resolve(r.result)});
-    db.close(); return items[0]?.initialGeneration.events.some(e=>e.label==="保存应用数据"&&e.status==="completed");
+    const items = await new Promise<Array<{ id: string; initialGeneration: { events: Array<{label:string;status:string}> } }>>(resolve=>{const r=tx.objectStore("projects").getAll();r.onsuccess=()=>resolve(r.result)});
+    db.close(); return items.find(item => item.id === new URLSearchParams(location.search).get("project"))?.initialGeneration.events.some(e=>e.label==="保存应用数据"&&e.status==="completed");
   })).toBe(true);
   const url=page.url();
   await page.reload();

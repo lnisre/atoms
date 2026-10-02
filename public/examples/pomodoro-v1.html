@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>专注番茄钟</title>
+<style>
+  * { box-sizing: border-box; }
+  html, body { height: 100%; margin: 0; }
+  body {
+    font-family: "PingFang SC", "Microsoft YaHei", "Helvetica Neue", Arial, sans-serif;
+    background: linear-gradient(160deg, #2b2136 0%, #1c1726 100%);
+    color: #f5f0ff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+  }
+  .card {
+    width: 100%;
+    max-width: 380px;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 20px;
+    padding: 28px 24px 24px;
+    text-align: center;
+    box-shadow: 0 18px 50px rgba(0,0,0,0.45);
+    transition: box-shadow 0.4s ease, background 0.4s ease;
+  }
+  .card.flash {
+    box-shadow: 0 0 0 3px #ffcf5c, 0 0 40px rgba(255,207,92,0.65);
+  }
+  h1 {
+    font-size: 18px;
+    font-weight: 600;
+    margin: 0 0 18px;
+    letter-spacing: 2px;
+    color: #d8ccf0;
+  }
+  .mode {
+    display: inline-block;
+    font-size: 15px;
+    font-weight: 600;
+    letter-spacing: 3px;
+    padding: 6px 18px;
+    border-radius: 999px;
+    margin-bottom: 14px;
+    transition: background 0.3s ease, color 0.3s ease;
+  }
+  .mode.focus { background: #ff6b6b; color: #fff; }
+  .mode.break { background: #4dd4ac; color: #06342a; }
+  .time {
+    font-size: 68px;
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: 2px;
+    margin: 6px 0 4px;
+    line-height: 1.1;
+  }
+  .count {
+    font-size: 13px;
+    color: #b6a9d0;
+    margin-bottom: 22px;
+  }
+  .controls {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+  }
+  button {
+    flex: 1;
+    font-family: inherit;
+    font-size: 16px;
+    padding: 12px 0;
+    border-radius: 12px;
+    border: none;
+    cursor: pointer;
+    font-weight: 600;
+    transition: transform 0.08s ease, opacity 0.2s ease, background 0.2s ease;
+    color: #fff;
+  }
+  button:active:not(:disabled) { transform: scale(0.97); }
+  button:disabled { opacity: 0.38; cursor: not-allowed; }
+  #toggleBtn { background: #22c55e; }
+  #toggleBtn:not(:disabled):hover { background: #34d570; }
+  #resetBtn { background: rgba(255,255,255,0.14); }
+  #resetBtn:not(:disabled):hover { background: rgba(255,255,255,0.22); }
+  .status {
+    margin-top: 18px;
+    font-size: 13px;
+    min-height: 18px;
+    color: #b6a9d0;
+    letter-spacing: 1px;
+  }
+  .status.error { color: #ff8f8f; }
+</style>
+</head>
+<body>
+  <main class="card" id="card">
+    <h1>专注番茄钟</h1>
+    <div class="mode focus" id="modeLabel">专注</div>
+    <div class="time" id="timeDisplay">25:00</div>
+    <div class="count" id="countDisplay">已完成专注 0 次</div>
+    <div class="controls">
+      <button id="toggleBtn" type="button" disabled>开始</button>
+      <button id="resetBtn" type="button" disabled>重置</button>
+    </div>
+    <button id="retryBtn" type="button" hidden>重试</button>
+    <div class="status" id="status" data-atoms-status>正在读取</div>
+  </main>
+<script>
+(function () {
+  "use strict";
+
+  var DEFAULT_FOCUS = 1500;
+  var DEFAULT_BREAK = 300;
+
+  var statusEl = document.getElementById("status");
+  var modeLabel = document.getElementById("modeLabel");
+  var timeDisplay = document.getElementById("timeDisplay");
+  var countDisplay = document.getElementById("countDisplay");
+  var toggleBtn = document.getElementById("toggleBtn");
+  var resetBtn = document.getElementById("resetBtn");
+  var card = document.getElementById("card");
+
+  var state = null;
+  var ready = false;
+  var tickTimer = null;
+  var retryBtn = document.getElementById("retryBtn");
+  var retryChange = null;
+  var saving = false;
+  var flashTimer = null;
+
+  var audioCtx = null;
+
+  function makeBeep() {
+    if (!audioCtx) {
+      try {
+        var Ctx = window.AudioContext || window.webkitAudioContext;
+        if (Ctx) audioCtx = new Ctx();
+      } catch (e) { audioCtx = null; }
+    }
+    if (!audioCtx) return;
+    try {
+      if (audioCtx.state === "suspended" && audioCtx.resume) {
+        audioCtx.resume();
+      }
+      var now = audioCtx.currentTime;
+      var osc = audioCtx.createOscillator();
+      var gain = audioCtx.createGain();
+      osc.type = "sine";
+      osc.frequency.setValueAtTime(880, now);
+      gain.gain.setValueAtTime(0.0001, now);
+      gain.gain.exponentialRampToValueAtTime(0.25, now + 0.02);
+      gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.45);
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+      osc.start(now);
+      osc.stop(now + 0.5);
+    } catch (e) { /* 声音提示失败不影响计时 */ }
+  }
+
+  function flashVisual() {
+    card.classList.add("flash");
+    if (flashTimer) clearTimeout(flashTimer);
+    flashTimer = setTimeout(function () {
+      card.classList.remove("flash");
+      flashTimer = null;
+    }, 900);
+  }
+
+  function isInt(v) { return typeof v === "number" && isFinite(v) && Math.floor(v) === v; }
+  function isPosInt(v) { return isInt(v) && v > 0; }
+
+  function normalize(raw) {
+    var src = (raw && typeof raw === "object" && !Array.isArray(raw)) ? raw : {};
+    var next = {};
+    // 完整复制全部自有键（含未知字段），未知字段原样保留。
+    for (var k in src) {
+      if (Object.prototype.hasOwnProperty.call(src, k)) next[k] = src[k];
+    }
+    var focusSeconds = isPosInt(src.focusSeconds) ? src.focusSeconds : DEFAULT_FOCUS;
+    var breakSeconds = isPosInt(src.breakSeconds) ? src.breakSeconds : DEFAULT_BREAK;
+    var mode = (src.mode === "break") ? "break" : "focus";
+    var limit = (mode === "break") ? breakSeconds : focusSeconds;
+    var remaining;
+    if (isInt(src.remaining) && src.remaining >= 0) {
+      remaining = Math.min(src.remaining, limit);
+    } else {
+      remaining = limit;
+    }
+    var running = (src.running === true);
+    var completedFocusCount = (isInt(src.completedFocusCount) && src.completedFocusCount >= 0) ? src.completedFocusCount : 0;
+
+    next.mode = mode;
+    next.remaining = remaining;
+    next.running = running;
+    next.focusSeconds = focusSeconds;
+    next.breakSeconds = breakSeconds;
+    next.completedFocusCount = completedFocusCount;
+    return next;
+  }
+
+  // 完整复制整包状态的所有自有键（含未知字段），用于所有提交/克隆路径。
+  function cloneState(s) {
+    var c = {};
+    if (!s || typeof s !== "object") return c;
+    for (var k in s) {
+      if (Object.prototype.hasOwnProperty.call(s, k)) c[k] = s[k];
+    }
+    return c;
+  }
+
+  function format(sec) {
+    var s = sec < 0 ? 0 : sec;
+    var m = Math.floor(s / 60);
+    var r = s % 60;
+    return (m < 10 ? "0" + m : "" + m) + ":" + (r < 10 ? "0" + r : "" + r);
+  }
+
+  function render() {
+    if (!state) return;
+    var isFocus = state.mode === "focus";
+    modeLabel.textContent = isFocus ? "专注" : "休息";
+    modeLabel.classList.toggle("focus", isFocus);
+    modeLabel.classList.toggle("break", !isFocus);
+    timeDisplay.textContent = format(state.remaining);
+    countDisplay.textContent = "已完成专注 " + state.completedFocusCount + " 次";
+    toggleBtn.textContent = state.running ? "暂停" : "开始";
+    toggleBtn.disabled = !ready || saving || !!retryChange;
+    resetBtn.disabled = !ready || saving || !!retryChange;
+  }
+
+  function setStatus(text, isError) {
+    statusEl.textContent = text;
+    statusEl.classList.toggle("error", !!isError);
+  }
+
+  // State is only committed after saveState resolves. The absolute deadline is
+  // persisted when starting a period; no unload write or per-second write needed.
+  function remainingNow(base) {
+    return base.running && Number.isFinite(base.deadlineAt)
+      ? Math.max(0, Math.ceil((base.deadlineAt - Date.now()) / 1000))
+      : base.remaining;
+  }
+
+  function startTicker() {
+    stopTicker();
+    tickTimer = setInterval(onTick, 250);
+    onTick();
+  }
+
+  function stopTicker() {
+    if (tickTimer !== null) clearInterval(tickTimer);
+    tickTimer = null;
+  }
+
+  function computeNaturalEnd(base, resume) {
+    var next = cloneState(base);
+    if (base.mode === "focus") {
+      next.mode = "break";
+      next.remaining = base.breakSeconds;
+      next.completedFocusCount = base.completedFocusCount + 1;
+    } else {
+      next.mode = "focus";
+      next.remaining = base.focusSeconds;
+    }
+    next.running = resume;
+    next.deadlineAt = resume ? Date.now() + next.remaining * 1000 : null;
+    return next;
+  }
+
+  function onTick() {
+    if (!state || !state.running || saving || retryChange) return;
+    state.remaining = remainingNow(state);
+    render();
+    if (state.remaining > 0) return;
+    flashVisual();
+    makeBeep();
+    // Keep the original foreground behavior: begin the next period.
+    commit(function (base) { return computeNaturalEnd(base, true); });
+  }
+
+  function commit(change) {
+    if (saving) return;
+    stopTicker();
+    saving = true;
+    retryChange = null;
+    retryBtn.hidden = true;
+    setStatus("正在保存", false);
+    render();
+    var next = change(cloneState(state));
+    function failed() {
+      saving = false;
+      retryChange = change;
+      retryBtn.hidden = false;
+      setStatus("保存失败，操作尚未保存，请重试", true);
+      render();
+    }
+    var saved;
+    try { saved = window.atoms.saveState(cloneState(next)); }
+    catch (error) { failed(); return; }
+    Promise.resolve(saved).then(function () {
+      state = next;
+      saving = false;
+      setStatus("已保存", false);
+      render();
+      if (state.running) startTicker();
+    }, failed);
+  }
+
+  function onToggle() {
+    if (!ready || saving || retryChange) return;
+    commit(function (base) {
+      var next = cloneState(base);
+      next.remaining = remainingNow(base);
+      if (base.running && next.remaining === 0) return computeNaturalEnd(base, false);
+      next.running = !base.running;
+      next.deadlineAt = next.running ? Date.now() + next.remaining * 1000 : null;
+      return next;
+    });
+  }
+
+  function onReset() {
+    if (!ready || saving || retryChange) return;
+    commit(function (base) {
+      var next = cloneState(base);
+      next.mode = "focus";
+      next.remaining = next.focusSeconds;
+      next.running = false;
+      next.deadlineAt = null;
+      return next;
+    });
+  }
+
+  function load() {
+    ready = false;
+    retryBtn.hidden = true;
+    setStatus("正在读取", false);
+    Promise.resolve().then(function () { return window.atoms.loadState(); })
+      .then(function (data) {
+        state = normalize(data);
+        ready = true;
+        render();
+        if (state.running) {
+          if (state.remaining === 0 && !Number.isFinite(state.deadlineAt)) {
+            commit(function (base) { return computeNaturalEnd(base, false); });
+          } else if (!Number.isFinite(state.deadlineAt)) {
+            // Old records have no timestamp: retain their remaining duration,
+            // establish a deadline once, and preserve every unknown field.
+            commit(function (base) {
+              var next = cloneState(base);
+              next.deadlineAt = Date.now() + next.remaining * 1000;
+              return next;
+            });
+          } else if (remainingNow(state) === 0) {
+            // Recovery settles only the saved period, then pauses. The count and
+            // the next paused period are one save, making reopening idempotent.
+            commit(function (base) { return computeNaturalEnd(base, false); });
+          } else {
+            setStatus("已读取", false);
+            startTicker();
+          }
+        } else {
+          setStatus("已读取", false);
+        }
+      }, function () {
+        ready = false;
+        toggleBtn.disabled = resetBtn.disabled = true;
+        retryBtn.hidden = false;
+        setStatus("读取失败，未更改数据，请重试", true);
+      });
+  }
+
+  retryBtn.addEventListener("click", function () {
+    if (retryChange) commit(retryChange);
+    else if (!ready) load();
+  });
+  toggleBtn.addEventListener("click", onToggle);
+  resetBtn.addEventListener("click", onReset);
+  window.addEventListener("beforeunload", stopTicker);
+
+  load();
+})();
+</script>
+</body>
+</html>

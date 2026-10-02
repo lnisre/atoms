@@ -9,8 +9,11 @@ export async function snapshot(page: Page): Promise<Snapshot> {
   return JSON.parse(await page.evaluate(async () => {
     const db = await new Promise<IDBDatabase>((resolve, reject) => { const r = indexedDB.open('atoms-projects', 1); r.onsuccess = () => resolve(r.result); r.onerror = () => reject(r.error); });
     try {
-      const read = (store: string) => new Promise(resolve => { const r = db.transaction(store).objectStore(store).getAll(); r.onsuccess = () => resolve(r.result); });
-      return JSON.stringify({ projects: await read('projects'), data: await read('applicationData') });
+      const read = (store: string) => new Promise<Record<string, unknown>[]>(resolve => { const r = db.transaction(store).objectStore(store).getAll(); r.onsuccess = () => resolve(r.result); });
+      const activeId = new URLSearchParams(location.search).get('project');
+      const projects = (await read('projects')).sort((a, b) => Number(b.id === activeId) - Number(a.id === activeId));
+      const data = (await read('applicationData')).sort((a, b) => Number(b.projectId === activeId) - Number(a.projectId === activeId));
+      return JSON.stringify({ projects, data });
     } finally { db.close(); }
   }));
 }

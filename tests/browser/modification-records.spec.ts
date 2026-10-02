@@ -10,7 +10,10 @@ async function snapshot(page: Page) {
     const db = await new Promise<IDBDatabase>(resolve => { const r=indexedDB.open('atoms-projects',1);r.onsuccess=()=>resolve(r.result); });
     const read = (name: string) => new Promise<unknown[]>(resolve=>{const r=db.transaction(name).objectStore(name).getAll();r.onsuccess=()=>resolve(r.result)});
     const projects = await read('projects'), data = await read('applicationData'); db.close();
-    return JSON.parse(JSON.stringify({projects,data}));
+    const snapshot = JSON.parse(JSON.stringify({projects,data}));
+    const activeId = new URLSearchParams(location.search).get('project');
+    snapshot.projects.sort((a: { id: string }, b: { id: string }) => Number(b.id === activeId) - Number(a.id === activeId));
+    return snapshot;
   });
 }
 async function setup(page: Page) {
