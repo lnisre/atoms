@@ -42,7 +42,7 @@ test('unavailable review keeps a restorable draft, truthful failure, and explici
   await page.route('**/api/generate',r=>respond(r,'unknown'));await begin(page);
   await expect(page.getByText('执行失败',{exact:true})).toBeVisible();await expect(page.getByText(/审查未完成，代码已保留/)).toBeVisible();
   await page.frameLocator('iframe').getByRole('button',{name:'增加'}).click();await expect(page.frameLocator('iframe').locator('output')).toHaveText('2');
-  const stored=await page.evaluate(async()=>{const db=await new Promise<IDBDatabase>(resolve=>{const r=indexedDB.open('atoms-projects');r.onsuccess=()=>resolve(r.result)});const p=await new Promise<Record<string,{html:string}>>(resolve=>{const r=db.transaction('projects').objectStore('projects').getAll();r.onsuccess=()=>resolve(r.result[0])});db.close();return p;});
+  const stored=await page.evaluate(async()=>{const db=await new Promise<IDBDatabase>(resolve=>{const r=indexedDB.open('atoms-projects');r.onsuccess=()=>resolve(r.result)});const p=await new Promise<Record<string,{html:string}>>(resolve=>{const r=db.transaction('projects').objectStore('projects').getAll();r.onsuccess=()=>resolve(r.result.find((p: { id: string }) => p.id === new URLSearchParams(location.search).get("project")))});db.close();return p;});
   expect(stored.result.html).not.toContain('saveState');expect(stored.draftResult.html).toContain('saveState');
   await page.reload();await expect(page.getByRole('button',{name:'使用此版本'})).toBeEnabled();await expect(page.frameLocator('iframe').locator('output')).toHaveText('0');
   await page.getByRole('button',{name:'使用此版本'}).click();await expect(page.getByText('运行预览 · 已采用应用')).toBeVisible();await expect(page.frameLocator('iframe').locator('output')).toHaveText('0');

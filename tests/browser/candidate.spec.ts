@@ -86,7 +86,7 @@ test('同项目多轮使用最新候选；试用增删改、失败、放弃、�
   await page.close();
   const reopened = await context.newPage(); await reopened.goto(url); await originalIntact(reopened);
   await reopened.getByRole('button', { name: 'Atoms 首页' }).click();
-  await expect(reopened.getByRole('region', { name: '已有项目' }).getByRole('button', { name: /打开项目/ })).toHaveCount(1);
+  await expect(reopened.getByRole('region', { name: '已有项目' }).getByRole('button', { name: /打开项目/ })).toHaveCount(2);
 });
 test('复制正式数据读取失败不开始空试用；手动重试可成功', async ({ page }) => {
   await setup(page);

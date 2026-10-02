@@ -1,3 +1,4 @@
+import { prepareBuiltinExample, type ExampleSource } from "./builtin-example";
 import { previewPolicy, type PreviewPolicy } from "./team/preview-policy";
 import { reviewedTeam, artifactTeam } from "./team/review";
 import { sha256 } from "./qa/contract";
@@ -15,6 +16,7 @@ export type ModificationRecord = {
 
 export type SavedProject = {
   id: string;
+  exampleSource?: ExampleSource;
   requirement: string;
   title: string;
   updatedAt: string;
@@ -90,16 +92,73 @@ async function transaction<T>(
   }
 }
 
+function displayProjects(projects: SavedProject[]) {
+  return projects.map(p => p.draftResult ? { ...p, result: p.draftResult } : p)
+    .sort((a, b) => b.updatedAt.localeCompare(a.updatedAt));
+}
+
 export function listProjects() {
   return transaction<SavedProject[]>(["projects"], "readonly", (tx, done) => {
     tx.objectStore("projects").getAll().onsuccess = (event) => {
-      const projects: SavedProject[] = (event.target as IDBRequest).result;
-      done(projects.map(p=>p.draftResult ? {...p,result:p.draftResult} : p).sort((a, b) => b.updatedAt.localeCompare(a.updatedAt)));
+      done(displayProjects((event.target as IDBRequest<SavedProject[]>).result));
     };
   });
 }
 
+// Metadata lives outside projects, under a non-project reserved key. Version 1
+// clients enumerate projects and read applicationData by UUID, so no upgrade or
+// project-list filter is needed. No business record is created for a null source.
+const FIRST_VISIT_KEY = "$atoms:workspace:first-visit";
+function initializeWorkspace(example?: SavedProject) {
+  return transaction<{ projects: SavedProject[]; needsExample: boolean }>(
+    ["projects", "applicationData"], "readwrite", (tx, done) => {
+      const projects = tx.objectStore("projects");
+      const metadata = tx.objectStore("applicationData");
+      projects.getAll().onsuccess = event => {
+        const saved = (event.target as IDBRequest<SavedProject[]>).result;
+        metadata.get(FIRST_VISIT_KEY).onsuccess = event => {
+          if ((event.target as IDBRequest).result) {
+            done({ projects: displayProjects(saved), needsExample: false });
+            return;
+          }
+          if (!saved.length && !example) {
+            done({ projects: [], needsExample: true });
+            return;
+          }
+          try {
+            if (!saved.length && example) {
+              projects.add(example);
+              saved.push(example);
+            }
+            metadata.put({ projectId: FIRST_VISIT_KEY, kind: "workspace-initialization", completed: true });
+            done({ projects: displayProjects(saved), needsExample: false });
+          } catch { tx.abort(); }
+        };
+      };
+    },
+  );
+}
+
+export async function listHomeProjects() {
+  // Read failure is never interpreted as an empty workspace. A failed asset or
+  // seed transaction leaves both records absent and allows an explicit retry.
+  await listProjects();
+  try {
+    const first = await initializeWorkspace();
+    if (!first.needsExample) return { projects: first.projects, exampleError: "" };
+    const example = await prepareBuiltinExample();
+    const final = await initializeWorkspace(example);
+    return { projects: final.projects, exampleError: "" };
+  } catch {
+    return {
+      projects: await listProjects(),
+      exampleError: "示例暂时准备失败，请重试；若浏览器存储不可用，当前无法保证保存与恢复。",
+    };
+  }
+}
+
 export async function saveProject(project: SavedProject) {
+  if (project.exampleSource) throw new Error("内置来源只允许由首次初始化创建");
   const team = project.initialGeneration?.team;
   if (team?.protocol === "atoms-team/3" && (!artifactTeam(team,await sha256(project.result.html),true) || JSON.stringify(project.previewPolicy) !== JSON.stringify(previewPolicy(team,project.result.html)))) throw new Error("项目代码、审查与预览策略不一致");
   return transaction<void>(["projects"], "readwrite", (tx) => {

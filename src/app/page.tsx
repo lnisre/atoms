@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import {
   appendGenerationEvents,
   listProjects,
+  listHomeProjects,
   loadApplicationData,
   saveProject,
   adoptCandidate,
@@ -34,7 +35,7 @@ type ModificationSession = {
   active: boolean;
 };
 
-type Project = { id: string; requirement: string };
+type Project = Pick<SavedProject, "id" | "requirement" | "exampleSource">;
 type Task =
   | { status: "waiting" }
   | { status: "failed"; error: string; outcome?: TeamOutcome }
@@ -73,6 +74,8 @@ export default function Home() {
   const [projects, setProjects] = useState<SavedProject[]>([]);
   const [loadingProjects, setLoadingProjects] = useState(true);
   const [listError, setListError] = useState("");
+  const [exampleError, setExampleError] = useState("");
+  const [homeLoadAttempt, setHomeLoadAttempt] = useState(0);
   const [projectSave, setProjectSave] = useState<
     "unsaved" | "saving" | "saved" | "failed"
   >("unsaved");
@@ -107,11 +110,14 @@ export default function Home() {
 
   useEffect(() => {
     let cancelled = false;
-    listProjects()
-      .then((saved) => {
+    const id = new URLSearchParams(window.location.search).get("project");
+    const load = id ? listProjects().then(projects => ({ projects, exampleError: "" })) : listHomeProjects();
+    load
+      .then(({ projects: saved, exampleError }) => {
         if (cancelled) return;
         setProjects(saved);
-        const id = new URLSearchParams(window.location.search).get("project");
+        setExampleError(exampleError);
+        setListError("");
         const current = saved.find((item) => item.id === id);
         if (current) {
           generationSession.current = null;
@@ -140,7 +146,12 @@ export default function Home() {
     return () => {
       cancelled = true;
     };
-  }, []);
+  }, [homeLoadAttempt]);
+
+  function retryHomeLoad() {
+    setLoadingProjects(true);
+    setHomeLoadAttempt(value => value + 1);
+  }
 
   function discardChanges() {
     for (const session of modificationSessions.current) session.active = false;
@@ -189,16 +200,7 @@ export default function Home() {
     setTask(null);
     setProjectSave("unsaved");
     window.history.replaceState(null, "", "/");
-    setLoadingProjects(true);
-    listProjects()
-      .then((saved) => {
-        setProjects(saved);
-        setListError("");
-      })
-      .catch(() =>
-        setListError("无法读取已有项目，请检查浏览器存储权限或空间。"),
-      )
-      .finally(() => setLoadingProjects(false));
+    retryHomeLoad();
   }
 
   useEffect(() => {
@@ -451,7 +453,7 @@ export default function Home() {
       {project && <header className="topbar">
         <div className="project-titlebar">
           <button className="brand" disabled={busy} onClick={goHome} aria-label="Atoms 首页"><AtomsMark /></button>
-          <h1 title={project.requirement}>{project.requirement}</h1>
+          <h1 title={project.requirement}>{project.exampleSource ? "示例 · 专注番茄钟" : project.requirement}</h1>
           <button className="text-button project-home" disabled={busy} onClick={goHome} aria-label="新建项目 / 已有项目" title="返回项目入口">⌄</button>
           <Unavailable label="代码历史与恢复">◴</Unavailable>
           <Unavailable label="收起对话">«</Unavailable>
@@ -467,6 +469,8 @@ export default function Home() {
           projects={projects}
           loadingProjects={loadingProjects}
           listError={listError}
+          exampleError={exampleError}
+          onRetryProjects={retryHomeLoad}
           examples={examples}
           onOpenProject={openProject}
           onGenerate={() => {
@@ -479,12 +483,12 @@ export default function Home() {
           <aside className="project-panel">
             <ConversationScroll key={project.id}>
               <details className="project-details"><summary>项目详情与保存范围</summary>
-                <details className="requirement-block"><summary>原需求详情</summary><p>{project.requirement}</p></details>
-                {task?.status === "complete" && <details className="generation-details"><summary>模型与耗时</summary><dl><div><dt>模型</dt><dd>{(candidate?.result ?? task.result).model}</dd></div><div><dt>{candidate ? "最近候选耗时" : "生成耗时"}</dt><dd>{((candidate?.result ?? task.result).durationMs / 1000).toFixed(1)} 秒</dd></div></dl></details>}
+                <details className="requirement-block"><summary>{project.exampleSource ? "示例功能与计时基线" : "原需求详情"}</summary><p>{project.requirement}</p></details>
+                {task?.status === "complete" && (!project.exampleSource || candidate || records.length > 0) && <details className="generation-details"><summary>模型与耗时</summary><dl><div><dt>模型</dt><dd>{(candidate?.result ?? task.result).model}</dd></div><div><dt>{candidate ? "最近候选耗时" : "生成耗时"}</dt><dd>{((candidate?.result ?? task.result).durationMs / 1000).toFixed(1)} 秒</dd></div></dl></details>}
                 <details className="storage-details"><summary>保存与恢复范围</summary><p>自动保存到本浏览器的当前网址。项目与应用数据分别显示保存结果，请等待保存成功再离开。清除站点数据、无痕会话结束或存储被回收后可能丢失，不支持跨设备找回。</p></details>
               </details>
-              <div className="user-message"><span>你 · 初始需求</span><p>{project.requirement}</p></div>
-              <section className={`task-state ${task?.status}`} aria-live="polite" aria-atomic="true">
+              {project.exampleSource ? <section className="result-card" aria-label="示例项目说明"><strong>示例项目</strong><p>这是预置的专注番茄钟，可以直接操作，也可以输入需求修改。操作会保存到本浏览器；初次提供与重新打开均不调用模型。</p></section> : <div className="user-message"><span>你 · 初始需求</span><p>{project.requirement}</p></div>}
+              {!project.exampleSource && <section className={`task-state ${task?.status}`} aria-live="polite" aria-atomic="true">
                 <div className="state-title">
                   <span className={initialBusy ? "spinner" : "state-symbol"} aria-hidden="true">{initialBusy ? "" : task?.status === "failed" ? "!" : "✓"}</span>
                   <h2>{initialBusy ? "正在生成应用" : task?.status === "failed" ? (task.outcome && task.outcome !== "failed" ? outcomeLabels[task.outcome] : "生成未完成") : restored ? "已恢复保存的应用" : "代码已生成"}</h2>
@@ -493,11 +497,11 @@ export default function Home() {
                 {task?.status === "waiting" && <button className="text-button" onClick={stopTask}>停止任务</button>}
                 {task?.status === "failed" && <><p role="alert" style={{whiteSpace:"pre-wrap"}}>{task.error}</p><button className="primary-button" onClick={() => void generate(project)}>重新生成</button></>}
                 {task?.status === "complete" && <p>{restored ? "已读取保存的需求和代码，没有重新调用模型。" : "现在可以在预览中操作应用。生成完成不代表所有功能都已验证。"}</p>}
-              </section>
+              </section>}
               {previousAttempts.map(attempt => <GenerationRecord key={attempt.record.taskId} title="此前任务" requirement={attempt.requirement} record={attempt.record} live={false} pending={false} saveError={false} saving={false} />)}
               {generationRecord && <GenerationRecord record={generationRecord} live={!restored && task?.status !== "failed"} pending={task?.status === "waiting"} saveError={logSaveError} saving={logSavePending} resultLabel={task?.status === "complete" ? (projectSave === "saved" ? "首次生成 · 已保存" : "首次生成 · 尚未保存") : undefined} />}
               <section className="record-history" aria-label="已采用修改记录">
-                {records.length === 0 && <p className="empty-history">还没有已采用的修改记录。</p>}
+                {records.length === 0 && !project.exampleSource && <p className="empty-history">还没有已采用的修改记录。</p>}
                 {records.map(record => <div key={record.id} className="adopted-group">
                   {record.generations?.length ? record.generations.map(generation => <GenerationRecord key={generation.taskId} title="已保存修改" requirement={generation.requirement} record={generation} live={false} pending={false} saveError={false} saving={false} />) : record.requests.map((request, index) => <div className="user-message" key={index}><span>已保存的修改需求</span><p>{request}</p></div>)}
                   <div className="result-card"><strong>{record.summary}</strong><p><time dateTime={record.adoptedAt}>{new Date(record.adoptedAt).toLocaleString("zh-CN")}</time> · 已采用并保存</p><small>修改记录，不提供历史代码回退。</small></div>
