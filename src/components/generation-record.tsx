@@ -1,3 +1,4 @@
+import { AssistantMessage } from "./assistant-message";
 import { issueText } from "@/lib/team/review";
 import { outcomeLabels } from "@/lib/team/contract";
 import type { InitialGeneration } from "@/lib/execution";
@@ -16,10 +17,7 @@ export function GenerationRecord({ record, live, pending, saveError, saving, tit
     const key = `${event.source}:${event.stepId}`;
     steps.set(key, [...(steps.get(key) ?? []), event]);
   }
-  return <section className="generation-record" aria-label={`${title}记录`}>
-    {requirement && <div className="user-message"><span>你</span><p>{requirement}</p></div>}
-    <div className="assistant-heading"><span className="assistant-mark" aria-hidden="true">✳</span><h2>助手 <span>{title}</span></h2></div>
-    <div className="assistant-content">
+  return <AssistantMessage title={title} requirement={requirement}>
       {pending ? <p className="record-note" role="status">等待模型完整说明…</p> : <p className="assistant-reply">{record.assistantReply ?? "本次未取得助手说明"}</p>}
       <p className="record-note">{record.team ? (record.team.protocol !== "atoms-team/1" ? "四角色代码审查流程；审查结论不代表业务运行已验证。" : "历史 QA 流程；检查结论仅覆盖当次代码、操作和合成样本。") : "M4 单模型生成；未执行四角色业务 QA。"}</p>
       {record.team && <div className="team-deliveries">
@@ -48,6 +46,5 @@ export function GenerationRecord({ record, live, pending, saveError, saving, tit
       {resultLabel && <div className="result-card"><strong>{resultLabel}</strong><p>请在右侧预览中实际操作，确认应用符合需求。</p></div>}
       {saving && <p className="record-note" role="status">执行记录正在保存，请等待完成再离开。</p>}
       {saveError && <p className="save-error" role="alert">执行记录保存失败，最新步骤可能无法恢复；已保存的应用和业务数据仍保留。请保留页面。</p>}
-    </div>
-  </section>;
+  </AssistantMessage>;
 }

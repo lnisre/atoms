@@ -25,6 +25,7 @@ import { readTeam } from "@/lib/team/client";
 import { previewPolicy, type PreviewPolicy } from "@/lib/team/preview-policy";
 import { unresolvedDataIssues } from "@/lib/team/review";
 import { TEAM_TIMEOUT_MS, TeamError, outcomeLabels, type TeamOutcome } from "@/lib/team/contract";
+import { ExampleConversation } from "@/components/example-conversation";
 import { GenerationRecord } from "@/components/generation-record";
 import { ConversationScroll } from "@/components/conversation-scroll";
 import { Unavailable, WorkspaceTools, PreviewNavigation, AtomsMark } from "@/components/workbench-controls";
@@ -487,7 +488,7 @@ export default function Home() {
                 {task?.status === "complete" && (!project.exampleSource || candidate || records.length > 0) && <details className="generation-details"><summary>模型与耗时</summary><dl><div><dt>模型</dt><dd>{(candidate?.result ?? task.result).model}</dd></div><div><dt>{candidate ? "最近候选耗时" : "生成耗时"}</dt><dd>{((candidate?.result ?? task.result).durationMs / 1000).toFixed(1)} 秒</dd></div></dl></details>}
                 <details className="storage-details"><summary>保存与恢复范围</summary><p>自动保存到本浏览器的当前网址。项目与应用数据分别显示保存结果，请等待保存成功再离开。清除站点数据、无痕会话结束或存储被回收后可能丢失，不支持跨设备找回。</p></details>
               </details>
-              {project.exampleSource ? <section className="result-card" aria-label="示例项目说明"><strong>示例项目</strong><p>这是预置的专注番茄钟，可以直接操作，也可以输入需求修改。操作会保存到本浏览器；初次提供与重新打开均不调用模型。</p></section> : <div className="user-message"><span>你 · 初始需求</span><p>{project.requirement}</p></div>}
+              {project.exampleSource ? <ExampleConversation /> : <div className="user-message"><span>你 · 初始需求</span><p>{project.requirement}</p></div>}
               {!project.exampleSource && <section className={`task-state ${task?.status}`} aria-live="polite" aria-atomic="true">
                 <div className="state-title">
                   <span className={initialBusy ? "spinner" : "state-symbol"} aria-hidden="true">{initialBusy ? "" : task?.status === "failed" ? "!" : "✓"}</span>

@@ -83,15 +83,27 @@ test("新工作区只创建一份独立示例、无业务记录、无伪造历�
   expect(first.projects[0].initialGeneration).toBeUndefined();
   await page.screenshot({ path: info.outputPath("home-example.png") });
   await card(page).click();
-  await expect(page.getByRole("region", { name: "示例项目说明" })).toBeVisible();
+  await expect(page.getByRole("region", { name: "示例项目记录" })).toBeVisible();
   await expect(page.getByText("你 · 初始需求")).toHaveCount(0);
+  const conversation = page.getByRole("region", { name: "示例项目记录" });
+  await expect(conversation.getByText("示例需求", { exact: true })).toBeVisible();
+  await expect(conversation.getByRole("heading", { name: "助手 示例项目" })).toBeVisible();
+  await expect(conversation.locator(".assistant-reply")).toContainText("这份专注番茄钟已经准备好了");
+  await expect(conversation.getByText("示例初始应用 · 已准备", { exact: true })).toBeVisible();
+  await expect(conversation.getByText("平台执行记录", { exact: true })).toHaveCount(0);
+  await conversation.getByText("示例交付说明", { exact: true }).click();
+  await expect(conversation).toContainText("本次打开没有执行模型生成或团队审查");
+  expect(await database(page)).toEqual(first);
   await expect(frame(page).locator("#timeDisplay")).toHaveText("25:00");
   await expect(frame(page).locator("#countDisplay")).toHaveText("已完成专注 0 次");
   await expect(frame(page).locator("#toggleBtn")).toHaveCSS("background-color", "rgb(34, 197, 94)");
+  await conversation.getByText("示例交付说明", { exact: true }).click();
+  await page.getByRole("region", { name: "项目对话与详情" }).evaluate(el => { el.scrollTop = 0; });
   await page.screenshot({ path: info.outputPath("workbench-example.png") });
   await action(page, "开始");
   await page.reload();
   await expect(frame(page).getByRole("button", { name: "暂停", exact: true })).toBeEnabled();
+  await expect(page.getByRole("heading", { name: "助手 示例项目" })).toBeVisible();
   expect(calls).toBe(0);
   const other = await browser.newContext(); const p2 = await other.newPage();
   await openExample(p2);
@@ -289,6 +301,7 @@ test("前台按原规则切换专注与休息，展示与输入不重置计时",
   await setTime(page, baseTime); await openExample(page); await action(page, "开始");
   await page.getByLabel("追加修改需求", { exact: true }).fill("保留输入");
   await page.getByText("项目详情与保存范围", { exact: true }).click();
+  await page.getByText("示例交付说明", { exact: true }).click();
   await setTime(page, baseTime + 1500_000);
   await expect(frame(page).locator("#modeLabel")).toHaveText("休息");
   await expect(frame(page).getByRole("button", { name: "暂停", exact: true })).toBeEnabled();
@@ -359,4 +372,42 @@ test("暂停与重置保存失败不覆盖原状态，重试后按实际时间�
     await action(page, "重试");
     await expect(frame(page).locator("#timeDisplay")).toHaveText(name === "暂停" ? "24:00" : "25:00");
   }
+});
+
+test("已保存且修改过的旧示例显示助手消息，不迁移或覆盖代码与数据", async ({ page }, info) => {
+  await page.goto("/?project=legacy-example");
+  await expect(page.getByRole("main").getByRole("alert")).toContainText("找不到该项目");
+  const html = await (await page.request.get("/examples/pomodoro-v1.html")).text();
+  await page.evaluate(async html => {
+    const db = await new Promise<IDBDatabase>(resolve => { const r = indexedDB.open("atoms-projects", 1); r.onsuccess = () => resolve(r.result); });
+    await new Promise<void>((resolve, reject) => {
+      const tx = db.transaction(["projects", "applicationData"], "readwrite");
+      tx.objectStore("projects").put({
+        id: "legacy-example", title: "示例 · 专注番茄钟", requirement: "已有示例功能基线", updatedAt: "2026-10-02T01:00:00Z",
+        exampleSource: { kind: "builtin-example", templateId: "focus-pomodoro", version: 1, sourceCodeHash: "a6c8df564b6088fc986ae137286e2b039d0cb9c10ab678d17a56bccd11dfc489", codeHash: "d1d6944ff3eda19b7f5150e9895cacc71579313be13e1e40232153f5b747871f" },
+        result: { html: html.replace("<h1>专注番茄钟</h1>", "<h1>保留我的标题</h1>"), model: "historical-fixture", durationMs: 1, generatedAt: "legacy" },
+        modificationRecords: [{ id: "saved-change", adoptedAt: "2026-10-02T01:00:00Z", requests: ["保留我的标题"], summary: "原有修改记录" }],
+      });
+      tx.objectStore("applicationData").put({ projectId: "legacy-example", state: { remaining: 987, running: false, completedFocusCount: 4, custom: { keep: true } } });
+      tx.oncomplete = () => resolve(); tx.onabort = () => reject(tx.error);
+    }); db.close();
+  }, html);
+  const before = await database(page);
+  let requests = 0; page.on("request", r => { if (r.url().includes("/api/generate")) requests++; });
+  await page.reload();
+  const conversation = page.getByRole("region", { name: "示例项目记录" });
+  await expect(conversation.getByRole("heading", { name: "助手 示例项目" })).toBeVisible();
+  await expect(frame(page).getByRole("heading", { name: "保留我的标题" })).toBeVisible();
+  await expect(frame(page).locator("#timeDisplay")).toHaveText("16:27");
+  await expect(frame(page).locator("#countDisplay")).toHaveText("已完成专注 4 次");
+  await page.getByLabel("追加修改需求", { exact: true }).fill("尚未提交的需求");
+  await conversation.getByText("示例交付说明", { exact: true }).click();
+  await expect(page.getByLabel("追加修改需求", { exact: true })).toHaveValue("尚未提交的需求");
+  await expect(page.getByText("原有修改记录", { exact: true })).toBeVisible();
+  expect(await database(page)).toEqual(before);
+  await page.screenshot({ path: info.outputPath("existing-example-conversation.png") });
+  await page.reload();
+  await expect(conversation.getByRole("heading", { name: "助手 示例项目" })).toBeVisible();
+  await expect(frame(page).locator("#timeDisplay")).toHaveText("16:27");
+  expect(await database(page)).toEqual(before); expect(requests).toBe(0);
 });
