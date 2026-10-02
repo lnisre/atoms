@@ -1,0 +1,15 @@
+{
+  "url": "https://v0-test0-nine.vercel.app",
+  "projectId": "d802672d-65e5-4aa5-ac8a-196c8b4ccb12",
+  "passed": true,
+  "checks": [
+    "same-origin pre-deployment example restored",
+    "assistant messages shown after deployment",
+    "project and business data unchanged",
+    "input and iframe retained on expand",
+    "reload restores state without model"
+  ],
+  "remaining": 1498,
+  "modelRequests": 0,
+  "checkedAt": "2026-10-02T14:16:48.853Z"
+}

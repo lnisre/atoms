@@ -377,7 +377,12 @@ test("暂停与重置保存失败不覆盖原状态，重试后按实际时间�
 test("已保存且修改过的旧示例显示助手消息，不迁移或覆盖代码与数据", async ({ page }, info) => {
   await page.goto("/?project=legacy-example");
   await expect(page.getByRole("main").getByRole("alert")).toContainText("找不到该项目");
-  const html = await (await page.request.get("/examples/pomodoro-v1.html")).text();
+  // Use the same browser network path as initialization (including host proxy).
+  const html = await page.evaluate(async () => {
+    const response = await fetch("/examples/pomodoro-v1.html", { signal: AbortSignal.timeout(10_000) });
+    if (!response.ok) throw new Error("示例素材读取失败");
+    return response.text();
+  });
   await page.evaluate(async html => {
     const db = await new Promise<IDBDatabase>(resolve => { const r = indexedDB.open("atoms-projects", 1); r.onsuccess = () => resolve(r.result); });
     await new Promise<void>((resolve, reject) => {

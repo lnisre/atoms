@@ -17,6 +17,14 @@
 
 本轮未执行新的真实模型请求；#37 的真实生产模型闭环证据保留，不把可控响应当成真实模型。此改动仅涉及对话呈现，模型协议与数据边界未改。
 
-目标生产部署与新/旧示例线上验证结果待补。源码身份见 [清单](assets/issue-39/source-sha256.json)。
+## 固定生产地址验证
+
+已更新 [v0-test0-nine.vercel.app](https://v0-test0-nine.vercel.app/)，生产部署 `dpl_6VqufYRg5Z5YGB1Jpj3KAXYbizzA` 为 READY，固定 alias 已核对。产品源码提交 `86db88d7dcc02156e4e99627dae3ca306d1ccc62`，[源码清单](assets/issue-39/source-sha256.json) 与上传文件逐项一致；后续提交仅补证据和测试网络取材方式，不改产品代码。
+
+- 线上示例首轮16项：15通过，1项在 Playwright 独立 API 请求素材时超时，尚未进入业务操作。该测试改用真实页面同源 fetch 获取素材，原断言不变，定向复验1/1通过（8.9秒）。不是一场16/16全绿，全部16项已有有效线上通过结果。
+- 额外完成真实跨部署升级：在旧线上版本、专用隔离浏览器中实际开始/暂停并保存1498秒状态；同一浏览器在新部署重开后看到助手消息。项目记录和业务记录逐值不变；展开说明与未提交输入保留；再刷新仍正确。模型请求0。
+- [部署身份](assets/issue-39/production-deployment.json)、[同浏览器升级结果](assets/issue-39/upgrade-result.json)、[线上已保存示例消息](assets/issue-39/production-upgraded-example.png)。
+
+没有改用户浏览器 profile、源项目、示例HTML或正式业务数据；不要求清除站点数据。已有示例刷新即可显示更新消息。
 
 [消息布局截图](assets/issue-39/example-conversation.png)。

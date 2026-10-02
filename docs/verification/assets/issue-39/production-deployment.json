@@ -1,0 +1,20 @@
+{
+  "sourceCommit": "86db88d7dcc02156e4e99627dae3ca306d1ccc62",
+  "sourceDigest": "8fcbd6992c027577e4d656b9ce7bafb5d35ba581dc8fa8aedd582067eacea796",
+  "deploymentId": "dpl_6VqufYRg5Z5YGB1Jpj3KAXYbizzA",
+  "deploymentURL": "https://v0-test0-c69ai0tpo-lnisres-projects.vercel.app",
+  "target": "production",
+  "readyState": "READY",
+  "fixedURL": "https://v0-test0-nine.vercel.app",
+  "verifiedAliasDeploymentId": "dpl_6VqufYRg5Z5YGB1Jpj3KAXYbizzA",
+  "previousProductionDeployment": "dpl_DfYb9orGzdCLPvW78dwx7w9WcBuE",
+  "aliasCheckedAt": "2026-10-02T14:16:44.855Z",
+  "browserTests": {
+    "firstRunPassed": 15,
+    "firstRunFailed": 1,
+    "failure": "independent API fixture request timeout before business steps",
+    "targetedRecheckPassed": 1
+  },
+  "sameBrowserUpgradePassed": true,
+  "sourceReleaseSha256": "d1d6944ff3eda19b7f5150e9895cacc71579313be13e1e40232153f5b747871f"
+}
