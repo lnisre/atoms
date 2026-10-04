@@ -1,0 +1,141 @@
+{
+  "url": "https://v0-test0-nine.vercel.app",
+  "startedAt": "2026-10-02T13:06:22.767Z",
+  "kind": "real model through deployed application; fresh isolated browser context",
+  "requests": [
+    {
+      "taskId": "93f3dfb2-c612-4229-82ca-9953253675d5",
+      "projectId": "c5e16eed-fcf6-4b82-9f9d-cffdd04cbc71",
+      "fields": [
+        "baseDataIssues",
+        "baseHtml",
+        "context",
+        "modification",
+        "projectId",
+        "requirement"
+      ],
+      "modification": "将标题从“专注番茄钟”改为“我的专注番茄钟”。仅调整标题，保持其他外观、计时、保存、恢复及未知字段处理不变。",
+      "baseCodeHash": "d1d6944ff3eda19b7f5150e9895cacc71579313be13e1e40232153f5b747871f",
+      "requirement": "专注番茄钟：保留深色卡片、绿色开始按钮与中文界面；默认专注25分钟、休息5分钟，支持开始、暂停、重置与完成专注次数；前台到期自动进入下一段并提示。运行中的当前段按真实经过时间跨刷新/关闭恢复，重开时已到期只结算当前段并暂停，不追补多轮、不重复计数。暂停保持暂停，继续从剩余时间开始；重置到初始专注暂停状态，保留完成统计及未知字段。通过 atoms.loadState/saveState 保存，读取失败禁止覆盖，保存成功才确认操作、失败可重试。无时长设置、后台服务或后台提醒。"
+    }
+  ],
+  "modelCalls": [
+    {
+      "call": 1,
+      "actor": "Mike",
+      "status": "started"
+    },
+    {
+      "call": 1,
+      "actor": "Mike",
+      "status": "completed",
+      "responseModel": "deepseek-flash"
+    },
+    {
+      "call": 2,
+      "actor": "Requirements",
+      "status": "started"
+    },
+    {
+      "call": 2,
+      "actor": "Requirements",
+      "status": "completed",
+      "responseModel": "deepseek-flash"
+    },
+    {
+      "call": 3,
+      "actor": "Mike",
+      "status": "started"
+    },
+    {
+      "call": 3,
+      "actor": "Mike",
+      "status": "completed",
+      "responseModel": "deepseek-flash"
+    },
+    {
+      "call": 4,
+      "actor": "Engineer",
+      "status": "started"
+    },
+    {
+      "call": 4,
+      "actor": "Engineer",
+      "status": "completed",
+      "responseModel": "deepseek-flash"
+    },
+    {
+      "call": 5,
+      "actor": "Mike",
+      "status": "started"
+    },
+    {
+      "call": 5,
+      "actor": "Mike",
+      "status": "completed",
+      "responseModel": "deepseek-flash"
+    },
+    {
+      "call": 6,
+      "actor": "Reviewer",
+      "status": "started"
+    },
+    {
+      "call": 6,
+      "actor": "Reviewer",
+      "status": "completed",
+      "responseModel": "deepseek-flash"
+    },
+    {
+      "call": 7,
+      "actor": "Mike",
+      "status": "started"
+    },
+    {
+      "call": 7,
+      "actor": "Mike",
+      "status": "completed",
+      "responseModel": "deepseek-flash"
+    }
+  ],
+  "actions": [
+    "开始",
+    "暂停",
+    "candidate reset leaves formal data unchanged",
+    "adopt only code; reload restores code and original paused state"
+  ],
+  "passed": true,
+  "initializationCalls": 0,
+  "initialCodeHash": "d1d6944ff3eda19b7f5150e9895cacc71579313be13e1e40232153f5b747871f",
+  "formalBefore": {
+    "mode": "focus",
+    "remaining": 1498,
+    "running": false,
+    "focusSeconds": 1500,
+    "breakSeconds": 300,
+    "completedFocusCount": 0,
+    "deadlineAt": null
+  },
+  "terminal": {
+    "type": "result",
+    "outcome": "passed",
+    "codeHash": "5da3e82895e605b13811e30de0e1aa404b679ce20018c881b11aab532edde883",
+    "review": {
+      "kind": "code-review",
+      "schemaVersion": 1,
+      "taskId": "93f3dfb2-c612-4229-82ca-9953253675d5",
+      "codeHash": "5da3e82895e605b13811e30de0e1aa404b679ce20018c881b11aab532edde883",
+      "approved": true,
+      "summary": "标题修改已正确实施：<title> 与 h1 均为「我的专注番茄钟」，其余外观、计时、保存、恢复逻辑与 baseHtml 一致。核心契约检查通过：仅使用 window.atoms.loadState/saveState 且传入数据值（非字符串）；保存成功后才提交 state；失败保留完整 pre-mutation 快照并可重试；normalize/cloneState 完整复制未知字段；读取失败显示「读取失败，未更改数据，请重试」并禁用按钮不写入；状态文案符合平台约定（正在读取/已读取/正在保存/已保存/失败）；恢复逻辑按 deadlineAt 结算当前段一次并暂停，暂停保持暂停，重置回初始专注暂停并保留统计。未发现功能、数据丢失、持久化或交互类缺陷。",
+      "issues": [],
+      "resolutions": []
+    },
+    "model": "deepseek-flash"
+  },
+  "restorationCalls": 0,
+  "finalCodeHash": "5da3e82895e605b13811e30de0e1aa404b679ce20018c881b11aab532edde883",
+  "savedTaskId": "93f3dfb2-c612-4229-82ca-9953253675d5",
+  "projectId": "c5e16eed-fcf6-4b82-9f9d-cffdd04cbc71",
+  "projectURL": "https://v0-test0-nine.vercel.app/?project=c5e16eed-fcf6-4b82-9f9d-cffdd04cbc71",
+  "endedAt": "2026-10-02T13:07:21.728Z"
+}

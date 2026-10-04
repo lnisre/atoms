@@ -11,7 +11,7 @@ for (const viewport of [{ width: 1440, height: 900 }, { width: 1280, height: 720
     await page.setViewportSize(viewport);
     let calls = 0;
     await page.route('**/api/generate', route => fulfillGeneration(route, { json: { html, model: 'entry-fixture', generatedAt: String(++calls), durationMs: 1000 } }));
-    await page.goto('/');
+    await page.goto('/?project=old-0');
     await expect(page.getByText('正在读取已有项目…')).toHaveCount(0);
     await page.evaluate(async html => {
       const db = await new Promise<IDBDatabase>(resolve => { const r = indexedDB.open('atoms-projects', 1); r.onsuccess = () => resolve(r.result); });
@@ -22,7 +22,7 @@ for (const viewport of [{ width: 1440, height: 900 }, { width: 1280, height: 720
         tx.oncomplete = () => resolve();
       }); db.close();
     }, html);
-    await page.reload();
+    await page.goto('/');
     await expect(page.getByRole('region', { name: '最近项目' }).getByRole('button')).toHaveCount(5);
     await expect(page.locator('iframe')).toHaveCount(0);
     await page.screenshot({ path: info.outputPath('home.png') });
@@ -89,9 +89,10 @@ for (const viewport of [{ width: 1440, height: 900 }, { width: 1280, height: 720
 }
 
 test('空项目入口与存储失败反馈可达', async ({ page }) => {
-  await page.goto('/');
+  await page.goto('/?project=missing');
   await page.getByRole('button', { name: '我的项目', exact: true }).click();
-  await page.getByRole('button', { name: '创建第一个应用' }).click();
+  await expect(page.getByRole('main').getByRole('alert')).toContainText('此浏览器中找不到该项目');
+  await page.getByRole('button', { name: '首页', exact: true }).click();
   await expect(page.getByLabel('你想做什么？')).toBeVisible();
   await page.goto('/?project=missing');
   await expect(page.getByRole('main').getByRole('alert')).toContainText('此浏览器中找不到该项目');

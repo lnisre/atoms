@@ -4,6 +4,7 @@ RUN corepack enable && corepack prepare pnpm@10.12.1 --activate
 COPY package.json pnpm-lock.yaml ./
 RUN pnpm install --frozen-lockfile
 COPY src ./src
+COPY public ./public
 COPY runtime/team/review.schema.json ./runtime/team/review.schema.json
 COPY next.config.ts tsconfig.json postcss.config.mjs eslint.config.mjs ./
 RUN pnpm build
@@ -21,6 +22,7 @@ COPY --from=web /usr/local/bin/node /usr/local/bin/node
 WORKDIR /app
 COPY --from=web /web/.next/standalone ./
 COPY --from=web /web/.next/static ./.next/static
+COPY --from=web /web/public ./public
 COPY runtime/team ./runtime/team
 COPY --from=web /web/node_modules/.pnpm/ws@8.18.3/node_modules/ws ./runtime/team/node_modules/ws
 RUN python -m pip check && python runtime/team/test_runner.py && python -m pip freeze > /app/runtime/team/target-freeze.txt
