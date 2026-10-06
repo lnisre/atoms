@@ -1,0 +1,32 @@
+{
+  "revision": "886f933c3015d3c810f85662812c5bc201a478f7",
+  "node": "v24.18.0",
+  "identity": {
+    "src/lib/team/socket.ts": "e99e31c125a113fe47a7b131208b28ab440105ab9e3398e95000c124ec620e76",
+    "src/lib/team/client.ts": "e7c5cb48b34683c41d56ea2fad7aff5d7bbf31fa7c4e9c29bf60cfcc0a4aa4c2"
+  },
+  "dependencies": [
+    "file:///Users/gaowenlong/.codex/worktrees/bf81/atoms/src/lib/html-document.ts",
+    "file:///Users/gaowenlong/.codex/worktrees/bf81/atoms/src/lib/team/review.ts",
+    "file:///Users/gaowenlong/.codex/worktrees/bf81/atoms/src/lib/qa/contract.ts",
+    "file:///Users/gaowenlong/.codex/worktrees/bf81/atoms/src/lib/team/contract.ts"
+  ],
+  "websocketFrames": [
+    {
+      "action": "start",
+      "ticket": "offline"
+    },
+    {
+      "action": "heartbeat",
+      "taskId": "task",
+      "token": "offline",
+      "id": 1
+    }
+  ],
+  "readOutcome": "AbortError: This operation was aborted",
+  "unhandledRejections": [],
+  "uncaughtExceptions": [
+    "TypeError [ERR_INVALID_STATE]: Invalid state: Controller is already closed"
+  ],
+  "providerCalls": 0
+}

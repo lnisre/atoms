@@ -1,0 +1,5 @@
+2026-10-06 20:02:00.064 | INFO     | metagpt.const:get_metagpt_root:25 - PROJECT_ROOT set from environment variable to /private/tmp/atoms-issue41/metagpt
+2026-10-06 20:02:00.065 | INFO     | metagpt.const:get_metagpt_package_root:15 - Package root set to /private/tmp/atoms-issue41/venv/lib/python3.11/site-packages
+/private/tmp/atoms-issue41/venv/lib/python3.11/site-packages/google/auth/transport/grpc.py:43: FutureWarning: grpcio < 1.83.0 does not support Post-Quantum Cryptography (PQC). Support for non-PQC environments is deprecated. In April 2027, google-auth will raise its minimum requirements to enforce grpcio >= 1.83.0. For more details on Google Cloud's post-quantum security migration, visit: https://cloud.google.com/security/resources/post-quantum-cryptography
+  warnings.warn(
+3.11.14 1.0.0 /private/tmp/atoms-issue41/venv/lib/python3.11/site-packages/metagpt/__init__.py

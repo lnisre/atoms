@@ -1,0 +1,226 @@
+{
+  "stats": {
+    "startTime": "2026-10-06T12:45:28.869Z",
+    "duration": 256830.949,
+    "expected": 16,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  },
+  "tests": [
+    {
+      "file": "team-modification.spec.ts",
+      "title": "nonfatal and unavailable-review modifications publish candidates; clarification and stop preserve them; adoption keeps real history",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "duration": 43510
+        }
+      ]
+    },
+    {
+      "file": "team-modification.spec.ts",
+      "title": "wrong base identity, wrong task and invalid terminal cannot replace an existing candidate",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "duration": 25796
+        }
+      ]
+    },
+    {
+      "file": "team-stop.spec.ts",
+      "title": "first generation stops after a cached artifact without publishing it",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "duration": 39215
+        }
+      ],
+      "stop": {
+        "observationMs": 32000,
+        "errors": [],
+        "sockets": [
+          {
+            "reviews": 2,
+            "artifacts": 2,
+            "closed": true,
+            "framesAfterClose": 0
+          }
+        ],
+        "storageEqual": true
+      }
+    },
+    {
+      "file": "team-stop.spec.ts",
+      "title": "modification stop preserves adopted code, business data and modification records",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "duration": 61786
+        }
+      ],
+      "stop": {
+        "observationMs": 32000,
+        "errors": [],
+        "sockets": [
+          {
+            "reviews": 1,
+            "artifacts": 1,
+            "closed": true,
+            "framesAfterClose": 0
+          },
+          {
+            "reviews": 1,
+            "artifacts": 1,
+            "closed": true,
+            "framesAfterClose": 0
+          },
+          {
+            "reviews": 2,
+            "artifacts": 2,
+            "closed": true,
+            "framesAfterClose": 0
+          }
+        ],
+        "storageEqual": true
+      }
+    },
+    {
+      "file": "team.spec.ts",
+      "title": "M5 rejects a legacy HTML-only first-generation response",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "duration": 614
+        }
+      ]
+    },
+    {
+      "file": "team.spec.ts",
+      "title": "HTTP team → code review → save → operations → reopen with zero generation requests",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "duration": 6665
+        }
+      ]
+    },
+    {
+      "file": "team.spec.ts",
+      "title": "leaving while Reviewer runs closes the connection; no hidden delivery",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "duration": 8318
+        }
+      ]
+    },
+    {
+      "file": "team.spec.ts",
+      "title": "wrong-code result is rejected and no project is delivered",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "duration": 6642
+        }
+      ]
+    },
+    {
+      "file": "team.spec.ts",
+      "title": "remaining nonfatal findings after two native repairs still preview and save",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "duration": 6293
+        }
+      ]
+    },
+    {
+      "file": "team.spec.ts",
+      "title": "one real native repair is shown, saved and restored with rejection history",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "duration": 7415
+        }
+      ]
+    },
+    {
+      "file": "team.spec.ts",
+      "title": "stop during rereview releases waiting and prevents a late delivery",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "duration": 6931
+        }
+      ]
+    },
+    {
+      "file": "team.spec.ts",
+      "title": "clarification ends its task, retains questions and restarts with a new identity",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "duration": 12359
+        }
+      ]
+    },
+    {
+      "file": "team.spec.ts",
+      "title": "format correction is not code repair and repeated invalid output fails",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "duration": 8011
+        }
+      ]
+    },
+    {
+      "file": "team.spec.ts",
+      "title": "unsupported requirements explain a feasible adjustment and end",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "duration": 7142
+        }
+      ]
+    },
+    {
+      "file": "team.spec.ts",
+      "title": "one review format correction succeeds without an Engineer repair",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "duration": 6725
+        }
+      ]
+    },
+    {
+      "file": "team.spec.ts",
+      "title": "an old approval cannot be substituted for the repaired-code review",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "duration": 5343
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "kind": "zero-network local lifecycle reproduction using actual source adapter, not production backend proof",
+  "source": "src/lib/team/socket.ts:10,29-33",
+  "sequence": [
+    "consumer cancels response reader",
+    "normal WebSocket close arrives"
+  ],
+  "observed": {
+    "name": "TypeError",
+    "message": "Invalid state: Controller is already closed",
+    "stack": "TypeError [ERR_INVALID_STATE]: Invalid state: Controller is already closed\n    at ReadableStreamDefaultController.close (node:internal/webstreams/readablestream:1096:13)\n    at <anonymous> (/Users/gaowenlong/.codex/worktrees/fe44/atoms/src/lib/team/socket.ts:33:137)\n    at SyntheticSocket.emit (file:///private/tmp/atoms-issue41/baseline-reproduction.mjs:3:309)\n    at file:///private/tmp/atoms-issue41/baseline-reproduction.mjs:4:271"
+  },
+  "webSocketCloseRequested": 1,
+  "newProviderCalls": 0,
+  "limitation": "Local stream says already closed; online Chrome said errored. Both show unguarded close after non-readable consumer state; no claim of server process or billing cancellation."
+}

@@ -1,0 +1,23 @@
+✔ reader cancellation followed by normal socket close never closes the stream twice (35.26925ms)
+✔ normal events drain in order; control success/rejection stays out of the stream (1.04325ms)
+✔ cancel settles all pending controls and ignores late events without waiting for a close callback (0.85225ms)
+✔ abort settles all pending controls and ignores late events without waiting for a close callback (0.879583ms)
+✔ close settles all pending controls and ignores late events without waiting for a close callback (0.46575ms)
+✔ normal-close settles all pending controls and ignores late events without waiting for a close callback (0.412625ms)
+✔ abnormal-close settles all pending controls and ignores late events without waiting for a close callback (0.371916ms)
+✔ error settles all pending controls and ignores late events without waiting for a close callback (0.315ms)
+✔ protocol settles all pending controls and ignores late events without waiting for a close callback (0.365458ms)
+✔ socket-error settles all pending controls and ignores late events without waiting for a close callback (0.374ms)
+✔ timeout settles all pending controls and ignores late events without waiting for a close callback (0.313625ms)
+✔ send-error settles all pending controls and ignores late events without waiting for a close callback (0.343583ms)
+✔ an already aborted signal never starts a task or retains listeners (0.275792ms)
+✔ abort while connecting prevents start even if open arrives later (0.190417ms)
+✔ start send failure errors the reader and cleans up the connection (0.203791ms)
+ℹ tests 15
+ℹ suites 0
+ℹ pass 15
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 330.799958
