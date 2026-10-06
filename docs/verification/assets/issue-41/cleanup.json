@@ -1,0 +1,14 @@
+{
+  "gatewayPid": 17556,
+  "nextPid": 17586,
+  "ports": [
+    3241,
+    3242
+  ],
+  "listeners": "",
+  "ownedProcesses": "",
+  "remainingTestBrowserOrPythonProcesses": [],
+  "temporaryRuntimeRemoved": true,
+  "retained": "docs/verification/assets/issue-41 and /private/tmp/atoms-issue41 logs; worktree node_modules/.next retained",
+  "browserProfileNote": "Playwright temporary profiles managed by the completed runner; no Chrome process using a Playwright temporary profile remains."
+}

@@ -1,0 +1,59 @@
+
+> atoms@0.1.0 test /Users/gaowenlong/.codex/worktrees/fe44/atoms
+> node --import tsx --test tests/generate.test.ts tests/team.test.ts tests/team-socket.test.ts tests/preview-policy.test.ts
+
+✔ 无效需求与跨源请求不调用模型 (111.72875ms)
+✔ 未配置密钥时明确失败 (1.945875ms)
+✔ 模型错误不会透传原始响应或返回假应用 (36.6835ms)
+✔ 真实请求合同、完整 HTML 与调用耗时 (25.836458ms)
+✔ 截断、空白或非 HTML 结果不作为成功 (2.500417ms)
+✔ 服务端超时结束请求并给出可重试错误 (1.213083ms)
+✔ 仅解包模型返回的唯一完整文档，不执行前后说明 (1.527ms)
+✔ 修改完整传递基础代码、追加需求与成功对话；不沿用首次需求长度限制截断代码 (2.751ms)
+✔ 缺失或超限修改输入明确失败，不丢弃上下文继续生成 (62.640542ms)
+✔ 注释中的结构标签不能冒充真实 head/body，无法装配时明确失败 (3.391041ms)
+✔ 单次请求分离完整正文与 HTML，模型等待期间已传递真实开始事件 (3.494791ms)
+✔ 缺少或无效正文保留完整应用，不补调模型；超长正文不静默截断 (20.009291ms)
+✔ 模型、提取、结构失败均发出实际失败与终态，不透传敏感错误 (14.041666ms)
+✔ 客户端收到产物后连接异常也不提交成功；取消读取会取消上游 (31.116209ms)
+✔ 修改沿用同次正文协议与实时事件，保留完整上下文和缺正文降级 (16.625084ms)
+✔ three implementations (two repairs) may finish with major nonfatal findings; fourth is rejected (21.316042ms)
+✔ review evidence is bound to current code; unsupported fatal labels cannot block preview (0.568584ms)
+✔ minor does not authorize repair; data risk permits trial but not adoption (4.491709ms)
+✔ changing code without a resolution cannot erase data risk; current-code resolution can (7.509667ms)
+✔ a third artifact with unavailable review cannot inherit second-artifact data resolution (1.136292ms)
+✔ only platform structural and proven empty-loop rules block; normal errors, strings, finite loops do not (16.019458ms)
+✔ client keeps a complete artifact on local deadline but not on explicit stop or malformed terminal (240.716833ms)
+✔ reader cancellation followed by normal socket close never closes the stream twice (97.632958ms)
+✔ normal events drain in order; control success/rejection stays out of the stream (2.623625ms)
+✔ cancel settles all pending controls and ignores late events without waiting for a close callback (2.048666ms)
+✔ abort settles all pending controls and ignores late events without waiting for a close callback (1.962333ms)
+✔ close settles all pending controls and ignores late events without waiting for a close callback (1.527584ms)
+✔ normal-close settles all pending controls and ignores late events without waiting for a close callback (1.5565ms)
+✔ abnormal-close settles all pending controls and ignores late events without waiting for a close callback (0.842ms)
+✔ error settles all pending controls and ignores late events without waiting for a close callback (0.771ms)
+✔ protocol settles all pending controls and ignores late events without waiting for a close callback (0.71075ms)
+✔ socket-error settles all pending controls and ignores late events without waiting for a close callback (0.51025ms)
+✔ timeout settles all pending controls and ignores late events without waiting for a close callback (0.385292ms)
+✔ send-error settles all pending controls and ignores late events without waiting for a close callback (0.73675ms)
+✔ an already aborted signal never starts a task or retains listeners (0.739958ms)
+✔ abort while connecting prevents start even if open arrives later (1.067375ms)
+✔ start send failure errors the reader and cleans up the connection (0.652708ms)
+✔ platform rules are appended independently; missing or renamed business checks reject (5.064416ms)
+✔ request bound evidence rejects omissions, wrong task, stale hash and weakened expected values (1.222042ms)
+✔ HTTP boundary rejects opaque origin, malformed first tasks and missing task owners without model calls (130.980459ms)
+✔ a missing Python executable emits an explicit terminal error, never a result (19.0385ms)
+✔ review gate binds approval to this code and all four roles (9.954125ms)
+✔ handoff gate rejects stale approval, unchanged code, second repair and wrong task (1.856292ms)
+✔ cancel and original deadline terminate the actual supervised process (11032.863042ms)
+✔ modification input admits complete large code but rejects missing context and business records (46.613292ms)
+✔ adoption rejects wrong project, stale final code and broken successful-round lineage before storage (48.172209ms)
+✔ bounded read-only observations keep exact expectations at the tool boundary (0.67075ms)
+ℹ tests 47
+ℹ suites 0
+ℹ pass 47
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 11978.438292

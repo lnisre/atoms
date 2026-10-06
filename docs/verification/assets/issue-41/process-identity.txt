@@ -1,0 +1,3 @@
+COMMAND   PID       USER   FD   TYPE DEVICE SIZE/OFF      NODE NAME
+node    17556 gaowenlong  cwd    DIR   1,16     1024 196633403 /Users/gaowenlong/.codex/worktrees/fe44/atoms
+node    17586 gaowenlong  cwd    DIR   1,16      256 196708850 /Users/gaowenlong/.codex/worktrees/fe44/atoms/.next/standalone

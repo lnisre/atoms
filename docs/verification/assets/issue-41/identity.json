@@ -1,0 +1,24 @@
+{
+  "cwd": "/Users/gaowenlong/.codex/worktrees/fe44/atoms",
+  "branch": "codex/fix-team-socket-cancel",
+  "base": "886f933c3015d3c810f85662812c5bc201a478f7",
+  "buildId": "bMF96r72Yu26vr7pW362e",
+  "node": "v24.18.0",
+  "files": {
+    "src/lib/team/socket.ts": "80536de259fcaf5bd59fc14ffc069a159deeb5d4fd15b964de7857999b2bad2d",
+    "src/lib/team/client.ts": "e7c5cb48b34683c41d56ea2fad7aff5d7bbf31fa7c4e9c29bf60cfcc0a4aa4c2",
+    "tests/team-socket.test.ts": "548b21509655613b67fdedd98f2c27f9b2bc39abe1b7568ffe9149f770851e2f",
+    "tests/browser/team-stop.spec.ts": "b363d901ae045b1d549dc7d524e09d14612709c76fb357f1448dcc90819b7d3c",
+    "tests/team/fixture_transport.py": "9af21ce54929b05df5c25d15c130f91e230e9e14051b02751a392221fdb7fc0e",
+    "tests/team/cross-app-workflow.ts": "3c0d1af05ceebc6320aa7195699d12c531a523e17bbb5eb6d5c37c156adc4973",
+    "runtime/team/runner.py": "b68c6ef8185d35cc276c3b20b862eb48d98aff85da5b6b6cb93dc71f2df9ae5d",
+    "runtime/team/gateway.mjs": "df16a20fd6f4b80d10c4c3b47ace15152cb0844adbdea95f668ae4f90d18fbe2",
+    "package.json": "afce6ecac1ea3cadf27e5b72604bc525f4c30511816553b5011fdf033d94714c",
+    "pnpm-lock.yaml": "05703d88d628174696fa23bb0996ff1ed55015bea5ba5e3fab8563b0f3b8a998"
+  },
+  "provider": "tests/team/fixture_transport.py patches httpx.AsyncClient; offline placeholder credentials only",
+  "realProviderCalls": 0,
+  "chrome": "154.0.8037.98",
+  "exampleAssetSha256": "d1d6944ff3eda19b7f5150e9895cacc71579313be13e1e40232153f5b747871f",
+  "servedExampleMatches": true
+}

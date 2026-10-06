@@ -1,0 +1,207 @@
+[
+  {
+    "file": ".agents/skills/verify-atoms/SKILL.md",
+    "target": "../../../CONTEXT.md",
+    "exists": true
+  },
+  {
+    "file": ".agents/skills/verify-atoms/SKILL.md",
+    "target": "features/README.md",
+    "exists": true
+  },
+  {
+    "file": ".agents/skills/verify-atoms/SKILL.md",
+    "target": "references/team.md",
+    "exists": true
+  },
+  {
+    "file": ".agents/skills/verify-atoms/SKILL.md",
+    "target": "references/team.md",
+    "exists": true
+  },
+  {
+    "file": ".agents/skills/verify-atoms/SKILL.md",
+    "target": "references/team.md",
+    "exists": true
+  },
+  {
+    "file": ".agents/skills/verify-atoms/SKILL.md",
+    "target": "features/README.md",
+    "exists": true
+  },
+  {
+    "file": ".agents/skills/verify-atoms/SKILL.md",
+    "target": "references/initial-artifact.md",
+    "exists": true
+  },
+  {
+    "file": ".agents/skills/verify-atoms/SKILL.md",
+    "target": "references/team.md",
+    "exists": true
+  },
+  {
+    "file": ".agents/skills/verify-atoms/references/initial-artifact.md",
+    "target": "../../../../docs/adr/0011-review-findings-and-preview.md",
+    "exists": true
+  },
+  {
+    "file": ".agents/skills/verify-atoms/references/initial-artifact.md",
+    "target": "team.md",
+    "exists": true
+  },
+  {
+    "file": ".agents/skills/verify-atoms/references/initial-artifact.md",
+    "target": "../../../../docs/verification/issue-40.md",
+    "exists": true
+  },
+  {
+    "file": ".agents/skills/verify-atoms/references/team.md",
+    "target": "../../../../runtime/team/README.md",
+    "exists": true
+  },
+  {
+    "file": ".agents/skills/verify-atoms/references/team.md",
+    "target": "../../../../Dockerfile.vercel",
+    "exists": true
+  },
+  {
+    "file": ".agents/skills/verify-atoms/references/team.md",
+    "target": "../../../../docs/adr/0011-review-findings-and-preview.md",
+    "exists": true
+  },
+  {
+    "file": ".agents/skills/verify-atoms/references/team.md",
+    "target": "../../../../docs/agents/vercel.md",
+    "exists": true
+  },
+  {
+    "file": ".agents/skills/verify-atoms/references/team.md",
+    "target": "initial-artifact.md",
+    "exists": true
+  },
+  {
+    "file": ".agents/skills/verify-atoms/features/workbench.md",
+    "target": "example.md",
+    "exists": true
+  },
+  {
+    "file": ".agents/skills/verify-atoms/features/example.md",
+    "target": "../../../../docs/adr/0012-first-visit-example-project.md",
+    "exists": true
+  },
+  {
+    "file": ".agents/skills/verify-atoms/features/example.md",
+    "target": "../../../../docs/adr/0011-review-findings-and-preview.md",
+    "exists": true
+  },
+  {
+    "file": ".agents/skills/verify-atoms/features/example.md",
+    "target": "../SKILL.md",
+    "exists": true
+  },
+  {
+    "file": ".agents/skills/verify-atoms/features/README.md",
+    "target": "generation.md",
+    "exists": true
+  },
+  {
+    "file": ".agents/skills/verify-atoms/features/README.md",
+    "target": "modification.md",
+    "exists": true
+  },
+  {
+    "file": ".agents/skills/verify-atoms/features/README.md",
+    "target": "review-policy.md",
+    "exists": true
+  },
+  {
+    "file": ".agents/skills/verify-atoms/features/README.md",
+    "target": "example.md",
+    "exists": true
+  },
+  {
+    "file": ".agents/skills/verify-atoms/features/README.md",
+    "target": "workbench.md",
+    "exists": true
+  },
+  {
+    "file": ".agents/skills/verify-atoms/features/README.md",
+    "target": "../references/team.md",
+    "exists": true
+  },
+  {
+    "file": ".agents/skills/verify-atoms/features/README.md",
+    "target": "../../../../docs/adr/0007-browser-qa-tool.md",
+    "exists": true
+  },
+  {
+    "file": ".agents/skills/verify-atoms/features/README.md",
+    "target": "../../../../docs/verification/issue-40.md",
+    "exists": true
+  },
+  {
+    "file": ".agents/skills/verify-atoms/features/generation.md",
+    "target": "../../../../docs/adr/0011-review-findings-and-preview.md",
+    "exists": true
+  },
+  {
+    "file": ".agents/skills/verify-atoms/features/generation.md",
+    "target": "../references/team.md",
+    "exists": true
+  },
+  {
+    "file": ".agents/skills/verify-atoms/features/generation.md",
+    "target": "../references/team.md",
+    "exists": true
+  },
+  {
+    "file": ".agents/skills/verify-atoms/features/generation.md",
+    "target": "../references/initial-artifact.md",
+    "exists": true
+  },
+  {
+    "file": ".agents/skills/verify-atoms/features/generation.md",
+    "target": "review-policy.md",
+    "exists": true
+  },
+  {
+    "file": ".agents/skills/verify-atoms/features/modification.md",
+    "target": "../../../../docs/adr/0004-m2-conversational-updates.md",
+    "exists": true
+  },
+  {
+    "file": ".agents/skills/verify-atoms/features/modification.md",
+    "target": "../../../../docs/adr/0011-review-findings-and-preview.md",
+    "exists": true
+  },
+  {
+    "file": ".agents/skills/verify-atoms/features/modification.md",
+    "target": "../references/initial-artifact.md",
+    "exists": true
+  },
+  {
+    "file": ".agents/skills/verify-atoms/features/modification.md",
+    "target": "../references/team.md",
+    "exists": true
+  },
+  {
+    "file": ".agents/skills/verify-atoms/features/review-policy.md",
+    "target": "../../../../docs/adr/0011-review-findings-and-preview.md",
+    "exists": true
+  },
+  {
+    "file": ".agents/skills/verify-atoms/features/review-policy.md",
+    "target": "../../../../docs/adr/0008-m5-pinned-team-connection.md",
+    "exists": true
+  },
+  {
+    "file": ".agents/skills/verify-atoms/features/review-policy.md",
+    "target": "../references/team.md",
+    "exists": true
+  },
+  {
+    "file": ".agents/skills/verify-atoms/features/review-policy.md",
+    "target": "../references/initial-artifact.md",
+    "exists": true
+  }
+]

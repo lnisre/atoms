@@ -1,0 +1,35 @@
+✖ reader cancellation followed by normal socket close never closes the stream twice (58.300625ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 0
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 406.482708
+
+✖ failing tests:
+
+test at ../../../../../../private/tmp/atoms-independent-20261006/baseline-socket.test.ts:2:2571
+✖ reader cancellation followed by normal socket close never closes the stream twice (58.300625ms)
+  AssertionError [ERR_ASSERTION]: Got unwanted exception.
+  Actual message: "Invalid state: Controller is already closed"
+      at TestContext.<anonymous> (/private/tmp/atoms-independent-20261006/baseline-socket.test.ts:55:10)
+      at async Test.run (node:internal/test_runner/test:1332:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:385:3) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: TypeError [ERR_INVALID_STATE]: Invalid state: Controller is already closed
+        at ReadableStreamDefaultController.close (node:internal/webstreams/readablestream:1096:13)
+        at <anonymous> (/private/tmp/atoms-independent-20261006/baseline-socket.ts:33:137)
+        at Socket.emit (/private/tmp/atoms-independent-20261006/baseline-socket.test.ts:23:59)
+        at <anonymous> (/private/tmp/atoms-independent-20261006/baseline-socket.test.ts:55:36)
+        at getActual (node:assert:611:5)
+        at strict.doesNotThrow (node:assert:779:32)
+        at TestContext.<anonymous> (/private/tmp/atoms-independent-20261006/baseline-socket.test.ts:55:10)
+        at async Test.run (node:internal/test_runner/test:1332:7)
+        at async startSubtestAfterBootstrap (node:internal/test_runner/harness:385:3),
+    expected: undefined,
+    operator: 'doesNotThrow',
+    diff: 'simple'
+  }

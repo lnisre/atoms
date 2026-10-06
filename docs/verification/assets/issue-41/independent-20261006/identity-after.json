@@ -1,0 +1,10 @@
+{
+  "A": {
+    "source": true,
+    "export": true
+  },
+  "B": {
+    "source": true,
+    "export": true
+  }
+}

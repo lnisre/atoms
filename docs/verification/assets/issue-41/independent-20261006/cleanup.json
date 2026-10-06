@@ -1,0 +1,21 @@
+{
+  "portsReleased": {
+    "3355": true,
+    "3356": true,
+    "3358": true
+  },
+  "processesExited": {
+    "16283": true,
+    "16345": true,
+    "22695": true,
+    "22746": true
+  },
+  "evidenceRetained": true,
+  "traceCount": 64,
+  "venv": "removed",
+  "runtime-home": "removed",
+  "python-config": "removed",
+  "browser-A": "removed",
+  "browser-B": "removed",
+  "uv-cache": "removed"
+}

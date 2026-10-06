@@ -1,0 +1,24 @@
+✖ reader cancellation followed by normal socket close never closes the stream twice (30.380125ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 0
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 269.301875
+
+✖ failing tests:
+
+test at tests/team-socket.test.ts:2:2500
+✖ reader cancellation followed by normal socket close never closes the stream twice (30.380125ms)
+  TypeError: Cannot set property readyState of #<_WebSocket> which has only a getter
+      at new Socket (/Users/gaowenlong/.codex/worktrees/fe44/atoms/tests/team-socket.test.ts:12:3)
+      at Object.construct (node:internal/test_runner/mock/mock:788:20)
+      at openTeamSocket (/Users/gaowenlong/.codex/worktrees/fe44/atoms/src/lib/team/socket.ts:5:14)
+      at setup (/Users/gaowenlong/.codex/worktrees/fe44/atoms/tests/team-socket.test.ts:42:23)
+      at TestContext.<anonymous> (/Users/gaowenlong/.codex/worktrees/fe44/atoms/tests/team-socket.test.ts:50:36)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1325:25)
+      at Test.start (node:internal/test_runner/test:1191:17)
+      at startSubtestAfterBootstrap (node:internal/test_runner/harness:385:17)
