@@ -88,7 +88,7 @@ for (const viewport of [{ width: 1440, height: 900 }, { width: 1280, height: 720
   });
 }
 
-test('空项目入口与存储失败反馈可达', async ({ page }) => {
+test('缺失项目反馈与首页/项目网格切换可达', async ({ page }) => {
   await page.goto('/?project=missing');
   await page.getByRole('button', { name: '我的项目', exact: true }).click();
   await expect(page.getByRole('main').getByRole('alert')).toContainText('此浏览器中找不到该项目');

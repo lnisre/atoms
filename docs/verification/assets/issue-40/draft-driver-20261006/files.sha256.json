@@ -1,0 +1,22 @@
+{
+  ".agents/skills/verify-atoms/SKILL.md": "a2f73582a5e961869f65d5afad2e0bb2d1206da6c2101c6405765adbccc87481",
+  ".agents/skills/verify-atoms/features/README.md": "a5d381bf71141061b5c6727a1a41b91351fe9f7a940a3fcbc754fba08f99deb2",
+  ".agents/skills/verify-atoms/features/generation.md": "34be88405493fd459cc1aae2b450fc032f05b16bcd7f82a0f0e281e44b4af91f",
+  ".agents/skills/verify-atoms/features/modification.md": "0f1758c5aad8d934ebfe1daa7c8868fb66c7af7ed1e1cbcb302aee1b8af71bec",
+  ".agents/skills/verify-atoms/features/review-policy.md": "7db830cbacc6a998a074c7111bddb9b4bda44fc47981db077ec502cd32fa3a11",
+  ".agents/skills/verify-atoms/references/initial-artifact.md": "c8bae383c3ae53d6bfd41d57cb6ead77bffaff810164f042a5167658cd53d395",
+  ".agents/skills/verify-atoms/references/team.md": "bd0fa76f00072626a69c5f6a1087b4435a0a51cfe2b45a66586bdad4d66adb1c",
+  "docs/verification/assets/issue-40/draft-driver-20261006/branches.json": "40bdcca394b962ca578ec5d39b2c77cd3afcac1d533522ebed1575b37281a65b",
+  "docs/verification/assets/issue-40/draft-driver-20261006/checks.json": "4465f24b9d86e4b1549fb6d45b109dbec6cdbfd59685b186cd8775c98e888523",
+  "docs/verification/assets/issue-40/draft-driver-20261006/cleanup.json": "10fbd3bc0d9309d81586724951365d17200a0a46c151efbd36c213f048dff41d",
+  "docs/verification/assets/issue-40/draft-driver-20261006/commands.json": "f48b7642e06dc6045ece18d3e5713a483fe7d9bdfceb6f748d45da579aa32930",
+  "docs/verification/assets/issue-40/draft-driver-20261006/summary.json": "1e7280c70507a923d03b575c6b470342f50cbadbb96a98aaad70201d9aad722b",
+  "docs/verification/issue-40-draft-driver.md": "4f2d07067ebfa26f959597dcc440cf5cb520f6b0321299f123fde85f6c734d0c",
+  "docs/verification/issue-40.md": "80f0a225613880436bc16e59f416e6a66804650812acd6a7f691ce6c7700bae3",
+  "tests/browser/cross-app-acceptance.spec.ts": "6422abf09a579344368e90eed48e651cbd82f7e616d3e01855c05222f4b905fa",
+  "tests/browser/cross-app-draft.spec.ts": "fbe958899befc51fe41326a8ad329cbf133f11d376e23b5cbfda01a46f09594b",
+  "tests/browser/record-assertions.spec.ts": "750a58934c51c4c3a0482a11cfe712bcebb5fc7ff4d21da13e7814b7b1dff24d",
+  "tests/team/cross-app-workflow.ts": "5407bbb9fd874ca8f9dede7694b6422fd8517cff9ef60b2e50e767ed3ea364e5",
+  "tests/team/live-cross-app.ts": "da5d23c4f241d4dc2dd8a4ecc5e079db9f5a5344080b42d485ba833fde0e9db2",
+  "tests/team/project-observation.ts": "8838380fe8d4b11d702752cf2faa62e1d8924207ffada09e8634c1be7b27c5d5"
+}

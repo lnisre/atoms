@@ -1,0 +1,83 @@
+[
+  {
+    "at": "2026-10-04T17:12:30.133Z",
+    "action": "launch and doctor",
+    "result": "passed"
+  },
+  {
+    "at": "2026-10-04T17:12:32.522Z",
+    "action": "launch Chrome",
+    "result": {
+      "round": 1,
+      "persistentProfile": "isolated temporary profile",
+      "browser": "154.0.8037.93"
+    }
+  },
+  {
+    "at": "2026-10-04T17:12:34.144Z",
+    "action": "open example through home card",
+    "result": {
+      "projectId": "e1bab61d-6313-4bd9-88cb-9ca986dde1e7",
+      "timer": "25:00",
+      "modelHistory": false
+    }
+  },
+  {
+    "at": "2026-10-04T17:12:35.549Z",
+    "action": "start and observe real elapsed time",
+    "result": "24:59"
+  },
+  {
+    "at": "2026-10-04T17:12:35.604Z",
+    "action": "pause; UI and committed IndexedDB agree",
+    "result": {
+      "timer": "24:59",
+      "state": {
+        "mode": "focus",
+        "remaining": 1499,
+        "running": false,
+        "focusSeconds": 1500,
+        "breakSeconds": 300,
+        "completedFocusCount": 0,
+        "deadlineAt": null
+      }
+    }
+  },
+  {
+    "at": "2026-10-04T17:12:36.803Z",
+    "action": "refresh project deep link",
+    "result": "same code and committed paused data"
+  },
+  {
+    "at": "2026-10-04T17:12:37.162Z",
+    "action": "close complete persistent browser",
+    "result": {
+      "round": 1
+    }
+  },
+  {
+    "at": "2026-10-04T17:12:38.021Z",
+    "action": "launch Chrome",
+    "result": {
+      "round": 2,
+      "persistentProfile": "isolated temporary profile",
+      "browser": "154.0.8037.93"
+    }
+  },
+  {
+    "at": "2026-10-04T17:12:39.492Z",
+    "action": "full Chrome restart; home card reopen",
+    "result": {
+      "timer": "24:59",
+      "sameProjectCodeAndData": true,
+      "apiRequests": 0
+    }
+  },
+  {
+    "at": "2026-10-04T17:12:39.784Z",
+    "action": "close complete persistent browser",
+    "result": {
+      "round": "final"
+    }
+  }
+]

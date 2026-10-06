@@ -1,0 +1,13 @@
+{
+  "SKILL.md": "1e2f32955b1ddc4f7e9a964b075fc96d3b73690ca7581c956aaccc83f1e33129",
+  "agents/openai.yaml": "9c89517c1e10d0afc60d795291557db01a2251c16de892e02e2049fa3b81c15d",
+  "features/README.md": "a306d46ff407107850755734ead723836442f8ca1750ef511f069f71cff7fe78",
+  "features/example.md": "2ecda15f858cc74a14b7a277b4c3cf9610941e68cf73405a7e0d993c0c1e8877",
+  "features/generation.md": "1eae1de02d5c55f1cad12ed006cc4ac50823a92c32c9b28ad9f3bd6e63b6487f",
+  "features/modification.md": "acf42ad170bca74c1ad1f8c4198a1564e4f862f5db97347da2d862f91d91c365",
+  "features/review-policy.md": "fbcc624d4fc989dee864308347f71aa283882a342fd863ce25f5a2cb23032add",
+  "features/workbench.md": "be7e20dc5baecb4519b1e3c24f97dc22f5c11e6c5b62907b2d1658b47f54ebeb",
+  "references/team.md": "def242992ebadd1d6311a6a0593acc9444ff19c2b23722aa9871d3e5ee596866",
+  "scripts/doctor.mjs": "61188359afc3ccc47671c653b2ee93c0007d549b5e6b1ec6bbcb19bdbf06cbc1",
+  "scripts/smoke-example.mjs": "8a4266670854265cc03875126a3f70e41d466aa87dd8666e173717b87d9c9e23"
+}

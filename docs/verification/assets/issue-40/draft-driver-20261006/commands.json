@@ -1,0 +1,54 @@
+{
+  "cwd": "/Users/gaowenlong/.codex/worktrees/verify-atoms/atoms",
+  "node": "/opt/homebrew/opt/node@24/bin/node",
+  "run": "/private/tmp/atoms-draft-driver.mvtjyw9_",
+  "commands": [
+    {
+      "command": "gh issue view 40 --repo lnisre/atoms --json number,title,body,labels,comments",
+      "purpose": "read-only accepted contract; initial sandbox network failed, escalated read succeeded"
+    },
+    {
+      "command": "node node_modules/next/dist/bin/next dev --webpack --hostname 127.0.0.1 --port 3348",
+      "output": "server.log",
+      "pidFile": "server.pid"
+    },
+    {
+      "command": "node .agents/skills/verify-atoms/scripts/doctor.mjs http://127.0.0.1:3348 <server.pid> dev",
+      "outputs": [
+        "doctor-first.json",
+        "doctor-final-run.json"
+      ]
+    },
+    {
+      "command": "TMPDIR=<run>/browser-tmp TEST_BASE_URL=http://127.0.0.1:3348 pnpm exec playwright test tests/browser/cross-app-draft.spec.ts --workers=1 --retries=0 --trace=on --output=<run>/draft-first --reporter=json",
+      "output": "draft-first.json",
+      "exitCode": 0
+    },
+    {
+      "command": "TMPDIR=<run>/browser-tmp TEST_BASE_URL=http://127.0.0.1:3348 pnpm exec playwright test tests/browser/cross-app-draft.spec.ts tests/browser/snapshot-cli.spec.ts tests/browser/record-assertions.spec.ts tests/browser/workbench-stream.spec.ts tests/browser/cross-app-acceptance.spec.ts tests/browser/candidate.spec.ts tests/browser/modification-records.spec.ts tests/browser/persistence.spec.ts tests/browser/save-race.spec.ts tests/browser/reviewer-preview.spec.ts tests/browser/home-entry.spec.ts tests/browser/workbench.spec.ts --workers=1 --retries=0 --trace=on --output=<run>/affected-final --reporter=json",
+      "output": "affected-final.json",
+      "exitCode": 0
+    },
+    {
+      "command": "pnpm lint",
+      "output": "lint-final.log",
+      "exitCode": 0
+    },
+    {
+      "command": "pnpm typecheck",
+      "output": "typecheck-final.log",
+      "exitCode": 0
+    },
+    {
+      "command": "python3 /Users/gaowenlong/.codex/skills/.system/skill-creator/scripts/quick_validate.py .agents/skills/verify-atoms",
+      "output": "skill-validation.log",
+      "exitCode": 0
+    },
+    {
+      "command": "pnpm exec playwright test tests/browser/candidate.spec.ts tests/browser/modification-records.spec.ts tests/browser/persistence.spec.ts tests/browser/save-race.spec.ts tests/browser/reviewer-preview.spec.ts tests/browser/cross-app-acceptance.spec.ts tests/browser/cross-app-draft.spec.ts tests/browser/record-assertions.spec.ts --list --reporter=json",
+      "output": "modification-selection.json",
+      "exitCode": 0,
+      "boundary": "listing only; actual execution is affected-final"
+    }
+  ]
+}

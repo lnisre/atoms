@@ -3,6 +3,7 @@ import { readFileSync } from 'node:fs';
 import { expect, type BrowserContext } from '@playwright/test';
 import { acceptanceScenarios, readingChanges, syntheticRequirement } from './cross-app-scenarios';
 import { snapshot } from './cross-app-workflow';
+import { expectVisibleRecords } from './record-assertions';
 import { independentCheck, hash } from './independent-check';
 import { artifactTeam } from '../../src/lib/team/review';
 
@@ -40,7 +41,7 @@ export async function repairWorkflow(context: BrowserContext, base: string, evid
     }, { html: prior.request.html, requirement: syntheticRequirement('reading') });
     await page.reload();
     await page.getByRole('region', { name: '已有项目' }).getByRole('button', { name: /合成阅读返工验收/ }).click();
-    await expect(page.frameLocator('iframe').locator('#records li')).toHaveCount(1);
+    await expectVisibleRecords(page.frameLocator('iframe'), ['返工原记录'], ['old']);
     const original = await snapshot(page);
     await page.getByLabel('追加修改需求').fill(readingChanges[0]);
     await page.getByRole('button', { name: '生成候选', exact: true }).click();

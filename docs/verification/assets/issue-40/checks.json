@@ -1,0 +1,10 @@
+{
+  "status": "passed",
+  "helperEslint": "passed",
+  "nodeSyntax": "passed",
+  "skillValidator": "passed",
+  "localLinkTargets": 50,
+  "helpersExecutable": true,
+  "retainedEvidenceHashes": "matched",
+  "occupiedPortProbe": "refused; unrelated listener remained reachable; scratch profile removed"
+}

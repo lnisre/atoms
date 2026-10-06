@@ -1,0 +1,302 @@
+{
+  "outcome": "changed",
+  "date": "2026-10-05 Asia/Shanghai",
+  "worktree": "/Users/gaowenlong/.codex/worktrees/verify-atoms/atoms",
+  "branch": "codex/verify-atoms",
+  "head": "886f933c3015d3c810f85662812c5bc201a478f7",
+  "mode": "isolated Next dev and real Chrome; synthetic transport/provider responses only",
+  "providerCalls": 0,
+  "sourceProductPublicRuntimeUnchanged": true,
+  "frozenRequirementTextUnchanged": true,
+  "previousVenvAndSmokeFixesPreserved": true,
+  "browserResults": {
+    "targeted": 13,
+    "affected": 28,
+    "total": 41,
+    "failed": 0,
+    "skipped": 0,
+    "retries": 0
+  },
+  "lint": "passed",
+  "typecheck": "passed",
+  "skillValidation": "passed",
+  "localSkillLinks": 33,
+  "modificationRecipeSelectedTests": 33,
+  "changedDriverAndSkillFiles": [
+    ".agents/skills/verify-atoms/SKILL.md",
+    ".agents/skills/verify-atoms/features/README.md",
+    ".agents/skills/verify-atoms/features/generation.md",
+    ".agents/skills/verify-atoms/features/modification.md",
+    ".agents/skills/verify-atoms/features/workbench.md",
+    ".agents/skills/verify-atoms/references/team.md",
+    "tests/browser/home-entry.spec.ts",
+    "tests/browser/record-assertions.spec.ts",
+    "tests/browser/snapshot-cli.spec.ts",
+    "tests/browser/workbench-stream.spec.ts",
+    "tests/team/cross-app-scenarios.ts",
+    "tests/team/cross-app-workflow.ts",
+    "tests/team/record-assertions.ts",
+    "tests/team/repair-workflow.ts",
+    "tests/team/snapshot-cli.mjs"
+  ],
+  "testIndex": [
+    {
+      "file": "cross-app-acceptance.spec.ts",
+      "title": "todo: frozen independent core, defaults, unknown fields and failure/timing checks",
+      "status": "expected",
+      "report": "targeted-1.json"
+    },
+    {
+      "file": "cross-app-acceptance.spec.ts",
+      "title": "reading: frozen independent core, defaults, unknown fields and failure/timing checks",
+      "status": "expected",
+      "report": "targeted-1.json"
+    },
+    {
+      "file": "cross-app-acceptance.spec.ts",
+      "title": "same frozen reading plan detects persistence loss and unknown-field loss",
+      "status": "expected",
+      "report": "targeted-1.json"
+    },
+    {
+      "file": "cross-app-acceptance.spec.ts",
+      "title": "reading: same acceptance workflow with explicit offline responses",
+      "status": "expected",
+      "report": "targeted-1.json"
+    },
+    {
+      "file": "cross-app-acceptance.spec.ts",
+      "title": "todo: same acceptance workflow with explicit offline responses",
+      "status": "expected",
+      "report": "targeted-1.json"
+    },
+    {
+      "file": "cross-app-acceptance.spec.ts",
+      "title": "bounded observation waits for the exact state and never passes an unmet expectation",
+      "status": "expected",
+      "report": "targeted-1.json"
+    },
+    {
+      "file": "cross-app-acceptance.spec.ts",
+      "title": "single repair acceptance driver verifies three artifacts and one modification using explicitly scripted reviews",
+      "status": "expected",
+      "report": "targeted-1.json"
+    },
+    {
+      "file": "record-assertions.spec.ts",
+      "title": "record assertion: empty-state",
+      "status": "expected",
+      "report": "targeted-1.json"
+    },
+    {
+      "file": "record-assertions.spec.ts",
+      "title": "record assertion: ignored-filter",
+      "status": "expected",
+      "report": "targeted-1.json"
+    },
+    {
+      "file": "record-assertions.spec.ts",
+      "title": "record assertion: missing-identity",
+      "status": "expected",
+      "report": "targeted-1.json"
+    },
+    {
+      "file": "snapshot-cli.spec.ts",
+      "title": "snapshot survives the actual node --import tsx browser entry",
+      "status": "expected",
+      "report": "targeted-1.json"
+    },
+    {
+      "file": "workbench-stream.spec.ts",
+      "title": "顺序消息、上翻保全、禁用工具与展示调整 1440",
+      "status": "expected",
+      "report": "targeted-1.json"
+    },
+    {
+      "file": "workbench-stream.spec.ts",
+      "title": "顺序消息、上翻保全、禁用工具与展示调整 1280",
+      "status": "expected",
+      "report": "targeted-1.json"
+    },
+    {
+      "file": "candidate.spec.ts",
+      "title": "同项目多轮使用最新候选；试用增删改、失败、放弃、刷新和关闭重开均保全正式数据",
+      "status": "expected",
+      "report": "affected-1.json"
+    },
+    {
+      "file": "candidate.spec.ts",
+      "title": "复制正式数据读取失败不开始空试用；手动重试可成功",
+      "status": "expected",
+      "report": "affected-1.json"
+    },
+    {
+      "file": "candidate.spec.ts",
+      "title": "修改超时结束等待，保留已采用应用供继续使用",
+      "status": "expected",
+      "report": "affected-1.json"
+    },
+    {
+      "file": "candidate.spec.ts",
+      "title": "明确采用最新候选只保存代码与多轮记录；旧通道失效，正式操作和重开可恢复",
+      "status": "expected",
+      "report": "affected-1.json"
+    },
+    {
+      "file": "candidate.spec.ts",
+      "title": "采用事务未完成不显示成功；中止保留候选和此前采用记录，可手动重试",
+      "status": "expected",
+      "report": "affected-1.json"
+    },
+    {
+      "file": "candidate.spec.ts",
+      "title": "停止修改后迟到响应不能替换已有候选，正式数据仍可恢复",
+      "status": "expected",
+      "report": "affected-1.json"
+    },
+    {
+      "file": "home-entry.spec.ts",
+      "title": "首页与项目网格真实接线、禁用与恢复 1440×900",
+      "status": "expected",
+      "report": "affected-1.json"
+    },
+    {
+      "file": "home-entry.spec.ts",
+      "title": "首页与项目网格真实接线、禁用与恢复 1280×720",
+      "status": "expected",
+      "report": "affected-1.json"
+    },
+    {
+      "file": "home-entry.spec.ts",
+      "title": "缺失项目反馈与首页/项目网格切换可达",
+      "status": "expected",
+      "report": "affected-1.json"
+    },
+    {
+      "file": "modification-records.spec.ts",
+      "title": "多轮回复和执行记录随最新代码采用，恢复零调用，首次消息和正式数据不变",
+      "status": "expected",
+      "report": "affected-1.json"
+    },
+    {
+      "file": "modification-records.spec.ts",
+      "title": "失败、无效HTML与旧任务事件保留有效候选；放弃和刷新丢弃会话消息",
+      "status": "expected",
+      "report": "affected-1.json"
+    },
+    {
+      "file": "modification-records.spec.ts",
+      "title": "采用事务失败不保存消息或代码，保留候选可重试，缺正文也可采用",
+      "status": "expected",
+      "report": "affected-1.json"
+    },
+    {
+      "file": "modification-records.spec.ts",
+      "title": "修改等待期间展示真实事件，原候选可用，错误终态结束等待",
+      "status": "expected",
+      "report": "affected-1.json"
+    },
+    {
+      "file": "modification-records.spec.ts",
+      "title": "真实HTTP修改入口验证失败返回任务终态，不触发模型",
+      "status": "expected",
+      "report": "affected-1.json"
+    },
+    {
+      "file": "modification-records.spec.ts",
+      "title": "采用后的日志追加失败如实提示，代码和消息已提交，重开不补造成功步骤",
+      "status": "expected",
+      "report": "affected-1.json"
+    },
+    {
+      "file": "persistence.spec.ts",
+      "title": "添加、完成、删除后刷新和关闭重开，恢复需求与业务数据且不调用模型",
+      "status": "expected",
+      "report": "affected-1.json"
+    },
+    {
+      "file": "persistence.spec.ts",
+      "title": "多个项目数据隔离，外部伪造的保存消息被忽略",
+      "status": "expected",
+      "report": "affected-1.json"
+    },
+    {
+      "file": "persistence.spec.ts",
+      "title": "业务数据事务中止时明确失败，不把请求成功当作保存成功",
+      "status": "expected",
+      "report": "affected-1.json"
+    },
+    {
+      "file": "persistence.spec.ts",
+      "title": "项目写入失败仍展示结果和错误，不宣称项目已保存",
+      "status": "expected",
+      "report": "affected-1.json"
+    },
+    {
+      "file": "persistence.spec.ts",
+      "title": "读取失败禁止覆盖原数据，恢复存储后仍能重开",
+      "status": "expected",
+      "report": "affected-1.json"
+    },
+    {
+      "file": "reviewer-preview.spec.ts",
+      "title": "minor: findings survive preview, automatic save and reopen; two repairs stop after three artifacts",
+      "status": "expected",
+      "report": "affected-1.json"
+    },
+    {
+      "file": "reviewer-preview.spec.ts",
+      "title": "major: findings survive preview, automatic save and reopen; two repairs stop after three artifacts",
+      "status": "expected",
+      "report": "affected-1.json"
+    },
+    {
+      "file": "reviewer-preview.spec.ts",
+      "title": "unavailable review keeps a restorable draft, truthful failure, and explicit first use without trial data",
+      "status": "expected",
+      "report": "affected-1.json"
+    },
+    {
+      "file": "reviewer-preview.spec.ts",
+      "title": "data-risk candidate is visible but cannot be adopted, including after unavailable rereview; actual resolution unlocks adoption",
+      "status": "expected",
+      "report": "affected-1.json"
+    },
+    {
+      "file": "reviewer-preview.spec.ts",
+      "title": "platform execution blocker does not mount even with model approval; code can be restored and modified",
+      "status": "expected",
+      "report": "affected-1.json"
+    },
+    {
+      "file": "save-race.spec.ts",
+      "title": "真实旧产物保存时禁止新修改，下一次修改确认后立即关闭可恢复",
+      "status": "expected",
+      "report": "affected-1.json"
+    },
+    {
+      "file": "workbench.spec.ts",
+      "title": "长内容桌面路径、独立滚动与详情状态保全 1280×720",
+      "status": "expected",
+      "report": "affected-1.json"
+    },
+    {
+      "file": "workbench.spec.ts",
+      "title": "长内容桌面路径、独立滚动与详情状态保全 1440×900",
+      "status": "expected",
+      "report": "affected-1.json"
+    }
+  ],
+  "evidenceDirectory": "/private/tmp/atoms-driver-maintenance.o4e9849n",
+  "knownFailuresRetained": [
+    "snapshot-red: expected reproduction on old helper, ReferenceError __name",
+    "cleanup-first/second: scratch checker misclassified compiler caches; corrected inspection confirmed no live browser/profile"
+  ],
+  "unverified": [
+    "native Python/gateway regressions (not changed in this task)",
+    "real supplier and Reviewer quality",
+    "production/deployment/visual comparison",
+    "full-browser restart of generated apps in this run"
+  ],
+  "handoff": "Stop edits after this report; original verification chat independently reruns the targeted list."
+}

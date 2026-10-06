@@ -1,0 +1,1 @@
+{"status":"passed","entry":"node --import tsx tests/team/snapshot-cli.mjs","checks":["actual helper and browser","both stores and active project ordering","reload preserves snapshot"],"providerCalls":0}

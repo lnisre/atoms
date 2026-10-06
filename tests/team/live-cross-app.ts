@@ -11,11 +11,13 @@ import { hash } from './independent-check';
 
 async function main() {
   const repair = process.argv.includes('--repair');
+  const initialDraft = process.argv.includes('--use-retained-draft') ? 'use-synthetic' : 'stop';
+  if (repair && initialDraft !== 'stop') throw new Error('--use-retained-draft applies only to first-generation cross-app scenarios');
   const kind: AppKind = process.argv.includes('--todo') ? 'todo' : 'reading';
   const manifest = { provider: 'https://api.deepseek.com/chat/completions', model: 'deepseek-flash', kind,
     requirement: syntheticRequirement(kind), changes: kind === 'reading' ? readingChanges : [],
     inputBoundary: 'Only these synthetic requests, generated HTML, role artifacts and platform prompts; no real business records or repository files',
-    controlledModificationDefect: repair, taskCount: repair ? 1 : kind === 'reading' ? 3 : 1, perTask: { deadlineMs: 240000, modelRequests: 20, engineerArtifacts: 2 },
+    initialDraft, controlledModificationDefect: repair, taskCount: repair ? 1 : kind === 'reading' ? 3 : 1, perTask: { deadlineMs: 240000, modelRequests: 20, engineerArtifacts: 3 },
     independentPlanHashes: [false, ...(kind === 'reading' ? [true] : [])].map(rated => hash(JSON.stringify(acceptanceScenarios(kind, rated)))) };
   if (!process.argv.includes('--execute')) { console.log(JSON.stringify(manifest, null, 2)); return; }
   const base = process.env.TEST_BASE_URL, destination = process.env.TEAM_EVIDENCE_DIR;
@@ -25,12 +27,15 @@ async function main() {
   const out = resolve(destination);
   if (existsSync(out)) throw new Error('Refusing to overwrite earlier evidence');
   mkdirSync(out, { recursive: true });
-  const evidence = (label: string, value: unknown) => writeFileSync(`${out}/${label}.json`, JSON.stringify(value, null, 2));
+  const observations: Record<string, unknown> = {};
+  const evidence = (label: string, value: unknown) => { observations[label] = value; writeFileSync(`${out}/${label}.json`, JSON.stringify(value, null, 2)); };
   const baseline = { sourceCommit: execFileSync('git', ['rev-parse', 'HEAD'], { encoding: 'utf8' }).trim(),
     dirty: !!execFileSync('git', ['status', '--porcelain'], { encoding: 'utf8' }).trim(),
     target: base, deploymentId: process.env.TEAM_DEPLOYMENT_ID ?? null };
+  const driverFiles = ['tests/team/live-cross-app.ts', 'tests/team/cross-app-workflow.ts', 'tests/team/project-observation.ts', 'tests/team/cross-app-scenarios.ts', 'tests/team/record-assertions.ts', 'tests/team/independent-check.ts', 'tests/team/repair-workflow.ts'];
+  const driverHashes = Object.fromEntries(driverFiles.map(file => [file, hash(readFileSync(file, 'utf8'))]));
   const sourceFiles = execFileSync('git', ['ls-files', 'src', 'runtime/team', 'package.json', 'pnpm-lock.yaml', 'next.config.ts', 'Dockerfile.vercel'], { encoding: 'utf8' }).trim().split('\n');
-  evidence('manifest', { ...manifest, ...baseline, sourceHashes: Object.fromEntries(sourceFiles.map(file => [file, hash(readFileSync(file, 'utf8'))])) });
+  evidence('manifest', { ...manifest, ...baseline, driverHashes, sourceHashes: Object.fromEntries(sourceFiles.map(file => [file, hash(readFileSync(file, 'utf8'))])) });
   // Avoid inheriting model/deployment secrets into the browser process.
   const env = Object.fromEntries(['PATH', 'HOME', 'TMPDIR', 'LANG'].flatMap(k => process.env[k] ? [[k, process.env[k]!]] : []));
   const browser = await chromium.launch({ channel: 'chrome', env });
@@ -50,15 +55,16 @@ async function main() {
     evidence('events', events);
   })));
   let success = false, failure: string | undefined;
-  try { if (repair) await repairWorkflow(context, base, evidence); else await crossAppWorkflow(context, base, kind, evidence); success = true; }
+  try { if (repair) await repairWorkflow(context, base, evidence); else await crossAppWorkflow(context, base, kind, evidence, { initialDraft }); success = true; }
   catch (error) { failure = error instanceof Error ? error.message : String(error); process.exitCode = 1; }
   finally {
     const calls = new Map<string, Record<string, unknown>>();
     for (const event of events) if (event.type === 'call') { const call = event.call as Record<string, unknown>; calls.set(`${event.taskId}:${call.call}`, { taskId: event.taskId, ...call }); }
-    evidence('summary', { kind: 'real provider, isolated synthetic project, independent developer acceptance', ...baseline, success, failure,
+    evidence('summary', { kind: 'real provider, isolated synthetic project, independent developer acceptance', ...baseline, workflowCompleted: success, failure, initial: observations['initial-disposition'] ?? null, lifecycle: observations.lifecycle ?? null,
+      evidenceBoundary: 'Workflow completion does not change initial task outcome or prove an uninterrupted team success.',
       elapsedMs: Date.now() - started, calls: [...calls.values()], callsWithoutUsage: [...calls.values()].filter(c => !c.usage).length });
     await browser.close();
   }
-  console.log(JSON.stringify({ success, failure, evidence: out }));
+  console.log(JSON.stringify({ workflowCompleted: success, initial: observations['initial-disposition'] ?? null, lifecycle: observations.lifecycle ?? null, failure, evidence: out }));
 }
 void main().catch(error => { console.error(error.message); process.exitCode = 1; });

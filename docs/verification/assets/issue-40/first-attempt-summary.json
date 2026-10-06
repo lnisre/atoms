@@ -1,0 +1,35 @@
+{
+  "success": false,
+  "failure": "AssertionError [ERR_ASSERTION]: Unexpected page error\n\n3 !== 0\n\n    at file:///Users/gaowenlong/.codex/worktrees/verify-atoms/atoms/.agents/skills/verify-atoms/scripts/smoke-example.mjs:143:10",
+  "cleanup": {
+    "browserClosed": true,
+    "serverStopped": true,
+    "portReleased": true,
+    "profileRemoved": true
+  },
+  "retained": {
+    "manifest.json": "c8989efcdfb2dfa17f7049c8afa037db5b3151101bc8bef8ddaa9b4c2f44fcbc",
+    "actions.json": "103f5cdb40171567733ed382d0a19e88f86a104f04ecbd9252798a1444f5d7b3",
+    "doctor.json": "884ac54427aa2dc5a6c0a8c2ab92ecefe8542c4b81725c628a8ff8ed431a7df6",
+    "saved.json": "8905789f786d8e993fd2de0384f540d119e6fbd8151feebc831a813774085128",
+    "reopened.json": "8905789f786d8e993fd2de0384f540d119e6fbd8151feebc831a813774085128",
+    "reopened.png": "1d306ec08f75ee5b378a2af3f82ca989f9d18d097f4e92d4360ff9d8049a240e",
+    "trace-1.zip": "057215bcd15aeda1553dbfc94a779ed914cf330d147af5d2c2ec20cb03fbd713",
+    "trace-final.zip": "6ed6b954de15b4c1ed569febccfca41e2deefd897be5bab9774369e5da0ced23"
+  },
+  "evidence": "/private/tmp/atoms-verify-40-smoke-1",
+  "coverage": [
+    "home example",
+    "real start/pause and IndexedDB save",
+    "paused refresh",
+    "full browser restart and home reopen",
+    "zero API requests"
+  ],
+  "unverified": [
+    "running/expired timer restoration",
+    "fault injection",
+    "team and real model",
+    "other feature maps",
+    "production build/deployment"
+  ]
+}

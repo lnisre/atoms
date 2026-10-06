@@ -1,0 +1,127 @@
+{
+  "snapshot": {
+    "beforeFix": "ReferenceError: __name is not defined",
+    "afterFix": {
+      "status": "passed",
+      "entry": "node --import tsx tests/team/snapshot-cli.mjs",
+      "checks": [
+        "actual helper and browser",
+        "both stores and active project ordering",
+        "reload preserves snapshot"
+      ],
+      "providerCalls": 0
+    }
+  },
+  "records": [
+    {
+      "test": "record assertion: empty-state",
+      "testStatus": "expected",
+      "independentStatus": "passed",
+      "codeHash": "db58bfa9cdb289daada24fd35c2eb25d2df7dad6b8a60f6a98192654379925a2",
+      "planHash": "a8d667487f7407f4fa99fd4131515cb4e7f3a193900733c32307ee0122580f7c",
+      "failures": []
+    },
+    {
+      "test": "record assertion: ignored-filter",
+      "testStatus": "expected",
+      "independentStatus": "failed",
+      "codeHash": "1c7dadf20153f2f4fa94c92cc40427efb13b57c3293df6fc9e77e01ecf7ddf65",
+      "planHash": "a8d667487f7407f4fa99fd4131515cb4e7f3a193900733c32307ee0122580f7c",
+      "failures": [
+        {
+          "command": {
+            "op": "assert",
+            "selector": "#records li[data-id]",
+            "property": "count",
+            "equals": 0
+          },
+          "actual": 1
+        },
+        {
+          "command": {
+            "op": "assert",
+            "selector": "#records .title",
+            "property": "count",
+            "equals": 0
+          },
+          "actual": 1
+        }
+      ]
+    },
+    {
+      "test": "record assertion: missing-identity",
+      "testStatus": "expected",
+      "independentStatus": "failed",
+      "codeHash": "94b483ae1e031ce4f207f695de220f87dc92ef784c64b902b80a73fbc01b30b6",
+      "planHash": "a8d667487f7407f4fa99fd4131515cb4e7f3a193900733c32307ee0122580f7c",
+      "failures": [
+        {
+          "command": {
+            "op": "assert",
+            "selector": "#records .title",
+            "property": "count",
+            "equals": 0
+          },
+          "actual": 1
+        },
+        {
+          "command": {
+            "op": "assert",
+            "selector": "#records li:not([data-id]) .title",
+            "property": "count",
+            "equals": 0
+          },
+          "actual": 1
+        }
+      ]
+    }
+  ],
+  "workbench": [
+    {
+      "test": "顺序消息、上翻保全、禁用工具与展示调整 1440",
+      "attachment": "generation-requests",
+      "requests": [
+        {
+          "requirement": "顺序测试初始需求",
+          "modification": null
+        },
+        {
+          "requirement": "顺序测试初始需求",
+          "modification": "第二条用户需求"
+        }
+      ]
+    },
+    {
+      "test": "顺序消息、上翻保全、禁用工具与展示调整 1440",
+      "attachment": "extra-request-rejected",
+      "requests": [
+        {
+          "requirement": "顺序测试初始需求",
+          "modification": null
+        },
+        {
+          "requirement": "顺序测试初始需求",
+          "modification": "第二条用户需求"
+        },
+        {
+          "requirement": "顺序测试初始需求",
+          "modification": "NEGATIVE_EXTRA_REQUEST"
+        }
+      ]
+    },
+    {
+      "test": "顺序消息、上翻保全、禁用工具与展示调整 1280",
+      "attachment": "generation-requests",
+      "requests": [
+        {
+          "requirement": "顺序测试初始需求",
+          "modification": null
+        },
+        {
+          "requirement": "顺序测试初始需求",
+          "modification": "第二条用户需求"
+        }
+      ]
+    }
+  ]
+}

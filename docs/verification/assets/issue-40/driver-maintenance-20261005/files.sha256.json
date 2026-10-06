@@ -1,0 +1,27 @@
+{
+  "head": "886f933c3015d3c810f85662812c5bc201a478f7",
+  "worktree": "/Users/gaowenlong/.codex/worktrees/verify-atoms/atoms",
+  "sha256": {
+    ".agents/skills/verify-atoms/SKILL.md": "afec9c6869b888399eb223f454f2c15f77d68f005303e1a1a3f42cd6fb8d35b2",
+    ".agents/skills/verify-atoms/features/README.md": "4e78436bd8765699da400f73c3abd74e5d6ef29e00d2b010369008a60c29ab02",
+    ".agents/skills/verify-atoms/features/generation.md": "5cbdc0eb3712b9457bc8d4e47f215dc6a9710aecd73cd51fc21035c16138a84c",
+    ".agents/skills/verify-atoms/features/modification.md": "0a33569389140c1c88702845db2e5202f89ee90e77d8f08b3d0d5b3fae6cf34b",
+    ".agents/skills/verify-atoms/features/workbench.md": "d9d4f92e9606407da3980a80ce81720f140b3cad99b8093200b53c1da29023e8",
+    ".agents/skills/verify-atoms/references/team.md": "64e8e29ac0e85fb9bb39345512f2b05873a654aff02bdcaeb45a02e0b6830833",
+    "tests/browser/home-entry.spec.ts": "ab6afcd17fbaf52dc9e11e94e1cedb2c9a966dc534206b04c0bebcfa3494fa03",
+    "tests/browser/record-assertions.spec.ts": "ef85d034f679a417a7b4bcea6f0bde70d798e9cd0f56bd8dc2bf0fbf11e2160e",
+    "tests/browser/snapshot-cli.spec.ts": "50d51467a04c8fe01fad0584424de321ba800ca515a60a517ae9e6a09e6bcb82",
+    "tests/browser/workbench-stream.spec.ts": "37bca476b62c5ce2536f63e3e008a13fa531e7ee7e50db6605eadcf9e627bca9",
+    "tests/team/cross-app-scenarios.ts": "9cd54eee485468e2a85eb1a574b160d5451ba3b509cfb873f43ea46c6cd49351",
+    "tests/team/cross-app-workflow.ts": "d96770a3fe19855d35761894b00cce6559c5902e5cc1a8bf0e6df8685254dbfa",
+    "tests/team/record-assertions.ts": "c354a5ba7fcf0d1f5f1717112b8a4f8144e1955a1c4c678c6acde8f0435317d0",
+    "tests/team/repair-workflow.ts": "5e8da379069719a6fa1e090e9432f407d5697de0e786c46dec5212974121eb35",
+    "tests/team/snapshot-cli.mjs": "176ef435d99575cc6f3a529bc06064c539ccdb753ea921da544d16c6d5a2e4aa",
+    "docs/verification/issue-40.md": "f7a8d36de58357f9c41ee21deec97047a889709f0528a0e53ff3fcc160f9aac0",
+    "docs/verification/assets/issue-40/driver-maintenance-20261005/counterexamples.json": "e238006a54473f4b84158f04ce57a3b4c33e38d08267e8e47083511287c83178",
+    "docs/verification/assets/issue-40/driver-maintenance-20261005/snapshot-green.log": "364f3ded8bcfb0edf7e05158c3bde817b4622ef7701381b81f582a673f624191",
+    "docs/verification/assets/issue-40/driver-maintenance-20261005/snapshot-red.log": "6f70d5db11d4dfd2043b68674afb17e17651eb070fe8b1fb4ed7790bed542ff0",
+    "docs/verification/assets/issue-40/driver-maintenance-20261005/summary.json": "a5d076a6a57446eaa3530271e6a728a317e905fc57af96a0bd67f26e2f1065be"
+  },
+  "excludedSelf": "files.sha256.json"
+}

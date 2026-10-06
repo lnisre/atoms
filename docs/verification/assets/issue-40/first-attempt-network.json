@@ -1,0 +1,125 @@
+{
+  "requests": [
+    {
+      "round": 1,
+      "method": "GET",
+      "path": "/"
+    },
+    {
+      "round": 1,
+      "method": "GET",
+      "path": "/_next/static/css/app/layout.css"
+    },
+    {
+      "round": 1,
+      "method": "GET",
+      "path": "/_next/static/css/app/page.css"
+    },
+    {
+      "round": 1,
+      "method": "GET",
+      "path": "/_next/static/chunks/webpack.js"
+    },
+    {
+      "round": 1,
+      "method": "GET",
+      "path": "/_next/static/chunks/main-app.js"
+    },
+    {
+      "round": 1,
+      "method": "GET",
+      "path": "/_next/static/chunks/app-pages-internals.js"
+    },
+    {
+      "round": 1,
+      "method": "GET",
+      "path": "/_next/static/chunks/app/page.js"
+    },
+    {
+      "round": 1,
+      "method": "GET",
+      "path": "/examples/pomodoro-v1.html"
+    },
+    {
+      "round": 1,
+      "method": "GET",
+      "path": "/examples/pomodoro-v1.html"
+    },
+    {
+      "round": 1,
+      "method": "GET",
+      "path": "/"
+    },
+    {
+      "round": 1,
+      "method": "GET",
+      "path": "/_next/static/css/app/layout.css"
+    },
+    {
+      "round": 1,
+      "method": "GET",
+      "path": "/_next/static/css/app/page.css"
+    },
+    {
+      "round": 1,
+      "method": "GET",
+      "path": "/_next/static/chunks/webpack.js"
+    },
+    {
+      "round": 1,
+      "method": "GET",
+      "path": "/_next/static/chunks/main-app.js"
+    },
+    {
+      "round": 1,
+      "method": "GET",
+      "path": "/_next/static/chunks/app-pages-internals.js"
+    },
+    {
+      "round": 1,
+      "method": "GET",
+      "path": "/_next/static/chunks/app/page.js"
+    },
+    {
+      "round": 2,
+      "method": "GET",
+      "path": "/"
+    },
+    {
+      "round": 2,
+      "method": "GET",
+      "path": "/_next/static/css/app/layout.css"
+    },
+    {
+      "round": 2,
+      "method": "GET",
+      "path": "/_next/static/css/app/page.css"
+    },
+    {
+      "round": 2,
+      "method": "GET",
+      "path": "/_next/static/chunks/webpack.js"
+    },
+    {
+      "round": 2,
+      "method": "GET",
+      "path": "/_next/static/chunks/main-app.js"
+    },
+    {
+      "round": 2,
+      "method": "GET",
+      "path": "/_next/static/chunks/app-pages-internals.js"
+    },
+    {
+      "round": 2,
+      "method": "GET",
+      "path": "/_next/static/chunks/app/page.js"
+    }
+  ],
+  "apiRequests": 0,
+  "consoleErrors": [
+    "Failed to read the 'serviceWorker' property from 'Navigator': Service worker is disabled because the context is sandboxed and lacks the 'allow-same-origin' flag.",
+    "Failed to read the 'serviceWorker' property from 'Navigator': Service worker is disabled because the context is sandboxed and lacks the 'allow-same-origin' flag.",
+    "Failed to read the 'serviceWorker' property from 'Navigator': Service worker is disabled because the context is sandboxed and lacks the 'allow-same-origin' flag."
+  ]
+}

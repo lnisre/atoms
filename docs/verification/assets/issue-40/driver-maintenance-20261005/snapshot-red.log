@@ -1,0 +1,13 @@
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+page.evaluate: ReferenceError: __name is not defined
+    at eval (eval at evaluate (:311:30), <anonymous>:1:181)
+    at async <anonymous>:337:30
+    at snapshot (/Users/gaowenlong/.codex/worktrees/verify-atoms/atoms/tests/team/cross-app-workflow.ts:9:32)
+    at /Users/gaowenlong/.codex/worktrees/verify-atoms/atoms/tests/team/snapshot-cli.mjs:45:24 {
+  log: []
+}
+
+Node.js v24.18.0
