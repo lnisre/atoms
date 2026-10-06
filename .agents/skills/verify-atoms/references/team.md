@@ -51,9 +51,11 @@ The gateway logs `Team gateway listening on 3215`. Wait for HTTP 200, then:
 
 ```sh
 node .agents/skills/verify-atoms/scripts/doctor.mjs "http://127.0.0.1:$PORT" "$SERVER_PID" team >"$RUN/doctor.json"
-METAGPT_PROJECT_ROOT="$METAGPT_PROJECT_ROOT" "$ATOMS_VERIFY_PYTHON" runtime/team/test_runner.py >"$RUN/python.txt" 2>&1
-TEAM_FIXTURE=1 TEST_BASE_URL="http://127.0.0.1:$PORT" pnpm exec playwright test tests/browser/team.spec.ts tests/browser/team-modification.spec.ts --workers=1 --retries=0 --trace=on --output="$RUN/browser" --reporter=json >"$RUN/playwright.json"
+HOME="$RUN/runtime-home" METAGPT_PROJECT_ROOT="$METAGPT_PROJECT_ROOT" "$ATOMS_VERIFY_PYTHON" runtime/team/test_runner.py >"$RUN/python.txt" 2>&1
+TEAM_FIXTURE=1 TEST_BASE_URL="http://127.0.0.1:$PORT" pnpm exec playwright test tests/browser/team.spec.ts tests/browser/team-modification.spec.ts tests/browser/team-stop.spec.ts --workers=1 --retries=0 --trace=on --output="$RUN/browser" --reporter=json >"$RUN/playwright.json"
 ```
+
+Run `pnpm test` as well: the current package script includes `tests/team-socket.test.ts` and `tests/team-client.test.ts`, whose isolated processes exercise the real client/adapter with scripted WebSockets, including pending heartbeat abort, timeout and transport failure. Use the current script and report its actual counts. The native `team-stop` cases cover first-generation and modification stops after a cached artifact, observe beyond the delayed Reviewer response, then reload and compare saved records.
 
 Require zero unexpected skips and preserve failure output. Doctor's current source hashes must match build-source for product/runtime inputs; rebuild after changes. Doctor cannot verify upstream auth by reading an env name. In this lane provider replacement is established by wrapper provenance and scripted test outcomes, not live auth.
 

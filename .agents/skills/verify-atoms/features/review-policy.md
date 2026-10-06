@@ -24,7 +24,7 @@ Generate or modify, expand actual role records/findings, observe preview and “
 TEST_BASE_URL="http://127.0.0.1:$PORT" pnpm exec playwright test tests/browser/reviewer-preview.spec.ts tests/browser/cross-app-draft.spec.ts tests/browser/preview-document.spec.ts --workers=1 --retries=0 --trace=on --output="$RUN/browser" --reporter=json >"$RUN/playwright.json"
 ```
 
-Native repair/stop/clarification: [team setup](../references/team.md), `team.spec.ts`; `pnpm test` and `runtime/team/test_runner.py` corroborate protocol/routing. Synthetic Reviewer messages are not model judgment.
+Native repair/stop/clarification: [team setup](../references/team.md), `team.spec.ts` and `team-stop.spec.ts` (first-generation and modification stop, including delayed results). `pnpm test` includes socket lifecycle and client heartbeat/abort/timeout integration; `runtime/team/test_runner.py` corroborates native protocol/routing. Synthetic Reviewer messages are not model judgment.
 
 Real controlled repair uses `repair-workflow.ts` plus `inject-modification-save-defect.py`. Its fixed independent plan checks injection/rejection/repair. Its two-Engineer assertion belongs to that successful one-repair scenario; it is not the global cap and cannot prove the two-repair cap alone.
 

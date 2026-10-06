@@ -4,9 +4,9 @@ Select by current criteria, not historical counts. Distinct entry points in each
 
 | Feature | Existing recipes | Acceptance authority |
 | --- | --- | --- |
-| [Generation and cross-app lifecycle](generation.md) | generation, first-generation, team, cross-app, cross-app-draft | #2/#3; current ADR 0011 |
-| [Modification, trial and adoption](modification.md) | candidate, modification-records, persistence, save-race, reviewer-preview, cross-app-acceptance, cross-app-draft, record-assertions, team-modification | #5/#6/#17/#27; ADR 0011 |
-| [Review, repairs and preview](review-policy.md) | reviewer-preview, cross-app-draft, team, preview-document | ADR 0011 / #35 |
+| [Generation and cross-app lifecycle](generation.md) | generation, first-generation, team, team-stop, cross-app, cross-app-draft | #2/#3; current ADR 0011 |
+| [Modification, trial and adoption](modification.md) | candidate, modification-records, persistence, save-race, reviewer-preview, cross-app-acceptance, cross-app-draft, record-assertions, team-modification, team-stop | #5/#6/#17/#27; ADR 0011 |
+| [Review, repairs and preview](review-policy.md) | reviewer-preview, cross-app-draft, team, team-stop, preview-document | ADR 0011 / #35 |
 | [First-visit example and timer](example.md) | builtin-example; full-browser smoke | ADR 0012 / #36/#37/#39 |
 | [Home and workbench](workbench.md) | home-entry, workbench, workbench-stream | #15/#18; retain visual reference gaps |
 
