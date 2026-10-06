@@ -1,0 +1,33 @@
+{
+  "success": false,
+  "failure": "AssertionError [ERR_ASSERTION]: Port already occupied; do not drive it\n\n1 !== 0\n\n    at file:///Users/gaowenlong/.codex/worktrees/verify-atoms/atoms/.agents/skills/verify-atoms/scripts/smoke-example.mjs:78:10\n    at ModuleJob.run (node:internal/modules/esm/module_job:439:25)\n    at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:643:26)\n    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5)",
+  "cleanup": {
+    "browserClosed": true,
+    "profileRemoved": true
+  },
+  "retained": {
+    "manifest.json": null,
+    "actions.json": null,
+    "doctor.json": null,
+    "saved.json": null,
+    "reopened.json": null,
+    "reopened.png": null,
+    "trace-1.zip": null,
+    "trace-final.zip": null
+  },
+  "evidence": "/private/tmp/atoms-verify-40-occupied-1",
+  "coverage": [
+    "home example",
+    "real start/pause and IndexedDB save",
+    "paused refresh",
+    "full browser restart and home reopen",
+    "zero API requests"
+  ],
+  "unverified": [
+    "running/expired timer restoration",
+    "fault injection",
+    "team and real model",
+    "other feature maps",
+    "production build/deployment"
+  ]
+}

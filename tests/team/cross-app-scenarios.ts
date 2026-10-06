@@ -1,6 +1,7 @@
 import type { Command, Json, Scenario } from '../../src/lib/qa/contract';
 
-// Frozen developer acceptance inputs. They are never a Reviewer tool plan.
+// Requirement text is frozen. Executable checks are maintained separately; retain each historical proof and planHash.
+// These are developer acceptance inputs, never a Reviewer tool plan.
 export type AppKind = 'todo' | 'reading';
 export function appContract(kind: AppKind) {
   const reading = kind === 'reading';
@@ -32,9 +33,13 @@ export function acceptanceScenarios(kind: AppKind, rated = false): Scenario[] {
   const scenario = (id: string, commands: Command[], extra = {}): Scenario => ({ id, seed, ...extra,
     checks: commands.map((command, i) => ({ id: `${id}-${i}`, label: `${id} ${i + 1}`, command })) });
   const preserved = [data(['unknown'], { marker: 'INDEPENDENT_ROOT' }), data([c.collection, '0', 'extra'], { marker: 'INDEPENDENT_ONLY' })];
+  // QA observes DOM membership; the shared Playwright workflow also checks visibility.
+  const records = (count: number): Command[] => [check('#records li[data-id]', 'count', count),
+    check('#records .title', 'count', count), check('#records li:not([data-id]) .title', 'count', 0),
+    check('#records li[data-id=""]', 'count', 0)];
   const normal: Command[] = [
     check('button:not(:disabled),input:not(:disabled),select:not(:disabled)', 'count', 0), bridge('saveAttempts', 0), loaded,
-    check('#records li', 'count', 1), check('[data-id="old"] .title', 'text', '旧记录'), bridge('commits', 0),
+    ...records(1), check('[data-id="old"] .title', 'text', '旧记录'), bridge('commits', 0),
     ...(rated ? [check('[data-id="old"] .score', 'value', '0')] : []),
     input('#name', '独立新增'), click('#add'), check('body', 'inert', true), check(status, 'text', '正在保存'),
     { op: 'click', selector: '#add', probeWhileInert: true }, data([], seed), wait,
@@ -42,14 +47,23 @@ export function acceptanceScenarios(kind: AppKind, rated = false): Scenario[] {
     data([c.collection, '1', c.title], '独立新增'), ...preserved, bridge('saveAttempts', 1), bridge('commits', 1),
     click('[data-id="old"] .toggle'), wait, data([c.collection, '0', c.state], c.complete), ...preserved,
     ...(rated ? [input('[data-id="old"] .score', '4'), wait, data([c.collection, '0', 'rating'], 4),
-      input('#filter', 'active'), check('#records li', 'count', 1), check('#records li .title', 'text', '独立新增'),
-      input('#filter', 'complete'), check('#records li', 'count', 1), check('#records li .title', 'text', '旧记录'),
-      input('#filter', 'all'), check('#records li', 'count', 2)] : []),
-    click('#records li:last-child .remove'), wait, data([c.collection, 'length'], 1), ...preserved,
+      input('#filter', 'active'), ...records(1), check('#records li .title', 'text', '独立新增'),
+      input('#filter', 'complete'), ...records(1), check('#records li .title', 'text', '旧记录'),
+      input('#filter', 'all'), ...records(2)] : []),
+    click('#records li[data-id]:not([data-id="old"]) .remove'), wait, data([c.collection, 'length'], 1), ...preserved,
     bridge('commits', rated ? 4 : 3),
   ];
+  const completedSeed: Json = { [c.collection]: [{ id: 'old', [c.title]: '旧记录', [c.state]: c.complete,
+    rating: 3, extra: { marker: 'INDEPENDENT_ONLY' } }], unknown: { marker: 'INDEPENDENT_ROOT' } };
   return [scenario('core-defaults-preservation-timing', normal, { loadDelayMs: 500, saveDelayMs: 500 }),
+    ...(rated ? [scenario('filter-empty-preserves-records', [loaded,
+      input('#filter', 'active'), ...records(0), data([], completedSeed), bridge('saveAttempts', 0), bridge('commits', 0),
+      input('#filter', 'complete'), ...records(1), check('[data-id="old"] .title', 'text', '旧记录'),
+      data([], completedSeed), bridge('saveAttempts', 0), bridge('commits', 0),
+      input('#filter', 'all'), ...records(1), check('[data-id="old"] .title', 'text', '旧记录'),
+      data([], completedSeed), bridge('saveAttempts', 0), bridge('commits', 0),
+    ], { seed: completedSeed })] : []),
     scenario('read-failure', [until('读取失败'), check(status, 'text', '读取失败'), check('button:not(:disabled),input:not(:disabled),select:not(:disabled)', 'count', 0), bridge('saveAttempts', 0), bridge('commits', 0), data([], seed)], { fault: 'read' }),
     scenario('save-failure', [loaded, input('#name', '失败新增'), click('#add'), check('body', 'inert', true), until('保存失败'),
-      check(status, 'text', '保存失败'), check('#records li', 'count', 1), data([], seed), bridge('saveAttempts', 1), bridge('rejectedSaves', 1), bridge('commits', 0)], { fault: 'save', saveDelayMs: 500 })];
+      check(status, 'text', '保存失败'), ...records(1), data([], seed), bridge('saveAttempts', 1), bridge('rejectedSaves', 1), bridge('commits', 0)], { fault: 'save', saveDelayMs: 500 })];
 }

@@ -31,7 +31,13 @@ for (const kind of ['reading', 'todo'] as const) test(`${kind}: same acceptance 
   await context.route('**/api/generate', route => fulfillGeneration(route, { json: {
     html: crossAppFixture(kind, round > 0, round++ > 1), model: 'OFFLINE FIXTURE', durationMs: 1, generatedAt: 'fixture', assistantReply: '明确标注的离线夹具，不是模型结果。',
   } }));
-  await crossAppWorkflow(context, baseURL!, kind, (label, value) => writeFileSync(testInfo.outputPath(`${label}.json`), JSON.stringify(value, null, 2)));
+  const observations: Record<string, unknown> = {};
+  await crossAppWorkflow(context, baseURL!, kind, (label, value) => {
+    observations[label] = value; writeFileSync(testInfo.outputPath(`${label}.json`), JSON.stringify(value, null, 2));
+  });
+  expect(observations['initial-disposition']).toMatchObject({ kind: 'formal', taskOutcome: 'passed' });
+  expect(observations.lifecycle).toMatchObject({ path: 'formal-from-generation', initialTaskOutcome: 'passed' });
+  expect(observations['explicit-first-use']).toBeUndefined();
 });
 
 test('bounded observation waits for the exact state and never passes an unmet expectation', async ({ page }) => {

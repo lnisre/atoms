@@ -1,0 +1,70 @@
+{
+  "outcome": "changed",
+  "scope": [
+    "generation",
+    "modification",
+    "review-policy"
+  ],
+  "date": "2026-10-06 Asia/Shanghai",
+  "worktree": "/Users/gaowenlong/.codex/worktrees/verify-atoms/atoms",
+  "branch": "codex/verify-atoms",
+  "head": "886f933c3015d3c810f85662812c5bc201a478f7",
+  "mode": "offline protocol fixture, real browser/storage; no provider/gateway acceptance",
+  "newProviderCalls": 0,
+  "firstNewRegression": {
+    "startTime": "2026-10-06T12:00:57.947Z",
+    "duration": 49687.968,
+    "expected": 6,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  },
+  "finalAffectedRegression": {
+    "startTime": "2026-10-06T12:03:46.865Z",
+    "duration": 313281.903,
+    "expected": 47,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  },
+  "sourceProtection": {
+    "protectedCount": 625,
+    "changed": [],
+    "sourceBaseline": "886f933c3015d3c810f85662812c5bc201a478f7"
+  },
+  "cleanup": {
+    "port": 3348,
+    "serverPid": 11874,
+    "exited": true,
+    "portReleased": true,
+    "browserTmpRemoved": true,
+    "retainedTraces": 54
+  },
+  "fullEvidence": "/private/tmp/atoms-draft-driver.mvtjyw9_",
+  "fullEvidenceTemporary": true,
+  "limitations": [
+    "real provider/team decision quality not rerun",
+    "production build/deployment not tested",
+    "native gateway/Python not rerun",
+    "full browser restart of generated app not covered by shared workflow",
+    "cancel stream bug out of scope",
+    "other feature-map branches not audited"
+  ],
+  "evidenceHashes": {
+    "affected-final.json": "4571418884c99b6718a90ad1561e83f75213fcec69bbb2b8e338f8041005bea9",
+    "draft-first.json": "93d57e861a6cee312bf37e19523291a4f63978138dd32e282509d00e66031e6d",
+    "doctor-first.json": "492afce924b0892d73fcd53140e634d194481f4c244e65c4539537f490d9befe",
+    "doctor-final-run.json": "6709228100e170fe339cf7871c96c9938563d32bc09612573c223c1af5d2f708",
+    "identity-before.json": "ffa9412ce9a286630e527a4f13390e11a7d3c584ba4f3f0490e7fe34b5d0a178",
+    "status-before.txt": "9b7acbc64d8f1051ab67d02e6737659b26e60499e03f985016015368956dd241",
+    "lint-final.log": "07e495acef03c212046b48125a9e7fdd65331239d601be9114ce469588fb99e8",
+    "typecheck-final.log": "1d9eabc79b75a6dd15fefc1a4c548743cb328c1f62389e95b576d8a398a3d911",
+    "modification-selection.json": "cc40f713d425140e71854ab330d539de0fc248f8a87e8b2a58bc927891eecac8"
+  },
+  "onlineSourcesReadOnly": {
+    "/private/tmp/atoms-online-acceptance.jeGNJa/report.txt": "40425e3cda778ec9d0436a13e04ef38bafd07a2209ed95dfe8111409794782e3",
+    "/private/tmp/atoms-online-acceptance.jeGNJa/continuation-1/summary.json": "4efceebf921f958a72d67ab621ec6621035a48d56e3f806a3e2779820fa992fe",
+    "/private/tmp/atoms-online-acceptance.jeGNJa/continuation-1/restored-raw-draft.json": "082caa7c756f89ac4d9f9f248efd331e0776d7e228790f5ca83cac3e077627f8",
+    "/private/tmp/atoms-online-acceptance.jeGNJa/continuation-1/explicit-use.json": "10549020b03984cba0383ab21fb729e84b39cbabb42da6d6159cf0b9cc7f8984"
+  }
+}

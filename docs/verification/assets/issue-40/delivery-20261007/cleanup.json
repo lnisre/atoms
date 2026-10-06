@@ -1,0 +1,23 @@
+{
+  "ownedPids": [
+    89903,
+    89915
+  ],
+  "gatewayStopped": true,
+  "portsReleased": [
+    3375,
+    3376
+  ],
+  "browserProcessesRemaining": 0,
+  "removedOwnedTemporaryPaths": [
+    "browser-tmp",
+    "runtime-home",
+    "config-root",
+    "venv",
+    "offline-python",
+    "metagpt-1.0.0-py3-none-any.whl"
+  ],
+  "traceCountRetained": 68,
+  "evidenceRetained": true,
+  "otherWorktreesModified": false
+}

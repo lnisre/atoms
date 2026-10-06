@@ -1,0 +1,4 @@
+interface:
+  display_name: "Verify Atoms"
+  short_description: "Verify Atoms user flows with isolated browser evidence"
+  default_prompt: "Use $verify-atoms to verify the current task's accepted Atoms behavior and report criterion-to-evidence results."

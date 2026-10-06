@@ -1,0 +1,213 @@
+[
+  {
+    "scenario": "cross-app-acceptance-readi-bc6e6--explicit-offline-responses",
+    "initial": {
+      "kind": "formal",
+      "projectId": "37a1d6fc-1d1e-4b86-a946-07f4747f35d8",
+      "taskId": "eff62f0d-892a-4d69-b1ae-6e0407b95bfd",
+      "taskOutcome": "passed",
+      "codeHash": "4c8122e5dd114cc9203cbc50c03eb7f66eaca7cbf6b2a04a6142aba23305cb82",
+      "policy": {
+        "status": "allowed",
+        "reasons": [],
+        "review": "clean",
+        "dataMode": "formal",
+        "adoption": "allowed"
+      },
+      "businessRow": "absent",
+      "requestedAction": "stop"
+    },
+    "lifecycle": {
+      "initialDisposition": "formal",
+      "initialTaskOutcome": "passed",
+      "path": "formal-from-generation"
+    },
+    "reading-initial-independent": {
+      "evidenceSha256": "e709374bc8793bdb97b19d52588f800eb46d08d837fad7d7582e7b2af89af24b"
+    },
+    "reading-first-candidate-independent": {
+      "evidenceSha256": "4f6dcfcff02d53036003598e048806251f6f2e9f23566c40a11fe6841f3c655d"
+    },
+    "reading-adopted-independent": {
+      "evidenceSha256": "7519763d345a2868ef2e0b576e5b387fdcb84c357aace7aaac771a22ba84ef09"
+    }
+  },
+  {
+    "scenario": "cross-app-acceptance-todo--c4016--explicit-offline-responses",
+    "initial": {
+      "kind": "formal",
+      "projectId": "5123f4a5-c74c-4e20-a4d3-9325168ac8a7",
+      "taskId": "6693aff3-eb39-417e-a1ac-7649203da1f0",
+      "taskOutcome": "passed",
+      "codeHash": "a038d52327739fc9f6a667e0d1607c7f10a6d47d9d66f19411b6cf2f3a45c005",
+      "policy": {
+        "status": "allowed",
+        "reasons": [],
+        "review": "clean",
+        "dataMode": "formal",
+        "adoption": "allowed"
+      },
+      "businessRow": "absent",
+      "requestedAction": "stop"
+    },
+    "lifecycle": {
+      "initialDisposition": "formal",
+      "initialTaskOutcome": "passed",
+      "path": "formal-from-generation"
+    }
+  },
+  {
+    "scenario": "cross-app-draft-data-risk--98dfd-river-without-formal-writes",
+    "initial": {
+      "kind": "draft-restricted",
+      "projectId": "743d58bd-4848-4c3a-8305-4495238ba851",
+      "taskId": "825fba10-0e15-4c2d-9489-602f6ba54b5e",
+      "taskOutcome": "issues",
+      "codeHash": "4c8122e5dd114cc9203cbc50c03eb7f66eaca7cbf6b2a04a6142aba23305cb82",
+      "policy": {
+        "status": "allowed",
+        "reasons": [],
+        "review": "issues",
+        "dataMode": "trial",
+        "adoption": "blocked"
+      },
+      "businessRow": "absent",
+      "requestedAction": "use-synthetic"
+    },
+    "traffic": {
+      "unexpected": [],
+      "errors": [],
+      "providerCalls": 0
+    }
+  },
+  {
+    "scenario": "cross-app-draft-execution--05d9e-river-without-formal-writes",
+    "initial": {
+      "kind": "execution-blocked",
+      "projectId": "d509285a-839e-4972-9e49-93aa4ab7aefe",
+      "taskId": "b1264155-e1ad-4ee6-95bd-b42f9f2b4536",
+      "taskOutcome": "passed",
+      "codeHash": "29480692ad727ff5d5827b5243b0b3002c2d97166b2600ce8a368592583505f1",
+      "policy": {
+        "status": "blocked",
+        "reasons": [
+          "检测到载入时无条件空循环：while(true){}"
+        ],
+        "review": "clean",
+        "dataMode": "formal",
+        "adoption": "blocked"
+      },
+      "businessRow": "absent",
+      "requestedAction": "use-synthetic"
+    },
+    "traffic": {
+      "unexpected": [],
+      "errors": [],
+      "providerCalls": 0
+    }
+  },
+  {
+    "scenario": "cross-app-draft-failed-fir-7d73c-covery-keep-failure-history",
+    "initial": {
+      "kind": "draft-usable",
+      "projectId": "4b7aeded-c16d-4983-a4dd-0113096a8da0",
+      "taskId": "298497d9-5c08-4a9b-a55f-f0f3d7c735e5",
+      "taskOutcome": "failed",
+      "codeHash": "4c8122e5dd114cc9203cbc50c03eb7f66eaca7cbf6b2a04a6142aba23305cb82",
+      "policy": {
+        "status": "allowed",
+        "reasons": [],
+        "review": "unavailable",
+        "dataMode": "trial",
+        "adoption": "allowed"
+      },
+      "businessRow": "absent",
+      "requestedAction": "use-synthetic"
+    },
+    "lifecycle": {
+      "initialDisposition": "draft-usable",
+      "initialTaskOutcome": "failed",
+      "path": "explicit-retained-artifact-continuation"
+    },
+    "traffic": {
+      "unexpected": [],
+      "errors": [],
+      "providerCalls": 0
+    },
+    "reading-draft-independent": {
+      "evidenceSha256": "07f9df07e1911fa28ee4b185c7727da08957311f345d3e92a1b799c4ce30f2d1"
+    },
+    "reading-initial-independent": {
+      "evidenceSha256": "cc146be1350df299de93bbb6572d0a2e8aa066c926d695a7129a67ff92b30597"
+    },
+    "reading-first-candidate-independent": {
+      "evidenceSha256": "26283b48c8b4c7c0160a6d60056ee9331ab197b9a489d9e820718188024553f3"
+    },
+    "reading-adopted-independent": {
+      "evidenceSha256": "3ff40244a9fee0e3de3f5e285995d5041458a6f7087d0a0ed5344c7b0f3ab85e"
+    },
+    "explicitFirstUse": {
+      "beforeDraft": true,
+      "afterDraft": false,
+      "beforePolicy": {
+        "status": "allowed",
+        "reasons": [],
+        "review": "unavailable",
+        "dataMode": "trial",
+        "adoption": "allowed"
+      },
+      "afterPolicy": {
+        "status": "allowed",
+        "reasons": [],
+        "review": "unavailable",
+        "dataMode": "formal",
+        "adoption": "allowed"
+      },
+      "beforeTeamDigest": "a046fc841b4445cf8cc62e9fd184b905105e7d1ad20bc06c4ed2c4f00fe7a0bc",
+      "afterTeamDigest": "a046fc841b4445cf8cc62e9fd184b905105e7d1ad20bc06c4ed2c4f00fe7a0bc",
+      "beforeOutcome": "failed",
+      "afterOutcome": "failed",
+      "codeUnchanged": true,
+      "evidenceSha256": "d8ba0e066f98cb63e0c56f1fa9f39fdbcbb0effd023d57a807820cc7c7d37941"
+    }
+  },
+  {
+    "scenario": "cross-app-draft-no-artifac-61c66-river-without-formal-writes",
+    "initial": {
+      "kind": "no-artifact",
+      "projectId": "af33726b-5702-4764-a93b-3bf8723db43a",
+      "taskId": "0a07b9c2-ef4c-4e21-8fea-9319c0a4b660",
+      "requestedAction": "use-synthetic",
+      "terminalText": "!\n生成未完成\n\nOFFLINE no artifact failure\n\n重新生成"
+    },
+    "traffic": {
+      "unexpected": [],
+      "errors": [],
+      "providerCalls": 0
+    }
+  },
+  {
+    "scenario": "cross-app-draft-unreviewed-01662-river-without-formal-writes",
+    "initial": {
+      "kind": "draft-usable",
+      "projectId": "e9662a1e-4e02-4780-b1e0-3316ad1d373e",
+      "taskId": "0dcf4c92-8d30-4e00-9867-26cdbf9f5b67",
+      "taskOutcome": "failed",
+      "codeHash": "4c8122e5dd114cc9203cbc50c03eb7f66eaca7cbf6b2a04a6142aba23305cb82",
+      "policy": {
+        "status": "allowed",
+        "reasons": [],
+        "review": "unavailable",
+        "dataMode": "trial",
+        "adoption": "allowed"
+      },
+      "businessRow": "absent",
+      "requestedAction": "stop"
+    },
+    "traffic": {
+      "unexpected": [],
+      "errors": [],
+      "providerCalls": 0
+    }
+  }
+]

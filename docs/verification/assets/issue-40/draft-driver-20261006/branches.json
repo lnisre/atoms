@@ -1,0 +1,235 @@
+{
+  "mode": "offline atoms-team/3 protocol fixtures; real UI/storage; no new model execution",
+  "initial": {
+    "kind": "draft-usable",
+    "projectId": "ec7dbf67-d6d4-4663-96aa-02e4dc39ecc4",
+    "taskId": "6107d4dc-ec48-4e31-a604-5d416a70f146",
+    "taskOutcome": "failed",
+    "codeHash": "4c8122e5dd114cc9203cbc50c03eb7f66eaca7cbf6b2a04a6142aba23305cb82",
+    "policy": {
+      "status": "allowed",
+      "reasons": [],
+      "review": "unavailable",
+      "dataMode": "trial",
+      "adoption": "allowed"
+    },
+    "businessRow": "absent",
+    "requestedAction": "use-synthetic"
+  },
+  "trial": {
+    "allFormalRowsUnchanged": true,
+    "currentBusinessRowAbsent": true,
+    "formalRowsDigest": "6c2e8d5e3ba97c0c6535ba33a22b7c54a08102db9ecf34d5624c803032aabc30"
+  },
+  "explicitUse": {
+    "action": "UI 使用此版本",
+    "draftRemoved": true,
+    "htmlHashBefore": "4c8122e5dd114cc9203cbc50c03eb7f66eaca7cbf6b2a04a6142aba23305cb82",
+    "htmlHashAfter": "4c8122e5dd114cc9203cbc50c03eb7f66eaca7cbf6b2a04a6142aba23305cb82",
+    "currentBusinessRowAbsent": true,
+    "initialTeamHash": "5b86c7990ca70cf3156e8d25c0ea83adebfe4901be46c9f460854a3ec9265592",
+    "teamHashAfterUse": "5b86c7990ca70cf3156e8d25c0ea83adebfe4901be46c9f460854a3ec9265592"
+  },
+  "final": {
+    "workflow": {
+      "kind": "reading",
+      "initialDisposition": "draft-usable",
+      "initialTaskOutcome": "failed",
+      "path": "explicit-retained-artifact-continuation",
+      "projectId": "ec7dbf67-d6d4-4663-96aa-02e4dc39ecc4",
+      "operations": [
+        "add:首次仅试用",
+        "add:首次仅试用",
+        "add:正式保留",
+        "add:正式删除",
+        "add:仅试用"
+      ],
+      "restorationModelRequests": 0,
+      "generationRequests": [
+        {
+          "body": {
+            "requirement": "做一个中文阅读记录应用，支持添加名称、切换在读/已读和删除。数据为 {books:[{id:string,name:string,status:\"reading\"|\"finished\"}]}，只在 null 时初始化。旧记录缺少status默认\"reading\"。保留根对象和每条记录未知字段；加载时不自动保存。输入 id=name，添加按钮 id=add，列表 id=records，每行 li 的 data-id 等于记录 id，名称用 .title 显示，切换和删除按钮 class=toggle/remove。同浏览器保存恢复，读取失败禁编辑，保存失败完整回退。样式自行决定。",
+            "projectId": "ec7dbf67-d6d4-4663-96aa-02e4dc39ecc4"
+          },
+          "taskId": "6107d4dc-ec48-4e31-a604-5d416a70f146"
+        },
+        {
+          "body": {
+            "projectId": "ec7dbf67-d6d4-4663-96aa-02e4dc39ecc4",
+            "requirement": "做一个中文阅读记录应用，支持添加名称、切换在读/已读和删除。数据为 {books:[{id:string,name:string,status:\"reading\"|\"finished\"}]}，只在 null 时初始化。旧记录缺少status默认\"reading\"。保留根对象和每条记录未知字段；加载时不自动保存。输入 id=name，添加按钮 id=add，列表 id=records，每行 li 的 data-id 等于记录 id，名称用 .title 显示，切换和删除按钮 class=toggle/remove。同浏览器保存恢复，读取失败禁编辑，保存失败完整回退。样式自行决定。",
+            "modification": "保留阅读记录全部功能和字段，为每条书增加 rating 整数评分0到5，旧记录缺失默认0。每行 select.score 提供0到5选项，改评分立即保存。新增状态筛选 select#filter，值 all/active/complete 分别显示全部/在读/已读，筛选仅影响显示，不持久化也不删除数据。保留未知字段。",
+            "baseHtml": "4c8122e5dd114cc9203cbc50c03eb7f66eaca7cbf6b2a04a6142aba23305cb82",
+            "baseDataIssues": [],
+            "context": []
+          },
+          "taskId": "44c5b690-8de7-49e4-b23e-b395f019534f"
+        },
+        {
+          "body": {
+            "projectId": "ec7dbf67-d6d4-4663-96aa-02e4dc39ecc4",
+            "requirement": "做一个中文阅读记录应用，支持添加名称、切换在读/已读和删除。数据为 {books:[{id:string,name:string,status:\"reading\"|\"finished\"}]}，只在 null 时初始化。旧记录缺少status默认\"reading\"。保留根对象和每条记录未知字段；加载时不自动保存。输入 id=name，添加按钮 id=add，列表 id=records，每行 li 的 data-id 等于记录 id，名称用 .title 显示，切换和删除按钮 class=toggle/remove。同浏览器保存恢复，读取失败禁编辑，保存失败完整回退。样式自行决定。",
+            "modification": "在最新候选基础上，把筛选框移到列表上方。保留评分、筛选、添加、状态切换、删除、原数据字段和缺省值行为，继续使用相同控件标识。",
+            "baseHtml": "3befeb64b14ddc6b312bad04a532132fbe5e861c2dc5e2bc32b28d0e9e1e3324",
+            "baseDataIssues": [],
+            "context": [
+              "保留阅读记录全部功能和字段，为每条书增加 rating 整数评分0到5，旧记录缺失默认0。每行 select.score 提供0到5选项，改评分立即保存。新增状态筛选 select#filter，值 all/active/complete 分别显示全部/在读/已读，筛选仅影响显示，不持久化也不删除数据。保留未知字段。"
+            ]
+          },
+          "taskId": "59aa6c49-c737-4964-9ffa-cb060f267607"
+        }
+      ]
+    },
+    "initialTaskOutcome": "failed",
+    "initialReviewerCalls": 0,
+    "teamHashAfterRecovery": "5b86c7990ca70cf3156e8d25c0ea83adebfe4901be46c9f460854a3ec9265592",
+    "modificationOutcomes": [
+      "passed",
+      "passed"
+    ],
+    "formalRow": {
+      "projectId": "ec7dbf67-d6d4-4663-96aa-02e4dc39ecc4",
+      "state": {
+        "books": [
+          {
+            "id": "4bd6a35d-d6de-4774-afe7-690da909b286",
+            "name": "正式保留",
+            "extra": {
+              "marker": "SYNTHETIC_PRIVATE_RECORD"
+            },
+            "rating": 3,
+            "status": "finished"
+          }
+        ],
+        "unknown": {
+          "marker": "SYNTHETIC_PRIVATE_ROOT"
+        }
+      },
+      "updatedAt": "2026-10-06T12:05:54.292Z"
+    }
+  },
+  "negativeBranches": [
+    {
+      "observation": {
+        "kind": "execution-blocked",
+        "projectId": "3b139998-01d6-4b2b-b714-79bf2f20ae42",
+        "taskId": "ebda2cb8-59cd-45eb-97e2-f9aedac29a62",
+        "taskOutcome": "passed",
+        "codeHash": "29480692ad727ff5d5827b5243b0b3002c2d97166b2600ce8a368592583505f1",
+        "policy": {
+          "status": "blocked",
+          "reasons": [
+            "检测到载入时无条件空循环：while(true){}"
+          ],
+          "review": "clean",
+          "dataMode": "formal",
+          "adoption": "blocked"
+        },
+        "businessRow": "absent",
+        "requestedAction": "use-synthetic"
+      },
+      "failurePage": "做一个中文阅读记录应用，支持添加名称、切换在读/已读和删除。数据为 {books:[{id:string,name:string,status:\"reading\"|\"finished\"}]}，只在 null 时初始化。旧记录缺少status默认\"reading\"。保留根对象和每条记录未知字段；加载时不自动保存。输入 id=name，添加按钮 id=add，列表 id=records，每行 li 的 data-id 等于记录 id，名称用 .title 显示，切换和删除按钮 class=toggle/remove。同浏览器保存恢复，读取失败禁编辑，保存失败完整回退。样式自行决定。\n⌄\n◴\n«\n▣ 应用查看器\n⌘\n▹_\n☁\n▱\n⌁\n···\n分享\n升级\n发布\n项目详情与保存范围\n你 · 初始需求\n\n做一个中文阅读记录应用，支持添加名称、切换在读/已读和删除。数据为 {books:[{id:string,name:string,status:\"reading\"|\"finished\"}]}，只在 null 时初始化。旧记录缺少status默认\"reading\"。保留根对象和每条记录未知字段；加载时不自动保存。输入 id=name，添加按钮 id=add，列表 id=records，每行 li 的 data-id 等于记录 id，名称用 .title 显示，切换和删除按钮 class=toggle/remove。同浏览器保存恢复，读取失败禁编辑，保存失败完整回退。样式自行决定。\n\n✓\n代码已生成\n\n现在可以在预览中操作应用。生成完成不代表所有功能都已验证。\n\n✳\n助手 首次生成\n\n离线协议夹具；不代表真实模型通过。\n\n四角色代码审查流程；审查结论不代表业务运行已验证。\n\n代码审查通过\n\n代码审查：通过 · 业务运行尚未验证\n\nOFFLINE SCRIPTED REVIEW\n\nTeamLeader · 分派与交付\n需求负责人 · 规格\nTeamLeader · 分派与交付\n实现工程师 · 交付\nTeamLeader · 分派与交付\nReviewer · 代码审查\nTeamLeader · 分派与交付\n模型调用与用量 · 7 次\n平台执行记录\n\n结构检查和预览载入不代表业务功能已验证。\n\n接收生成结果\n完成\n保存项目与助手回复\n完成\n任务归属与时间说明\n首次生成 · 已保存\n\n请在右侧预览中实际操作，确认应用符合需求。\n\n还没有已采用的修改记录。\n\n项目已保存\n\n追加修改需求\n＋\n♩\n基于已采用应用修改\n生成候选\n▣\n↻\n⌂\n当前应用\n↗\n‹› 控制台\n\n暂未运行：检测到载入时无条件空循环：while(true){}\n\n代码和问题已保留，可继续修改。",
+      "traffic": {
+        "unexpected": [],
+        "errors": [],
+        "providerCalls": 0
+      },
+      "explicitUseEvidencePresent": false
+    },
+    {
+      "observation": {
+        "kind": "no-artifact",
+        "projectId": "6c35d4f7-a43a-4eac-abf2-5b1760a2f08f",
+        "taskId": "a8aeed58-0231-4c70-a596-2276b9ef143c",
+        "requestedAction": "use-synthetic",
+        "terminalText": "!\n生成未完成\n\nOFFLINE no artifact failure\n\n重新生成"
+      },
+      "failurePage": "做一个中文阅读记录应用，支持添加名称、切换在读/已读和删除。数据为 {books:[{id:string,name:string,status:\"reading\"|\"finished\"}]}，只在 null 时初始化。旧记录缺少status默认\"reading\"。保留根对象和每条记录未知字段；加载时不自动保存。输入 id=name，添加按钮 id=add，列表 id=records，每行 li 的 data-id 等于记录 id，名称用 .title 显示，切换和删除按钮 class=toggle/remove。同浏览器保存恢复，读取失败禁编辑，保存失败完整回退。样式自行决定。\n⌄\n◴\n«\n▣ 应用查看器\n⌘\n▹_\n☁\n▱\n⌁\n···\n分享\n升级\n发布\n项目详情与保存范围\n你 · 初始需求\n\n做一个中文阅读记录应用，支持添加名称、切换在读/已读和删除。数据为 {books:[{id:string,name:string,status:\"reading\"|\"finished\"}]}，只在 null 时初始化。旧记录缺少status默认\"reading\"。保留根对象和每条记录未知字段；加载时不自动保存。输入 id=name，添加按钮 id=add，列表 id=records，每行 li 的 data-id 等于记录 id，名称用 .title 显示，切换和删除按钮 class=toggle/remove。同浏览器保存恢复，读取失败禁编辑，保存失败完整回退。样式自行决定。\n\n!\n生成未完成\n\nOFFLINE no artifact failure\n\n重新生成\n✳\n助手 首次生成\n\n本次未取得助手说明\n\n四角色代码审查流程；审查结论不代表业务运行已验证。\n\n执行失败\n\n本次未取得完整审查结果\n\n模型调用与用量 · 0 次\n平台执行记录\n\n结构检查和预览载入不代表业务功能已验证。\n\n执行失败\n失败\n任务归属与时间说明\n\n还没有已采用的修改记录。\n\n项目尚未保存\n\n补充或调整需求\n\n本轮执行已结束。此前需求与问题保留在当前会话，补充后发起新任务。\n\n补充后重新发起\n▣\n↻\n⌂\n当前应用\n↗\n‹› 控制台\n↗\n等待新的生成结果\n\n左侧保留了你的需求，可以重新发起生成。\n\nAPP PREVIEW",
+      "traffic": {
+        "unexpected": [],
+        "errors": [],
+        "providerCalls": 0
+      },
+      "explicitUseEvidencePresent": false
+    },
+    {
+      "observation": {
+        "kind": "draft-restricted",
+        "projectId": "f986436d-aec7-4d52-b01a-03b39afab575",
+        "taskId": "9e3b0d54-6e0f-4503-901b-7f60aed4ad50",
+        "taskOutcome": "issues",
+        "codeHash": "4c8122e5dd114cc9203cbc50c03eb7f66eaca7cbf6b2a04a6142aba23305cb82",
+        "policy": {
+          "status": "allowed",
+          "reasons": [],
+          "review": "issues",
+          "dataMode": "trial",
+          "adoption": "blocked"
+        },
+        "businessRow": "absent",
+        "requestedAction": "use-synthetic"
+      },
+      "failurePage": "做一个中文阅读记录应用，支持添加名称、切换在读/已读和删除。数据为 {books:[{id:string,name:string,status:\"reading\"|\"finished\"}]}，只在 null 时初始化。旧记录缺少status默认\"reading\"。保留根对象和每条记录未知字段；加载时不自动保存。输入 id=name，添加按钮 id=add，列表 id=records，每行 li 的 data-id 等于记录 id，名称用 .title 显示，切换和删除按钮 class=toggle/remove。同浏览器保存恢复，读取失败禁编辑，保存失败完整回退。样式自行决定。\n⌄\n◴\n«\n▣ 应用查看器\n⌘\n▹_\n☁\n▱\n⌁\n···\n分享\n升级\n发布\n项目详情与保存范围\n你 · 初始需求\n\n做一个中文阅读记录应用，支持添加名称、切换在读/已读和删除。数据为 {books:[{id:string,name:string,status:\"reading\"|\"finished\"}]}，只在 null 时初始化。旧记录缺少status默认\"reading\"。保留根对象和每条记录未知字段；加载时不自动保存。输入 id=name，添加按钮 id=add，列表 id=records，每行 li 的 data-id 等于记录 id，名称用 .title 显示，切换和删除按钮 class=toggle/remove。同浏览器保存恢复，读取失败禁编辑，保存失败完整回退。样式自行决定。\n\n✓\n代码已生成\n\n现在可以在预览中操作应用。生成完成不代表所有功能都已验证。\n\n✳\n助手 首次生成\n\n离线协议夹具；不代表真实模型通过。\n\n四角色代码审查流程；审查结论不代表业务运行已验证。\n\n代码可预览 · 有待修复问题\n\n代码审查：有待修复问题 · 业务运行尚未验证\n\nOFFLINE SCRIPTED REVIEW\n\n重大 · scripted persistence risk, not a model finding（fixture risk；代码：window.atoms.saveState(next)）\nTeamLeader · 分派与交付\n需求负责人 · 规格\nTeamLeader · 分派与交付\n实现工程师 · 交付\nTeamLeader · 分派与交付\nReviewer · 代码审查\nTeamLeader · 分派与交付\n模型调用与用量 · 7 次\n平台执行记录\n\n结构检查和预览载入不代表业务功能已验证。\n\n接收生成结果\n完成\n保存项目与助手回复\n完成\n装配隔离预览\n完成\n载入隔离预览\n完成\n读取试用数据\n完成\n任务归属与时间说明\n首次生成 · 已保存\n\n请在右侧预览中实际操作，确认应用符合需求。\n\n还没有已采用的修改记录。\n\n项目已保存\n\n追加修改需求\n＋\n♩\n基于已采用应用修改\n生成候选\n▣\n↻\n⌂\n当前应用\n↗\n‹› 控制台\n\n待验证项目 · 代码与问题已保存，试用数据仅本次会话有效。\n\n使用此版本\n\n可预览，有待修复问题 · 业务运行尚未验证；存在待修复的数据问题，暂不可采用\n\n候选试用 · 未采用\n预览已加载 · 请实际操作检查\n\n试用数据已更新 · 仅本轮会话有效，未写入正式数据",
+      "traffic": {
+        "unexpected": [],
+        "errors": [],
+        "providerCalls": 0
+      },
+      "explicitUseEvidencePresent": false
+    },
+    {
+      "observation": {
+        "kind": "draft-usable",
+        "projectId": "77d65b9c-4a1e-4f25-b36e-b925e448c136",
+        "taskId": "963a9d07-a40a-4f17-9541-89aa41a0fa3a",
+        "taskOutcome": "failed",
+        "codeHash": "4c8122e5dd114cc9203cbc50c03eb7f66eaca7cbf6b2a04a6142aba23305cb82",
+        "policy": {
+          "status": "allowed",
+          "reasons": [],
+          "review": "unavailable",
+          "dataMode": "trial",
+          "adoption": "allowed"
+        },
+        "businessRow": "absent",
+        "requestedAction": "stop"
+      },
+      "failurePage": "做一个中文阅读记录应用，支持添加名称、切换在读/已读和删除。数据为 {books:[{id:string,name:string,status:\"reading\"|\"finished\"}]}，只在 null 时初始化。旧记录缺少status默认\"reading\"。保留根对象和每条记录未知字段；加载时不自动保存。输入 id=name，添加按钮 id=add，列表 id=records，每行 li 的 data-id 等于记录 id，名称用 .title 显示，切换和删除按钮 class=toggle/remove。同浏览器保存恢复，读取失败禁编辑，保存失败完整回退。样式自行决定。\n⌄\n◴\n«\n▣ 应用查看器\n⌘\n▹_\n☁\n▱\n⌁\n···\n分享\n升级\n发布\n项目详情与保存范围\n你 · 初始需求\n\n做一个中文阅读记录应用，支持添加名称、切换在读/已读和删除。数据为 {books:[{id:string,name:string,status:\"reading\"|\"finished\"}]}，只在 null 时初始化。旧记录缺少status默认\"reading\"。保留根对象和每条记录未知字段；加载时不自动保存。输入 id=name，添加按钮 id=add，列表 id=records，每行 li 的 data-id 等于记录 id，名称用 .title 显示，切换和删除按钮 class=toggle/remove。同浏览器保存恢复，读取失败禁编辑，保存失败完整回退。样式自行决定。\n\n✓\n代码已生成\n\n现在可以在预览中操作应用。生成完成不代表所有功能都已验证。\n\n✳\n助手 首次生成\n\n离线协议夹具；不代表真实模型通过。\n\n四角色代码审查流程；审查结论不代表业务运行已验证。\n\n执行失败\n\n本次未取得完整审查结果\n\nTeamLeader · 分派与交付\n需求负责人 · 规格\nTeamLeader · 分派与交付\n实现工程师 · 交付\n模型调用与用量 · 5 次\n平台执行记录\n\n结构检查和预览载入不代表业务功能已验证。\n\n接收生成结果\n完成\n保存项目与助手回复\n完成\n装配隔离预览\n完成\n载入隔离预览\n完成\n读取试用数据\n完成\n任务归属与时间说明\n首次生成 · 已保存\n\n请在右侧预览中实际操作，确认应用符合需求。\n\n还没有已采用的修改记录。\n\n项目已保存\n\n追加修改需求\n＋\n♩\n基于已采用应用修改\n生成候选\n▣\n↻\n⌂\n当前应用\n↗\n‹› 控制台\n\n待验证项目 · 代码与问题已保存，试用数据仅本次会话有效。\n\n使用此版本\n\n审查未完成，代码已保留 · 业务运行尚未验证\n\n候选试用 · 未采用\n预览已加载 · 请实际操作检查\n\n试用数据已更新 · 仅本轮会话有效，未写入正式数据",
+      "traffic": {
+        "unexpected": [],
+        "errors": [],
+        "providerCalls": 0
+      },
+      "explicitUseEvidencePresent": false
+    }
+  ],
+  "independentChecks": [
+    {
+      "label": "reading-initial-independent",
+      "status": "passed",
+      "checks": 55,
+      "codeHash": "4c8122e5dd114cc9203cbc50c03eb7f66eaca7cbf6b2a04a6142aba23305cb82",
+      "planHash": "23be4737d820fb47a99e3ef3bf84d619621e8d4795e02e666476f096a975c652"
+    },
+    {
+      "label": "reading-first-candidate-independent",
+      "status": "passed",
+      "checks": 103,
+      "codeHash": "3befeb64b14ddc6b312bad04a532132fbe5e861c2dc5e2bc32b28d0e9e1e3324",
+      "planHash": "4da4798dcdc49673351922a435806e211969dfd9593f9f4a77ee10d6f30b188a"
+    },
+    {
+      "label": "reading-draft-independent",
+      "status": "passed",
+      "checks": 55,
+      "codeHash": "4c8122e5dd114cc9203cbc50c03eb7f66eaca7cbf6b2a04a6142aba23305cb82",
+      "planHash": "23be4737d820fb47a99e3ef3bf84d619621e8d4795e02e666476f096a975c652"
+    },
+    {
+      "label": "reading-adopted-independent",
+      "status": "passed",
+      "checks": 103,
+      "codeHash": "0052c685d092fe9e6839a54acb1d69bd1e7145140c77619c1f68d3d4df3f732a",
+      "planHash": "4da4798dcdc49673351922a435806e211969dfd9593f9f4a77ee10d6f30b188a"
+    }
+  ]
+}

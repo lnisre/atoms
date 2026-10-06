@@ -1,0 +1,14 @@
+{
+  "oldSmokeCommit": "886f933c3015d3c810f85662812c5bc201a478f7",
+  "newCandidate": "a242924f0e35468dc576a328c540822fa125aced",
+  "changedProductInputs": [
+    "package.json",
+    "src/lib/team/client.ts",
+    "src/lib/team/socket.ts"
+  ],
+  "smokeHelpersUnchanged": {
+    ".agents/skills/verify-atoms/scripts/doctor.mjs": true,
+    ".agents/skills/verify-atoms/scripts/smoke-example.mjs": true
+  },
+  "decision": "Reuse old paused-example/full-browser-restart and occupied-port evidence only: no example/store/page/smoke changes; rerun all 47 B cases plus native stop/heartbeat because client/socket baseline and shared snapshot differ across prior runs. Historical counts remain historical."
+}

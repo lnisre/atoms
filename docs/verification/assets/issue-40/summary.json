@@ -1,0 +1,34 @@
+{
+  "success": true,
+  "cleanup": {
+    "browserClosed": true,
+    "serverStopped": true,
+    "portReleased": true,
+    "profileRemoved": true
+  },
+  "retained": {
+    "manifest.json": "5b1583008c83004ca9d0c72ca0f4af2044a5a7e16813721651825a154f7a1e4f",
+    "actions.json": "489329df7e045e6395296ef97398c5d73f19680feb3e3502de0e531299aa28c3",
+    "doctor.json": "ece9a284ef5de2b7e4e045cf35225a42f1727f177d4d43d51ecb62160480ad07",
+    "saved.json": "ba451c17504d3282ca139ef41b7cd7eaa9fc2d63f50caa86d4ce59aef538e3ce",
+    "reopened.json": "ba451c17504d3282ca139ef41b7cd7eaa9fc2d63f50caa86d4ce59aef538e3ce",
+    "reopened.png": "142d0c57e6cea0960ce4ded7a99a3d9da221d1916d9f1001098def8abc4325ca",
+    "trace-1.zip": "05e216ca63d41fd2c64b44efd2fcd541c4ead590836bb2a9aea55ae0e00be396",
+    "trace-final.zip": "13d2b9b937b12caa814fbb7935db59d80dd22c42856288853cd22213533432ac"
+  },
+  "evidence": "/private/tmp/atoms-verify-40-smoke-2",
+  "coverage": [
+    "home example",
+    "real start/pause and IndexedDB save",
+    "paused refresh",
+    "full browser restart and home reopen",
+    "zero API requests"
+  ],
+  "unverified": [
+    "running/expired timer restoration",
+    "fault injection",
+    "team and real model",
+    "other feature maps",
+    "production build/deployment"
+  ]
+}
