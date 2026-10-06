@@ -1,0 +1,77 @@
+{
+  "previousCandidate": "3be65e0734f21382ff77f5b2b5c6e8a0ca8d30a1",
+  "codeFiles": [
+    {
+      "path": "src/lib/team/client.ts",
+      "candidateSha256": "e7c5cb48b34683c41d56ea2fad7aff5d7bbf31fa7c4e9c29bf60cfcc0a4aa4c2",
+      "newSha256": "45fd6ffbfacc9d9ff2263a4fe6eacc8923b18d102cf1d56c26d573a21aa3eb59"
+    },
+    {
+      "path": "package.json",
+      "candidateSha256": "afce6ecac1ea3cadf27e5b72604bc525f4c30511816553b5011fdf033d94714c",
+      "newSha256": "46196e98057fcef0e6d00203d18fe6f83a5d75fef9a44fba29463e00f87a7405"
+    },
+    {
+      "path": "tests/team-client.test.ts",
+      "candidateSha256": null,
+      "newSha256": "2b70d800a1491fd461829a9567b842d048be49ef7164fef62d7af6c3bf635004"
+    },
+    {
+      "path": "tests/team/heartbeat-lifecycle.mjs",
+      "candidateSha256": null,
+      "newSha256": "3e9742540db879adabe21e4913cbfdde28718431a4cddc3a13085832eebb100c"
+    }
+  ],
+  "report": {
+    "path": "docs/verification/issue-41.md",
+    "sha256": "a3ac51d6dff4a3a61ae087b183dd552059c99aa60f6062847155b6c2b02cac20",
+    "integrationInstruction": "Append the P1 follow-up section to the independent report; preserve its prior independent-review section."
+  },
+  "evidence": {
+    "abort-before.json": "850c4cc963fd9e12c0a186eada2c44e8ae81d1a951e8cfe037cbb7ae4f5d1d29",
+    "abort-before.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "before-identity.json": "d379d96ee48608995b1f9cee8ccadaa7879f750aa8e37c5762ae7d3252612080",
+    "browser-related-summary.json": "b723358cad5ccacfe165b40fcc71140cfee9bdd5861bd29c781a964f122fde92",
+    "browser-stop-summary.json": "5fdf7d146fd60efa94acf22eaf222dc96f120c3a634483cd2686a5b8adfd5358",
+    "build.txt": "875337b8b9689a2895a9fafb93cf00ac09c906f7bb3365d3a86123410a67f7d9",
+    "cleanup.json": "99bdf486864b5490b4e257d165176bf5a841543cac5a2e362e0946460313ef33",
+    "client-scenarios/abort-after-ack.json": "cb9b359168379a443c112d906263e820e6e2dbf738f97dac5e07ab832739baed",
+    "client-scenarios/abort.json": "190a0929cf2edd956038479f91ce5faaea21f44351dca6333f2127bb706384ae",
+    "client-scenarios/ack-rejected.json": "216761e0e0fffadadc41eb12e921472a7432685294f3faee5cf7d4360633075c",
+    "client-scenarios/complete-pending.json": "21ee31ec6481850cd2fdd5152f2fdec33939d4afaf5e54a5875c632cd327e5ef",
+    "client-scenarios/normal.json": "d0e1de1f366cf27ce59d9383625b66dac0e1dc26926a43b84a53c98bfff8bf41",
+    "client-scenarios/socket-error.json": "0f8638f9d5f670396de83d674206280842772f49e906ba4c5e25a33195785cf5",
+    "client-scenarios/timeout.json": "4fb9468d4dee0579119a4fd48de6685fec9949668bf70d1512a55c79d53e9f60",
+    "code-followup.patch": "322ce4fa9d4d6b0be492c0d4173476105c9e95bd8c30e72a70e56bcdde79303d",
+    "first-stop.json": "ed924352112a5732e7b0d1ed697f2524f27fe9dbab416d6f9632c0c4617f7372",
+    "first-stopped.png": "b045739181ea8cdfdf8a451c8d347e7364f57f72f81e300c09180fc59bccbaa5",
+    "identity.json": "0c55a5f98aeacfd99d645cd8e5414fad75bdd14a63f15f1e038a71c8e2a66d06",
+    "integration-after.txt": "543410200d95067e16debda90d30a660059a24055969a56033988730491da445",
+    "integration-before.txt": "f780c844a176da21e801f7f113c23a85b48e2f1ecbc14bfe5ef65ca7c0a78a16",
+    "lint-final.txt": "1289f1dde2cfa810174024b326cd5e4f8134c9a72a2e9c83708d3608462ab7d0",
+    "modification-stop.json": "fcbdacf010219f50480cc1bafc4410459f39f7959b77773e8564af865abf9be7",
+    "modification-stopped.png": "0526e84d4cc3a53caaf0edcfd74c291cf02edf74bca826b72edceb0cfe683099",
+    "process-identity.txt": "5be792e9d4de8364bf3ecf0e52f2911b866049e014c2f6690edd4db9a59139e9",
+    "python-check.txt": "b985642bb2c84cb8b1993c94f8657fe4a6744ea8e677e33262d41f8e79486fee",
+    "python-provenance.json": "7bd5170a072b88ebe7cd6b0bcd504e70d5a156f13cd5e995fb1b24f670f7e88f",
+    "python-tests.txt": "be3ff5bf03244ab408d012e15918c41b85af1cb910aa07aad21afb8f0b33d4b6",
+    "tests.txt": "1f5989f7df6a431adb025cdc2f8e8dc3774753afe59a0f77ed1d7742ac58e601",
+    "typecheck.txt": "2b568dafc0c3103f7460310bfda7e17cb83317da90fb79cfd97d1a050fbbe8ac"
+  },
+  "historicalEvidenceUnchanged": true,
+  "tests": {
+    "default": 54,
+    "integrationIncluded": 7,
+    "adapterIncluded": 15,
+    "python": 20,
+    "pageStop": 2,
+    "relatedPages": 3,
+    "skips": 0,
+    "retries": 0
+  },
+  "unverified": [
+    "production/live-provider",
+    "exact pending-heartbeat timing in Chrome (deterministically covered in native Node client integration)",
+    "full 14-test browser suite not repeated this round"
+  ]
+}

@@ -1,6 +1,6 @@
 # Issue #41：停止生成任务的流生命周期修复
 
-> 当前交付状态（2026-10-06）：独立 Spec 审查与协调者复验发现 P1 取消竞态，**阻断发布**。候选尚未 push / 创建 PR / 合入 master；#41 保持 OPEN。下文作者自测与已通过集合属于历史/局部结果，不能解释为全部验收通过。详见末节。
+> 更新（2026-10-06）：此前 P1 阻断及失败证据完整保留。原修复会话已补上 heartbeat reader 清理，独立旧/新对照及受影响回归通过；本轮结果见末节。发布须以更新候选的独立审查和 GitHub 交付记录为准。
 
 2026-10-06（Asia/Shanghai）。本地修复与离线定向回归；未提交、推送、创建 PR、关闭 Issue 或部署。
 
@@ -155,3 +155,37 @@ node --import tsx docs/verification/assets/issue-41/independent-20261006/spec-re
 最小建议：局部处理 heartbeat 失败清理中 `reader.cancel()` 的预期拒绝，沿用已有 onAbort/finally 的清理方式，并增加正式 readTeam + adapter 的 pending heartbeat 与 abort/timeout 集成回归。不要全局吞掉错误。这会改变产品候选，超出本轮独立回归的修补边界；故仅记录建议，没有修改 client、adapter 或原测试。
 
 Standards 0 项；Spec 1 项 P1。停止发布，未 push、未创建 PR、无 merge SHA；#41 保持 OPEN。远端 master 在交付检查时仍为原基线，主工作区干净但不需要同步；两个来源工作区的未提交内容保持原样。B 独立回归仍通过，未交付、未关闭 #40。所有本轮服务/profile/临时 Python 已清理，最后的零网络复现进程亦已退出。
+
+## P1 补修后的独立复验（2026-10-06）
+
+修复会话 `01a1110e-08fa-7153-b78a-6346b00eca2e` 完成并明确停止写入后，才读取、校验和导入最终候选。来源仍是 `fe44/atoms` / `codex/fix-team-socket-cancel`、HEAD `886f933`，其未提交内容保持只读。交接 [manifest](assets/issue-41/heartbeat-author-20261006/handoff-manifest.json) 和 [作者身份](assets/issue-41/heartbeat-author-20261006/identity.json) 全部匹配；作者 [补修前错误](assets/issue-41/heartbeat-author-20261006/abort-before.json) 与 [集成失败](assets/issue-41/heartbeat-author-20261006/integration-before.txt) 独立保留。作者其余完整证据仍在来源 `heartbeat-20261006/`，没有用其报告覆盖本文件。
+
+本交付分支增量导入四个文件：`src/lib/team/client.ts`、`package.json`、`tests/team-client.test.ts`、`tests/team/heartbeat-lifecycle.mjs`。相对旧候选，产品只在 heartbeat 失败清理处增加 `reader.cancel().catch(() => {})`，沿用 onAbort/finally 的局部处理；原始 abort、控制超时、传输失败仍由 readTeam 返回拒绝，不伪造成成功。socket adapter、预算、Leader、审查、存储策略及既有页面用例未改。代码冻结提交为 `7c604dce257b0b8a57ee261610d1501c186b6065`；client hash 为 `45fd6ffbfacc9d9ff2263a4fe6eacc8923b18d102cf1d56c26d573a21aa3eb59`。
+
+### 新运行与旧证据的边界
+
+继续使用独立 `bf81/atoms`，新运行目录 `/private/tmp/atoms-independent-p1-20261006`，Node 24.18.0、pnpm 10.12.1、新 Python 3.11 venv、独立 runtime HOME 与 Chrome 临时目录。重新生产构建 BUILD_ID `eUgKCdZ-YOvAxmSKQEeSd`，新网关 3365 / Next 3366；cwd、父子监听归属、served 示例字节与打包 runner 均核对。仅使用 offline placeholder 与当前 `fixture_transport.py`，真实供应商调用为 0。[实例](assets/issue-41/independent-p1-20261006/doctor.json)。
+
+本轮从缓存独立安装 Python 依赖并通过 pip check；五个 MetaGPT 原生核心文件与上一轮已从固定上游 SHA 独立获取的 hash 一致。本轮复用该来源核验，不冒称再次请求整个上游或验证整个包。
+
+| 检查 | 本轮独立结果 | 证据 |
+| --- | --- | --- |
+| 原审查最小复现的旧/新对照 | 旧候选 `3be65e0` 仍出现 unhandled AbortError；新 `7c604dc` 未处理异常数组为空，readTeam 正常返回 AbortError 拒绝 | [旧失败](assets/issue-41/independent-p1-20261006/old-red.json)、[新通过](assets/issue-41/independent-p1-20261006/new-green.json)、[同一复现](assets/issue-41/independent-p1-20261006/pending-heartbeat-abort.mjs) |
+| 默认 Node 测试 | 54/54，0 失败/跳过；含原 15 条 adapter 生命周期与新增 7 条真实 client 集成 | [日志](assets/issue-41/independent-p1-20261006/unit.log) |
+| pending heartbeat / 正常流 | abort、真实控制超时、socket-error、拒绝 ack、双 heartbeat 后正常完成、pending 时正常完成、ack 后 abort 全通过；所有计时器/监听/迟到发送归零，未处理异常 0 | [7 场景](assets/issue-41/independent-p1-20261006/client-summary.json) |
+| 静态 / 构建 | lint、typecheck、webpack build、prepare 全部 exit 0 | [实际命令与退出码](assets/issue-41/independent-p1-20261006/commands.json)、[lint](assets/issue-41/independent-p1-20261006/lint.log)、[类型](assets/issue-41/independent-p1-20261006/typecheck.log)、[构建](assets/issue-41/independent-p1-20261006/build.log) |
+| Python | 新环境本轮 20/20；pip check 通过 | [结果](assets/issue-41/independent-p1-20261006/python-summary.txt)、[依赖](assets/issue-41/independent-p1-20261006/python-check.log) |
+| 真实页面 | 5/5，失败/跳过/重试均 0：两条首次/修改停止 + 正常交付保存恢复 + 非致命/审查不可用修改/采用 + 错身份/错终态保全 | [逐项结果](assets/issue-41/independent-p1-20261006/browser-summary.json) |
+| 两条 UI 停止 | 均实际点击后观察 32 秒，pageerror 0、socket 关闭、无迟到成果、完整正式项目/数据快照相等，刷新保全 | [首次](assets/issue-41/independent-p1-20261006/first-stopped.png)、[修改](assets/issue-41/independent-p1-20261006/modification-stopped.png)、同上 JSON |
+
+原审查复现仅在临时副本的允许 SHA 列表增加新候选，未修改原历史脚本或断言。它读取固定 Git 版本的正式 client/socket，其他运行依赖跨候选无变化。timeout 场景本轮实际运行 14100ms，发生 3 个重叠 heartbeat，仍明确返回“工具回传超时”且资源全清理。页面自然时序不保证 pending heartbeat；精确竞态由正式调用链的零网络集成确定性覆盖，不混淆两层证据。
+
+B 的来源 53 个文件逐项重算 hash 均未变，复用上一轮独立 47/47（含地图 39 项实际执行），本轮没有再运行 B 全套。[复用检查](assets/issue-41/independent-p1-20261006/B-reuse-check.json)。本次产品差异只处理 heartbeat 失败后的 reader 清理，不改 B 的身份选择、草稿策略、明确采用、业务行、历史记录、manifest 或驱动入口；其本轮新增风险由上面的 7 条正式调用链集成和 5 条真实网关页面测试覆盖。上一轮完整 14 条团队页面结果保留，其中 3 条本轮重新执行；不将其余 11 条列为新运行。
+
+### 身份、清理与审查交接
+
+[来源冻结](assets/issue-41/independent-p1-20261006/identity-before.json) 与 [结束核对](assets/issue-41/independent-p1-20261006/identity-after.json) 确认来源未变、导入文件与 manifest 一致。旧独立报告、P1 阻断、失败与 trace 均保留，新增结论在本节追加。本轮除预期的旧候选反证失败外，没有候选测试失败或重试。
+
+自建网关 61742 / Next 61743 已退出，3365/3366 释放；本轮浏览器/profile、venv、runtime HOME、配置根、wrapper 和 wheel 已清理，源码与独立构建保留。[清理](assets/issue-41/independent-p1-20261006/cleanup.json)、[5 份 trace hash](assets/issue-41/independent-p1-20261006/trace-sha256.json)、[精简证据 hash](assets/issue-41/independent-p1-20261006/sha256.json)。完整新 JSON/trace/原始日志仍在本轮临时运行目录，长期交付只包含精简脱敏证据。
+
+未做手工部署、生产页面复验、真实供应商或计费取消验证；不修改 #40，不推断自动部署等于线上验证。后续提交若仅补充审查/交付文字而产品文件 hash 不变，沿用本节有效证据。

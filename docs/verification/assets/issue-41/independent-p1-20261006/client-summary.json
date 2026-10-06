@@ -1,0 +1,345 @@
+[
+  {
+    "scenario": "socket-error",
+    "elapsedMs": 4110,
+    "heartbeatCount": 1,
+    "outcome": {
+      "status": "rejected",
+      "name": "Error",
+      "message": "controlled transport failure"
+    },
+    "cleanup": {
+      "intervals": 0,
+      "timeouts": 0,
+      "abortListeners": 0,
+      "pagehideListeners": 0,
+      "socketListeners": 0,
+      "sentAfterEnd": 0
+    },
+    "unhandledRejections": [],
+    "uncaughtExceptions": [],
+    "providerCalls": 0
+  },
+  {
+    "scenario": "normal",
+    "elapsedMs": 8109,
+    "heartbeatCount": 2,
+    "outcome": {
+      "status": "resolved",
+      "result": {
+        "result": {
+          "html": "<!DOCTYPE html><html><head></head><body>offline</body></html>",
+          "model": "fixture",
+          "durationMs": 1,
+          "generatedAt": "synthetic"
+        },
+        "assistantReply": null,
+        "team": {
+          "protocol": "atoms-team/3",
+          "taskId": "task",
+          "projectId": "project",
+          "codeHash": "a9c9881bd6acf9462631d313969e1668e089e6c5f90af980d145815178c7d4ae",
+          "review": {
+            "kind": "code-review",
+            "schemaVersion": 1,
+            "resolutions": [],
+            "taskId": "task",
+            "codeHash": "a9c9881bd6acf9462631d313969e1668e089e6c5f90af980d145815178c7d4ae",
+            "approved": true,
+            "summary": "synthetic",
+            "issues": []
+          },
+          "outcome": "passed",
+          "deliveries": [
+            {
+              "role": "Mike",
+              "content": "{\"command\":\"assign\",\"to\":\"Requirements\",\"reason\":\"synthetic\",\"instruction\":\"synthetic\"}"
+            },
+            {
+              "role": "Requirements",
+              "content": "{\"requirements\":[{\"id\":\"synthetic\",\"description\":\"synthetic\"}]}"
+            },
+            {
+              "role": "Mike",
+              "content": "{\"command\":\"assign\",\"to\":\"Engineer\",\"reason\":\"synthetic\",\"instruction\":\"synthetic\"}"
+            },
+            {
+              "role": "Engineer",
+              "content": "{\"codeHash\":\"a9c9881bd6acf9462631d313969e1668e089e6c5f90af980d145815178c7d4ae\",\"iteration\":1}"
+            },
+            {
+              "role": "Mike",
+              "content": "{\"command\":\"assign\",\"to\":\"Reviewer\",\"reason\":\"synthetic\",\"instruction\":\"synthetic\"}"
+            },
+            {
+              "role": "Reviewer",
+              "content": "{\"kind\":\"code-review\",\"schemaVersion\":1,\"resolutions\":[],\"taskId\":\"task\",\"codeHash\":\"a9c9881bd6acf9462631d313969e1668e089e6c5f90af980d145815178c7d4ae\",\"approved\":true,\"summary\":\"synthetic\",\"issues\":[]}"
+            },
+            {
+              "role": "Mike",
+              "content": "{\"command\":\"finish\"}"
+            }
+          ],
+          "calls": [
+            {
+              "call": 1,
+              "actor": "Mike",
+              "requestedModel": "fixture",
+              "status": "completed"
+            },
+            {
+              "call": 2,
+              "actor": "Requirements",
+              "requestedModel": "fixture",
+              "status": "completed"
+            },
+            {
+              "call": 3,
+              "actor": "Mike",
+              "requestedModel": "fixture",
+              "status": "completed"
+            },
+            {
+              "call": 4,
+              "actor": "Engineer",
+              "requestedModel": "fixture",
+              "status": "completed"
+            },
+            {
+              "call": 5,
+              "actor": "Mike",
+              "requestedModel": "fixture",
+              "status": "completed"
+            },
+            {
+              "call": 6,
+              "actor": "Reviewer",
+              "requestedModel": "fixture",
+              "status": "completed"
+            },
+            {
+              "call": 7,
+              "actor": "Mike",
+              "requestedModel": "fixture",
+              "status": "completed"
+            }
+          ]
+        }
+      }
+    },
+    "cleanup": {
+      "intervals": 0,
+      "timeouts": 0,
+      "abortListeners": 0,
+      "pagehideListeners": 0,
+      "socketListeners": 0,
+      "sentAfterEnd": 0
+    },
+    "unhandledRejections": [],
+    "uncaughtExceptions": [],
+    "providerCalls": 0
+  },
+  {
+    "scenario": "timeout",
+    "elapsedMs": 14100,
+    "heartbeatCount": 3,
+    "outcome": {
+      "status": "rejected",
+      "name": "Error",
+      "message": "\u5de5\u5177\u56de\u4f20\u8d85\u65f6"
+    },
+    "cleanup": {
+      "intervals": 0,
+      "timeouts": 0,
+      "abortListeners": 0,
+      "pagehideListeners": 0,
+      "socketListeners": 0,
+      "sentAfterEnd": 0
+    },
+    "unhandledRejections": [],
+    "uncaughtExceptions": [],
+    "providerCalls": 0
+  },
+  {
+    "scenario": "complete-pending",
+    "elapsedMs": 4100,
+    "heartbeatCount": 1,
+    "outcome": {
+      "status": "resolved",
+      "result": {
+        "result": {
+          "html": "<!DOCTYPE html><html><head></head><body>offline</body></html>",
+          "model": "fixture",
+          "durationMs": 1,
+          "generatedAt": "synthetic"
+        },
+        "assistantReply": null,
+        "team": {
+          "protocol": "atoms-team/3",
+          "taskId": "task",
+          "projectId": "project",
+          "codeHash": "a9c9881bd6acf9462631d313969e1668e089e6c5f90af980d145815178c7d4ae",
+          "review": {
+            "kind": "code-review",
+            "schemaVersion": 1,
+            "resolutions": [],
+            "taskId": "task",
+            "codeHash": "a9c9881bd6acf9462631d313969e1668e089e6c5f90af980d145815178c7d4ae",
+            "approved": true,
+            "summary": "synthetic",
+            "issues": []
+          },
+          "outcome": "passed",
+          "deliveries": [
+            {
+              "role": "Mike",
+              "content": "{\"command\":\"assign\",\"to\":\"Requirements\",\"reason\":\"synthetic\",\"instruction\":\"synthetic\"}"
+            },
+            {
+              "role": "Requirements",
+              "content": "{\"requirements\":[{\"id\":\"synthetic\",\"description\":\"synthetic\"}]}"
+            },
+            {
+              "role": "Mike",
+              "content": "{\"command\":\"assign\",\"to\":\"Engineer\",\"reason\":\"synthetic\",\"instruction\":\"synthetic\"}"
+            },
+            {
+              "role": "Engineer",
+              "content": "{\"codeHash\":\"a9c9881bd6acf9462631d313969e1668e089e6c5f90af980d145815178c7d4ae\",\"iteration\":1}"
+            },
+            {
+              "role": "Mike",
+              "content": "{\"command\":\"assign\",\"to\":\"Reviewer\",\"reason\":\"synthetic\",\"instruction\":\"synthetic\"}"
+            },
+            {
+              "role": "Reviewer",
+              "content": "{\"kind\":\"code-review\",\"schemaVersion\":1,\"resolutions\":[],\"taskId\":\"task\",\"codeHash\":\"a9c9881bd6acf9462631d313969e1668e089e6c5f90af980d145815178c7d4ae\",\"approved\":true,\"summary\":\"synthetic\",\"issues\":[]}"
+            },
+            {
+              "role": "Mike",
+              "content": "{\"command\":\"finish\"}"
+            }
+          ],
+          "calls": [
+            {
+              "call": 1,
+              "actor": "Mike",
+              "requestedModel": "fixture",
+              "status": "completed"
+            },
+            {
+              "call": 2,
+              "actor": "Requirements",
+              "requestedModel": "fixture",
+              "status": "completed"
+            },
+            {
+              "call": 3,
+              "actor": "Mike",
+              "requestedModel": "fixture",
+              "status": "completed"
+            },
+            {
+              "call": 4,
+              "actor": "Engineer",
+              "requestedModel": "fixture",
+              "status": "completed"
+            },
+            {
+              "call": 5,
+              "actor": "Mike",
+              "requestedModel": "fixture",
+              "status": "completed"
+            },
+            {
+              "call": 6,
+              "actor": "Reviewer",
+              "requestedModel": "fixture",
+              "status": "completed"
+            },
+            {
+              "call": 7,
+              "actor": "Mike",
+              "requestedModel": "fixture",
+              "status": "completed"
+            }
+          ]
+        }
+      }
+    },
+    "cleanup": {
+      "intervals": 0,
+      "timeouts": 0,
+      "abortListeners": 0,
+      "pagehideListeners": 0,
+      "socketListeners": 0,
+      "sentAfterEnd": 0
+    },
+    "unhandledRejections": [],
+    "uncaughtExceptions": [],
+    "providerCalls": 0
+  },
+  {
+    "scenario": "ack-rejected",
+    "elapsedMs": 4104,
+    "heartbeatCount": 1,
+    "outcome": {
+      "status": "rejected",
+      "name": "Error",
+      "message": "\u56e2\u961f\u8fde\u63a5\u4e2d\u65ad"
+    },
+    "cleanup": {
+      "intervals": 0,
+      "timeouts": 0,
+      "abortListeners": 0,
+      "pagehideListeners": 0,
+      "socketListeners": 0,
+      "sentAfterEnd": 0
+    },
+    "unhandledRejections": [],
+    "uncaughtExceptions": [],
+    "providerCalls": 0
+  },
+  {
+    "scenario": "abort",
+    "elapsedMs": 4102,
+    "heartbeatCount": 1,
+    "outcome": {
+      "status": "rejected",
+      "name": "AbortError",
+      "message": "This operation was aborted"
+    },
+    "cleanup": {
+      "intervals": 0,
+      "timeouts": 0,
+      "abortListeners": 0,
+      "pagehideListeners": 0,
+      "socketListeners": 0,
+      "sentAfterEnd": 0
+    },
+    "unhandledRejections": [],
+    "uncaughtExceptions": [],
+    "providerCalls": 0
+  },
+  {
+    "scenario": "abort-after-ack",
+    "elapsedMs": 4097,
+    "heartbeatCount": 1,
+    "outcome": {
+      "status": "rejected",
+      "name": "AbortError",
+      "message": "This operation was aborted"
+    },
+    "cleanup": {
+      "intervals": 0,
+      "timeouts": 0,
+      "abortListeners": 0,
+      "pagehideListeners": 0,
+      "socketListeners": 0,
+      "sentAfterEnd": 0
+    },
+    "unhandledRejections": [],
+    "uncaughtExceptions": [],
+    "providerCalls": 0
+  }
+]
