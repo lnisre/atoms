@@ -1,0 +1,27 @@
+[
+  {
+    "path": "team.py",
+    "sha256": "af0398fce4109cadf8a0ac8e479d261ef0cb6347c60d0c3343ff7d6e22180bcc",
+    "matchesPriorPinnedUpstream": true
+  },
+  {
+    "path": "environment/mgx/mgx_env.py",
+    "sha256": "aa1dda173a21c775a6c49b5dad2af99bc3db4a608fd23a9189ecc6522b08ec9b",
+    "matchesPriorPinnedUpstream": true
+  },
+  {
+    "path": "roles/role.py",
+    "sha256": "2dac0259a6f3733fa2ec0df8a43eb8dda1cac199410c31ef350aaaf70f6c939b",
+    "matchesPriorPinnedUpstream": true
+  },
+  {
+    "path": "roles/di/role_zero.py",
+    "sha256": "072d832e75fc90ed4b36673eea054cfe9f74145b11722312513970399d9090c4",
+    "matchesPriorPinnedUpstream": true
+  },
+  {
+    "path": "roles/di/team_leader.py",
+    "sha256": "a331cbab502865f53127726dcf97a130727767ac800575b48545ac5f25f3a683",
+    "matchesPriorPinnedUpstream": true
+  }
+]

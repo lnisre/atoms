@@ -117,3 +117,38 @@ Node 24.18.0；独立 Next dev 实例 3337、PID 99020，独立 Chrome 临时目
 ## 首次待验证草稿驱动维护（2026-10-06）
 
 新增独立报告：[首次草稿分类、明确使用及失败历史回归](issue-40-draft-driver.md)。本轮在同一验证 worktree 补充驱动/技能，47/47 离线受影响回归通过，零新增供应商调用；将初次团队失败与保留产物继续的结果分开记录。上文旧结论、线上原始失败及既有证据不改写。
+
+## 整合 master 与交付验证（2026-10-07）
+
+结果 **changed**。在指定 `codex/verify-atoms` worktree 先用 `ec43cbe` 固化全部 53 个既有文件，再以正常 merge `68da61c` 整合远端 master `29212c00b1b2701d84515743c3afc6a980140261`。没有冲突；未导入其他 worktree 的未提交补丁。初始 53 文件逐项匹配 #41 独立 B 的冻结身份；只更新 5 份技能配方，加入新 `team-stop`、默认 client/socket 心跳集成入口及独立 Python HOME。产品、运行时、锁文件、配置与 master 完全一致。技能及驱动候选为 `a242924f0e35468dc576a328c540822fa125aced`；之后仅追加本节与交付证据。
+
+维护范围：generation、modification、review-policy、workbench 的受影响配方和共享驱动；三个只读源码 agent 覆盖四份地图，协调者串行执行 live pass。依据 #40 正文/评论、本轮明确授权、CONTEXT、ADR 0004/0006/0008/0011。未改变已接受期望，也未扩展产品设计。
+
+### 本轮新结果
+
+独立 Node 24.18.0 / pnpm 10.12.1、锁定依赖、webpack 生产构建；自建 gateway `3375` / Next `3376`。Python 3.11 venv 从本机缓存独立安装，依赖检查通过；五个原生调度核心文件与此前从固定上游 SHA 核验的字节一致，未声称本次重新下载或核验整个上游包。wrapper 明确执行本 worktree 的 `fixture_transport.py`，替换 `httpx.AsyncClient` 并要求离线占位凭据；同时启用 `TEAM_FIXTURE=1`。没有真实供应商调用，没有部署。
+
+| 预期及来源 | 本轮观察 | 证据 | 结果 |
+| --- | --- | --- | --- |
+| 仓库默认静态/单元/构建门槛 | lint、typecheck、默认测试 54/54、webpack build/prepare 成功；默认测试含真实 client/adapter 心跳生命周期 | [unit](assets/issue-40/delivery-20261007/unit.log)、[build](assets/issue-40/delivery-20261007/build.log) | 通过 |
+| 原生团队路由、预算与取消（ADR 0006/0008） | Python 20/20；gateway Doctor 前后健康，归属/构建/素材匹配 | [Python](assets/issue-40/delivery-20261007/python-summary.log)、[doctor](assets/issue-40/delivery-20261007/doctor.json)、[provenance](assets/issue-40/delivery-20261007/python-provenance.json) | 通过 |
+| 新基线与共享驱动整合 | 16 文件 67/67；0 失败、跳过、重试；涵盖旧 B 47 项及原生团队、停止、preview-document | [逐项结果](assets/issue-40/delivery-20261007/browser-summary.json) | 通过 |
+| 草稿五分支、显式使用、失败历史及风险拒绝（ADR 0011） | 默认停在可用草稿；显式使用保留 failed/无 Reviewer 历史与代码 hash，排除试用数据；风险/阻断/无产物拒绝正式链路；正式路径保持通过 | [分支摘要](assets/issue-40/delivery-20261007/branches.json)、逐项结果 | 通过 |
+| 记录级断言、tsx CLI、工作台请求账本 | 空态正例与两种错误筛选反例；snapshot spec 启动实际 `node --import tsx` CLI；1440/1280 预期请求各 2 次，额外 fetch 反例拒绝 | [反例及停止](assets/issue-40/delivery-20261007/counterexamples-and-stops.json)、逐项结果 | 通过 |
+| 地图选集与实际执行一致 | modification.md 的 8 文件选出 39 项，全部在本轮 67 项通过集合；不是用 `--list` 代替执行 | 逐项结果中的 modificationMapSelection | 通过 |
+| 首次/修改停止保全，拒绝缓存及迟到工件（#41 / ADR 0011） | 两条均观察 32 秒；无页面错误、socket 关闭、无迟到 frame，停止前后完整存储一致，刷新不重启任务 | 反例及停止 | 通过 |
+| 技能结构、入口、链接与权限（#40） | frontmatter 校验；UI metadata 存在；两 helper 可执行；技能及既有报告 70 个本地链接有效；manifest 默认 stop、显式 use、repair 组合拒绝 | [integrity](assets/issue-40/delivery-20261007/integrity.json)、[格式](assets/issue-40/delivery-20261007/skill-validation.log) | 通过；UI 自动发现未验证 |
+
+静态/默认测试和构建先在 merge commit 执行；随后 `a242924` 只改上述技能文档，产品/测试/构建输入未变。浏览器与 Doctor 直接在 `a242924` 执行。精确源码、测试和技能身份见 [tested-files](assets/issue-40/delivery-20261007/tested-files.sha256.json)，构建产品身份见 [build-source](assets/issue-40/delivery-20261007/build-source.json)。CLI 默认/显式 manifest 和不兼容选项结果也保存在同目录。本轮候选验证没有失败或重试；不覆盖上文历史失败。
+
+### 复用范围与未验证边界
+
+[复用判断](assets/issue-40/delivery-20261007/evidence-reuse.json)：旧 B 47/47 与 53 文件身份保留为独立历史证据；因整合 client/socket 和 `team-stop` 使用本票 snapshot，旧计数不替代本次整合运行，上述 47 项全部新跑。旧番茄钟真实开始/暂停、完整 Chrome 退出重启及端口占用拒绝证据仍有效：example/store/page/smoke helper 字节未变；相比旧 smoke 仅 package 测试入口、client/socket 改动，与零模型示例路径无关。本轮未重做完整历史套件或番茄钟冒烟。
+
+当前会话技能目录清单没有自动列出 `verify-atoms`；已验证项目文件注册位置、显式读取/命令调用与 metadata，**未验证实际 UI 自动发现**。真实模型/Reviewer 质量、生产部署与线上验收、原站视觉、生成应用完整浏览器重启，以及本轮未选择的其他地图分支均不新增通过结论。旧功能及真实验收缺口按原报告保持。
+
+### 独立审查与清理
+
+按 code-review 两个独立只读 agent 审查固定差异 `29212c0...a242924`：Standards 0 项硬性违反、0 项需修复异味；Spec 0 项发现。审查包含全部技能、driver、测试及历史报告；本节和新增精简证据另做最终增量核对。snapshot 的就地 IndexedDB 回调保留 tsx 序列化约束，不以抽象重构重新引入 `__name`。
+
+[清理记录](assets/issue-40/delivery-20261007/cleanup.json)：仅关闭本轮 gateway/Next `89903/89915`，3375/3376 释放；浏览器退出，临时 profile/cache、Python venv、wrapper、runtime HOME 与配置根删除。68 份 trace 和完整结果保留在 `/private/tmp/atoms-40-delivery`；临时位置不是长期档案，长期精简结果在本节链接目录，[trace 哈希](assets/issue-40/delivery-20261007/trace-sha256.json)仅供追溯，不表示 ZIP 已入库。原主工作区与其他 worktree 未用于测试或修改；原 53 文件全部先提交保全，旧报告/失败证据未覆盖。GitHub PR、最终 head、merge SHA 与关闭状态以随后交付记录为准。

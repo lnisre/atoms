@@ -1,0 +1,1735 @@
+[
+  {
+    "test": "record assertion: empty-state",
+    "evidence": "independent-filter-proof",
+    "value": {
+      "kind": "independent developer browser acceptance; not Reviewer execution",
+      "result": {
+        "protocol": "atoms-qa/1",
+        "taskId": "6249673a-bbd4-4431-b70a-b09c0c9934e7",
+        "requestId": "ad4ed53d-6c25-4507-b004-fa6c68f1682b",
+        "codeHash": "db58bfa9cdb289daada24fd35c2eb25d2df7dad6b8a60f6a98192654379925a2",
+        "planHash": "a8d667487f7407f4fa99fd4131515cb4e7f3a193900733c32307ee0122580f7c",
+        "status": "passed",
+        "results": [
+          {
+            "scenarioId": "filter-empty-preserves-records",
+            "checkId": "filter-empty-preserves-records-0",
+            "command": {
+              "op": "wait-for",
+              "selector": "[data-atoms-status]",
+              "property": "text",
+              "equals": "已读取"
+            },
+            "expected": "已读取",
+            "actual": "已读取",
+            "status": "passed",
+            "startedAt": 1791304686659,
+            "endedAt": 1791304686685
+          },
+          {
+            "scenarioId": "filter-empty-preserves-records",
+            "checkId": "filter-empty-preserves-records-1",
+            "command": {
+              "op": "input",
+              "selector": "#filter",
+              "value": "active"
+            },
+            "expected": "active",
+            "actual": "active",
+            "status": "passed",
+            "startedAt": 1791304686685,
+            "endedAt": 1791304686685
+          },
+          {
+            "scenarioId": "filter-empty-preserves-records",
+            "checkId": "filter-empty-preserves-records-2",
+            "command": {
+              "op": "assert",
+              "selector": "#records li[data-id]",
+              "property": "count",
+              "equals": 0
+            },
+            "expected": 0,
+            "actual": 0,
+            "status": "passed",
+            "startedAt": 1791304686685,
+            "endedAt": 1791304686686
+          },
+          {
+            "scenarioId": "filter-empty-preserves-records",
+            "checkId": "filter-empty-preserves-records-3",
+            "command": {
+              "op": "assert",
+              "selector": "#records .title",
+              "property": "count",
+              "equals": 0
+            },
+            "expected": 0,
+            "actual": 0,
+            "status": "passed",
+            "startedAt": 1791304686686,
+            "endedAt": 1791304686686
+          },
+          {
+            "scenarioId": "filter-empty-preserves-records",
+            "checkId": "filter-empty-preserves-records-4",
+            "command": {
+              "op": "assert",
+              "selector": "#records li:not([data-id]) .title",
+              "property": "count",
+              "equals": 0
+            },
+            "expected": 0,
+            "actual": 0,
+            "status": "passed",
+            "startedAt": 1791304686686,
+            "endedAt": 1791304686686
+          },
+          {
+            "scenarioId": "filter-empty-preserves-records",
+            "checkId": "filter-empty-preserves-records-5",
+            "command": {
+              "op": "assert",
+              "selector": "#records li[data-id=\"\"]",
+              "property": "count",
+              "equals": 0
+            },
+            "expected": 0,
+            "actual": 0,
+            "status": "passed",
+            "startedAt": 1791304686686,
+            "endedAt": 1791304686686
+          },
+          {
+            "scenarioId": "filter-empty-preserves-records",
+            "checkId": "filter-empty-preserves-records-6",
+            "command": {
+              "op": "data",
+              "path": [],
+              "equals": {
+                "books": [
+                  {
+                    "id": "old",
+                    "name": "旧记录",
+                    "status": "finished",
+                    "rating": 3,
+                    "extra": {
+                      "marker": "INDEPENDENT_ONLY"
+                    }
+                  }
+                ],
+                "unknown": {
+                  "marker": "INDEPENDENT_ROOT"
+                }
+              }
+            },
+            "expected": {
+              "books": [
+                {
+                  "id": "old",
+                  "name": "旧记录",
+                  "status": "finished",
+                  "rating": 3,
+                  "extra": {
+                    "marker": "INDEPENDENT_ONLY"
+                  }
+                }
+              ],
+              "unknown": {
+                "marker": "INDEPENDENT_ROOT"
+              }
+            },
+            "actual": {
+              "books": [
+                {
+                  "id": "old",
+                  "name": "旧记录",
+                  "status": "finished",
+                  "rating": 3,
+                  "extra": {
+                    "marker": "INDEPENDENT_ONLY"
+                  }
+                }
+              ],
+              "unknown": {
+                "marker": "INDEPENDENT_ROOT"
+              }
+            },
+            "status": "passed",
+            "startedAt": 1791304686686,
+            "endedAt": 1791304686686
+          },
+          {
+            "scenarioId": "filter-empty-preserves-records",
+            "checkId": "filter-empty-preserves-records-7",
+            "command": {
+              "op": "bridge",
+              "property": "saveAttempts",
+              "equals": 0
+            },
+            "expected": 0,
+            "actual": 0,
+            "status": "passed",
+            "startedAt": 1791304686686,
+            "endedAt": 1791304686686
+          },
+          {
+            "scenarioId": "filter-empty-preserves-records",
+            "checkId": "filter-empty-preserves-records-8",
+            "command": {
+              "op": "bridge",
+              "property": "commits",
+              "equals": 0
+            },
+            "expected": 0,
+            "actual": 0,
+            "status": "passed",
+            "startedAt": 1791304686686,
+            "endedAt": 1791304686686
+          },
+          {
+            "scenarioId": "filter-empty-preserves-records",
+            "checkId": "filter-empty-preserves-records-9",
+            "command": {
+              "op": "input",
+              "selector": "#filter",
+              "value": "complete"
+            },
+            "expected": "complete",
+            "actual": "complete",
+            "status": "passed",
+            "startedAt": 1791304686686,
+            "endedAt": 1791304686686
+          },
+          {
+            "scenarioId": "filter-empty-preserves-records",
+            "checkId": "filter-empty-preserves-records-10",
+            "command": {
+              "op": "assert",
+              "selector": "#records li[data-id]",
+              "property": "count",
+              "equals": 1
+            },
+            "expected": 1,
+            "actual": 1,
+            "status": "passed",
+            "startedAt": 1791304686686,
+            "endedAt": 1791304686686
+          },
+          {
+            "scenarioId": "filter-empty-preserves-records",
+            "checkId": "filter-empty-preserves-records-11",
+            "command": {
+              "op": "assert",
+              "selector": "#records .title",
+              "property": "count",
+              "equals": 1
+            },
+            "expected": 1,
+            "actual": 1,
+            "status": "passed",
+            "startedAt": 1791304686686,
+            "endedAt": 1791304686686
+          },
+          {
+            "scenarioId": "filter-empty-preserves-records",
+            "checkId": "filter-empty-preserves-records-12",
+            "command": {
+              "op": "assert",
+              "selector": "#records li:not([data-id]) .title",
+              "property": "count",
+              "equals": 0
+            },
+            "expected": 0,
+            "actual": 0,
+            "status": "passed",
+            "startedAt": 1791304686686,
+            "endedAt": 1791304686687
+          },
+          {
+            "scenarioId": "filter-empty-preserves-records",
+            "checkId": "filter-empty-preserves-records-13",
+            "command": {
+              "op": "assert",
+              "selector": "#records li[data-id=\"\"]",
+              "property": "count",
+              "equals": 0
+            },
+            "expected": 0,
+            "actual": 0,
+            "status": "passed",
+            "startedAt": 1791304686687,
+            "endedAt": 1791304686687
+          },
+          {
+            "scenarioId": "filter-empty-preserves-records",
+            "checkId": "filter-empty-preserves-records-14",
+            "command": {
+              "op": "assert",
+              "selector": "[data-id=\"old\"] .title",
+              "property": "text",
+              "equals": "旧记录"
+            },
+            "expected": "旧记录",
+            "actual": "旧记录",
+            "status": "passed",
+            "startedAt": 1791304686687,
+            "endedAt": 1791304686687
+          },
+          {
+            "scenarioId": "filter-empty-preserves-records",
+            "checkId": "filter-empty-preserves-records-15",
+            "command": {
+              "op": "data",
+              "path": [],
+              "equals": {
+                "books": [
+                  {
+                    "id": "old",
+                    "name": "旧记录",
+                    "status": "finished",
+                    "rating": 3,
+                    "extra": {
+                      "marker": "INDEPENDENT_ONLY"
+                    }
+                  }
+                ],
+                "unknown": {
+                  "marker": "INDEPENDENT_ROOT"
+                }
+              }
+            },
+            "expected": {
+              "books": [
+                {
+                  "id": "old",
+                  "name": "旧记录",
+                  "status": "finished",
+                  "rating": 3,
+                  "extra": {
+                    "marker": "INDEPENDENT_ONLY"
+                  }
+                }
+              ],
+              "unknown": {
+                "marker": "INDEPENDENT_ROOT"
+              }
+            },
+            "actual": {
+              "books": [
+                {
+                  "id": "old",
+                  "name": "旧记录",
+                  "status": "finished",
+                  "rating": 3,
+                  "extra": {
+                    "marker": "INDEPENDENT_ONLY"
+                  }
+                }
+              ],
+              "unknown": {
+                "marker": "INDEPENDENT_ROOT"
+              }
+            },
+            "status": "passed",
+            "startedAt": 1791304686687,
+            "endedAt": 1791304686687
+          },
+          {
+            "scenarioId": "filter-empty-preserves-records",
+            "checkId": "filter-empty-preserves-records-16",
+            "command": {
+              "op": "bridge",
+              "property": "saveAttempts",
+              "equals": 0
+            },
+            "expected": 0,
+            "actual": 0,
+            "status": "passed",
+            "startedAt": 1791304686687,
+            "endedAt": 1791304686687
+          },
+          {
+            "scenarioId": "filter-empty-preserves-records",
+            "checkId": "filter-empty-preserves-records-17",
+            "command": {
+              "op": "bridge",
+              "property": "commits",
+              "equals": 0
+            },
+            "expected": 0,
+            "actual": 0,
+            "status": "passed",
+            "startedAt": 1791304686687,
+            "endedAt": 1791304686687
+          },
+          {
+            "scenarioId": "filter-empty-preserves-records",
+            "checkId": "filter-empty-preserves-records-18",
+            "command": {
+              "op": "input",
+              "selector": "#filter",
+              "value": "all"
+            },
+            "expected": "all",
+            "actual": "all",
+            "status": "passed",
+            "startedAt": 1791304686687,
+            "endedAt": 1791304686687
+          },
+          {
+            "scenarioId": "filter-empty-preserves-records",
+            "checkId": "filter-empty-preserves-records-19",
+            "command": {
+              "op": "assert",
+              "selector": "#records li[data-id]",
+              "property": "count",
+              "equals": 1
+            },
+            "expected": 1,
+            "actual": 1,
+            "status": "passed",
+            "startedAt": 1791304686687,
+            "endedAt": 1791304686687
+          },
+          {
+            "scenarioId": "filter-empty-preserves-records",
+            "checkId": "filter-empty-preserves-records-20",
+            "command": {
+              "op": "assert",
+              "selector": "#records .title",
+              "property": "count",
+              "equals": 1
+            },
+            "expected": 1,
+            "actual": 1,
+            "status": "passed",
+            "startedAt": 1791304686687,
+            "endedAt": 1791304686687
+          },
+          {
+            "scenarioId": "filter-empty-preserves-records",
+            "checkId": "filter-empty-preserves-records-21",
+            "command": {
+              "op": "assert",
+              "selector": "#records li:not([data-id]) .title",
+              "property": "count",
+              "equals": 0
+            },
+            "expected": 0,
+            "actual": 0,
+            "status": "passed",
+            "startedAt": 1791304686687,
+            "endedAt": 1791304686687
+          },
+          {
+            "scenarioId": "filter-empty-preserves-records",
+            "checkId": "filter-empty-preserves-records-22",
+            "command": {
+              "op": "assert",
+              "selector": "#records li[data-id=\"\"]",
+              "property": "count",
+              "equals": 0
+            },
+            "expected": 0,
+            "actual": 0,
+            "status": "passed",
+            "startedAt": 1791304686687,
+            "endedAt": 1791304686687
+          },
+          {
+            "scenarioId": "filter-empty-preserves-records",
+            "checkId": "filter-empty-preserves-records-23",
+            "command": {
+              "op": "assert",
+              "selector": "[data-id=\"old\"] .title",
+              "property": "text",
+              "equals": "旧记录"
+            },
+            "expected": "旧记录",
+            "actual": "旧记录",
+            "status": "passed",
+            "startedAt": 1791304686687,
+            "endedAt": 1791304686687
+          },
+          {
+            "scenarioId": "filter-empty-preserves-records",
+            "checkId": "filter-empty-preserves-records-24",
+            "command": {
+              "op": "data",
+              "path": [],
+              "equals": {
+                "books": [
+                  {
+                    "id": "old",
+                    "name": "旧记录",
+                    "status": "finished",
+                    "rating": 3,
+                    "extra": {
+                      "marker": "INDEPENDENT_ONLY"
+                    }
+                  }
+                ],
+                "unknown": {
+                  "marker": "INDEPENDENT_ROOT"
+                }
+              }
+            },
+            "expected": {
+              "books": [
+                {
+                  "id": "old",
+                  "name": "旧记录",
+                  "status": "finished",
+                  "rating": 3,
+                  "extra": {
+                    "marker": "INDEPENDENT_ONLY"
+                  }
+                }
+              ],
+              "unknown": {
+                "marker": "INDEPENDENT_ROOT"
+              }
+            },
+            "actual": {
+              "books": [
+                {
+                  "id": "old",
+                  "name": "旧记录",
+                  "status": "finished",
+                  "rating": 3,
+                  "extra": {
+                    "marker": "INDEPENDENT_ONLY"
+                  }
+                }
+              ],
+              "unknown": {
+                "marker": "INDEPENDENT_ROOT"
+              }
+            },
+            "status": "passed",
+            "startedAt": 1791304686687,
+            "endedAt": 1791304686687
+          },
+          {
+            "scenarioId": "filter-empty-preserves-records",
+            "checkId": "filter-empty-preserves-records-25",
+            "command": {
+              "op": "bridge",
+              "property": "saveAttempts",
+              "equals": 0
+            },
+            "expected": 0,
+            "actual": 0,
+            "status": "passed",
+            "startedAt": 1791304686687,
+            "endedAt": 1791304686687
+          },
+          {
+            "scenarioId": "filter-empty-preserves-records",
+            "checkId": "filter-empty-preserves-records-26",
+            "command": {
+              "op": "bridge",
+              "property": "commits",
+              "equals": 0
+            },
+            "expected": 0,
+            "actual": 0,
+            "status": "passed",
+            "startedAt": 1791304686687,
+            "endedAt": 1791304686687
+          }
+        ],
+        "detail": "所有计划项实际执行完成。"
+      },
+      "requestHash": "5b6ae8acfc9af36339590f1f407fbed4c66e736fb61bd8660fd8c79d5c8cd3c7"
+    }
+  },
+  {
+    "test": "record assertion: ignored-filter",
+    "evidence": "independent-filter-proof",
+    "value": {
+      "kind": "independent developer browser acceptance; not Reviewer execution",
+      "result": {
+        "protocol": "atoms-qa/1",
+        "taskId": "2673baa6-7b16-485b-8777-7cd62d275123",
+        "requestId": "4ba3ddc0-c4f5-4335-b6dd-77ca1d570774",
+        "codeHash": "1c7dadf20153f2f4fa94c92cc40427efb13b57c3293df6fc9e77e01ecf7ddf65",
+        "planHash": "a8d667487f7407f4fa99fd4131515cb4e7f3a193900733c32307ee0122580f7c",
+        "status": "failed",
+        "results": [
+          {
+            "scenarioId": "filter-empty-preserves-records",
+            "checkId": "filter-empty-preserves-records-0",
+            "command": {
+              "op": "wait-for",
+              "selector": "[data-atoms-status]",
+              "property": "text",
+              "equals": "已读取"
+            },
+            "expected": "已读取",
+            "actual": "已读取",
+            "status": "passed",
+            "startedAt": 1791304692660,
+            "endedAt": 1791304692688
+          },
+          {
+            "scenarioId": "filter-empty-preserves-records",
+            "checkId": "filter-empty-preserves-records-1",
+            "command": {
+              "op": "input",
+              "selector": "#filter",
+              "value": "active"
+            },
+            "expected": "active",
+            "actual": "active",
+            "status": "passed",
+            "startedAt": 1791304692688,
+            "endedAt": 1791304692689
+          },
+          {
+            "scenarioId": "filter-empty-preserves-records",
+            "checkId": "filter-empty-preserves-records-2",
+            "command": {
+              "op": "assert",
+              "selector": "#records li[data-id]",
+              "property": "count",
+              "equals": 0
+            },
+            "expected": 0,
+            "actual": 1,
+            "status": "failed",
+            "startedAt": 1791304692689,
+            "endedAt": 1791304692689
+          },
+          {
+            "scenarioId": "filter-empty-preserves-records",
+            "checkId": "filter-empty-preserves-records-3",
+            "command": {
+              "op": "assert",
+              "selector": "#records .title",
+              "property": "count",
+              "equals": 0
+            },
+            "expected": 0,
+            "actual": 1,
+            "status": "failed",
+            "startedAt": 1791304692689,
+            "endedAt": 1791304692689
+          },
+          {
+            "scenarioId": "filter-empty-preserves-records",
+            "checkId": "filter-empty-preserves-records-4",
+            "command": {
+              "op": "assert",
+              "selector": "#records li:not([data-id]) .title",
+              "property": "count",
+              "equals": 0
+            },
+            "expected": 0,
+            "actual": 0,
+            "status": "passed",
+            "startedAt": 1791304692689,
+            "endedAt": 1791304692689
+          },
+          {
+            "scenarioId": "filter-empty-preserves-records",
+            "checkId": "filter-empty-preserves-records-5",
+            "command": {
+              "op": "assert",
+              "selector": "#records li[data-id=\"\"]",
+              "property": "count",
+              "equals": 0
+            },
+            "expected": 0,
+            "actual": 0,
+            "status": "passed",
+            "startedAt": 1791304692689,
+            "endedAt": 1791304692689
+          },
+          {
+            "scenarioId": "filter-empty-preserves-records",
+            "checkId": "filter-empty-preserves-records-6",
+            "command": {
+              "op": "data",
+              "path": [],
+              "equals": {
+                "books": [
+                  {
+                    "id": "old",
+                    "name": "旧记录",
+                    "status": "finished",
+                    "rating": 3,
+                    "extra": {
+                      "marker": "INDEPENDENT_ONLY"
+                    }
+                  }
+                ],
+                "unknown": {
+                  "marker": "INDEPENDENT_ROOT"
+                }
+              }
+            },
+            "expected": {
+              "books": [
+                {
+                  "id": "old",
+                  "name": "旧记录",
+                  "status": "finished",
+                  "rating": 3,
+                  "extra": {
+                    "marker": "INDEPENDENT_ONLY"
+                  }
+                }
+              ],
+              "unknown": {
+                "marker": "INDEPENDENT_ROOT"
+              }
+            },
+            "actual": {
+              "books": [
+                {
+                  "id": "old",
+                  "name": "旧记录",
+                  "status": "finished",
+                  "rating": 3,
+                  "extra": {
+                    "marker": "INDEPENDENT_ONLY"
+                  }
+                }
+              ],
+              "unknown": {
+                "marker": "INDEPENDENT_ROOT"
+              }
+            },
+            "status": "passed",
+            "startedAt": 1791304692689,
+            "endedAt": 1791304692689
+          },
+          {
+            "scenarioId": "filter-empty-preserves-records",
+            "checkId": "filter-empty-preserves-records-7",
+            "command": {
+              "op": "bridge",
+              "property": "saveAttempts",
+              "equals": 0
+            },
+            "expected": 0,
+            "actual": 0,
+            "status": "passed",
+            "startedAt": 1791304692689,
+            "endedAt": 1791304692689
+          },
+          {
+            "scenarioId": "filter-empty-preserves-records",
+            "checkId": "filter-empty-preserves-records-8",
+            "command": {
+              "op": "bridge",
+              "property": "commits",
+              "equals": 0
+            },
+            "expected": 0,
+            "actual": 0,
+            "status": "passed",
+            "startedAt": 1791304692689,
+            "endedAt": 1791304692689
+          },
+          {
+            "scenarioId": "filter-empty-preserves-records",
+            "checkId": "filter-empty-preserves-records-9",
+            "command": {
+              "op": "input",
+              "selector": "#filter",
+              "value": "complete"
+            },
+            "expected": "complete",
+            "actual": "complete",
+            "status": "passed",
+            "startedAt": 1791304692689,
+            "endedAt": 1791304692689
+          },
+          {
+            "scenarioId": "filter-empty-preserves-records",
+            "checkId": "filter-empty-preserves-records-10",
+            "command": {
+              "op": "assert",
+              "selector": "#records li[data-id]",
+              "property": "count",
+              "equals": 1
+            },
+            "expected": 1,
+            "actual": 1,
+            "status": "passed",
+            "startedAt": 1791304692689,
+            "endedAt": 1791304692689
+          },
+          {
+            "scenarioId": "filter-empty-preserves-records",
+            "checkId": "filter-empty-preserves-records-11",
+            "command": {
+              "op": "assert",
+              "selector": "#records .title",
+              "property": "count",
+              "equals": 1
+            },
+            "expected": 1,
+            "actual": 1,
+            "status": "passed",
+            "startedAt": 1791304692689,
+            "endedAt": 1791304692689
+          },
+          {
+            "scenarioId": "filter-empty-preserves-records",
+            "checkId": "filter-empty-preserves-records-12",
+            "command": {
+              "op": "assert",
+              "selector": "#records li:not([data-id]) .title",
+              "property": "count",
+              "equals": 0
+            },
+            "expected": 0,
+            "actual": 0,
+            "status": "passed",
+            "startedAt": 1791304692689,
+            "endedAt": 1791304692689
+          },
+          {
+            "scenarioId": "filter-empty-preserves-records",
+            "checkId": "filter-empty-preserves-records-13",
+            "command": {
+              "op": "assert",
+              "selector": "#records li[data-id=\"\"]",
+              "property": "count",
+              "equals": 0
+            },
+            "expected": 0,
+            "actual": 0,
+            "status": "passed",
+            "startedAt": 1791304692689,
+            "endedAt": 1791304692690
+          },
+          {
+            "scenarioId": "filter-empty-preserves-records",
+            "checkId": "filter-empty-preserves-records-14",
+            "command": {
+              "op": "assert",
+              "selector": "[data-id=\"old\"] .title",
+              "property": "text",
+              "equals": "旧记录"
+            },
+            "expected": "旧记录",
+            "actual": "旧记录",
+            "status": "passed",
+            "startedAt": 1791304692690,
+            "endedAt": 1791304692690
+          },
+          {
+            "scenarioId": "filter-empty-preserves-records",
+            "checkId": "filter-empty-preserves-records-15",
+            "command": {
+              "op": "data",
+              "path": [],
+              "equals": {
+                "books": [
+                  {
+                    "id": "old",
+                    "name": "旧记录",
+                    "status": "finished",
+                    "rating": 3,
+                    "extra": {
+                      "marker": "INDEPENDENT_ONLY"
+                    }
+                  }
+                ],
+                "unknown": {
+                  "marker": "INDEPENDENT_ROOT"
+                }
+              }
+            },
+            "expected": {
+              "books": [
+                {
+                  "id": "old",
+                  "name": "旧记录",
+                  "status": "finished",
+                  "rating": 3,
+                  "extra": {
+                    "marker": "INDEPENDENT_ONLY"
+                  }
+                }
+              ],
+              "unknown": {
+                "marker": "INDEPENDENT_ROOT"
+              }
+            },
+            "actual": {
+              "books": [
+                {
+                  "id": "old",
+                  "name": "旧记录",
+                  "status": "finished",
+                  "rating": 3,
+                  "extra": {
+                    "marker": "INDEPENDENT_ONLY"
+                  }
+                }
+              ],
+              "unknown": {
+                "marker": "INDEPENDENT_ROOT"
+              }
+            },
+            "status": "passed",
+            "startedAt": 1791304692690,
+            "endedAt": 1791304692690
+          },
+          {
+            "scenarioId": "filter-empty-preserves-records",
+            "checkId": "filter-empty-preserves-records-16",
+            "command": {
+              "op": "bridge",
+              "property": "saveAttempts",
+              "equals": 0
+            },
+            "expected": 0,
+            "actual": 0,
+            "status": "passed",
+            "startedAt": 1791304692690,
+            "endedAt": 1791304692690
+          },
+          {
+            "scenarioId": "filter-empty-preserves-records",
+            "checkId": "filter-empty-preserves-records-17",
+            "command": {
+              "op": "bridge",
+              "property": "commits",
+              "equals": 0
+            },
+            "expected": 0,
+            "actual": 0,
+            "status": "passed",
+            "startedAt": 1791304692690,
+            "endedAt": 1791304692690
+          },
+          {
+            "scenarioId": "filter-empty-preserves-records",
+            "checkId": "filter-empty-preserves-records-18",
+            "command": {
+              "op": "input",
+              "selector": "#filter",
+              "value": "all"
+            },
+            "expected": "all",
+            "actual": "all",
+            "status": "passed",
+            "startedAt": 1791304692690,
+            "endedAt": 1791304692690
+          },
+          {
+            "scenarioId": "filter-empty-preserves-records",
+            "checkId": "filter-empty-preserves-records-19",
+            "command": {
+              "op": "assert",
+              "selector": "#records li[data-id]",
+              "property": "count",
+              "equals": 1
+            },
+            "expected": 1,
+            "actual": 1,
+            "status": "passed",
+            "startedAt": 1791304692690,
+            "endedAt": 1791304692690
+          },
+          {
+            "scenarioId": "filter-empty-preserves-records",
+            "checkId": "filter-empty-preserves-records-20",
+            "command": {
+              "op": "assert",
+              "selector": "#records .title",
+              "property": "count",
+              "equals": 1
+            },
+            "expected": 1,
+            "actual": 1,
+            "status": "passed",
+            "startedAt": 1791304692690,
+            "endedAt": 1791304692690
+          },
+          {
+            "scenarioId": "filter-empty-preserves-records",
+            "checkId": "filter-empty-preserves-records-21",
+            "command": {
+              "op": "assert",
+              "selector": "#records li:not([data-id]) .title",
+              "property": "count",
+              "equals": 0
+            },
+            "expected": 0,
+            "actual": 0,
+            "status": "passed",
+            "startedAt": 1791304692690,
+            "endedAt": 1791304692690
+          },
+          {
+            "scenarioId": "filter-empty-preserves-records",
+            "checkId": "filter-empty-preserves-records-22",
+            "command": {
+              "op": "assert",
+              "selector": "#records li[data-id=\"\"]",
+              "property": "count",
+              "equals": 0
+            },
+            "expected": 0,
+            "actual": 0,
+            "status": "passed",
+            "startedAt": 1791304692690,
+            "endedAt": 1791304692690
+          },
+          {
+            "scenarioId": "filter-empty-preserves-records",
+            "checkId": "filter-empty-preserves-records-23",
+            "command": {
+              "op": "assert",
+              "selector": "[data-id=\"old\"] .title",
+              "property": "text",
+              "equals": "旧记录"
+            },
+            "expected": "旧记录",
+            "actual": "旧记录",
+            "status": "passed",
+            "startedAt": 1791304692690,
+            "endedAt": 1791304692690
+          },
+          {
+            "scenarioId": "filter-empty-preserves-records",
+            "checkId": "filter-empty-preserves-records-24",
+            "command": {
+              "op": "data",
+              "path": [],
+              "equals": {
+                "books": [
+                  {
+                    "id": "old",
+                    "name": "旧记录",
+                    "status": "finished",
+                    "rating": 3,
+                    "extra": {
+                      "marker": "INDEPENDENT_ONLY"
+                    }
+                  }
+                ],
+                "unknown": {
+                  "marker": "INDEPENDENT_ROOT"
+                }
+              }
+            },
+            "expected": {
+              "books": [
+                {
+                  "id": "old",
+                  "name": "旧记录",
+                  "status": "finished",
+                  "rating": 3,
+                  "extra": {
+                    "marker": "INDEPENDENT_ONLY"
+                  }
+                }
+              ],
+              "unknown": {
+                "marker": "INDEPENDENT_ROOT"
+              }
+            },
+            "actual": {
+              "books": [
+                {
+                  "id": "old",
+                  "name": "旧记录",
+                  "status": "finished",
+                  "rating": 3,
+                  "extra": {
+                    "marker": "INDEPENDENT_ONLY"
+                  }
+                }
+              ],
+              "unknown": {
+                "marker": "INDEPENDENT_ROOT"
+              }
+            },
+            "status": "passed",
+            "startedAt": 1791304692690,
+            "endedAt": 1791304692690
+          },
+          {
+            "scenarioId": "filter-empty-preserves-records",
+            "checkId": "filter-empty-preserves-records-25",
+            "command": {
+              "op": "bridge",
+              "property": "saveAttempts",
+              "equals": 0
+            },
+            "expected": 0,
+            "actual": 0,
+            "status": "passed",
+            "startedAt": 1791304692690,
+            "endedAt": 1791304692690
+          },
+          {
+            "scenarioId": "filter-empty-preserves-records",
+            "checkId": "filter-empty-preserves-records-26",
+            "command": {
+              "op": "bridge",
+              "property": "commits",
+              "equals": 0
+            },
+            "expected": 0,
+            "actual": 0,
+            "status": "passed",
+            "startedAt": 1791304692690,
+            "endedAt": 1791304692690
+          }
+        ],
+        "detail": "实际检查存在失败；未交付应用。"
+      },
+      "requestHash": "90fb1070d8f242fdddbe45f6516fc43249be0c671444740aea51c3ccbfb01b9c"
+    }
+  },
+  {
+    "test": "record assertion: missing-identity",
+    "evidence": "independent-filter-proof",
+    "value": {
+      "kind": "independent developer browser acceptance; not Reviewer execution",
+      "result": {
+        "protocol": "atoms-qa/1",
+        "taskId": "db748cd0-2686-4341-bea0-206a6770e30b",
+        "requestId": "1a4d3526-384d-46e7-841a-e47c14b61254",
+        "codeHash": "94b483ae1e031ce4f207f695de220f87dc92ef784c64b902b80a73fbc01b30b6",
+        "planHash": "a8d667487f7407f4fa99fd4131515cb4e7f3a193900733c32307ee0122580f7c",
+        "status": "failed",
+        "results": [
+          {
+            "scenarioId": "filter-empty-preserves-records",
+            "checkId": "filter-empty-preserves-records-0",
+            "command": {
+              "op": "wait-for",
+              "selector": "[data-atoms-status]",
+              "property": "text",
+              "equals": "已读取"
+            },
+            "expected": "已读取",
+            "actual": "已读取",
+            "status": "passed",
+            "startedAt": 1791304698945,
+            "endedAt": 1791304698972
+          },
+          {
+            "scenarioId": "filter-empty-preserves-records",
+            "checkId": "filter-empty-preserves-records-1",
+            "command": {
+              "op": "input",
+              "selector": "#filter",
+              "value": "active"
+            },
+            "expected": "active",
+            "actual": "active",
+            "status": "passed",
+            "startedAt": 1791304698972,
+            "endedAt": 1791304698973
+          },
+          {
+            "scenarioId": "filter-empty-preserves-records",
+            "checkId": "filter-empty-preserves-records-2",
+            "command": {
+              "op": "assert",
+              "selector": "#records li[data-id]",
+              "property": "count",
+              "equals": 0
+            },
+            "expected": 0,
+            "actual": 0,
+            "status": "passed",
+            "startedAt": 1791304698973,
+            "endedAt": 1791304698973
+          },
+          {
+            "scenarioId": "filter-empty-preserves-records",
+            "checkId": "filter-empty-preserves-records-3",
+            "command": {
+              "op": "assert",
+              "selector": "#records .title",
+              "property": "count",
+              "equals": 0
+            },
+            "expected": 0,
+            "actual": 1,
+            "status": "failed",
+            "startedAt": 1791304698973,
+            "endedAt": 1791304698973
+          },
+          {
+            "scenarioId": "filter-empty-preserves-records",
+            "checkId": "filter-empty-preserves-records-4",
+            "command": {
+              "op": "assert",
+              "selector": "#records li:not([data-id]) .title",
+              "property": "count",
+              "equals": 0
+            },
+            "expected": 0,
+            "actual": 1,
+            "status": "failed",
+            "startedAt": 1791304698973,
+            "endedAt": 1791304698973
+          },
+          {
+            "scenarioId": "filter-empty-preserves-records",
+            "checkId": "filter-empty-preserves-records-5",
+            "command": {
+              "op": "assert",
+              "selector": "#records li[data-id=\"\"]",
+              "property": "count",
+              "equals": 0
+            },
+            "expected": 0,
+            "actual": 0,
+            "status": "passed",
+            "startedAt": 1791304698973,
+            "endedAt": 1791304698973
+          },
+          {
+            "scenarioId": "filter-empty-preserves-records",
+            "checkId": "filter-empty-preserves-records-6",
+            "command": {
+              "op": "data",
+              "path": [],
+              "equals": {
+                "books": [
+                  {
+                    "id": "old",
+                    "name": "旧记录",
+                    "status": "finished",
+                    "rating": 3,
+                    "extra": {
+                      "marker": "INDEPENDENT_ONLY"
+                    }
+                  }
+                ],
+                "unknown": {
+                  "marker": "INDEPENDENT_ROOT"
+                }
+              }
+            },
+            "expected": {
+              "books": [
+                {
+                  "id": "old",
+                  "name": "旧记录",
+                  "status": "finished",
+                  "rating": 3,
+                  "extra": {
+                    "marker": "INDEPENDENT_ONLY"
+                  }
+                }
+              ],
+              "unknown": {
+                "marker": "INDEPENDENT_ROOT"
+              }
+            },
+            "actual": {
+              "books": [
+                {
+                  "id": "old",
+                  "name": "旧记录",
+                  "status": "finished",
+                  "rating": 3,
+                  "extra": {
+                    "marker": "INDEPENDENT_ONLY"
+                  }
+                }
+              ],
+              "unknown": {
+                "marker": "INDEPENDENT_ROOT"
+              }
+            },
+            "status": "passed",
+            "startedAt": 1791304698973,
+            "endedAt": 1791304698973
+          },
+          {
+            "scenarioId": "filter-empty-preserves-records",
+            "checkId": "filter-empty-preserves-records-7",
+            "command": {
+              "op": "bridge",
+              "property": "saveAttempts",
+              "equals": 0
+            },
+            "expected": 0,
+            "actual": 0,
+            "status": "passed",
+            "startedAt": 1791304698973,
+            "endedAt": 1791304698973
+          },
+          {
+            "scenarioId": "filter-empty-preserves-records",
+            "checkId": "filter-empty-preserves-records-8",
+            "command": {
+              "op": "bridge",
+              "property": "commits",
+              "equals": 0
+            },
+            "expected": 0,
+            "actual": 0,
+            "status": "passed",
+            "startedAt": 1791304698973,
+            "endedAt": 1791304698973
+          },
+          {
+            "scenarioId": "filter-empty-preserves-records",
+            "checkId": "filter-empty-preserves-records-9",
+            "command": {
+              "op": "input",
+              "selector": "#filter",
+              "value": "complete"
+            },
+            "expected": "complete",
+            "actual": "complete",
+            "status": "passed",
+            "startedAt": 1791304698973,
+            "endedAt": 1791304698973
+          },
+          {
+            "scenarioId": "filter-empty-preserves-records",
+            "checkId": "filter-empty-preserves-records-10",
+            "command": {
+              "op": "assert",
+              "selector": "#records li[data-id]",
+              "property": "count",
+              "equals": 1
+            },
+            "expected": 1,
+            "actual": 1,
+            "status": "passed",
+            "startedAt": 1791304698973,
+            "endedAt": 1791304698973
+          },
+          {
+            "scenarioId": "filter-empty-preserves-records",
+            "checkId": "filter-empty-preserves-records-11",
+            "command": {
+              "op": "assert",
+              "selector": "#records .title",
+              "property": "count",
+              "equals": 1
+            },
+            "expected": 1,
+            "actual": 1,
+            "status": "passed",
+            "startedAt": 1791304698973,
+            "endedAt": 1791304698973
+          },
+          {
+            "scenarioId": "filter-empty-preserves-records",
+            "checkId": "filter-empty-preserves-records-12",
+            "command": {
+              "op": "assert",
+              "selector": "#records li:not([data-id]) .title",
+              "property": "count",
+              "equals": 0
+            },
+            "expected": 0,
+            "actual": 0,
+            "status": "passed",
+            "startedAt": 1791304698973,
+            "endedAt": 1791304698973
+          },
+          {
+            "scenarioId": "filter-empty-preserves-records",
+            "checkId": "filter-empty-preserves-records-13",
+            "command": {
+              "op": "assert",
+              "selector": "#records li[data-id=\"\"]",
+              "property": "count",
+              "equals": 0
+            },
+            "expected": 0,
+            "actual": 0,
+            "status": "passed",
+            "startedAt": 1791304698973,
+            "endedAt": 1791304698973
+          },
+          {
+            "scenarioId": "filter-empty-preserves-records",
+            "checkId": "filter-empty-preserves-records-14",
+            "command": {
+              "op": "assert",
+              "selector": "[data-id=\"old\"] .title",
+              "property": "text",
+              "equals": "旧记录"
+            },
+            "expected": "旧记录",
+            "actual": "旧记录",
+            "status": "passed",
+            "startedAt": 1791304698973,
+            "endedAt": 1791304698974
+          },
+          {
+            "scenarioId": "filter-empty-preserves-records",
+            "checkId": "filter-empty-preserves-records-15",
+            "command": {
+              "op": "data",
+              "path": [],
+              "equals": {
+                "books": [
+                  {
+                    "id": "old",
+                    "name": "旧记录",
+                    "status": "finished",
+                    "rating": 3,
+                    "extra": {
+                      "marker": "INDEPENDENT_ONLY"
+                    }
+                  }
+                ],
+                "unknown": {
+                  "marker": "INDEPENDENT_ROOT"
+                }
+              }
+            },
+            "expected": {
+              "books": [
+                {
+                  "id": "old",
+                  "name": "旧记录",
+                  "status": "finished",
+                  "rating": 3,
+                  "extra": {
+                    "marker": "INDEPENDENT_ONLY"
+                  }
+                }
+              ],
+              "unknown": {
+                "marker": "INDEPENDENT_ROOT"
+              }
+            },
+            "actual": {
+              "books": [
+                {
+                  "id": "old",
+                  "name": "旧记录",
+                  "status": "finished",
+                  "rating": 3,
+                  "extra": {
+                    "marker": "INDEPENDENT_ONLY"
+                  }
+                }
+              ],
+              "unknown": {
+                "marker": "INDEPENDENT_ROOT"
+              }
+            },
+            "status": "passed",
+            "startedAt": 1791304698974,
+            "endedAt": 1791304698974
+          },
+          {
+            "scenarioId": "filter-empty-preserves-records",
+            "checkId": "filter-empty-preserves-records-16",
+            "command": {
+              "op": "bridge",
+              "property": "saveAttempts",
+              "equals": 0
+            },
+            "expected": 0,
+            "actual": 0,
+            "status": "passed",
+            "startedAt": 1791304698974,
+            "endedAt": 1791304698974
+          },
+          {
+            "scenarioId": "filter-empty-preserves-records",
+            "checkId": "filter-empty-preserves-records-17",
+            "command": {
+              "op": "bridge",
+              "property": "commits",
+              "equals": 0
+            },
+            "expected": 0,
+            "actual": 0,
+            "status": "passed",
+            "startedAt": 1791304698974,
+            "endedAt": 1791304698974
+          },
+          {
+            "scenarioId": "filter-empty-preserves-records",
+            "checkId": "filter-empty-preserves-records-18",
+            "command": {
+              "op": "input",
+              "selector": "#filter",
+              "value": "all"
+            },
+            "expected": "all",
+            "actual": "all",
+            "status": "passed",
+            "startedAt": 1791304698974,
+            "endedAt": 1791304698974
+          },
+          {
+            "scenarioId": "filter-empty-preserves-records",
+            "checkId": "filter-empty-preserves-records-19",
+            "command": {
+              "op": "assert",
+              "selector": "#records li[data-id]",
+              "property": "count",
+              "equals": 1
+            },
+            "expected": 1,
+            "actual": 1,
+            "status": "passed",
+            "startedAt": 1791304698974,
+            "endedAt": 1791304698974
+          },
+          {
+            "scenarioId": "filter-empty-preserves-records",
+            "checkId": "filter-empty-preserves-records-20",
+            "command": {
+              "op": "assert",
+              "selector": "#records .title",
+              "property": "count",
+              "equals": 1
+            },
+            "expected": 1,
+            "actual": 1,
+            "status": "passed",
+            "startedAt": 1791304698974,
+            "endedAt": 1791304698974
+          },
+          {
+            "scenarioId": "filter-empty-preserves-records",
+            "checkId": "filter-empty-preserves-records-21",
+            "command": {
+              "op": "assert",
+              "selector": "#records li:not([data-id]) .title",
+              "property": "count",
+              "equals": 0
+            },
+            "expected": 0,
+            "actual": 0,
+            "status": "passed",
+            "startedAt": 1791304698974,
+            "endedAt": 1791304698974
+          },
+          {
+            "scenarioId": "filter-empty-preserves-records",
+            "checkId": "filter-empty-preserves-records-22",
+            "command": {
+              "op": "assert",
+              "selector": "#records li[data-id=\"\"]",
+              "property": "count",
+              "equals": 0
+            },
+            "expected": 0,
+            "actual": 0,
+            "status": "passed",
+            "startedAt": 1791304698974,
+            "endedAt": 1791304698974
+          },
+          {
+            "scenarioId": "filter-empty-preserves-records",
+            "checkId": "filter-empty-preserves-records-23",
+            "command": {
+              "op": "assert",
+              "selector": "[data-id=\"old\"] .title",
+              "property": "text",
+              "equals": "旧记录"
+            },
+            "expected": "旧记录",
+            "actual": "旧记录",
+            "status": "passed",
+            "startedAt": 1791304698974,
+            "endedAt": 1791304698974
+          },
+          {
+            "scenarioId": "filter-empty-preserves-records",
+            "checkId": "filter-empty-preserves-records-24",
+            "command": {
+              "op": "data",
+              "path": [],
+              "equals": {
+                "books": [
+                  {
+                    "id": "old",
+                    "name": "旧记录",
+                    "status": "finished",
+                    "rating": 3,
+                    "extra": {
+                      "marker": "INDEPENDENT_ONLY"
+                    }
+                  }
+                ],
+                "unknown": {
+                  "marker": "INDEPENDENT_ROOT"
+                }
+              }
+            },
+            "expected": {
+              "books": [
+                {
+                  "id": "old",
+                  "name": "旧记录",
+                  "status": "finished",
+                  "rating": 3,
+                  "extra": {
+                    "marker": "INDEPENDENT_ONLY"
+                  }
+                }
+              ],
+              "unknown": {
+                "marker": "INDEPENDENT_ROOT"
+              }
+            },
+            "actual": {
+              "books": [
+                {
+                  "id": "old",
+                  "name": "旧记录",
+                  "status": "finished",
+                  "rating": 3,
+                  "extra": {
+                    "marker": "INDEPENDENT_ONLY"
+                  }
+                }
+              ],
+              "unknown": {
+                "marker": "INDEPENDENT_ROOT"
+              }
+            },
+            "status": "passed",
+            "startedAt": 1791304698974,
+            "endedAt": 1791304698974
+          },
+          {
+            "scenarioId": "filter-empty-preserves-records",
+            "checkId": "filter-empty-preserves-records-25",
+            "command": {
+              "op": "bridge",
+              "property": "saveAttempts",
+              "equals": 0
+            },
+            "expected": 0,
+            "actual": 0,
+            "status": "passed",
+            "startedAt": 1791304698974,
+            "endedAt": 1791304698974
+          },
+          {
+            "scenarioId": "filter-empty-preserves-records",
+            "checkId": "filter-empty-preserves-records-26",
+            "command": {
+              "op": "bridge",
+              "property": "commits",
+              "equals": 0
+            },
+            "expected": 0,
+            "actual": 0,
+            "status": "passed",
+            "startedAt": 1791304698974,
+            "endedAt": 1791304698974
+          }
+        ],
+        "detail": "实际检查存在失败；未交付应用。"
+      },
+      "requestHash": "d5e50295b6f48ca29354c85d95e710efa9d9abac688a9f52ff340c0320459b4f"
+    }
+  },
+  {
+    "test": "first generation stops after a cached artifact without publishing it",
+    "evidence": "stop-evidence",
+    "value": {
+      "errors": [],
+      "sockets": [
+        {
+          "reviews": 2,
+          "artifacts": 2,
+          "closed": true,
+          "framesAfterClose": 0
+        }
+      ],
+      "observationMs": 32000,
+      "beforeAfterStorageEqual": true
+    }
+  },
+  {
+    "test": "modification stop preserves adopted code, business data and modification records",
+    "evidence": "stop-evidence",
+    "value": {
+      "errors": [],
+      "sockets": [
+        {
+          "reviews": 1,
+          "artifacts": 1,
+          "closed": true,
+          "framesAfterClose": 0
+        },
+        {
+          "reviews": 1,
+          "artifacts": 1,
+          "closed": true,
+          "framesAfterClose": 0
+        },
+        {
+          "reviews": 2,
+          "artifacts": 2,
+          "closed": true,
+          "framesAfterClose": 0
+        }
+      ],
+      "observationMs": 32000,
+      "beforeAfterStorageEqual": true
+    }
+  },
+  {
+    "test": "顺序消息、上翻保全、禁用工具与展示调整 1440",
+    "evidence": "generation-requests",
+    "value": [
+      {
+        "requirement": "顺序测试初始需求",
+        "modification": null
+      },
+      {
+        "requirement": "顺序测试初始需求",
+        "modification": "第二条用户需求"
+      }
+    ]
+  },
+  {
+    "test": "顺序消息、上翻保全、禁用工具与展示调整 1440",
+    "evidence": "extra-request-rejected",
+    "value": [
+      {
+        "requirement": "顺序测试初始需求",
+        "modification": null
+      },
+      {
+        "requirement": "顺序测试初始需求",
+        "modification": "第二条用户需求"
+      },
+      {
+        "requirement": "顺序测试初始需求",
+        "modification": "NEGATIVE_EXTRA_REQUEST"
+      }
+    ]
+  },
+  {
+    "test": "顺序消息、上翻保全、禁用工具与展示调整 1280",
+    "evidence": "generation-requests",
+    "value": [
+      {
+        "requirement": "顺序测试初始需求",
+        "modification": null
+      },
+      {
+        "requirement": "顺序测试初始需求",
+        "modification": "第二条用户需求"
+      }
+    ]
+  }
+]

@@ -1,0 +1,49 @@
+{
+  "cwd": "/Users/gaowenlong/.codex/worktrees/verify-atoms/atoms",
+  "PATHPrefix": "/opt/homebrew/opt/node@24/bin",
+  "runDirectory": "/private/tmp/atoms-40-delivery",
+  "commands": [
+    {
+      "command": "pnpm lint",
+      "exitCode": 0
+    },
+    {
+      "command": "pnpm typecheck",
+      "exitCode": 0
+    },
+    {
+      "command": "pnpm test",
+      "exitCode": 0,
+      "passed": 54
+    },
+    {
+      "command": "pnpm build --webpack && node runtime/team/prepare.mjs",
+      "exitCode": 0
+    },
+    {
+      "command": "HOME=\"$RUN/runtime-home\" METAGPT_PROJECT_ROOT=\"$RUN/config-root\" \"$RUN/venv/bin/python\" runtime/team/test_runner.py",
+      "exitCode": 0,
+      "passed": 20
+    },
+    {
+      "command": "TEAM_FIXTURE=1 TEST_BASE_URL=http://127.0.0.1:3375 pnpm exec playwright test tests/browser/candidate.spec.ts tests/browser/cross-app-acceptance.spec.ts tests/browser/cross-app-draft.spec.ts tests/browser/home-entry.spec.ts tests/browser/modification-records.spec.ts tests/browser/persistence.spec.ts tests/browser/preview-document.spec.ts tests/browser/record-assertions.spec.ts tests/browser/reviewer-preview.spec.ts tests/browser/save-race.spec.ts tests/browser/snapshot-cli.spec.ts tests/browser/team-modification.spec.ts tests/browser/team-stop.spec.ts tests/browser/team.spec.ts tests/browser/workbench-stream.spec.ts tests/browser/workbench.spec.ts --workers=1 --retries=0 --trace=on --output=\"$RUN/browser\" --reporter=json",
+      "exitCode": 0,
+      "passed": 67
+    },
+    {
+      "command": "node --import tsx tests/team/live-cross-app.ts",
+      "exitCode": 0
+    },
+    {
+      "command": "node --import tsx tests/team/live-cross-app.ts --use-retained-draft",
+      "exitCode": 0
+    },
+    {
+      "command": "node --import tsx tests/team/live-cross-app.ts --repair --use-retained-draft",
+      "exitCode": 1,
+      "expectedRejection": true
+    }
+  ],
+  "offlineProvider": "wrapper invokes this worktree tests/team/fixture_transport.py with isolated venv; only offline-test-placeholder; dedicated runtime-home/config-root",
+  "browserTMPDIR": "/private/tmp/atoms-40-delivery/browser-tmp"
+}

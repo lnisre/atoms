@@ -1,0 +1,375 @@
+{
+  "historicalBInputMatches": 53,
+  "preservedInputFilesUnchanged": 48,
+  "updatedRecipeFiles": [
+    ".agents/skills/verify-atoms/features/README.md",
+    ".agents/skills/verify-atoms/features/generation.md",
+    ".agents/skills/verify-atoms/features/modification.md",
+    ".agents/skills/verify-atoms/features/review-policy.md",
+    ".agents/skills/verify-atoms/references/team.md"
+  ],
+  "localLinks": [
+    {
+      "file": ".agents/skills/verify-atoms/SKILL.md",
+      "target": "../../../CONTEXT.md",
+      "exists": true
+    },
+    {
+      "file": ".agents/skills/verify-atoms/SKILL.md",
+      "target": "features/README.md",
+      "exists": true
+    },
+    {
+      "file": ".agents/skills/verify-atoms/SKILL.md",
+      "target": "references/team.md#offline-native-team",
+      "exists": true
+    },
+    {
+      "file": ".agents/skills/verify-atoms/SKILL.md",
+      "target": "references/team.md#real-model-and-target",
+      "exists": true
+    },
+    {
+      "file": ".agents/skills/verify-atoms/SKILL.md",
+      "target": "references/team.md",
+      "exists": true
+    },
+    {
+      "file": ".agents/skills/verify-atoms/SKILL.md",
+      "target": "features/README.md",
+      "exists": true
+    },
+    {
+      "file": ".agents/skills/verify-atoms/SKILL.md",
+      "target": "references/initial-artifact.md",
+      "exists": true
+    },
+    {
+      "file": ".agents/skills/verify-atoms/SKILL.md",
+      "target": "references/team.md",
+      "exists": true
+    },
+    {
+      "file": ".agents/skills/verify-atoms/references/initial-artifact.md",
+      "target": "../../../../docs/adr/0011-review-findings-and-preview.md",
+      "exists": true
+    },
+    {
+      "file": ".agents/skills/verify-atoms/references/initial-artifact.md",
+      "target": "team.md#real-model-and-target",
+      "exists": true
+    },
+    {
+      "file": ".agents/skills/verify-atoms/references/initial-artifact.md",
+      "target": "../../../../docs/verification/issue-40.md",
+      "exists": true
+    },
+    {
+      "file": ".agents/skills/verify-atoms/references/team.md",
+      "target": "../../../../runtime/team/README.md",
+      "exists": true
+    },
+    {
+      "file": ".agents/skills/verify-atoms/references/team.md",
+      "target": "../../../../Dockerfile.vercel",
+      "exists": true
+    },
+    {
+      "file": ".agents/skills/verify-atoms/references/team.md",
+      "target": "../../../../docs/adr/0011-review-findings-and-preview.md",
+      "exists": true
+    },
+    {
+      "file": ".agents/skills/verify-atoms/references/team.md",
+      "target": "../../../../docs/agents/vercel.md",
+      "exists": true
+    },
+    {
+      "file": ".agents/skills/verify-atoms/references/team.md",
+      "target": "initial-artifact.md",
+      "exists": true
+    },
+    {
+      "file": ".agents/skills/verify-atoms/features/workbench.md",
+      "target": "example.md",
+      "exists": true
+    },
+    {
+      "file": ".agents/skills/verify-atoms/features/example.md",
+      "target": "../../../../docs/adr/0012-first-visit-example-project.md",
+      "exists": true
+    },
+    {
+      "file": ".agents/skills/verify-atoms/features/example.md",
+      "target": "../../../../docs/adr/0011-review-findings-and-preview.md",
+      "exists": true
+    },
+    {
+      "file": ".agents/skills/verify-atoms/features/example.md",
+      "target": "../SKILL.md#launch",
+      "exists": true
+    },
+    {
+      "file": ".agents/skills/verify-atoms/features/README.md",
+      "target": "generation.md",
+      "exists": true
+    },
+    {
+      "file": ".agents/skills/verify-atoms/features/README.md",
+      "target": "modification.md",
+      "exists": true
+    },
+    {
+      "file": ".agents/skills/verify-atoms/features/README.md",
+      "target": "review-policy.md",
+      "exists": true
+    },
+    {
+      "file": ".agents/skills/verify-atoms/features/README.md",
+      "target": "example.md",
+      "exists": true
+    },
+    {
+      "file": ".agents/skills/verify-atoms/features/README.md",
+      "target": "workbench.md",
+      "exists": true
+    },
+    {
+      "file": ".agents/skills/verify-atoms/features/README.md",
+      "target": "../references/team.md",
+      "exists": true
+    },
+    {
+      "file": ".agents/skills/verify-atoms/features/README.md",
+      "target": "../../../../docs/adr/0007-browser-qa-tool.md",
+      "exists": true
+    },
+    {
+      "file": ".agents/skills/verify-atoms/features/README.md",
+      "target": "../../../../docs/verification/issue-40.md",
+      "exists": true
+    },
+    {
+      "file": ".agents/skills/verify-atoms/features/generation.md",
+      "target": "../../../../docs/adr/0011-review-findings-and-preview.md",
+      "exists": true
+    },
+    {
+      "file": ".agents/skills/verify-atoms/features/generation.md",
+      "target": "../../../../docs/adr/0006-m5-metagpt-agent-team.md",
+      "exists": true
+    },
+    {
+      "file": ".agents/skills/verify-atoms/features/generation.md",
+      "target": "../references/team.md#offline-native-team",
+      "exists": true
+    },
+    {
+      "file": ".agents/skills/verify-atoms/features/generation.md",
+      "target": "../references/team.md#real-model-and-target",
+      "exists": true
+    },
+    {
+      "file": ".agents/skills/verify-atoms/features/generation.md",
+      "target": "../references/initial-artifact.md",
+      "exists": true
+    },
+    {
+      "file": ".agents/skills/verify-atoms/features/generation.md",
+      "target": "review-policy.md",
+      "exists": true
+    },
+    {
+      "file": ".agents/skills/verify-atoms/features/modification.md",
+      "target": "../../../../docs/adr/0004-m2-conversational-updates.md",
+      "exists": true
+    },
+    {
+      "file": ".agents/skills/verify-atoms/features/modification.md",
+      "target": "../../../../docs/adr/0011-review-findings-and-preview.md",
+      "exists": true
+    },
+    {
+      "file": ".agents/skills/verify-atoms/features/modification.md",
+      "target": "../references/initial-artifact.md",
+      "exists": true
+    },
+    {
+      "file": ".agents/skills/verify-atoms/features/modification.md",
+      "target": "../references/team.md",
+      "exists": true
+    },
+    {
+      "file": ".agents/skills/verify-atoms/features/review-policy.md",
+      "target": "../../../../docs/adr/0011-review-findings-and-preview.md",
+      "exists": true
+    },
+    {
+      "file": ".agents/skills/verify-atoms/features/review-policy.md",
+      "target": "../../../../docs/adr/0008-m5-pinned-team-connection.md",
+      "exists": true
+    },
+    {
+      "file": ".agents/skills/verify-atoms/features/review-policy.md",
+      "target": "../references/team.md",
+      "exists": true
+    },
+    {
+      "file": ".agents/skills/verify-atoms/features/review-policy.md",
+      "target": "../references/initial-artifact.md",
+      "exists": true
+    },
+    {
+      "file": "docs/verification/issue-40.md",
+      "target": "../../.agents/skills/verify-atoms/SKILL.md",
+      "exists": true
+    },
+    {
+      "file": "docs/verification/issue-40.md",
+      "target": "../../.agents/skills/verify-atoms/features/README.md",
+      "exists": true
+    },
+    {
+      "file": "docs/verification/issue-40.md",
+      "target": "../../.agents/skills/verify-atoms/references/team.md",
+      "exists": true
+    },
+    {
+      "file": "docs/verification/issue-40.md",
+      "target": "assets/issue-40/doctor.json",
+      "exists": true
+    },
+    {
+      "file": "docs/verification/issue-40.md",
+      "target": "assets/issue-40/manifest.json",
+      "exists": true
+    },
+    {
+      "file": "docs/verification/issue-40.md",
+      "target": "assets/issue-40/initial.json",
+      "exists": true
+    },
+    {
+      "file": "docs/verification/issue-40.md",
+      "target": "assets/issue-40/actions.json",
+      "exists": true
+    },
+    {
+      "file": "docs/verification/issue-40.md",
+      "target": "assets/issue-40/saved.json",
+      "exists": true
+    },
+    {
+      "file": "docs/verification/issue-40.md",
+      "target": "assets/issue-40/reopened.json",
+      "exists": true
+    },
+    {
+      "file": "docs/verification/issue-40.md",
+      "target": "assets/issue-40/reopened.png",
+      "exists": true
+    },
+    {
+      "file": "docs/verification/issue-40.md",
+      "target": "assets/issue-40/network.json",
+      "exists": true
+    },
+    {
+      "file": "docs/verification/issue-40.md",
+      "target": "assets/issue-40/cleanup.json",
+      "exists": true
+    },
+    {
+      "file": "docs/verification/issue-40.md",
+      "target": "assets/issue-40/summary.json",
+      "exists": true
+    },
+    {
+      "file": "docs/verification/issue-40.md",
+      "target": "assets/issue-40/checks.json",
+      "exists": true
+    },
+    {
+      "file": "docs/verification/issue-40.md",
+      "target": "assets/issue-40/first-attempt-summary.json",
+      "exists": true
+    },
+    {
+      "file": "docs/verification/issue-40.md",
+      "target": "assets/issue-40/first-attempt-network.json",
+      "exists": true
+    },
+    {
+      "file": "docs/verification/issue-40.md",
+      "target": "assets/issue-40/skill-files.sha256.json",
+      "exists": true
+    },
+    {
+      "file": "docs/verification/issue-40.md",
+      "target": "assets/issue-40/driver-maintenance-20261005/summary.json",
+      "exists": true
+    },
+    {
+      "file": "docs/verification/issue-40.md",
+      "target": "assets/issue-40/driver-maintenance-20261005/counterexamples.json",
+      "exists": true
+    },
+    {
+      "file": "docs/verification/issue-40.md",
+      "target": "assets/issue-40/driver-maintenance-20261005/files.sha256.json",
+      "exists": true
+    },
+    {
+      "file": "docs/verification/issue-40.md",
+      "target": "issue-40-draft-driver.md",
+      "exists": true
+    },
+    {
+      "file": "docs/verification/issue-40-draft-driver.md",
+      "target": "assets/issue-40/draft-driver-20261006/files.sha256.json",
+      "exists": true
+    },
+    {
+      "file": "docs/verification/issue-40-draft-driver.md",
+      "target": "assets/issue-40/draft-driver-20261006/summary.json",
+      "exists": true
+    },
+    {
+      "file": "docs/verification/issue-40-draft-driver.md",
+      "target": "assets/issue-40/draft-driver-20261006/branches.json",
+      "exists": true
+    },
+    {
+      "file": "docs/verification/issue-40-draft-driver.md",
+      "target": "assets/issue-40/draft-driver-20261006/checks.json",
+      "exists": true
+    },
+    {
+      "file": "docs/verification/issue-40-draft-driver.md",
+      "target": "assets/issue-40/draft-driver-20261006/commands.json",
+      "exists": true
+    },
+    {
+      "file": "docs/verification/issue-40-draft-driver.md",
+      "target": "assets/issue-40/draft-driver-20261006/cleanup.json",
+      "exists": true
+    },
+    {
+      "file": "docs/verification/issue-40-draft-driver.md",
+      "target": "../../.agents/skills/verify-atoms/references/initial-artifact.md",
+      "exists": true
+    }
+  ],
+  "helpersExecutable": true,
+  "uiAutomaticDiscovery": "unverified: current session catalogue does not list verify-atoms",
+  "masterIntegrationChanges": [
+    "package.json",
+    "src/lib/team/client.ts",
+    "src/lib/team/socket.ts",
+    "tests/browser/team-stop.spec.ts",
+    "tests/team-client.test.ts",
+    "tests/team-socket.test.ts",
+    "tests/team/heartbeat-lifecycle.mjs"
+  ],
+  "sourceCommit": "a242924f0e35468dc576a328c540822fa125aced"
+}
