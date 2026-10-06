@@ -1,5 +1,7 @@
 # Issue #41：停止生成任务的流生命周期修复
 
+> 当前交付状态（2026-10-06）：独立 Spec 审查与协调者复验发现 P1 取消竞态，**阻断发布**。候选尚未 push / 创建 PR / 合入 master；#41 保持 OPEN。下文作者自测与已通过集合属于历史/局部结果，不能解释为全部验收通过。详见末节。
+
 2026-10-06（Asia/Shanghai）。本地修复与离线定向回归；未提交、推送、创建 PR、关闭 Issue 或部署。
 
 ## 被测身份与修改边界
@@ -120,3 +122,36 @@ B 的成功草稿续验保留初始 failed/无 Reviewer 的历史；真实使用
 本轮完整证据位于 `/private/tmp/atoms-independent-20261006`，包含两份完整 Playwright JSON、64 份 trace、安装失败日志和原始 Python 输出；临时位置不视为永久归档。[精简证据 hash](assets/issue-41/independent-20261006/sha256.json) 和 [trace 索引](assets/issue-41/independent-20261006/trace-sha256.json) 保留追溯。两套服务与浏览器已退出，3355/3356/3358 释放，本轮 venv、运行 HOME、离线配置、wrapper、profile/cache 删除；独立 checkout 与构建缓存保留。见 [清理](assets/issue-41/independent-20261006/cleanup.json)。
 
 发布边界仍是 #41 客户端取消生命周期；未执行生产页面复验、真实模型/计费取消、手工 Vercel 部署或环境修改。PR 与远端合并结果以 GitHub 记录及本会话最终交付报告为准。
+
+## 独立审查：发布阻断
+
+Standards / Spec 按 `code-review` 技能由两个并行只读 agent 独立审查。固定基线 `886f933c3015d3c810f85662812c5bc201a478f7`，冻结候选 `3be65e0734f21382ff77f5b2b5c6e8a0ca8d30a1`；四个产品/测试文件逐字节匹配被测身份。没有修改候选、放宽断言或补丁式重跑。
+
+### Standards
+
+0 项发现。未发现违反 AGENTS.md、领域术语、ADR 或 PR 交付原则的改动，也未发现值得提出的基线代码异味。终止状态、监听、计时器和 pending 控制请求集中收尾；报告区分作者自测、独立回归及未验证范围。历史原始日志保留 CR/末尾空白以维持原始字节与 hash；源码、测试和报告的 whitespace check 通过。
+
+### Spec
+
+**1 项 P1，阻断发布：pending heartbeat 期间停止会产生未处理的 AbortError。**
+
+Issue #41 要求“pending 控制请求和计时器得到有界清理……覆盖发生中的取消竞态”，以及“重复终止均不抛未处理异常”。正式调用链尚未满足该条件：
+
+1. `readTeam` 接收 session 后建立实际 4 秒 heartbeat，控制请求尚未收到 ack。
+2. AbortSignal 中止；候选 `socket.ts:35` 的 onAbort 进入 finish，立即拒绝 pending（第 26 行）并令流 error（第 29 行）。
+3. `client.ts:67` 的 heartbeat 失败回调执行 `void reader.cancel()`；对已经 errored 的流，该 Promise 被拒绝且没有局部捕获，形成未处理的 `AbortError`。
+
+审查者与协调者各自用 Node 24、正式 `readTeam` 与固定版本 adapter 重跑。两次候选运行均 exit 1，包含一个未处理的 AbortError；两次基线均 exit 1，表现为原 `Controller is already closed` 未捕获异常。候选消除了原错误，但新增了未处理异常形式，属于修复不完整。既有 client 及其运行时依赖在两版本间无改动。
+
+[最小集成复现](assets/issue-41/independent-20261006/spec-review/pending-heartbeat-abort.mjs) 从 Git 固定 SHA 读取 client/socket，仅擦除 TypeScript 类型与调整 import；真实 ReadableStream、真实 4 秒计时器，WebSocket 是明确零网络替身。错误观察器仅记账，检测到未处理异常即退出 1，不修改产品行为。可从本仓库执行：
+
+```sh
+node --import tsx docs/verification/assets/issue-41/independent-20261006/spec-review/pending-heartbeat-abort.mjs 3be65e0734f21382ff77f5b2b5c6e8a0ca8d30a1
+node --import tsx docs/verification/assets/issue-41/independent-20261006/spec-review/pending-heartbeat-abort.mjs 886f933c3015d3c810f85662812c5bc201a478f7
+```
+
+证据：[审查候选](assets/issue-41/independent-20261006/spec-review/candidate.json)、[审查基线](assets/issue-41/independent-20261006/spec-review/baseline.json)、[协调者候选复验](assets/issue-41/independent-20261006/spec-review/candidate-coordinator.json)、[协调者基线复验](assets/issue-41/independent-20261006/spec-review/baseline-coordinator.json)。这些运行是新增集成检查，不包含在前文已通过的 47/15/16 测试计数中。
+
+最小建议：局部处理 heartbeat 失败清理中 `reader.cancel()` 的预期拒绝，沿用已有 onAbort/finally 的清理方式，并增加正式 readTeam + adapter 的 pending heartbeat 与 abort/timeout 集成回归。不要全局吞掉错误。这会改变产品候选，超出本轮独立回归的修补边界；故仅记录建议，没有修改 client、adapter 或原测试。
+
+Standards 0 项；Spec 1 项 P1。停止发布，未 push、未创建 PR、无 merge SHA；#41 保持 OPEN。远端 master 在交付检查时仍为原基线，主工作区干净但不需要同步；两个来源工作区的未提交内容保持原样。B 独立回归仍通过，未交付、未关闭 #40。所有本轮服务/profile/临时 Python 已清理，最后的零网络复现进程亦已退出。

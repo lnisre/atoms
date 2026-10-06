@@ -1,0 +1,32 @@
+{
+  "revision": "3be65e0734f21382ff77f5b2b5c6e8a0ca8d30a1",
+  "node": "v24.18.0",
+  "identity": {
+    "src/lib/team/socket.ts": "80536de259fcaf5bd59fc14ffc069a159deeb5d4fd15b964de7857999b2bad2d",
+    "src/lib/team/client.ts": "e7c5cb48b34683c41d56ea2fad7aff5d7bbf31fa7c4e9c29bf60cfcc0a4aa4c2"
+  },
+  "dependencies": [
+    "file:///Users/gaowenlong/.codex/worktrees/bf81/atoms/src/lib/html-document.ts",
+    "file:///Users/gaowenlong/.codex/worktrees/bf81/atoms/src/lib/team/review.ts",
+    "file:///Users/gaowenlong/.codex/worktrees/bf81/atoms/src/lib/qa/contract.ts",
+    "file:///Users/gaowenlong/.codex/worktrees/bf81/atoms/src/lib/team/contract.ts"
+  ],
+  "websocketFrames": [
+    {
+      "action": "start",
+      "ticket": "offline"
+    },
+    {
+      "action": "heartbeat",
+      "taskId": "task",
+      "token": "offline",
+      "id": 1
+    }
+  ],
+  "readOutcome": "AbortError: This operation was aborted",
+  "unhandledRejections": [
+    "AbortError: This operation was aborted"
+  ],
+  "uncaughtExceptions": [],
+  "providerCalls": 0
+}
