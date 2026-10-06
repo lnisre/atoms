@@ -1,0 +1,105 @@
+{
+  "stats": {
+    "startTime": "2026-10-06T15:45:50.359Z",
+    "duration": 137187.512,
+    "expected": 5,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  },
+  "tests": [
+    {
+      "file": "team-modification.spec.ts",
+      "title": "nonfatal and unavailable-review modifications publish candidates; clarification and stop preserve them; adoption keeps real history",
+      "results": [
+        {
+          "status": "passed",
+          "duration": 25943,
+          "retry": 0
+        }
+      ]
+    },
+    {
+      "file": "team-modification.spec.ts",
+      "title": "wrong base identity, wrong task and invalid terminal cannot replace an existing candidate",
+      "results": [
+        {
+          "status": "passed",
+          "duration": 15483,
+          "retry": 0
+        }
+      ]
+    },
+    {
+      "file": "team-stop.spec.ts",
+      "title": "first generation stops after a cached artifact without publishing it",
+      "results": [
+        {
+          "status": "passed",
+          "duration": 38090,
+          "retry": 0
+        }
+      ],
+      "stop": {
+        "observationMs": 32000,
+        "storageEqual": true,
+        "errors": [],
+        "sockets": [
+          {
+            "reviews": 2,
+            "artifacts": 2,
+            "closed": true,
+            "framesAfterClose": 0
+          }
+        ]
+      }
+    },
+    {
+      "file": "team-stop.spec.ts",
+      "title": "modification stop preserves adopted code, business data and modification records",
+      "results": [
+        {
+          "status": "passed",
+          "duration": 47987,
+          "retry": 0
+        }
+      ],
+      "stop": {
+        "observationMs": 32000,
+        "storageEqual": true,
+        "errors": [],
+        "sockets": [
+          {
+            "reviews": 1,
+            "artifacts": 1,
+            "closed": true,
+            "framesAfterClose": 0
+          },
+          {
+            "reviews": 1,
+            "artifacts": 1,
+            "closed": true,
+            "framesAfterClose": 0
+          },
+          {
+            "reviews": 2,
+            "artifacts": 2,
+            "closed": true,
+            "framesAfterClose": 0
+          }
+        ]
+      }
+    },
+    {
+      "file": "team.spec.ts",
+      "title": "HTTP team → code review → save → operations → reopen with zero generation requests",
+      "results": [
+        {
+          "status": "passed",
+          "duration": 6663,
+          "retry": 0
+        }
+      ]
+    }
+  ]
+}

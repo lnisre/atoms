@@ -1,0 +1,43 @@
+[
+  {
+    "name": "unit",
+    "command": [
+      "pnpm",
+      "test"
+    ],
+    "exitCode": 0
+  },
+  {
+    "name": "lint",
+    "command": [
+      "pnpm",
+      "lint"
+    ],
+    "exitCode": 0
+  },
+  {
+    "name": "typecheck",
+    "command": [
+      "pnpm",
+      "typecheck"
+    ],
+    "exitCode": 0
+  },
+  {
+    "name": "build",
+    "command": [
+      "pnpm",
+      "build",
+      "--webpack"
+    ],
+    "exitCode": 0
+  },
+  {
+    "name": "prepare",
+    "command": [
+      "node",
+      "runtime/team/prepare.mjs"
+    ],
+    "exitCode": 0
+  }
+]

@@ -1,0 +1,19 @@
+{
+  "61742": {
+    "process": "61742 70357 node runtime/team/gateway.mjs\n",
+    "cwd": "p61742\nfcwd\nn/Users/gaowenlong/.codex/worktrees/bf81/atoms\n"
+  },
+  "61743": {
+    "process": "61743 61742 next-server (v16.3.6) \n",
+    "cwd": "p61743\nfcwd\nn/Users/gaowenlong/.codex/worktrees/bf81/atoms/.next/standalone\n"
+  },
+  "buildId": "eUgKCdZ-YOvAxmSKQEeSd",
+  "servedAssetMatches": true,
+  "sourceRunnerMatchesPackaged": true,
+  "wrapper": "#!/bin/sh\nexport METAGPT_PROJECT_ROOT=/private/tmp/atoms-independent-p1-20261006/python-config\nexec /private/tmp/atoms-independent-p1-20261006/venv/bin/python /Users/gaowenlong/.codex/worktrees/bf81/atoms/tests/team/fixture_transport.py \"$@\"\n",
+  "ports": [
+    3365,
+    3366
+  ],
+  "candidate": "7c604dce257b0b8a57ee261610d1501c186b6065"
+}

@@ -1,0 +1,28 @@
+{
+  "scenario": "abort",
+  "node": "v24.18.0",
+  "elapsedMs": 4112,
+  "identity": {
+    "src/lib/team/client.ts": "e7c5cb48b34683c41d56ea2fad7aff5d7bbf31fa7c4e9c29bf60cfcc0a4aa4c2",
+    "src/lib/team/socket.ts": "80536de259fcaf5bd59fc14ffc069a159deeb5d4fd15b964de7857999b2bad2d"
+  },
+  "heartbeatCount": 1,
+  "outcome": {
+    "status": "rejected",
+    "name": "AbortError",
+    "message": "This operation was aborted"
+  },
+  "cleanup": {
+    "intervals": 0,
+    "timeouts": 0,
+    "abortListeners": 0,
+    "pagehideListeners": 0,
+    "socketListeners": 0,
+    "sentAfterEnd": 0
+  },
+  "unhandledRejections": [
+    "AbortError: This operation was aborted"
+  ],
+  "uncaughtExceptions": [],
+  "providerCalls": 0
+}

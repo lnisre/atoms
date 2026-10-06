@@ -1,0 +1,7 @@
+{
+  "candidate.json": "9773cb5b4b11e5e08b72bf23d110432cba48d665a4c02ff7ba6644d152abde35",
+  "candidate-coordinator.json": "9773cb5b4b11e5e08b72bf23d110432cba48d665a4c02ff7ba6644d152abde35",
+  "pending-heartbeat-abort.mjs": "917e13948041dace0a83b8c1e3996521201dd2cb45e448faec636198389bf550",
+  "baseline.json": "fdfecb30ddbfda7572f232ff6e5ff3905355a4ccdf7d1127ba877dea722862ca",
+  "baseline-coordinator.json": "fdfecb30ddbfda7572f232ff6e5ff3905355a4ccdf7d1127ba877dea722862ca"
+}

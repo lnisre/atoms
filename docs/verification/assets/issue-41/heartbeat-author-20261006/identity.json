@@ -1,0 +1,47 @@
+{
+  "worktree": "/Users/gaowenlong/.codex/worktrees/fe44/atoms",
+  "branch": "codex/fix-team-socket-cancel",
+  "base": "886f933c3015d3c810f85662812c5bc201a478f7",
+  "previousCandidate": "3be65e0734f21382ff77f5b2b5c6e8a0ca8d30a1",
+  "buildId": "FqA1Ksr9s7brq8CfJJlX4",
+  "node": "24.18.0",
+  "chrome": "154.0.8037.98",
+  "gatewayPorts": [
+    3245,
+    3246
+  ],
+  "sourceDelta": [
+    {
+      "path": "src/lib/team/client.ts",
+      "candidateSha256": "e7c5cb48b34683c41d56ea2fad7aff5d7bbf31fa7c4e9c29bf60cfcc0a4aa4c2",
+      "newSha256": "45fd6ffbfacc9d9ff2263a4fe6eacc8923b18d102cf1d56c26d573a21aa3eb59"
+    },
+    {
+      "path": "package.json",
+      "candidateSha256": "afce6ecac1ea3cadf27e5b72604bc525f4c30511816553b5011fdf033d94714c",
+      "newSha256": "46196e98057fcef0e6d00203d18fe6f83a5d75fef9a44fba29463e00f87a7405"
+    },
+    {
+      "path": "tests/team-client.test.ts",
+      "candidateSha256": null,
+      "newSha256": "2b70d800a1491fd461829a9567b842d048be49ef7164fef62d7af6c3bf635004"
+    },
+    {
+      "path": "tests/team/heartbeat-lifecycle.mjs",
+      "candidateSha256": null,
+      "newSha256": "3e9742540db879adabe21e4913cbfdde28718431a4cddc3a13085832eebb100c"
+    }
+  ],
+  "productPathsCompared": 48,
+  "changedProductPaths": [
+    "src/lib/team/client.ts"
+  ],
+  "adapterSha256": "80536de259fcaf5bd59fc14ffc069a159deeb5d4fd15b964de7857999b2bad2d",
+  "patchSha256": "322ce4fa9d4d6b0be492c0d4173476105c9e95bd8c30e72a70e56bcdde79303d",
+  "fixtures": {
+    "tests/browser/team-stop.spec.ts": "b363d901ae045b1d549dc7d524e09d14612709c76fb357f1448dcc90819b7d3c",
+    "tests/team/fixture_transport.py": "9af21ce54929b05df5c25d15c130f91e230e9e14051b02751a392221fdb7fc0e",
+    "tests/team/cross-app-workflow.ts": "3c0d1af05ceebc6320aa7195699d12c531a523e17bbb5eb6d5c37c156adc4973"
+  },
+  "providerCalls": 0
+}

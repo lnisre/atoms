@@ -1,0 +1,6 @@
+
+> atoms@0.1.0 typecheck /private/tmp/atoms-independent-20261006/B
+> next typegen && tsc --noEmit
+
+Generating route types...
+✓ Types generated successfully

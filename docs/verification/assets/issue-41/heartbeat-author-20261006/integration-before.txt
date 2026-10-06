@@ -1,0 +1,31 @@
+✖ readTeam heartbeat lifecycle: abort (4281.051542ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 0
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 4523.157583
+
+✖ failing tests:
+
+test at tests/team-client.test.ts:2:1106
+✖ readTeam heartbeat lifecycle: abort (4281.051542ms)
+  Error: Command failed: /opt/homebrew/Cellar/node@24/24.18.0/bin/node --import tsx tests/team/heartbeat-lifecycle.mjs abort
+  
+      at genericNodeError (node:internal/errors:985:15)
+      at wrappedFn (node:internal/errors:539:14)
+      at ChildProcess.exithandler (node:child_process:417:12)
+      at ChildProcess.emit (node:events:509:28)
+      at maybeClose (node:internal/child_process:1124:16)
+      at Socket.<anonymous> (node:internal/child_process:481:11)
+      at Socket.emit (node:events:509:28)
+      at Pipe.<anonymous> (node:net:351:12) {
+    code: 1,
+    killed: false,
+    signal: null,
+    cmd: '/opt/homebrew/Cellar/node@24/24.18.0/bin/node --import tsx tests/team/heartbeat-lifecycle.mjs abort',
+    stdout: '{\n  "scenario": "abort",\n  "node": "v24.18.0",\n  "elapsedMs": 4104,\n  "identity": {\n    "src/lib/team/client.ts": "e7c5cb48b34683c41d56ea2fad7aff5d7bbf31fa7c4e9c29bf60cfcc0a4aa4c2",\n    "src/lib/team/socket.ts": "80536de259fcaf5bd59fc14ffc069a159deeb5d4fd15b964de7857999b2bad2d"\n  },\n  "heartbeatCount": 1,\n  "outcome": {\n    "status": "rejected",\n    "name": "AbortError",\n    "message": "This operation was aborted"\n  },\n  "cleanup": {\n    "intervals": 0,\n    "timeouts": 0,\n    "abortListeners": 0,\n    "pagehideListeners": 0,\n    "socketListeners": 0,\n    "sentAfterEnd": 0\n  },\n  "unhandledRejections": [\n    "AbortError: This operation was aborted"\n  ],\n  "uncaughtExceptions": [],\n  "providerCalls": 0\n}\n',
+    stderr: ''
+  }

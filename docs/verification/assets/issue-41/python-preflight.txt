@@ -1,0 +1,30 @@
+2026-10-06 20:00:08.114 | INFO     | metagpt.const:get_metagpt_root:25 - PROJECT_ROOT set from environment variable to /private/tmp/atoms-issue41/metagpt
+2026-10-06 20:00:08.115 | INFO     | metagpt.const:get_metagpt_package_root:15 - Package root set to /private/tmp/atoms-issue41/venv/lib/python3.11/site-packages
+/private/tmp/atoms-issue41/venv/lib/python3.11/site-packages/google/auth/transport/grpc.py:43: FutureWarning: grpcio < 1.83.0 does not support Post-Quantum Cryptography (PQC). Support for non-PQC environments is deprecated. In April 2027, google-auth will raise its minimum requirements to enforce grpcio >= 1.83.0. For more details on Google Cloud's post-quantum security migration, visit: https://cloud.google.com/security/resources/post-quantum-cryptography
+  warnings.warn(
+[WARNING][2026-10-06 20:00:21.324] __init__.py:24 [t:8407490752]: no pyarrow has been installed. Dataset will run in restrict mode in which some functions may not be available
+[WARNING][2026-10-06 20:00:21.326] __init__.py:24 [t:8407490752]: no pyarrow has been installed. Dataset will run in restrict mode in which some functions may not be available
+Traceback (most recent call last):
+  File "<string>", line 1, in <module>
+  File "/private/tmp/atoms-issue41/venv/lib/python3.11/site-packages/metagpt/team.py", line 19, in <module>
+    from metagpt.environment import Environment
+  File "/private/tmp/atoms-issue41/venv/lib/python3.11/site-packages/metagpt/environment/__init__.py", line 5, in <module>
+    from metagpt.environment.base_env import Environment
+  File "/private/tmp/atoms-issue41/venv/lib/python3.11/site-packages/metagpt/environment/base_env.py", line 23, in <module>
+    from metagpt.memory import Memory
+  File "/private/tmp/atoms-issue41/venv/lib/python3.11/site-packages/metagpt/memory/__init__.py", line 9, in <module>
+    from metagpt.memory.memory import Memory
+  File "/private/tmp/atoms-issue41/venv/lib/python3.11/site-packages/metagpt/memory/memory.py", line 15, in <module>
+    from metagpt.schema import Message
+  File "/private/tmp/atoms-issue41/venv/lib/python3.11/site-packages/metagpt/schema.py", line 52, in <module>
+    from metagpt.repo_parser import DotClassInfo
+  File "/private/tmp/atoms-issue41/venv/lib/python3.11/site-packages/metagpt/repo_parser.py", line 21, in <module>
+    import pandas as pd
+  File "/private/tmp/atoms-issue41/venv/lib/python3.11/site-packages/pandas/__init__.py", line 23, in <module>
+    from pandas.compat import (
+  File "/private/tmp/atoms-issue41/venv/lib/python3.11/site-packages/pandas/compat/__init__.py", line 27, in <module>
+    from pandas.compat.pyarrow import (
+  File "/private/tmp/atoms-issue41/venv/lib/python3.11/site-packages/pandas/compat/pyarrow.py", line 10, in <module>
+    _palv = Version(Version(pa.__version__).base_version)
+                            ^^^^^^^^^^^^^^
+AttributeError: module 'pyarrow' has no attribute '__version__'

@@ -1,0 +1,96 @@
+{
+  "stats": {
+    "startTime": "2026-10-06T12:05:54.811Z",
+    "duration": 256461.789,
+    "expected": 14,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  },
+  "scenarios": [
+    {
+      "title": "nonfatal and unavailable-review modifications publish candidates; clarification and stop preserve them; adoption keeps real history",
+      "status": "passed",
+      "duration": 70465,
+      "errors": []
+    },
+    {
+      "title": "wrong base identity, wrong task and invalid terminal cannot replace an existing candidate",
+      "status": "passed",
+      "duration": 50304,
+      "errors": []
+    },
+    {
+      "title": "M5 rejects a legacy HTML-only first-generation response",
+      "status": "passed",
+      "duration": 647,
+      "errors": []
+    },
+    {
+      "title": "HTTP team → code review → save → operations → reopen with zero generation requests",
+      "status": "passed",
+      "duration": 15079,
+      "errors": []
+    },
+    {
+      "title": "leaving while Reviewer runs closes the connection; no hidden delivery",
+      "status": "passed",
+      "duration": 18089,
+      "errors": []
+    },
+    {
+      "title": "wrong-code result is rejected and no project is delivered",
+      "status": "passed",
+      "duration": 14792,
+      "errors": []
+    },
+    {
+      "title": "remaining nonfatal findings after two native repairs still preview and save",
+      "status": "passed",
+      "duration": 14722,
+      "errors": []
+    },
+    {
+      "title": "one real native repair is shown, saved and restored with rejection history",
+      "status": "passed",
+      "duration": 9686,
+      "errors": []
+    },
+    {
+      "title": "stop during rereview releases waiting and prevents a late delivery",
+      "status": "passed",
+      "duration": 8391,
+      "errors": []
+    },
+    {
+      "title": "clarification ends its task, retains questions and restarts with a new identity",
+      "status": "passed",
+      "duration": 18365,
+      "errors": []
+    },
+    {
+      "title": "format correction is not code repair and repeated invalid output fails",
+      "status": "passed",
+      "duration": 7891,
+      "errors": []
+    },
+    {
+      "title": "unsupported requirements explain a feasible adjustment and end",
+      "status": "passed",
+      "duration": 7806,
+      "errors": []
+    },
+    {
+      "title": "one review format correction succeeds without an Engineer repair",
+      "status": "passed",
+      "duration": 8790,
+      "errors": []
+    },
+    {
+      "title": "an old approval cannot be substituted for the repaired-code review",
+      "status": "passed",
+      "duration": 8829,
+      "errors": []
+    }
+  ]
+}
