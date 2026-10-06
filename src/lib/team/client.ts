@@ -64,7 +64,7 @@ export async function readTeam(response: Response, taskId: string, projectId: st
         if (m.type === "session") {
           if (token || m.protocol !== TEAM_PROTOCOL || m.projectId !== projectId || typeof m.token !== "string") throw new ProtocolError("团队会话协议不匹配");
           token = m.token;
-          heartbeat = setInterval(() => { void control().catch(() => { if (!receivedTerminal) { transportFailed = true; void reader.cancel(); cancel(); } }); },4000);
+          heartbeat = setInterval(() => { void control().catch(() => { if (!receivedTerminal) { transportFailed = true; void reader.cancel().catch(() => {}); cancel(); } }); },4000);
         } else if (!token) throw new ProtocolError("缺少团队会话");
         else if (m.type === "delivery") {
           const deliveries = [...team.deliveries,m.delivery];

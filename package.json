@@ -8,7 +8,7 @@
     "start": "next start",
     "lint": "eslint",
     "typecheck": "next typegen && tsc --noEmit",
-    "test": "node --import tsx --test tests/generate.test.ts tests/team.test.ts tests/team-socket.test.ts tests/preview-policy.test.ts",
+    "test": "node --import tsx --test tests/generate.test.ts tests/team.test.ts tests/team-socket.test.ts tests/team-client.test.ts tests/preview-policy.test.ts",
     "test:e2e": "playwright test",
     "team:build": "next build && node runtime/team/prepare.mjs",
     "team:start": "node runtime/team/gateway.mjs"
