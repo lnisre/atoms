@@ -30,7 +30,7 @@ export function ResultViewer({ version, children, actions, notice, status }: {
           removes the hidden view from focus without pausing its application. */}
       <div id={`${id}-preview`} className={styles.pane} data-active={!showingCode} inert={showingCode} aria-hidden={showingCode}>{children}</div>
       <div id={`${id}-code`} className={styles.pane} data-active={showingCode} inert={!showingCode} aria-hidden={!showingCode}>
-        {openedCode && version && <SourceBrowser key={version.id} version={version} />}
+        {openedCode && version && <SourceBrowser version={version} />}
       </div>
     </div>
   </section>;

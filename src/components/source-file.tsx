@@ -29,16 +29,18 @@ function renderLines(lines: SourceLine[], matches: SourceMatch[], active: number
 
 // Remounted for the full path + version identity by SourceBrowser. A pending
 // clipboard result can only update the file that initiated it.
-export function SourceFile({ path, text, query, onQueryChange, sourceRef }: {
+export function SourceFile({ path, text, query, onQueryChange, sourceRef, onScroll, revealMatchOnMount }: {
   path: string;
   text: string;
   query: string;
   onQueryChange: (query: string) => void;
   sourceRef: RefObject<HTMLPreElement | null>;
+  onScroll: () => void;
+  revealMatchOnMount: boolean;
 }) {
   const input = useRef<HTMLInputElement>(null);
   const searchId = useId();
-  const [selection, setSelection] = useState({ query, index: 0, move: 0 });
+  const [selection, setSelection] = useState({ query, index: 0, move: revealMatchOnMount ? 1 : 0 });
   const [copyState, setCopyState] = useState<"idle" | "pending" | "success" | "error">("idle");
   const lines = useMemo(() => highlightSource(path, text), [path, text]);
   const matches = useMemo(() => findSourceMatches(text, query), [text, query]);
@@ -46,6 +48,9 @@ export function SourceFile({ path, text, query, onQueryChange, sourceRef }: {
   const rendered = useMemo(() => renderLines(lines, matches, active), [lines, matches, active]);
 
   useEffect(() => {
+    // A same-path version update restores the reading position. Recalculate
+    // matches without jumping until the reader searches or navigates again.
+    if (selection.move === 0) return;
     const container = sourceRef.current;
     const match = container?.querySelector<HTMLElement>(`mark[data-match="${active}"]`);
     if (!container || !match) return;
@@ -65,7 +70,7 @@ export function SourceFile({ path, text, query, onQueryChange, sourceRef }: {
   }
 
   function changeQuery(next: string) {
-    setSelection({ query: next, index: 0, move: 0 });
+    setSelection({ query: next, index: 0, move: 1 });
     onQueryChange(next);
   }
 
@@ -105,6 +110,6 @@ export function SourceFile({ path, text, query, onQueryChange, sourceRef }: {
     {copyState === "success" && <p className={styles.copyFeedback} role="status">已复制当前文件的完整源码</p>}
     {copyState === "error" && <p className={styles.copyFeedback} role="alert">复制失败：无法写入剪贴板，请选中下方源码后手动复制。</p>}
     {text === "" && <p className={styles.empty} role="status">空文本文件</p>}
-    <pre ref={sourceRef} className={styles.source} tabIndex={0} role="region" aria-label={`源码 ${path}`}><code>{rendered}</code></pre>
+    <pre ref={sourceRef} onScroll={onScroll} className={styles.source} tabIndex={0} role="region" aria-label={`源码 ${path}`}><code>{rendered}</code></pre>
   </div>;
 }
