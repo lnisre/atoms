@@ -47,8 +47,8 @@ for (const viewport of [{ width: 1440, height: 900 }, { width: 1280, height: 720
     await page.getByRole('button', { name: '我的项目', exact: true }).click();
     const region = page.getByRole('region', { name: '已有项目' });
     const cards = region.getByRole('button', { name: /打开项目/ });
-    await expect(cards).toHaveCount(7);
-    await expect(region.getByText('项目封面占位')).toHaveCount(7);
+    await expect(cards).toHaveCount(8);
+    await expect(region.getByText('项目封面占位')).toHaveCount(8);
     await expect(page.locator('iframe')).toHaveCount(0);
     await page.screenshot({ path: info.outputPath('projects.png') });
     await page.getByRole('main').evaluate(el => { el.scrollTop = el.scrollHeight; });
@@ -61,7 +61,7 @@ for (const viewport of [{ width: 1440, height: 900 }, { width: 1280, height: 720
       expect(box).not.toBeNull(); expect(box!.x).toBeGreaterThanOrEqual(0); expect(box!.y).toBeGreaterThanOrEqual(0);
       expect(box!.x + box!.width).toBeLessThanOrEqual(viewport.width); expect(box!.y + box!.height).toBeLessThanOrEqual(viewport.height);
     }
-    await page.getByRole('region', { name: '最近项目' }).getByRole('button').first().click();
+    await page.getByRole('region', { name: '最近项目' }).getByRole('button', { name: /旧项目：/ }).click();
     await expect(page.frameLocator('iframe').locator('output')).toHaveText('7');
     await page.frameLocator('iframe').getByRole('button', { name: '增加' }).press('Enter');
     await expect(page.getByText('应用数据已保存', { exact: true })).toBeVisible();
@@ -83,7 +83,7 @@ for (const viewport of [{ width: 1440, height: 900 }, { width: 1280, height: 720
     expect(calls).toBe(1);
     await page.getByRole('button', { name: /新建项目/ }).click();
     await page.getByRole('button', { name: '我的项目', exact: true }).click();
-    await expect(cards).toHaveCount(8);
+    await expect(cards).toHaveCount(9);
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
   });
 }

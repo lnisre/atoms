@@ -17,6 +17,7 @@ export type ModificationRecord = {
 export type SavedProject = {
   id: string;
   exampleSource?: ExampleSource;
+  retiredExampleSource?: ExampleSource;
   requirement: string;
   title: string;
   updatedAt: string;
@@ -105,9 +106,9 @@ export function listProjects() {
   });
 }
 
-// Metadata lives outside projects, under a non-project reserved key. Version 1
-// clients enumerate projects and read applicationData by UUID, so no upgrade or
-// project-list filter is needed. Initial data and both markers commit with the project.
+// Keep markers in the existing store: old clients can still save/ adopt without
+// a database version change. All reads below are raw persisted records, not the
+// display projection that substitutes draftResult for result.
 const FIRST_VISIT_KEY = "$atoms:workspace:first-visit";
 const TIP_EXAMPLE_KEY = "$atoms:workspace:tip-calculator";
 function initializeWorkspace(example?: SavedProject) {
@@ -115,37 +116,56 @@ function initializeWorkspace(example?: SavedProject) {
     ["projects", "applicationData"], "readwrite", (tx, done) => {
       const projects = tx.objectStore("projects");
       const metadata = tx.objectStore("applicationData");
-      projects.getAll().onsuccess = event => {
-        const saved = (event.target as IDBRequest<SavedProject[]>).result;
-        metadata.get(FIRST_VISIT_KEY).onsuccess = event => {
-          if ((event.target as IDBRequest).result) {
-            done({ projects: displayProjects(saved), needsExample: false });
-            return;
-          }
-          if (!saved.length && !example) {
-            done({ projects: [], needsExample: true });
-            return;
-          }
-          try {
-            if (!saved.length && example) {
-              projects.add(example);
-              metadata.add({ projectId: example.id, state: structuredClone(EXAMPLE_STATE) });
-              metadata.put({ projectId: TIP_EXAMPLE_KEY, kind: "workspace-initialization", completed: true });
-              saved.push(example);
+      metadata.get(TIP_EXAMPLE_KEY).onsuccess = event => {
+        const completed = Boolean((event.target as IDBRequest).result);
+        try {
+          projects.getAll().onsuccess = event => {
+            const saved = (event.target as IDBRequest<SavedProject[]>).result;
+            if (completed) {
+              done({ projects: displayProjects(saved), needsExample: false });
+              return;
             }
-            metadata.put({ projectId: FIRST_VISIT_KEY, kind: "workspace-initialization", completed: true });
-            done({ projects: displayProjects(saved), needsExample: false });
-          } catch { tx.abort(); }
-        };
+            const installed = saved.some(p => p.exampleSource?.templateId === "tip-calculator");
+            if (!installed && !example) {
+              done({ projects: displayProjects(saved), needsExample: true });
+              return;
+            }
+            try {
+              // Re-read under the final write lock after downloading. Only change
+              // identity/title; preserve newer code, draft, records and unknown
+              // fields saved by another tab. Never write old application data.
+              const upgraded = saved.map(current => {
+                if (current.exampleSource?.templateId !== "focus-pomodoro") return current;
+                const retired = {
+                  ...current,
+                  title: current.title === "示例 · 专注番茄钟" ? "专注番茄钟" : current.title,
+                  retiredExampleSource: current.exampleSource,
+                };
+                delete retired.exampleSource;
+                projects.put(retired);
+                return retired;
+              });
+              if (!installed && example) {
+                projects.add(example);
+                metadata.add({ projectId: example.id, state: structuredClone(EXAMPLE_STATE) });
+                upgraded.push(example);
+              }
+              metadata.put({ projectId: FIRST_VISIT_KEY, kind: "workspace-initialization", completed: true });
+              metadata.put({ projectId: TIP_EXAMPLE_KEY, kind: "workspace-initialization", completed: true });
+              done({ projects: displayProjects(upgraded), needsExample: false });
+            } catch { tx.abort(); }
+          };
+        } catch { tx.abort(); }
       };
     },
   );
 }
 
-export async function initializeHomeWorkspace() {
-  // Read failure is never interpreted as an empty workspace. A failed asset or
-  // seed transaction leaves both records absent and allows an explicit retry.
-  await listProjects();
+export async function initializeHomeWorkspace(projectId?: string | null) {
+  // A missing deep link remains missing; it is not a first-visit entry point.
+  // Read failure is never interpreted as an empty workspace.
+  const existing = await listProjects();
+  if (projectId && !existing.some(p => p.id === projectId)) return { projects: existing, exampleError: "" };
   try {
     const first = await initializeWorkspace();
     if (!first.needsExample) return { projects: first.projects, exampleError: "" };
@@ -161,7 +181,7 @@ export async function initializeHomeWorkspace() {
 }
 
 export async function saveProject(project: SavedProject) {
-  if (project.exampleSource) throw new Error("内置来源只允许由首次初始化创建");
+  if (project.exampleSource || project.retiredExampleSource) throw new Error("内置来源只允许由工作区初始化创建");
   const team = project.initialGeneration?.team;
   if (team?.protocol === "atoms-team/3" && (!artifactTeam(team,await sha256(project.result.html),true) || JSON.stringify(project.previewPolicy) !== JSON.stringify(previewPolicy(team,project.result.html)))) throw new Error("项目代码、审查与预览策略不一致");
   return transaction<void>(["projects"], "readwrite", (tx) => {

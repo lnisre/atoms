@@ -175,21 +175,7 @@ test("读库失败不请求素材、不写标记，存储恢复可重试", async
   await page.getByRole("button", { name: "重试读取与准备" }).click(); await expect(card(page)).toHaveCount(1);
 });
 
-test("素材准备期间另一旧标签保存正常项目，初始化不追加或覆盖", async ({ page }) => {
-  let release!: () => void;
-  const gate = new Promise<void>(resolve => { release = resolve; });
-  let requested!: () => void;
-  const seen = new Promise<void>(resolve => { requested = resolve; });
-  await page.route("**/examples/tip-calculator-v1.html", async r => { requested(); await gate; await r.continue(); });
-  await page.goto("/"); await seen;
-  await page.evaluate(async () => {
-    const db = await new Promise<IDBDatabase>(resolve => { const r = indexedDB.open("atoms-projects", 1); r.onsuccess = () => resolve(r.result); });
-    await new Promise<void>(resolve => { const tx = db.transaction("projects", "readwrite"); tx.objectStore("projects").put({ id: "racing", title: "同时保存", requirement: "正常项目", updatedAt: "2026-10-02", result: { html: "<!doctype html><html><head></head><body>保留</body></html>", generatedAt: "race", model: "old", durationMs: 1 } }); tx.oncomplete = () => resolve(); }); db.close();
-  });
-  release(); await expect(page.getByText("正在读取已有项目…")).toHaveCount(0);
-  const db = await database(page); expect(db.projects.map(p => p.id)).toEqual(["racing"]);
-  expect(db.data).toHaveLength(1); await expect(card(page)).toHaveCount(0);
-});
+// Upgrade races now use real UI saves and adoption in workspace-upgrade.spec.ts.
 
 test("已有项目的初始化标记写入失败仍显示旧项目与数据", async ({ page }) => {
   await seedOld(page);
@@ -208,10 +194,11 @@ test("已有项目保全、记录已处理，缺失深链接不被示例替换",
   const original = await database(page); expect(original.data).toHaveLength(1);
   await page.goto("/"); await expect(page.getByText("正在读取已有项目…")).toHaveCount(0);
   const after = await database(page);
-  expect(after.projects).toEqual(original.projects);
+  expect(after.projects.filter(p => p.id === "old")).toEqual(original.projects);
+  expect(after.projects).toHaveLength(2);
   expect(after.data.find(d => d.projectId === "old")).toEqual(original.data[0]);
   expect(after.data.some(d => d.projectId === "$atoms:workspace:first-visit")).toBe(true);
-  await expect(card(page)).toHaveCount(0);
+  await expect(card(page)).toHaveCount(1);
   await page.goto("/?project=missing"); await expect(page.getByRole("main").getByRole("alert")).toContainText("找不到该项目");
   await expect(page.locator("iframe")).toHaveCount(0);
   await page.goto("/?project=old"); await expect(frame(page).getByText("旧应用")).toBeVisible();

@@ -3,7 +3,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import {
   appendGenerationEvents,
-  listProjects,
   initializeHomeWorkspace,
   loadApplicationData,
   saveProject,
@@ -38,7 +37,7 @@ type ModificationSession = {
   active: boolean;
 };
 
-type Project = Pick<SavedProject, "id" | "requirement" | "exampleSource">;
+type Project = Pick<SavedProject, "id" | "requirement" | "exampleSource" | "retiredExampleSource"> & { title?: string };
 type Task =
   | { status: "waiting" }
   | { status: "failed"; error: string; outcome?: TeamOutcome }
@@ -114,7 +113,7 @@ export default function Home() {
   useEffect(() => {
     let cancelled = false;
     const id = new URLSearchParams(window.location.search).get("project");
-    const load = id ? listProjects().then(projects => ({ projects, exampleError: "" })) : initializeHomeWorkspace();
+    const load = initializeHomeWorkspace(id);
     load
       .then(({ projects: saved, exampleError }) => {
         if (cancelled) return;
@@ -154,6 +153,24 @@ export default function Home() {
   function retryHomeLoad() {
     setLoadingProjects(true);
     setHomeLoadAttempt(value => value + 1);
+  }
+
+  async function retryExamplePreparation() {
+    setLoadingProjects(true);
+    try {
+      const loaded = await initializeHomeWorkspace();
+      setProjects(loaded.projects);
+      setExampleError(loaded.exampleError);
+      // Refresh only provenance/title. A retry must not reset the current task,
+      // candidate, source view, iframe or unsent input.
+      setProject(current => {
+        const saved = loaded.projects.find(p => p.id === current?.id);
+        return current && saved ? { ...current, title: saved.title,
+          exampleSource: saved.exampleSource, retiredExampleSource: saved.retiredExampleSource } : current;
+      });
+    } catch {
+      setExampleError("无法读取已有项目，请检查浏览器存储权限；当前无法保证保存与恢复。");
+    } finally { setLoadingProjects(false); }
   }
 
   function discardChanges() {
@@ -465,7 +482,7 @@ export default function Home() {
       {project && <header className="topbar">
         <div className="project-titlebar">
           <button className="brand" disabled={busy} onClick={goHome} aria-label="Atoms 首页"><AtomsMark /></button>
-          <h1 title={project.requirement}>{project.exampleSource ? (project.exampleSource.templateId === "tip-calculator" ? "示例 · 小费计算器" : "示例 · 专注番茄钟") : project.requirement}</h1>
+          <h1 title={project.requirement}>{project.title ?? project.requirement}</h1>
           <button className="text-button project-home" disabled={busy} onClick={goHome} aria-label="新建项目 / 已有项目" title="返回项目入口">⌄</button>
           <Unavailable label="代码历史与恢复">◴</Unavailable>
           <Unavailable label="收起对话">«</Unavailable>
@@ -493,13 +510,15 @@ export default function Home() {
       ) : (
         <main className="workspace">
           <aside className="project-panel">
+            {exampleError && <div role="alert" className="save-error"><p>{exampleError}</p><button className="text-button" disabled={loadingProjects} onClick={() => void retryExamplePreparation()}>重试准备示例</button></div>}
             <ConversationScroll key={project.id}>
               <details className="project-details"><summary>项目详情与保存范围</summary>
                 <details className="requirement-block"><summary>{project.exampleSource ? "示例功能基线" : "原需求详情"}</summary><p>{project.requirement}</p></details>
                 {task?.status === "complete" && (!project.exampleSource || candidate || records.length > 0) && <details className="generation-details"><summary>模型与耗时</summary><dl><div><dt>模型</dt><dd>{(candidate?.result ?? task.result).model}</dd></div><div><dt>{candidate ? "最近候选耗时" : "生成耗时"}</dt><dd>{((candidate?.result ?? task.result).durationMs / 1000).toFixed(1)} 秒</dd></div></dl></details>}
+                {project.retiredExampleSource && <details className="record-note"><summary>项目来源</summary><p>来自旧版专注番茄钟示例，现作为普通项目保留。代码、个人数据和已采用修改继续属于本项目；没有补充生成或审查记录。</p><p>来源代码 SHA-256：<code>{project.retiredExampleSource.sourceCodeHash}</code>。预置版本 SHA-256：<code>{project.retiredExampleSource.codeHash}</code>。这些标识属于初始素材，不代表后续修改的代码。</p></details>}
                 <details className="storage-details"><summary>保存与恢复范围</summary><p>自动保存到本浏览器的当前网址。项目与应用数据分别显示保存结果，请等待保存成功再离开。清除站点数据、无痕会话结束或存储被回收后可能丢失，不支持跨设备找回。</p></details>
               </details>
-              {project.exampleSource ? <ExampleConversation source={project.exampleSource} /> : <div className="user-message"><span>你 · 初始需求</span><p>{project.requirement}</p></div>}
+              {project.exampleSource ? <ExampleConversation source={project.exampleSource} /> : <div className="user-message"><span>{project.retiredExampleSource ? "原项目功能基线" : "你 · 初始需求"}</span><p>{project.requirement}</p></div>}
               {!project.exampleSource && <section className={`task-state ${task?.status}`} aria-live="polite" aria-atomic="true">
                 <div className="state-title">
                   <span className={initialBusy ? "spinner" : "state-symbol"} aria-hidden="true">{initialBusy ? "" : task?.status === "failed" ? "!" : "✓"}</span>
