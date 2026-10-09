@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useId, useLayoutEffect, useMemo, useRef, useState } from "react";
+import { SourceFile } from "./source-file";
 import styles from "./source-browser.module.css";
 
 // A read-only presentation boundary, independent of generation and persistence.
@@ -35,6 +36,7 @@ export function SourceBrowser({ version }: { version: SourceVersion }) {
     return new Set(parts.slice(0, -1).map((_, index) => parts.slice(0, index + 1).join("/")));
   });
   const [treeOpen, setTreeOpen] = useState(true);
+  const [query, setQuery] = useState("");
   const root = useRef<HTMLDivElement>(null);
   const source = useRef<HTMLPreElement>(null);
   const positions = useRef(new Map<string, { top: number; left: number }>());
@@ -94,10 +96,7 @@ export function SourceBrowser({ version }: { version: SourceVersion }) {
         <div className={styles.directoryTitle}>文件 <span>{version.files.length}</span></div>
         {renderDirectory(tree)}
       </nav>
-      <div className={styles.content}>
-        {selected.text === "" && <p className={styles.empty} role="status">空文本文件</p>}
-        <pre ref={source} className={styles.source} tabIndex={0} role="region" aria-label={`源码 ${selected.path}`}><code>{selected.text}</code></pre>
-      </div>
+      <SourceFile key={JSON.stringify([version.id, selected.path])} path={selected.path} text={selected.text} query={query} onQueryChange={setQuery} sourceRef={source} />
     </div>
   </div>;
 }

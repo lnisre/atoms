@@ -98,6 +98,8 @@ for (const viewport of [{ width: 1440, height: 900 }, { width: 1280, height: 720
     await page.keyboard.press('Tab'); await expect(page.getByRole('button', { name: '查看代码', exact: true })).toBeFocused();
     await page.keyboard.press('Space');
     await page.keyboard.press('Tab'); await expect(page.getByRole('button', { name: '展开目录' })).toBeFocused();
+    await page.keyboard.press('Tab'); await expect(page.getByRole('searchbox', { name: '在当前文件中搜索' })).toBeFocused();
+    await page.keyboard.press('Tab'); await expect(page.getByRole('button', { name: '复制当前文件', exact: true })).toBeFocused();
     await page.keyboard.press('Tab'); await expect(source(page)).toBeFocused();
     expect(await source(page).evaluate(el => el.scrollTop)).toBe(position);
     await expect(page.getByLabel('追加修改需求', { exact: true })).toHaveValue('未提交的项目级修改');
