@@ -80,9 +80,10 @@ for (const viewport of [{ width: 1440, height: 900 }, { width: 1280, height: 720
     await page.screenshot({ path: testInfo.outputPath(`source-${viewport.width}.png`) });
     await page.getByRole('button', { name: '收起目录' }).click();
     await source(page).focus();
-    const sourceBox = (await source(page).boundingBox())!;
-    await page.mouse.move(sourceBox.x + 18, sourceBox.y + 24); await page.mouse.down();
-    await page.mouse.move(sourceBox.x + 210, sourceBox.y + 24); await page.mouse.up();
+    // Read the first visible text line's geometry; the gutter is not selectable.
+    const sourceBox = (await source(page).locator('code > span').first().boundingBox())!;
+    await page.mouse.move(sourceBox.x + 2, sourceBox.y + sourceBox.height / 2); await page.mouse.down();
+    await page.mouse.move(sourceBox.x + 130, sourceBox.y + sourceBox.height / 2, { steps: 8 }); await page.mouse.up();
     expect(await page.evaluate(() => getSelection()?.toString())).toBeTruthy();
     await source(page).hover(); await page.mouse.wheel(0, 950);
     await expect.poll(() => source(page).evaluate(el => el.scrollTop)).toBeGreaterThan(0);

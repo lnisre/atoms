@@ -1,0 +1,1033 @@
+{
+  "requests": 4,
+  "formal": {
+    "projectId": "df987919-01b4-461e-8147-6a5d8404ca94",
+    "state": {
+      "count": 2
+    },
+    "updatedAt": "2026-10-09T09:03:42.561Z"
+  },
+  "afterAdoption": {
+    "project": {
+      "id": "df987919-01b4-461e-8147-6a5d8404ca94",
+      "requirement": "PRD 集中验收合成项目",
+      "title": "PRD 集中验收合成项目",
+      "result": {
+        "html": "<!doctype html><html><head></head><body><h1>审查预览夹具</h1><button disabled id=\"add\">增加</button><output>0</output><script>\nlet state={count:0};const b=document.querySelector('#add'),o=document.querySelector('output');\nwindow.atoms.loadState().then(s=>{state=s??{count:0};o.textContent=state.count;b.disabled=false});\nb.onclick=async()=>{state.count+=2;await window.atoms.saveState(state);o.textContent=state.count};\n</script></body></html> ",
+        "model": "OFFLINE FIXTURE",
+        "durationMs": 1,
+        "generatedAt": "d1d9a415-9bd0-4bc8-811a-121fc9f544f6"
+      },
+      "previewPolicy": {
+        "status": "allowed",
+        "reasons": [],
+        "review": "clean",
+        "dataMode": "formal",
+        "adoption": "allowed"
+      },
+      "initialGeneration": {
+        "team": {
+          "protocol": "atoms-team/3",
+          "taskId": "f8e6bd94-c109-4278-ab03-8d3ef4b7edb5",
+          "projectId": "df987919-01b4-461e-8147-6a5d8404ca94",
+          "codeHash": "12e1655d18f5f535ed2b015adec22a63fc704083de3ea24abc8617005eda2e16",
+          "review": {
+            "kind": "code-review",
+            "schemaVersion": 1,
+            "taskId": "f8e6bd94-c109-4278-ab03-8d3ef4b7edb5",
+            "codeHash": "12e1655d18f5f535ed2b015adec22a63fc704083de3ea24abc8617005eda2e16",
+            "approved": true,
+            "summary": "离线静态审查，未运行浏览器",
+            "issues": [],
+            "resolutions": []
+          },
+          "deliveries": [
+            {
+              "role": "Mike",
+              "content": "{\"command\":\"assign\",\"to\":\"Requirements\"}"
+            },
+            {
+              "role": "Requirements",
+              "content": "{\"requirements\":[{\"id\":\"increment\"}]}"
+            },
+            {
+              "role": "Mike",
+              "content": "{\"command\":\"assign\",\"to\":\"Engineer\"}"
+            },
+            {
+              "role": "Engineer",
+              "content": "{\"iteration\":1,\"codeHash\":\"12e1655d18f5f535ed2b015adec22a63fc704083de3ea24abc8617005eda2e16\",\"assistantReply\":\"离线夹具\"}"
+            },
+            {
+              "role": "Mike",
+              "content": "{\"command\":\"assign\",\"to\":\"Reviewer\"}"
+            },
+            {
+              "role": "Reviewer",
+              "content": "{\"kind\":\"code-review\",\"schemaVersion\":1,\"taskId\":\"f8e6bd94-c109-4278-ab03-8d3ef4b7edb5\",\"codeHash\":\"12e1655d18f5f535ed2b015adec22a63fc704083de3ea24abc8617005eda2e16\",\"approved\":true,\"summary\":\"离线静态审查，未运行浏览器\",\"issues\":[],\"resolutions\":[]}"
+            },
+            {
+              "role": "Mike",
+              "content": "{\"command\":\"finish\"}"
+            }
+          ],
+          "outcome": "passed",
+          "calls": [
+            {
+              "call": 1,
+              "actor": "Mike",
+              "status": "completed",
+              "requestedModel": "OFFLINE FIXTURE"
+            },
+            {
+              "call": 2,
+              "actor": "Requirements",
+              "status": "completed",
+              "requestedModel": "OFFLINE FIXTURE"
+            },
+            {
+              "call": 3,
+              "actor": "Mike",
+              "status": "completed",
+              "requestedModel": "OFFLINE FIXTURE"
+            },
+            {
+              "call": 4,
+              "actor": "Engineer",
+              "status": "completed",
+              "requestedModel": "OFFLINE FIXTURE"
+            },
+            {
+              "call": 5,
+              "actor": "Mike",
+              "status": "completed",
+              "requestedModel": "OFFLINE FIXTURE"
+            },
+            {
+              "call": 6,
+              "actor": "Reviewer",
+              "status": "completed",
+              "requestedModel": "OFFLINE FIXTURE"
+            },
+            {
+              "call": 7,
+              "actor": "Mike",
+              "status": "completed",
+              "requestedModel": "OFFLINE FIXTURE"
+            }
+          ]
+        },
+        "taskId": "f8e6bd94-c109-4278-ab03-8d3ef4b7edb5",
+        "startedAt": "2026-10-09T09:03:42.252Z",
+        "assistantReply": "这是离线夹具，不是真实模型结果。",
+        "events": [
+          {
+            "taskId": "f8e6bd94-c109-4278-ab03-8d3ef4b7edb5",
+            "source": "browser",
+            "sequence": 1,
+            "stepId": "transport",
+            "label": "接收生成结果",
+            "status": "started",
+            "detail": "向服务端提交需求并持续读取实际执行事件。",
+            "at": "2026-10-09T09:03:42.252Z"
+          },
+          {
+            "taskId": "f8e6bd94-c109-4278-ab03-8d3ef4b7edb5",
+            "source": "browser",
+            "sequence": 2,
+            "stepId": "transport",
+            "label": "接收生成结果",
+            "status": "completed",
+            "detail": "完整代码已收到；实际审查与任务结束状态见团队记录。",
+            "at": "2026-10-09T09:03:42.390Z"
+          },
+          {
+            "taskId": "f8e6bd94-c109-4278-ab03-8d3ef4b7edb5",
+            "source": "browser",
+            "sequence": 3,
+            "stepId": "project-save",
+            "label": "保存项目与助手回复",
+            "status": "started",
+            "detail": "写入本浏览器项目存储，等待事务提交。",
+            "at": "2026-10-09T09:03:42.394Z"
+          },
+          {
+            "taskId": "f8e6bd94-c109-4278-ab03-8d3ef4b7edb5",
+            "source": "browser",
+            "sequence": 4,
+            "stepId": "project-save",
+            "label": "保存项目与助手回复",
+            "status": "completed",
+            "detail": "项目、HTML、助手回复及已有执行记录已提交；后续步骤独立追加。",
+            "at": "2026-10-09T09:03:42.442Z"
+          },
+          {
+            "taskId": "f8e6bd94-c109-4278-ab03-8d3ef4b7edb5",
+            "source": "browser",
+            "sequence": 5,
+            "stepId": "preview-assemble",
+            "label": "装配隔离预览",
+            "status": "started",
+            "detail": "向结构合格的完整 HTML 注入平台数据接口与隔离策略。",
+            "at": "2026-10-09T09:03:42.450Z"
+          },
+          {
+            "taskId": "f8e6bd94-c109-4278-ab03-8d3ef4b7edb5",
+            "source": "browser",
+            "sequence": 6,
+            "stepId": "preview-assemble",
+            "label": "装配隔离预览",
+            "status": "completed",
+            "detail": "完整预览文档已装配；未验证业务功能。",
+            "at": "2026-10-09T09:03:42.451Z"
+          },
+          {
+            "taskId": "f8e6bd94-c109-4278-ab03-8d3ef4b7edb5",
+            "source": "browser",
+            "sequence": 7,
+            "stepId": "preview-load",
+            "label": "载入隔离预览",
+            "status": "started",
+            "detail": "将完整文档载入 sandbox iframe。",
+            "at": "2026-10-09T09:03:42.451Z"
+          },
+          {
+            "taskId": "f8e6bd94-c109-4278-ab03-8d3ef4b7edb5",
+            "source": "browser",
+            "sequence": 8,
+            "stepId": "preview-assemble",
+            "label": "装配隔离预览",
+            "status": "started",
+            "detail": "向结构合格的完整 HTML 注入平台数据接口与隔离策略。",
+            "at": "2026-10-09T09:03:42.451Z"
+          },
+          {
+            "taskId": "f8e6bd94-c109-4278-ab03-8d3ef4b7edb5",
+            "source": "browser",
+            "sequence": 9,
+            "stepId": "preview-assemble",
+            "label": "装配隔离预览",
+            "status": "completed",
+            "detail": "完整预览文档已装配；未验证业务功能。",
+            "at": "2026-10-09T09:03:42.451Z"
+          },
+          {
+            "taskId": "f8e6bd94-c109-4278-ab03-8d3ef4b7edb5",
+            "source": "browser",
+            "sequence": 10,
+            "stepId": "preview-load",
+            "label": "载入隔离预览",
+            "status": "started",
+            "detail": "将完整文档载入 sandbox iframe。",
+            "at": "2026-10-09T09:03:42.451Z"
+          },
+          {
+            "taskId": "f8e6bd94-c109-4278-ab03-8d3ef4b7edb5",
+            "source": "browser",
+            "sequence": 11,
+            "stepId": "preview-load",
+            "label": "载入隔离预览",
+            "status": "completed",
+            "detail": "已观察到 iframe load 事件；请实际操作验证业务功能。",
+            "at": "2026-10-09T09:03:42.488Z"
+          },
+          {
+            "taskId": "f8e6bd94-c109-4278-ab03-8d3ef4b7edb5",
+            "source": "browser",
+            "sequence": 12,
+            "stepId": "data-f2d131db-6cc1-4fab-8f68-0142f909b20c-1",
+            "label": "读取应用数据",
+            "status": "started",
+            "detail": "通过平台接口访问本项目的正式业务数据。",
+            "at": "2026-10-09T09:03:42.488Z"
+          },
+          {
+            "taskId": "f8e6bd94-c109-4278-ab03-8d3ef4b7edb5",
+            "source": "browser",
+            "sequence": 13,
+            "stepId": "data-f2d131db-6cc1-4fab-8f68-0142f909b20c-1",
+            "label": "读取应用数据",
+            "status": "completed",
+            "detail": "读取已完成；未复制业务数据到执行记录。",
+            "at": "2026-10-09T09:03:42.509Z"
+          },
+          {
+            "taskId": "f8e6bd94-c109-4278-ab03-8d3ef4b7edb5",
+            "source": "browser",
+            "sequence": 14,
+            "stepId": "data-f2d131db-6cc1-4fab-8f68-0142f909b20c-2",
+            "label": "保存应用数据",
+            "status": "started",
+            "detail": "通过平台接口访问本项目的正式业务数据。",
+            "at": "2026-10-09T09:03:42.549Z"
+          },
+          {
+            "taskId": "f8e6bd94-c109-4278-ab03-8d3ef4b7edb5",
+            "source": "browser",
+            "sequence": 15,
+            "stepId": "data-f2d131db-6cc1-4fab-8f68-0142f909b20c-2",
+            "label": "保存应用数据",
+            "status": "completed",
+            "detail": "正式业务数据事务已提交。",
+            "at": "2026-10-09T09:03:42.562Z"
+          }
+        ]
+      },
+      "updatedAt": "2026-10-09T09:03:43.527Z",
+      "modificationRecords": [
+        {
+          "id": "f955c0d3-e3c2-46ae-bf58-eb11a94cd814",
+          "adoptedAt": "2026-10-09T09:03:43.527Z",
+          "requests": [
+            "data",
+            "unknown",
+            "resolved"
+          ],
+          "generations": [
+            {
+              "team": {
+                "protocol": "atoms-team/3",
+                "taskId": "aa75eb61-53bd-43de-bac8-3e537800fe39",
+                "projectId": "df987919-01b4-461e-8147-6a5d8404ca94",
+                "baseCodeHash": "12e1655d18f5f535ed2b015adec22a63fc704083de3ea24abc8617005eda2e16",
+                "baseDataIssues": [],
+                "codeHash": "693d6612fe436465f8827ea47ecf34262d72105e771830551d9a2e7c8d6cc63d",
+                "review": {
+                  "kind": "code-review",
+                  "schemaVersion": 1,
+                  "taskId": "aa75eb61-53bd-43de-bac8-3e537800fe39",
+                  "codeHash": "693d6612fe436465f8827ea47ecf34262d72105e771830551d9a2e7c8d6cc63d",
+                  "approved": false,
+                  "summary": "离线静态审查，未运行浏览器",
+                  "issues": [
+                    {
+                      "id": "preserve-fields",
+                      "severity": "major",
+                      "category": "data-loss",
+                      "codeQuote": "saveState({count:state.count})",
+                      "trigger": "点击增加",
+                      "consequence": "未知字段丢失"
+                    }
+                  ],
+                  "resolutions": []
+                },
+                "deliveries": [
+                  {
+                    "role": "Mike",
+                    "content": "{\"command\":\"assign\",\"to\":\"Requirements\"}"
+                  },
+                  {
+                    "role": "Requirements",
+                    "content": "{\"requirements\":[{\"id\":\"increment\"}]}"
+                  },
+                  {
+                    "role": "Mike",
+                    "content": "{\"command\":\"assign\",\"to\":\"Engineer\"}"
+                  },
+                  {
+                    "role": "Engineer",
+                    "content": "{\"iteration\":1,\"codeHash\":\"693d6612fe436465f8827ea47ecf34262d72105e771830551d9a2e7c8d6cc63d\",\"assistantReply\":\"离线夹具\"}"
+                  },
+                  {
+                    "role": "Mike",
+                    "content": "{\"command\":\"assign\",\"to\":\"Reviewer\"}"
+                  },
+                  {
+                    "role": "Reviewer",
+                    "content": "{\"kind\":\"code-review\",\"schemaVersion\":1,\"taskId\":\"aa75eb61-53bd-43de-bac8-3e537800fe39\",\"codeHash\":\"693d6612fe436465f8827ea47ecf34262d72105e771830551d9a2e7c8d6cc63d\",\"approved\":false,\"summary\":\"离线静态审查，未运行浏览器\",\"issues\":[{\"id\":\"preserve-fields\",\"severity\":\"major\",\"category\":\"data-loss\",\"codeQuote\":\"saveState({count:state.count})\",\"trigger\":\"点击增加\",\"consequence\":\"未知字段丢失\"}],\"resolutions\":[]}"
+                  },
+                  {
+                    "role": "Mike",
+                    "content": "{\"command\":\"finish\"}"
+                  }
+                ],
+                "outcome": "issues",
+                "calls": [
+                  {
+                    "call": 1,
+                    "actor": "Mike",
+                    "status": "completed",
+                    "requestedModel": "OFFLINE FIXTURE"
+                  },
+                  {
+                    "call": 2,
+                    "actor": "Requirements",
+                    "status": "completed",
+                    "requestedModel": "OFFLINE FIXTURE"
+                  },
+                  {
+                    "call": 3,
+                    "actor": "Mike",
+                    "status": "completed",
+                    "requestedModel": "OFFLINE FIXTURE"
+                  },
+                  {
+                    "call": 4,
+                    "actor": "Engineer",
+                    "status": "completed",
+                    "requestedModel": "OFFLINE FIXTURE"
+                  },
+                  {
+                    "call": 5,
+                    "actor": "Mike",
+                    "status": "completed",
+                    "requestedModel": "OFFLINE FIXTURE"
+                  },
+                  {
+                    "call": 6,
+                    "actor": "Reviewer",
+                    "status": "completed",
+                    "requestedModel": "OFFLINE FIXTURE"
+                  },
+                  {
+                    "call": 7,
+                    "actor": "Mike",
+                    "status": "completed",
+                    "requestedModel": "OFFLINE FIXTURE"
+                  }
+                ]
+              },
+              "taskId": "aa75eb61-53bd-43de-bac8-3e537800fe39",
+              "projectId": "df987919-01b4-461e-8147-6a5d8404ca94",
+              "requirement": "data",
+              "startedAt": "2026-10-09T09:03:42.641Z",
+              "assistantReply": "这是离线夹具，不是真实模型结果。",
+              "events": [
+                {
+                  "taskId": "aa75eb61-53bd-43de-bac8-3e537800fe39",
+                  "source": "browser",
+                  "sequence": 1,
+                  "stepId": "transport",
+                  "label": "接收修改结果",
+                  "status": "started",
+                  "detail": "提交已采用代码，读取实际执行事件。",
+                  "at": "2026-10-09T09:03:42.641Z"
+                },
+                {
+                  "taskId": "aa75eb61-53bd-43de-bac8-3e537800fe39",
+                  "source": "browser",
+                  "sequence": 2,
+                  "stepId": "transport",
+                  "label": "接收修改结果",
+                  "status": "completed",
+                  "detail": "完整 HTML 已保留；实际审查与任务结束状态见团队记录。",
+                  "at": "2026-10-09T09:03:42.660Z"
+                },
+                {
+                  "taskId": "aa75eb61-53bd-43de-bac8-3e537800fe39",
+                  "source": "browser",
+                  "sequence": 3,
+                  "stepId": "trial",
+                  "label": "准备试用副本",
+                  "status": "started",
+                  "detail": "读取正式数据并创建会话内副本。",
+                  "at": "2026-10-09T09:03:42.660Z"
+                },
+                {
+                  "taskId": "aa75eb61-53bd-43de-bac8-3e537800fe39",
+                  "source": "browser",
+                  "sequence": 4,
+                  "stepId": "trial",
+                  "label": "准备试用副本",
+                  "status": "completed",
+                  "detail": "试用副本已准备；不会写入正式业务数据。",
+                  "at": "2026-10-09T09:03:42.679Z"
+                },
+                {
+                  "taskId": "aa75eb61-53bd-43de-bac8-3e537800fe39",
+                  "source": "browser",
+                  "sequence": 5,
+                  "stepId": "preview-assemble",
+                  "label": "装配隔离预览",
+                  "status": "started",
+                  "detail": "向结构合格的完整 HTML 注入平台数据接口与隔离策略。",
+                  "at": "2026-10-09T09:03:42.698Z"
+                },
+                {
+                  "taskId": "aa75eb61-53bd-43de-bac8-3e537800fe39",
+                  "source": "browser",
+                  "sequence": 6,
+                  "stepId": "preview-assemble",
+                  "label": "装配隔离预览",
+                  "status": "completed",
+                  "detail": "完整预览文档已装配；未验证业务功能。",
+                  "at": "2026-10-09T09:03:42.698Z"
+                },
+                {
+                  "taskId": "aa75eb61-53bd-43de-bac8-3e537800fe39",
+                  "source": "browser",
+                  "sequence": 7,
+                  "stepId": "preview-load",
+                  "label": "载入隔离预览",
+                  "status": "started",
+                  "detail": "将完整文档载入 sandbox iframe。",
+                  "at": "2026-10-09T09:03:42.698Z"
+                },
+                {
+                  "taskId": "aa75eb61-53bd-43de-bac8-3e537800fe39",
+                  "source": "browser",
+                  "sequence": 8,
+                  "stepId": "preview-assemble",
+                  "label": "装配隔离预览",
+                  "status": "started",
+                  "detail": "向结构合格的完整 HTML 注入平台数据接口与隔离策略。",
+                  "at": "2026-10-09T09:03:42.698Z"
+                },
+                {
+                  "taskId": "aa75eb61-53bd-43de-bac8-3e537800fe39",
+                  "source": "browser",
+                  "sequence": 9,
+                  "stepId": "preview-assemble",
+                  "label": "装配隔离预览",
+                  "status": "completed",
+                  "detail": "完整预览文档已装配；未验证业务功能。",
+                  "at": "2026-10-09T09:03:42.698Z"
+                },
+                {
+                  "taskId": "aa75eb61-53bd-43de-bac8-3e537800fe39",
+                  "source": "browser",
+                  "sequence": 10,
+                  "stepId": "preview-load",
+                  "label": "载入隔离预览",
+                  "status": "started",
+                  "detail": "将完整文档载入 sandbox iframe。",
+                  "at": "2026-10-09T09:03:42.698Z"
+                },
+                {
+                  "taskId": "aa75eb61-53bd-43de-bac8-3e537800fe39",
+                  "source": "browser",
+                  "sequence": 11,
+                  "stepId": "preview-load",
+                  "label": "载入隔离预览",
+                  "status": "completed",
+                  "detail": "已观察到 iframe load 事件；请实际操作验证业务功能。",
+                  "at": "2026-10-09T09:03:42.723Z"
+                },
+                {
+                  "taskId": "aa75eb61-53bd-43de-bac8-3e537800fe39",
+                  "source": "browser",
+                  "sequence": 12,
+                  "stepId": "data-8069cdc2-cb8f-4a4d-bde2-6b721589804c-1",
+                  "label": "读取试用数据",
+                  "status": "started",
+                  "detail": "访问本轮会话的试用副本，不写入正式数据。",
+                  "at": "2026-10-09T09:03:42.723Z"
+                },
+                {
+                  "taskId": "aa75eb61-53bd-43de-bac8-3e537800fe39",
+                  "source": "browser",
+                  "sequence": 13,
+                  "stepId": "data-8069cdc2-cb8f-4a4d-bde2-6b721589804c-1",
+                  "label": "读取试用数据",
+                  "status": "completed",
+                  "detail": "读取已完成；未复制业务数据到执行记录。",
+                  "at": "2026-10-09T09:03:42.723Z"
+                },
+                {
+                  "taskId": "aa75eb61-53bd-43de-bac8-3e537800fe39",
+                  "source": "browser",
+                  "sequence": 14,
+                  "stepId": "data-8069cdc2-cb8f-4a4d-bde2-6b721589804c-2",
+                  "label": "更新试用数据",
+                  "status": "started",
+                  "detail": "访问本轮会话的试用副本，不写入正式数据。",
+                  "at": "2026-10-09T09:03:42.896Z"
+                },
+                {
+                  "taskId": "aa75eb61-53bd-43de-bac8-3e537800fe39",
+                  "source": "browser",
+                  "sequence": 15,
+                  "stepId": "data-8069cdc2-cb8f-4a4d-bde2-6b721589804c-2",
+                  "label": "更新试用数据",
+                  "status": "completed",
+                  "detail": "试用副本已更新，未写入正式数据。",
+                  "at": "2026-10-09T09:03:42.896Z"
+                }
+              ],
+              "outcome": "complete"
+            },
+            {
+              "team": {
+                "protocol": "atoms-team/3",
+                "taskId": "dc466dab-49cc-4c47-87a8-807e02021669",
+                "projectId": "df987919-01b4-461e-8147-6a5d8404ca94",
+                "baseCodeHash": "693d6612fe436465f8827ea47ecf34262d72105e771830551d9a2e7c8d6cc63d",
+                "baseDataIssues": [
+                  {
+                    "id": "preserve-fields",
+                    "severity": "major",
+                    "category": "data-loss",
+                    "codeQuote": "saveState({count:state.count})",
+                    "trigger": "点击增加",
+                    "consequence": "未知字段丢失"
+                  }
+                ],
+                "codeHash": "12e1655d18f5f535ed2b015adec22a63fc704083de3ea24abc8617005eda2e16",
+                "deliveries": [
+                  {
+                    "role": "Mike",
+                    "content": "{\"command\":\"assign\",\"to\":\"Requirements\"}"
+                  },
+                  {
+                    "role": "Requirements",
+                    "content": "{\"requirements\":[{\"id\":\"increment\"}]}"
+                  },
+                  {
+                    "role": "Mike",
+                    "content": "{\"command\":\"assign\",\"to\":\"Engineer\"}"
+                  },
+                  {
+                    "role": "Engineer",
+                    "content": "{\"iteration\":1,\"codeHash\":\"12e1655d18f5f535ed2b015adec22a63fc704083de3ea24abc8617005eda2e16\",\"assistantReply\":\"离线夹具\"}"
+                  }
+                ],
+                "outcome": "failed",
+                "calls": [
+                  {
+                    "call": 1,
+                    "actor": "Mike",
+                    "status": "completed",
+                    "requestedModel": "OFFLINE FIXTURE"
+                  },
+                  {
+                    "call": 2,
+                    "actor": "Requirements",
+                    "status": "completed",
+                    "requestedModel": "OFFLINE FIXTURE"
+                  },
+                  {
+                    "call": 3,
+                    "actor": "Mike",
+                    "status": "completed",
+                    "requestedModel": "OFFLINE FIXTURE"
+                  },
+                  {
+                    "call": 4,
+                    "actor": "Engineer",
+                    "status": "completed",
+                    "requestedModel": "OFFLINE FIXTURE"
+                  }
+                ]
+              },
+              "taskId": "dc466dab-49cc-4c47-87a8-807e02021669",
+              "projectId": "df987919-01b4-461e-8147-6a5d8404ca94",
+              "requirement": "unknown",
+              "startedAt": "2026-10-09T09:03:42.955Z",
+              "assistantReply": "这是离线夹具，不是真实模型结果。",
+              "events": [
+                {
+                  "taskId": "dc466dab-49cc-4c47-87a8-807e02021669",
+                  "source": "browser",
+                  "sequence": 1,
+                  "stepId": "transport",
+                  "label": "接收修改结果",
+                  "status": "started",
+                  "detail": "提交最新候选代码及已完成的本轮需求，读取实际执行事件。",
+                  "at": "2026-10-09T09:03:42.955Z"
+                },
+                {
+                  "taskId": "dc466dab-49cc-4c47-87a8-807e02021669",
+                  "source": "browser",
+                  "sequence": 2,
+                  "stepId": "transport",
+                  "label": "接收修改结果",
+                  "status": "completed",
+                  "detail": "完整 HTML 已保留；实际审查与任务结束状态见团队记录。",
+                  "at": "2026-10-09T09:03:42.976Z"
+                },
+                {
+                  "taskId": "dc466dab-49cc-4c47-87a8-807e02021669",
+                  "source": "browser",
+                  "sequence": 3,
+                  "stepId": "trial",
+                  "label": "准备试用副本",
+                  "status": "started",
+                  "detail": "沿用当前会话的试用数据。",
+                  "at": "2026-10-09T09:03:42.976Z"
+                },
+                {
+                  "taskId": "dc466dab-49cc-4c47-87a8-807e02021669",
+                  "source": "browser",
+                  "sequence": 4,
+                  "stepId": "trial",
+                  "label": "准备试用副本",
+                  "status": "completed",
+                  "detail": "试用副本已准备；不会写入正式业务数据。",
+                  "at": "2026-10-09T09:03:42.976Z"
+                },
+                {
+                  "taskId": "dc466dab-49cc-4c47-87a8-807e02021669",
+                  "source": "browser",
+                  "sequence": 5,
+                  "stepId": "preview-assemble",
+                  "label": "装配隔离预览",
+                  "status": "started",
+                  "detail": "向结构合格的完整 HTML 注入平台数据接口与隔离策略。",
+                  "at": "2026-10-09T09:03:43.006Z"
+                },
+                {
+                  "taskId": "dc466dab-49cc-4c47-87a8-807e02021669",
+                  "source": "browser",
+                  "sequence": 6,
+                  "stepId": "preview-assemble",
+                  "label": "装配隔离预览",
+                  "status": "completed",
+                  "detail": "完整预览文档已装配；未验证业务功能。",
+                  "at": "2026-10-09T09:03:43.006Z"
+                },
+                {
+                  "taskId": "dc466dab-49cc-4c47-87a8-807e02021669",
+                  "source": "browser",
+                  "sequence": 7,
+                  "stepId": "preview-load",
+                  "label": "载入隔离预览",
+                  "status": "started",
+                  "detail": "将完整文档载入 sandbox iframe。",
+                  "at": "2026-10-09T09:03:43.006Z"
+                },
+                {
+                  "taskId": "dc466dab-49cc-4c47-87a8-807e02021669",
+                  "source": "browser",
+                  "sequence": 8,
+                  "stepId": "preview-assemble",
+                  "label": "装配隔离预览",
+                  "status": "started",
+                  "detail": "向结构合格的完整 HTML 注入平台数据接口与隔离策略。",
+                  "at": "2026-10-09T09:03:43.006Z"
+                },
+                {
+                  "taskId": "dc466dab-49cc-4c47-87a8-807e02021669",
+                  "source": "browser",
+                  "sequence": 9,
+                  "stepId": "preview-assemble",
+                  "label": "装配隔离预览",
+                  "status": "completed",
+                  "detail": "完整预览文档已装配；未验证业务功能。",
+                  "at": "2026-10-09T09:03:43.006Z"
+                },
+                {
+                  "taskId": "dc466dab-49cc-4c47-87a8-807e02021669",
+                  "source": "browser",
+                  "sequence": 10,
+                  "stepId": "preview-load",
+                  "label": "载入隔离预览",
+                  "status": "started",
+                  "detail": "将完整文档载入 sandbox iframe。",
+                  "at": "2026-10-09T09:03:43.006Z"
+                },
+                {
+                  "taskId": "dc466dab-49cc-4c47-87a8-807e02021669",
+                  "source": "browser",
+                  "sequence": 11,
+                  "stepId": "preview-load",
+                  "label": "载入隔离预览",
+                  "status": "completed",
+                  "detail": "已观察到 iframe load 事件；请实际操作验证业务功能。",
+                  "at": "2026-10-09T09:03:43.037Z"
+                },
+                {
+                  "taskId": "dc466dab-49cc-4c47-87a8-807e02021669",
+                  "source": "browser",
+                  "sequence": 12,
+                  "stepId": "data-c2b934ff-10e0-4872-a383-22260464210d-1",
+                  "label": "读取试用数据",
+                  "status": "started",
+                  "detail": "访问本轮会话的试用副本，不写入正式数据。",
+                  "at": "2026-10-09T09:03:43.053Z"
+                },
+                {
+                  "taskId": "dc466dab-49cc-4c47-87a8-807e02021669",
+                  "source": "browser",
+                  "sequence": 13,
+                  "stepId": "data-c2b934ff-10e0-4872-a383-22260464210d-1",
+                  "label": "读取试用数据",
+                  "status": "completed",
+                  "detail": "读取已完成；未复制业务数据到执行记录。",
+                  "at": "2026-10-09T09:03:43.053Z"
+                }
+              ],
+              "outcome": "complete"
+            },
+            {
+              "team": {
+                "protocol": "atoms-team/3",
+                "taskId": "34390bc7-9972-42dc-b8fa-d2dea11636f8",
+                "projectId": "df987919-01b4-461e-8147-6a5d8404ca94",
+                "baseCodeHash": "12e1655d18f5f535ed2b015adec22a63fc704083de3ea24abc8617005eda2e16",
+                "baseDataIssues": [
+                  {
+                    "id": "preserve-fields",
+                    "severity": "major",
+                    "category": "data-loss",
+                    "codeQuote": "saveState({count:state.count})",
+                    "trigger": "点击增加",
+                    "consequence": "未知字段丢失"
+                  }
+                ],
+                "codeHash": "12e1655d18f5f535ed2b015adec22a63fc704083de3ea24abc8617005eda2e16",
+                "review": {
+                  "kind": "code-review",
+                  "schemaVersion": 1,
+                  "taskId": "34390bc7-9972-42dc-b8fa-d2dea11636f8",
+                  "codeHash": "12e1655d18f5f535ed2b015adec22a63fc704083de3ea24abc8617005eda2e16",
+                  "approved": true,
+                  "summary": "离线静态审查，未运行浏览器",
+                  "issues": [],
+                  "resolutions": [
+                    {
+                      "id": "preserve-fields",
+                      "codeQuote": "saveState(state)",
+                      "explanation": "完整保存所有字段"
+                    }
+                  ]
+                },
+                "deliveries": [
+                  {
+                    "role": "Mike",
+                    "content": "{\"command\":\"assign\",\"to\":\"Requirements\"}"
+                  },
+                  {
+                    "role": "Requirements",
+                    "content": "{\"requirements\":[{\"id\":\"increment\"}]}"
+                  },
+                  {
+                    "role": "Mike",
+                    "content": "{\"command\":\"assign\",\"to\":\"Engineer\"}"
+                  },
+                  {
+                    "role": "Engineer",
+                    "content": "{\"iteration\":1,\"codeHash\":\"12e1655d18f5f535ed2b015adec22a63fc704083de3ea24abc8617005eda2e16\",\"assistantReply\":\"离线夹具\"}"
+                  },
+                  {
+                    "role": "Mike",
+                    "content": "{\"command\":\"assign\",\"to\":\"Reviewer\"}"
+                  },
+                  {
+                    "role": "Reviewer",
+                    "content": "{\"kind\":\"code-review\",\"schemaVersion\":1,\"taskId\":\"34390bc7-9972-42dc-b8fa-d2dea11636f8\",\"codeHash\":\"12e1655d18f5f535ed2b015adec22a63fc704083de3ea24abc8617005eda2e16\",\"approved\":true,\"summary\":\"离线静态审查，未运行浏览器\",\"issues\":[],\"resolutions\":[{\"id\":\"preserve-fields\",\"codeQuote\":\"saveState(state)\",\"explanation\":\"完整保存所有字段\"}]}"
+                  },
+                  {
+                    "role": "Mike",
+                    "content": "{\"command\":\"finish\"}"
+                  }
+                ],
+                "outcome": "passed",
+                "calls": [
+                  {
+                    "call": 1,
+                    "actor": "Mike",
+                    "status": "completed",
+                    "requestedModel": "OFFLINE FIXTURE"
+                  },
+                  {
+                    "call": 2,
+                    "actor": "Requirements",
+                    "status": "completed",
+                    "requestedModel": "OFFLINE FIXTURE"
+                  },
+                  {
+                    "call": 3,
+                    "actor": "Mike",
+                    "status": "completed",
+                    "requestedModel": "OFFLINE FIXTURE"
+                  },
+                  {
+                    "call": 4,
+                    "actor": "Engineer",
+                    "status": "completed",
+                    "requestedModel": "OFFLINE FIXTURE"
+                  },
+                  {
+                    "call": 5,
+                    "actor": "Mike",
+                    "status": "completed",
+                    "requestedModel": "OFFLINE FIXTURE"
+                  },
+                  {
+                    "call": 6,
+                    "actor": "Reviewer",
+                    "status": "completed",
+                    "requestedModel": "OFFLINE FIXTURE"
+                  },
+                  {
+                    "call": 7,
+                    "actor": "Mike",
+                    "status": "completed",
+                    "requestedModel": "OFFLINE FIXTURE"
+                  }
+                ]
+              },
+              "taskId": "34390bc7-9972-42dc-b8fa-d2dea11636f8",
+              "projectId": "df987919-01b4-461e-8147-6a5d8404ca94",
+              "requirement": "resolved",
+              "startedAt": "2026-10-09T09:03:43.223Z",
+              "assistantReply": "这是离线夹具，不是真实模型结果。",
+              "events": [
+                {
+                  "taskId": "34390bc7-9972-42dc-b8fa-d2dea11636f8",
+                  "source": "browser",
+                  "sequence": 1,
+                  "stepId": "transport",
+                  "label": "接收修改结果",
+                  "status": "started",
+                  "detail": "提交最新候选代码及已完成的本轮需求，读取实际执行事件。",
+                  "at": "2026-10-09T09:03:43.223Z"
+                },
+                {
+                  "taskId": "34390bc7-9972-42dc-b8fa-d2dea11636f8",
+                  "source": "browser",
+                  "sequence": 2,
+                  "stepId": "transport",
+                  "label": "接收修改结果",
+                  "status": "completed",
+                  "detail": "完整 HTML 已保留；实际审查与任务结束状态见团队记录。",
+                  "at": "2026-10-09T09:03:43.245Z"
+                },
+                {
+                  "taskId": "34390bc7-9972-42dc-b8fa-d2dea11636f8",
+                  "source": "browser",
+                  "sequence": 3,
+                  "stepId": "trial",
+                  "label": "准备试用副本",
+                  "status": "started",
+                  "detail": "沿用当前会话的试用数据。",
+                  "at": "2026-10-09T09:03:43.245Z"
+                },
+                {
+                  "taskId": "34390bc7-9972-42dc-b8fa-d2dea11636f8",
+                  "source": "browser",
+                  "sequence": 4,
+                  "stepId": "trial",
+                  "label": "准备试用副本",
+                  "status": "completed",
+                  "detail": "试用副本已准备；不会写入正式业务数据。",
+                  "at": "2026-10-09T09:03:43.245Z"
+                },
+                {
+                  "taskId": "34390bc7-9972-42dc-b8fa-d2dea11636f8",
+                  "source": "browser",
+                  "sequence": 5,
+                  "stepId": "preview-assemble",
+                  "label": "装配隔离预览",
+                  "status": "started",
+                  "detail": "向结构合格的完整 HTML 注入平台数据接口与隔离策略。",
+                  "at": "2026-10-09T09:03:43.275Z"
+                },
+                {
+                  "taskId": "34390bc7-9972-42dc-b8fa-d2dea11636f8",
+                  "source": "browser",
+                  "sequence": 6,
+                  "stepId": "preview-assemble",
+                  "label": "装配隔离预览",
+                  "status": "completed",
+                  "detail": "完整预览文档已装配；未验证业务功能。",
+                  "at": "2026-10-09T09:03:43.275Z"
+                },
+                {
+                  "taskId": "34390bc7-9972-42dc-b8fa-d2dea11636f8",
+                  "source": "browser",
+                  "sequence": 7,
+                  "stepId": "preview-load",
+                  "label": "载入隔离预览",
+                  "status": "started",
+                  "detail": "将完整文档载入 sandbox iframe。",
+                  "at": "2026-10-09T09:03:43.275Z"
+                },
+                {
+                  "taskId": "34390bc7-9972-42dc-b8fa-d2dea11636f8",
+                  "source": "browser",
+                  "sequence": 8,
+                  "stepId": "preview-assemble",
+                  "label": "装配隔离预览",
+                  "status": "started",
+                  "detail": "向结构合格的完整 HTML 注入平台数据接口与隔离策略。",
+                  "at": "2026-10-09T09:03:43.275Z"
+                },
+                {
+                  "taskId": "34390bc7-9972-42dc-b8fa-d2dea11636f8",
+                  "source": "browser",
+                  "sequence": 9,
+                  "stepId": "preview-assemble",
+                  "label": "装配隔离预览",
+                  "status": "completed",
+                  "detail": "完整预览文档已装配；未验证业务功能。",
+                  "at": "2026-10-09T09:03:43.276Z"
+                },
+                {
+                  "taskId": "34390bc7-9972-42dc-b8fa-d2dea11636f8",
+                  "source": "browser",
+                  "sequence": 10,
+                  "stepId": "preview-load",
+                  "label": "载入隔离预览",
+                  "status": "started",
+                  "detail": "将完整文档载入 sandbox iframe。",
+                  "at": "2026-10-09T09:03:43.276Z"
+                },
+                {
+                  "taskId": "34390bc7-9972-42dc-b8fa-d2dea11636f8",
+                  "source": "browser",
+                  "sequence": 11,
+                  "stepId": "preview-load",
+                  "label": "载入隔离预览",
+                  "status": "completed",
+                  "detail": "已观察到 iframe load 事件；请实际操作验证业务功能。",
+                  "at": "2026-10-09T09:03:43.307Z"
+                },
+                {
+                  "taskId": "34390bc7-9972-42dc-b8fa-d2dea11636f8",
+                  "source": "browser",
+                  "sequence": 12,
+                  "stepId": "data-61eced7c-d8e5-478c-ae11-6c87775c0e64-1",
+                  "label": "读取试用数据",
+                  "status": "started",
+                  "detail": "访问本轮会话的试用副本，不写入正式数据。",
+                  "at": "2026-10-09T09:03:43.313Z"
+                },
+                {
+                  "taskId": "34390bc7-9972-42dc-b8fa-d2dea11636f8",
+                  "source": "browser",
+                  "sequence": 13,
+                  "stepId": "data-61eced7c-d8e5-478c-ae11-6c87775c0e64-1",
+                  "label": "读取试用数据",
+                  "status": "completed",
+                  "detail": "读取已完成；未复制业务数据到执行记录。",
+                  "at": "2026-10-09T09:03:43.313Z"
+                },
+                {
+                  "taskId": "34390bc7-9972-42dc-b8fa-d2dea11636f8",
+                  "source": "browser",
+                  "sequence": 14,
+                  "stepId": "adoption",
+                  "label": "采用代码与消息",
+                  "status": "started",
+                  "detail": "在同一事务保存最新候选代码、对应需求、助手回复与执行记录；不写入试用数据。",
+                  "at": "2026-10-09T09:03:43.523Z"
+                },
+                {
+                  "taskId": "34390bc7-9972-42dc-b8fa-d2dea11636f8",
+                  "source": "browser",
+                  "sequence": 15,
+                  "stepId": "adoption",
+                  "label": "采用代码与消息",
+                  "status": "completed",
+                  "detail": "采用事务已提交，代码与对应消息已保存；正式数据保持原样。",
+                  "at": "2026-10-09T09:03:43.550Z"
+                }
+              ],
+              "outcome": "complete"
+            }
+          ],
+          "codeTaskId": "34390bc7-9972-42dc-b8fa-d2dea11636f8",
+          "summary": "已采用 3 轮调整后的候选代码，继续使用原项目正式数据。"
+        }
+      ]
+    },
+    "data": {
+      "projectId": "df987919-01b4-461e-8147-6a5d8404ca94",
+      "state": {
+        "count": 2
+      },
+      "updatedAt": "2026-10-09T09:03:42.561Z"
+    }
+  }
+}

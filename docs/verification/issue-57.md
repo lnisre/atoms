@@ -14,7 +14,7 @@
 
 自有 managed worktree 从 T2 创建，分支 `codex/source-browser-t4`。以非快进合并保留 T2、T3 双方历史，集成提交 **`e42cb67f42eb7b1cc0a6371d9e339925bb2c00c9`**。未改前置源分支，未合并 GitHub PR。主目录的 CONTEXT.md、示例 ADR 和 experiments 均未混入。
 
-PR 以 T2 分支为堆叠基线，因此差异包含 **T3 + 冲突解决 + T4**；不是纯 T4 diff。评审 T4 后续增量可从 `e42cb67` 比较，但集成提交本身的冲突解决也需评审。前置 PR 合并顺序与基线调整仍由后续集成处理。
+T4 原计划以 T2 分支为堆叠 PR 基线，差异包含 **T3 + 冲突解决 + T4**；当时推送未完成，实际没有创建 T4 PR。评审 T4 增量可从 `e42cb67` 比较，但集成提交本身的冲突解决也需评审。后续由 [#47 集中验收](issue-47.md) 统一交付 T1–T4 到 master，不再另提 T4 堆叠 PR。
 
 唯一文本冲突在 `source-browser.tsx`：保留 T2 的 `SourceFile` 高亮、搜索、复制和 `[version.id, selected.path]` key，同时接入 T3 的阅读状态 hook、版本提示及文件移除回退。`SourceFile` 新增滚动回调，将位置交回 hook；同路径版本更新重新计算匹配，但不自动跳到首个搜索结果而覆盖 T3 恢复的位置。主动查询、前后匹配、切换文件仍可定位。两项直接相关的合成组件检查覆盖这些合并风险。
 

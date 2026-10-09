@@ -8,7 +8,7 @@ Select by current criteria, not historical counts. Distinct entry points in each
 | [Modification, trial and adoption](modification.md) | candidate, modification-records, persistence, save-race, reviewer-preview, cross-app-acceptance, cross-app-draft, record-assertions, team-modification, team-stop | #5/#6/#17/#27; ADR 0011 |
 | [Review, repairs and preview](review-policy.md) | reviewer-preview, cross-app-draft, team, team-stop, preview-document | ADR 0011 / #35 |
 | [First-visit example and timer](example.md) | builtin-example; full-browser smoke | ADR 0012 / #36/#37/#39 |
-| [Home and workbench](workbench.md) | home-entry, workbench, workbench-stream | #15/#18; retain visual reference gaps |
+| [Home and workbench](workbench.md) | home-entry, workbench, workbench-stream, source-browser, source-reading, source-version, source-recovery, source-acceptance | #15/#18/#47; retain visual reference gaps |
 
 Requirements live in linked Issues/ADRs. Selectors/commands are checkout observations; reconcile drift before changing expectations.
 

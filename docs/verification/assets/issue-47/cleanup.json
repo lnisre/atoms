@@ -1,0 +1,11 @@
+{
+  "serverPid": 35317,
+  "listenerPid": 35343,
+  "port": 3247,
+  "serverStopped": true,
+  "portReleased": true,
+  "browsers": "Playwright per-test isolated contexts closed; all runners exited",
+  "evidenceRetained": true,
+  "productionBuild": "passed after dev shutdown",
+  "scratchProfiles": "Playwright managed temporary profiles"
+}

@@ -194,7 +194,7 @@ test("项目写入失败仍展示结果和错误，不宣称项目已保存", as
   await page.getByRole("button", { name: "开始生成" }).click();
   await expect(
     page
-      .getByRole("main")
+      .getByRole("region", { name: "项目成果", exact: true })
       .getByRole("alert")
       .filter({ hasText: "项目保存失败" }),
   ).toBeVisible();

@@ -1,0 +1,504 @@
+{
+  "requests": 5,
+  "before": {
+    "project": {
+      "id": "64f3db6b-c1cc-44ea-9127-96d5e5c04ae4",
+      "requirement": "PRD 集中验收合成项目",
+      "title": "PRD 集中验收合成项目",
+      "result": {
+        "html": "<!doctype html><html><head></head><body><h1>initial</h1><input aria-label=\"草稿\"><button disabled>保存</button><output></output><script>\nconst input=document.querySelector('input'),button=document.querySelector('button'),output=document.querySelector('output');\natoms.loadState().then(s=>{input.value=s?.text??'';output.textContent=input.value;button.disabled=false});\nbutton.onclick=async()=>{await atoms.saveState({text:input.value});output.textContent=input.value};\n</script></body></html>",
+        "model": "OFFLINE SOURCE ACCEPTANCE",
+        "durationMs": 1,
+        "generatedAt": "initial"
+      },
+      "previewPolicy": {
+        "status": "allowed",
+        "reasons": [],
+        "review": "clean",
+        "dataMode": "formal",
+        "adoption": "allowed"
+      },
+      "initialGeneration": {
+        "team": {
+          "protocol": "atoms-team/3",
+          "taskId": "95ebf2c2-0911-4be5-aeab-8e110d10f798",
+          "projectId": "64f3db6b-c1cc-44ea-9127-96d5e5c04ae4",
+          "codeHash": "94062ae8b865b9931860c9ea9f15f54e9cd7bfafb9ca54dab516ed21f645524d",
+          "review": {
+            "kind": "code-review",
+            "schemaVersion": 1,
+            "resolutions": [],
+            "taskId": "95ebf2c2-0911-4be5-aeab-8e110d10f798",
+            "codeHash": "94062ae8b865b9931860c9ea9f15f54e9cd7bfafb9ca54dab516ed21f645524d",
+            "approved": true,
+            "summary": "SYNTHETIC REVIEW FIXTURE",
+            "issues": []
+          },
+          "outcome": "passed",
+          "deliveries": [
+            {
+              "role": "Mike",
+              "content": "{\"command\":\"assign\",\"to\":\"Requirements\",\"reason\":\"synthetic fixture\",\"instruction\":\"synthetic fixture\"}"
+            },
+            {
+              "role": "Requirements",
+              "content": "{\"requirements\":[{\"id\":\"synthetic\",\"description\":\"synthetic\"}]}"
+            },
+            {
+              "role": "Mike",
+              "content": "{\"command\":\"assign\",\"to\":\"Engineer\",\"reason\":\"synthetic fixture\",\"instruction\":\"synthetic fixture\"}"
+            },
+            {
+              "role": "Engineer",
+              "content": "{\"codeHash\":\"94062ae8b865b9931860c9ea9f15f54e9cd7bfafb9ca54dab516ed21f645524d\",\"iteration\":1}"
+            },
+            {
+              "role": "Mike",
+              "content": "{\"command\":\"assign\",\"to\":\"Reviewer\",\"reason\":\"synthetic fixture\",\"instruction\":\"synthetic fixture\"}"
+            },
+            {
+              "role": "Reviewer",
+              "content": "{\"kind\":\"code-review\",\"schemaVersion\":1,\"resolutions\":[],\"taskId\":\"95ebf2c2-0911-4be5-aeab-8e110d10f798\",\"codeHash\":\"94062ae8b865b9931860c9ea9f15f54e9cd7bfafb9ca54dab516ed21f645524d\",\"approved\":true,\"summary\":\"SYNTHETIC REVIEW FIXTURE\",\"issues\":[]}"
+            },
+            {
+              "role": "Mike",
+              "content": "{\"command\":\"finish\"}"
+            }
+          ],
+          "calls": [
+            {
+              "call": 1,
+              "actor": "Mike",
+              "requestedModel": "fixture",
+              "status": "completed"
+            },
+            {
+              "call": 2,
+              "actor": "Requirements",
+              "requestedModel": "fixture",
+              "status": "completed"
+            },
+            {
+              "call": 3,
+              "actor": "Mike",
+              "requestedModel": "fixture",
+              "status": "completed"
+            },
+            {
+              "call": 4,
+              "actor": "Engineer",
+              "requestedModel": "fixture",
+              "status": "completed"
+            },
+            {
+              "call": 5,
+              "actor": "Mike",
+              "requestedModel": "fixture",
+              "status": "completed"
+            },
+            {
+              "call": 6,
+              "actor": "Reviewer",
+              "requestedModel": "fixture",
+              "status": "completed"
+            },
+            {
+              "call": 7,
+              "actor": "Mike",
+              "requestedModel": "fixture",
+              "status": "completed"
+            }
+          ]
+        },
+        "taskId": "95ebf2c2-0911-4be5-aeab-8e110d10f798",
+        "startedAt": "2026-10-09T09:02:57.716Z",
+        "assistantReply": null,
+        "events": [
+          {
+            "taskId": "95ebf2c2-0911-4be5-aeab-8e110d10f798",
+            "source": "browser",
+            "sequence": 1,
+            "stepId": "transport",
+            "label": "接收生成结果",
+            "status": "started",
+            "detail": "向服务端提交需求并持续读取实际执行事件。",
+            "at": "2026-10-09T09:02:57.716Z"
+          },
+          {
+            "taskId": "95ebf2c2-0911-4be5-aeab-8e110d10f798",
+            "source": "browser",
+            "sequence": 2,
+            "stepId": "transport",
+            "label": "接收生成结果",
+            "status": "completed",
+            "detail": "完整代码已收到；实际审查与任务结束状态见团队记录。",
+            "at": "2026-10-09T09:02:57.942Z"
+          },
+          {
+            "taskId": "95ebf2c2-0911-4be5-aeab-8e110d10f798",
+            "source": "browser",
+            "sequence": 3,
+            "stepId": "project-save",
+            "label": "保存项目与助手回复",
+            "status": "started",
+            "detail": "写入本浏览器项目存储，等待事务提交。",
+            "at": "2026-10-09T09:02:57.946Z"
+          },
+          {
+            "taskId": "95ebf2c2-0911-4be5-aeab-8e110d10f798",
+            "source": "browser",
+            "sequence": 4,
+            "stepId": "project-save",
+            "label": "保存项目与助手回复",
+            "status": "completed",
+            "detail": "项目、HTML、助手回复及已有执行记录已提交；后续步骤独立追加。",
+            "at": "2026-10-09T09:02:57.992Z"
+          },
+          {
+            "taskId": "95ebf2c2-0911-4be5-aeab-8e110d10f798",
+            "source": "browser",
+            "sequence": 5,
+            "stepId": "preview-assemble",
+            "label": "装配隔离预览",
+            "status": "started",
+            "detail": "向结构合格的完整 HTML 注入平台数据接口与隔离策略。",
+            "at": "2026-10-09T09:02:58.006Z"
+          },
+          {
+            "taskId": "95ebf2c2-0911-4be5-aeab-8e110d10f798",
+            "source": "browser",
+            "sequence": 6,
+            "stepId": "preview-assemble",
+            "label": "装配隔离预览",
+            "status": "completed",
+            "detail": "完整预览文档已装配；未验证业务功能。",
+            "at": "2026-10-09T09:02:58.006Z"
+          },
+          {
+            "taskId": "95ebf2c2-0911-4be5-aeab-8e110d10f798",
+            "source": "browser",
+            "sequence": 7,
+            "stepId": "preview-load",
+            "label": "载入隔离预览",
+            "status": "started",
+            "detail": "将完整文档载入 sandbox iframe。",
+            "at": "2026-10-09T09:02:58.006Z"
+          },
+          {
+            "taskId": "95ebf2c2-0911-4be5-aeab-8e110d10f798",
+            "source": "browser",
+            "sequence": 8,
+            "stepId": "preview-assemble",
+            "label": "装配隔离预览",
+            "status": "started",
+            "detail": "向结构合格的完整 HTML 注入平台数据接口与隔离策略。",
+            "at": "2026-10-09T09:02:58.006Z"
+          },
+          {
+            "taskId": "95ebf2c2-0911-4be5-aeab-8e110d10f798",
+            "source": "browser",
+            "sequence": 9,
+            "stepId": "preview-assemble",
+            "label": "装配隔离预览",
+            "status": "completed",
+            "detail": "完整预览文档已装配；未验证业务功能。",
+            "at": "2026-10-09T09:02:58.007Z"
+          },
+          {
+            "taskId": "95ebf2c2-0911-4be5-aeab-8e110d10f798",
+            "source": "browser",
+            "sequence": 10,
+            "stepId": "preview-load",
+            "label": "载入隔离预览",
+            "status": "started",
+            "detail": "将完整文档载入 sandbox iframe。",
+            "at": "2026-10-09T09:02:58.007Z"
+          },
+          {
+            "taskId": "95ebf2c2-0911-4be5-aeab-8e110d10f798",
+            "source": "browser",
+            "sequence": 11,
+            "stepId": "preview-load",
+            "label": "载入隔离预览",
+            "status": "completed",
+            "detail": "已观察到 iframe load 事件；请实际操作验证业务功能。",
+            "at": "2026-10-09T09:02:58.150Z"
+          },
+          {
+            "taskId": "95ebf2c2-0911-4be5-aeab-8e110d10f798",
+            "source": "browser",
+            "sequence": 12,
+            "stepId": "data-1bf35c81-cf9c-4068-8e93-71f9dbdcd3c5-1",
+            "label": "读取应用数据",
+            "status": "started",
+            "detail": "通过平台接口访问本项目的正式业务数据。",
+            "at": "2026-10-09T09:02:58.159Z"
+          },
+          {
+            "taskId": "95ebf2c2-0911-4be5-aeab-8e110d10f798",
+            "source": "browser",
+            "sequence": 13,
+            "stepId": "data-1bf35c81-cf9c-4068-8e93-71f9dbdcd3c5-1",
+            "label": "读取应用数据",
+            "status": "completed",
+            "detail": "读取已完成；未复制业务数据到执行记录。",
+            "at": "2026-10-09T09:02:58.175Z"
+          }
+        ]
+      },
+      "updatedAt": "2026-10-09T09:02:57.946Z"
+    },
+    "data": null
+  },
+  "afterReopen": {
+    "project": {
+      "id": "64f3db6b-c1cc-44ea-9127-96d5e5c04ae4",
+      "requirement": "PRD 集中验收合成项目",
+      "title": "PRD 集中验收合成项目",
+      "result": {
+        "html": "<!doctype html><html><head></head><body><h1>initial</h1><input aria-label=\"草稿\"><button disabled>保存</button><output></output><script>\nconst input=document.querySelector('input'),button=document.querySelector('button'),output=document.querySelector('output');\natoms.loadState().then(s=>{input.value=s?.text??'';output.textContent=input.value;button.disabled=false});\nbutton.onclick=async()=>{await atoms.saveState({text:input.value});output.textContent=input.value};\n</script></body></html>",
+        "model": "OFFLINE SOURCE ACCEPTANCE",
+        "durationMs": 1,
+        "generatedAt": "initial"
+      },
+      "previewPolicy": {
+        "status": "allowed",
+        "reasons": [],
+        "review": "clean",
+        "dataMode": "formal",
+        "adoption": "allowed"
+      },
+      "initialGeneration": {
+        "team": {
+          "protocol": "atoms-team/3",
+          "taskId": "95ebf2c2-0911-4be5-aeab-8e110d10f798",
+          "projectId": "64f3db6b-c1cc-44ea-9127-96d5e5c04ae4",
+          "codeHash": "94062ae8b865b9931860c9ea9f15f54e9cd7bfafb9ca54dab516ed21f645524d",
+          "review": {
+            "kind": "code-review",
+            "schemaVersion": 1,
+            "resolutions": [],
+            "taskId": "95ebf2c2-0911-4be5-aeab-8e110d10f798",
+            "codeHash": "94062ae8b865b9931860c9ea9f15f54e9cd7bfafb9ca54dab516ed21f645524d",
+            "approved": true,
+            "summary": "SYNTHETIC REVIEW FIXTURE",
+            "issues": []
+          },
+          "outcome": "passed",
+          "deliveries": [
+            {
+              "role": "Mike",
+              "content": "{\"command\":\"assign\",\"to\":\"Requirements\",\"reason\":\"synthetic fixture\",\"instruction\":\"synthetic fixture\"}"
+            },
+            {
+              "role": "Requirements",
+              "content": "{\"requirements\":[{\"id\":\"synthetic\",\"description\":\"synthetic\"}]}"
+            },
+            {
+              "role": "Mike",
+              "content": "{\"command\":\"assign\",\"to\":\"Engineer\",\"reason\":\"synthetic fixture\",\"instruction\":\"synthetic fixture\"}"
+            },
+            {
+              "role": "Engineer",
+              "content": "{\"codeHash\":\"94062ae8b865b9931860c9ea9f15f54e9cd7bfafb9ca54dab516ed21f645524d\",\"iteration\":1}"
+            },
+            {
+              "role": "Mike",
+              "content": "{\"command\":\"assign\",\"to\":\"Reviewer\",\"reason\":\"synthetic fixture\",\"instruction\":\"synthetic fixture\"}"
+            },
+            {
+              "role": "Reviewer",
+              "content": "{\"kind\":\"code-review\",\"schemaVersion\":1,\"resolutions\":[],\"taskId\":\"95ebf2c2-0911-4be5-aeab-8e110d10f798\",\"codeHash\":\"94062ae8b865b9931860c9ea9f15f54e9cd7bfafb9ca54dab516ed21f645524d\",\"approved\":true,\"summary\":\"SYNTHETIC REVIEW FIXTURE\",\"issues\":[]}"
+            },
+            {
+              "role": "Mike",
+              "content": "{\"command\":\"finish\"}"
+            }
+          ],
+          "calls": [
+            {
+              "call": 1,
+              "actor": "Mike",
+              "requestedModel": "fixture",
+              "status": "completed"
+            },
+            {
+              "call": 2,
+              "actor": "Requirements",
+              "requestedModel": "fixture",
+              "status": "completed"
+            },
+            {
+              "call": 3,
+              "actor": "Mike",
+              "requestedModel": "fixture",
+              "status": "completed"
+            },
+            {
+              "call": 4,
+              "actor": "Engineer",
+              "requestedModel": "fixture",
+              "status": "completed"
+            },
+            {
+              "call": 5,
+              "actor": "Mike",
+              "requestedModel": "fixture",
+              "status": "completed"
+            },
+            {
+              "call": 6,
+              "actor": "Reviewer",
+              "requestedModel": "fixture",
+              "status": "completed"
+            },
+            {
+              "call": 7,
+              "actor": "Mike",
+              "requestedModel": "fixture",
+              "status": "completed"
+            }
+          ]
+        },
+        "taskId": "95ebf2c2-0911-4be5-aeab-8e110d10f798",
+        "startedAt": "2026-10-09T09:02:57.716Z",
+        "assistantReply": null,
+        "events": [
+          {
+            "taskId": "95ebf2c2-0911-4be5-aeab-8e110d10f798",
+            "source": "browser",
+            "sequence": 1,
+            "stepId": "transport",
+            "label": "接收生成结果",
+            "status": "started",
+            "detail": "向服务端提交需求并持续读取实际执行事件。",
+            "at": "2026-10-09T09:02:57.716Z"
+          },
+          {
+            "taskId": "95ebf2c2-0911-4be5-aeab-8e110d10f798",
+            "source": "browser",
+            "sequence": 2,
+            "stepId": "transport",
+            "label": "接收生成结果",
+            "status": "completed",
+            "detail": "完整代码已收到；实际审查与任务结束状态见团队记录。",
+            "at": "2026-10-09T09:02:57.942Z"
+          },
+          {
+            "taskId": "95ebf2c2-0911-4be5-aeab-8e110d10f798",
+            "source": "browser",
+            "sequence": 3,
+            "stepId": "project-save",
+            "label": "保存项目与助手回复",
+            "status": "started",
+            "detail": "写入本浏览器项目存储，等待事务提交。",
+            "at": "2026-10-09T09:02:57.946Z"
+          },
+          {
+            "taskId": "95ebf2c2-0911-4be5-aeab-8e110d10f798",
+            "source": "browser",
+            "sequence": 4,
+            "stepId": "project-save",
+            "label": "保存项目与助手回复",
+            "status": "completed",
+            "detail": "项目、HTML、助手回复及已有执行记录已提交；后续步骤独立追加。",
+            "at": "2026-10-09T09:02:57.992Z"
+          },
+          {
+            "taskId": "95ebf2c2-0911-4be5-aeab-8e110d10f798",
+            "source": "browser",
+            "sequence": 5,
+            "stepId": "preview-assemble",
+            "label": "装配隔离预览",
+            "status": "started",
+            "detail": "向结构合格的完整 HTML 注入平台数据接口与隔离策略。",
+            "at": "2026-10-09T09:02:58.006Z"
+          },
+          {
+            "taskId": "95ebf2c2-0911-4be5-aeab-8e110d10f798",
+            "source": "browser",
+            "sequence": 6,
+            "stepId": "preview-assemble",
+            "label": "装配隔离预览",
+            "status": "completed",
+            "detail": "完整预览文档已装配；未验证业务功能。",
+            "at": "2026-10-09T09:02:58.006Z"
+          },
+          {
+            "taskId": "95ebf2c2-0911-4be5-aeab-8e110d10f798",
+            "source": "browser",
+            "sequence": 7,
+            "stepId": "preview-load",
+            "label": "载入隔离预览",
+            "status": "started",
+            "detail": "将完整文档载入 sandbox iframe。",
+            "at": "2026-10-09T09:02:58.006Z"
+          },
+          {
+            "taskId": "95ebf2c2-0911-4be5-aeab-8e110d10f798",
+            "source": "browser",
+            "sequence": 8,
+            "stepId": "preview-assemble",
+            "label": "装配隔离预览",
+            "status": "started",
+            "detail": "向结构合格的完整 HTML 注入平台数据接口与隔离策略。",
+            "at": "2026-10-09T09:02:58.006Z"
+          },
+          {
+            "taskId": "95ebf2c2-0911-4be5-aeab-8e110d10f798",
+            "source": "browser",
+            "sequence": 9,
+            "stepId": "preview-assemble",
+            "label": "装配隔离预览",
+            "status": "completed",
+            "detail": "完整预览文档已装配；未验证业务功能。",
+            "at": "2026-10-09T09:02:58.007Z"
+          },
+          {
+            "taskId": "95ebf2c2-0911-4be5-aeab-8e110d10f798",
+            "source": "browser",
+            "sequence": 10,
+            "stepId": "preview-load",
+            "label": "载入隔离预览",
+            "status": "started",
+            "detail": "将完整文档载入 sandbox iframe。",
+            "at": "2026-10-09T09:02:58.007Z"
+          },
+          {
+            "taskId": "95ebf2c2-0911-4be5-aeab-8e110d10f798",
+            "source": "browser",
+            "sequence": 11,
+            "stepId": "preview-load",
+            "label": "载入隔离预览",
+            "status": "completed",
+            "detail": "已观察到 iframe load 事件；请实际操作验证业务功能。",
+            "at": "2026-10-09T09:02:58.150Z"
+          },
+          {
+            "taskId": "95ebf2c2-0911-4be5-aeab-8e110d10f798",
+            "source": "browser",
+            "sequence": 12,
+            "stepId": "data-1bf35c81-cf9c-4068-8e93-71f9dbdcd3c5-1",
+            "label": "读取应用数据",
+            "status": "started",
+            "detail": "通过平台接口访问本项目的正式业务数据。",
+            "at": "2026-10-09T09:02:58.159Z"
+          },
+          {
+            "taskId": "95ebf2c2-0911-4be5-aeab-8e110d10f798",
+            "source": "browser",
+            "sequence": 13,
+            "stepId": "data-1bf35c81-cf9c-4068-8e93-71f9dbdcd3c5-1",
+            "label": "读取应用数据",
+            "status": "completed",
+            "detail": "读取已完成；未复制业务数据到执行记录。",
+            "at": "2026-10-09T09:02:58.175Z"
+          }
+        ]
+      },
+      "updatedAt": "2026-10-09T09:02:57.946Z"
+    },
+    "data": null
+  },
+  "lateResponseReleased": true
+}
