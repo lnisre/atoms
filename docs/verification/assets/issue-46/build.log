@@ -1,0 +1,14 @@
+
+> atoms@0.1.0 build /Users/gaowenlong/.codex/worktrees/tip-example-delivery/atoms
+> next build
+
+▲ Next.js 16.3.6 (Turbopack)
+✓ Running next.config.ts took 81ms
+
+  Creating an optimized production build ...
+✓ Compiled successfully in 4.5s
+  Running TypeScript ...
+tests/browser/example-restart.spec.ts(63,25): error TS2589: Type instantiation is excessively deep and possibly infinite.
+Failed to type check.
+
+ ELIFECYCLE  Command failed with exit code 1.

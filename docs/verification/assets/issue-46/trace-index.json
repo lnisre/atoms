@@ -1,0 +1,17 @@
+{
+  "smoke/trace-1.zip": "e4631eea2324e90907221aae324b7e0cc2d8892e91b8206800950caad04a3203",
+  "smoke/trace-final.zip": "f1ace12845d6a6f874d800d545f08e2c207f2a14ec3281f1ca1f8073d3ef5b20",
+  "restart-serialization/example-restart-完整浏览器重启同时恢复旧副本、新示例个人采用代码、正式数据与来源记录/trace.zip": "48e0b0779060a7a8580f431444dacc085164aea19cf0367c586c0c6022507c1a",
+  "browser-first/workspace-upgrade-升级分支：旧示例已移除，独立补入且刷新不重灌/trace.zip": "9c6c99b2d44552c1e626501fe7f9ab8f965c56744ee86d0bca631158510e4517",
+  "browser-first/workspace-upgrade-升级分支：已初始化空工作区，独立补入且刷新不重灌/trace.zip": "bf17ea2f85cf31756827152a37bc8d929fb76b087e2ec98f50ce2269166de922",
+  "browser-first/workspace-upgrade-升级分支：旧首访标记，独立补入且刷新不重灌/trace.zip": "644df15a41987ca8857b38da161e5144162e78cc080935924a7ab4c9675cf40e",
+  "browser-first/workspace-upgrade-升级分支：无标记其他项目，独立补入且刷新不重灌/trace.zip": "1f616b021725f6adbf85b8f21fce44a3f52f7b742f8f2ad4e081c7f55be7b73b",
+  "browser-retry/workspace-upgrade-升级分支：旧示例已移除，独立补入且刷新不重灌/trace.zip": "41e81c247d66e885bf467a9148986dfea2d7cbc118ace2696e489230976ad46d",
+  "browser-retry/workspace-upgrade-升级分支：已初始化空工作区，独立补入且刷新不重灌/trace.zip": "b5e737570edbf163f095202a4962c0bd23a7aeedfd00307fb4bed85884b00e73",
+  "browser-retry/workspace-upgrade-升级分支：旧首访标记，独立补入且刷新不重灌/trace.zip": "c51dc0033e900a2e171205319f58af86558b95301ca5a631e704b0a831c82dea",
+  "browser-retry/workspace-upgrade-升级分支：无标记其他项目，独立补入且刷新不重灌/trace.zip": "f06eeeeaa8e42eb3c36ebf1ccfe6900327db4607be526775d70ff5d880964724",
+  "browser-retry/workspace-upgrade-升级分支：已装小费但无标记，独立补入且刷新不重灌/trace.zip": "119787c162556d29a2d051441d6e9ff5d79f51cb02723049b7f762eee5e02794",
+  "browser-retry/example-restart-完整浏览器重启同时恢复旧副本、新示例个人采用代码、正式数据与来源记录/trace.zip": "4159e03feaa792fb0c357a24d83b02bfc0a0bfe218ea85c5d6b61d8faf960fdb",
+  "browser-retry/example-restart-完整浏览器重启同时恢复旧副本、新示例个人采用代码、正式数据与来源记录/restart-trace-2.zip": "f985b372c12f857d91a76baa3839a0da441f4094384e2344c67ac954e9526194",
+  "restart-final/example-restart-完整浏览器重启同时恢复旧副本、新示例个人采用代码、正式数据与来源记录/trace.zip": "f8581dff5fb1176a7fb2dea24b6bdc30c85ac24960f83075d489a8c5e488e7be"
+}

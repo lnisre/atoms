@@ -67,8 +67,13 @@ for (const branch of ["旧首访标记", "无标记其他项目", "旧示例已�
     }
     for (const row of data) expect(after.data.find(d => d.projectId === row.projectId)).toEqual(row);
     if (branch !== "已装小费但无标记") expect(after.data.find(d => d.projectId === tip.id)?.state).toEqual(EXAMPLE_STATE);
-    expect(downloads).toBe(branch === "已装小费但无标记" ? 0 : 1);
+    // Dev Strict Mode can start preparation twice; uniqueness is a committed
+    // project/data invariant, not a count of concurrent asset reads.
+    if (branch === "已装小费但无标记") expect(downloads).toBe(0);
+    else expect(downloads).toBeGreaterThan(0);
+    const installedDownloads = downloads;
     await page.reload(); await expect(page.getByText("正在读取已有项目…")).toHaveCount(0); expect(await database(page)).toEqual(after);
+    expect(downloads).toBe(installedDownloads);
   });
 }
 

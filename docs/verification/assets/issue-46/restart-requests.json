@@ -1,0 +1,12 @@
+{
+  "requests": [
+    {
+      "round": 1,
+      "path": "/api/generate"
+    }
+  ],
+  "generations": [
+    1
+  ],
+  "providerCalls": 0
+}
