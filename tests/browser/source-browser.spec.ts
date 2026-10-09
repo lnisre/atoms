@@ -128,20 +128,20 @@ for (const viewport of [{ width: 1440, height: 900 }, { width: 1280, height: 720
   });
 }
 
-test('示例项目：唯一文件为原始 HTML，查看期间计时继续且重开零请求', async ({ page }, testInfo) => {
+test('示例项目：唯一文件为原始 HTML，查看期间保留未保存输入且重开零请求', async ({ page }, testInfo) => {
   const requests: string[] = [];
   await page.route('**/api/**', route => { requests.push(route.request().url()); return route.abort(); });
   await page.goto('/');
-  await page.getByRole('region', { name: '已有项目' }).getByRole('button', { name: /示例 · 专注番茄钟/ }).click();
+  await page.getByRole('region', { name: '已有项目' }).getByRole('button', { name: /示例 · 小费计算器/ }).click();
   const app = page.frameLocator('iframe');
-  await expect(app.locator('#timeDisplay')).toHaveText('25:00');
-  await app.getByRole('button', { name: '开始', exact: true }).press('Enter');
+  await expect(app.locator('#perPersonVal')).toHaveText('¥5.25');
+  await app.getByLabel('账单金额（元）').fill('');
   await page.getByRole('button', { name: '查看代码', exact: true }).click();
-  expect(await source(page).locator('code').textContent()).toBe(await readFile('public/examples/pomodoro-v1.html', 'utf8'));
-  await expect.poll(() => app.locator('#timeDisplay').textContent()).not.toBe('25:00');
+  expect(await source(page).locator('code').textContent()).toBe(await readFile('public/examples/tip-calculator-v1.html', 'utf8'));
+  await expect(app.getByLabel('账单金额（元）')).toHaveValue('');
   await page.screenshot({ path: testInfo.outputPath('example-source.png') });
   await page.getByRole('button', { name: '预览', exact: true }).click();
-  await app.getByRole('button', { name: '暂停', exact: true }).press('Enter');
+  await app.getByLabel('账单金额（元）').fill('80');
   await expect(page.getByText('应用数据已保存', { exact: true })).toBeVisible();
   await page.reload();
   await expect(page.getByRole('button', { name: '预览', exact: true })).toHaveAttribute('aria-pressed', 'true');

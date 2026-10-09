@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>小费计算器</title>
+<style>
+  * { box-sizing: border-box; }
+  body {
+    font-family: system-ui, -apple-system, "Segoe UI", "Microsoft YaHei", sans-serif;
+    margin: 0;
+    padding: 24px;
+    background: #eafaf6;
+    color: #17352f;
+  }
+  .card {
+    max-width: 860px;
+    margin: 0 auto;
+    background: #ffffff;
+    border-radius: 16px;
+    padding: 24px 26px 26px;
+    box-shadow: 0 6px 20px rgba(15, 118, 110, 0.12);
+    border: 1px solid #cdeee6;
+  }
+  h1 {
+    font-size: 21px;
+    margin: 0 0 20px;
+    color: #0f766e;
+    letter-spacing: 0.5px;
+  }
+  .layout {
+    display: flex;
+    gap: 24px;
+    align-items: stretch;
+  }
+  .panel-left {
+    flex: 1 1 0;
+    min-width: 0;
+  }
+  .panel-right {
+    flex: 1 1 0;
+    min-width: 0;
+    background: #f2fbf8;
+    border: 1px solid #d1f0e9;
+    border-radius: 12px;
+    padding: 18px 18px 14px;
+  }
+  .panel-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: #0f766e;
+    margin: 0 0 14px;
+    padding-bottom: 8px;
+    border-bottom: 1px dashed #b9e6dc;
+  }
+  .field { margin-bottom: 16px; }
+  label {
+    display: block;
+    font-size: 14px;
+    margin-bottom: 6px;
+    color: #2c524a;
+  }
+  input[type=number] {
+    width: 100%;
+    padding: 10px 12px;
+    font-size: 15px;
+    border: 1px solid #a9ddd2;
+    border-radius: 9px;
+    background: #ffffff;
+    color: #17352f;
+    transition: border-color 0.15s, box-shadow 0.15s;
+  }
+  input[type=number]:focus {
+    outline: none;
+    border-color: #14b8a6;
+    box-shadow: 0 0 0 3px rgba(20, 184, 166, 0.18);
+  }
+  input[type=number]:disabled {
+    background: #eef4f2;
+    color: #9db3ae;
+    border-color: #d5e6e2;
+  }
+  .error {
+    color: #b8433b;
+    font-size: 13px;
+    margin: 6px 0 0;
+    min-height: 0;
+    line-height: 1.5;
+  }
+  .results { margin: 0; }
+  .row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding: 10px 0;
+    font-size: 15px;
+    border-bottom: 1px solid #e2f3ef;
+  }
+  .row:last-child { border-bottom: none; }
+  .row .val {
+    font-variant-numeric: tabular-nums;
+    font-weight: 600;
+    color: #2c524a;
+  }
+  .row.total .val { color: #0f766e; }
+  .row.perperson .val {
+    color: #0d9488;
+    font-size: 17px;
+  }
+  [data-atoms-status] {
+    margin-top: 20px;
+    font-size: 13px;
+    color: #567a73;
+    text-align: center;
+    min-height: 18px;
+  }
+  @media (max-width: 700px) {
+    body { padding: 14px; }
+    .card { padding: 18px 16px 20px; }
+    .layout {
+      flex-direction: column;
+      gap: 18px;
+    }
+    .panel-right { width: 100%; }
+  }
+</style>
+</head>
+<body>
+<div class="card">
+  <h1>小费计算器</h1>
+
+  <div class="layout">
+    <div class="panel-left">
+      <p class="panel-title">输入</p>
+
+      <div class="field">
+        <label for="bill">账单金额（元）</label>
+        <input id="bill" type="number" step="0.01" min="0" inputmode="decimal" disabled>
+      </div>
+      <div class="field">
+        <label for="tipPercent">小费比例（%）</label>
+        <input id="tipPercent" type="number" step="0.1" min="0" inputmode="decimal" disabled>
+      </div>
+      <div class="field">
+        <label for="people">人数</label>
+        <input id="people" type="number" step="1" min="1" inputmode="numeric" disabled>
+      </div>
+
+      <p class="error" id="errorMsg"></p>
+    </div>
+
+    <div class="panel-right">
+      <p class="panel-title">计算结果</p>
+      <div class="results">
+        <div class="row"><span>小费金额</span><span class="val" id="tipAmountVal">—</span></div>
+        <div class="row total"><span>含小费总额</span><span class="val" id="totalVal">—</span></div>
+        <div class="row perperson"><span>每人应付金额</span><span class="val" id="perPersonVal">—</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div data-atoms-status></div>
+</div>
+
+<script>
+(function () {
+  'use strict';
+
+  var DEFAULTS = { bill: 0, tipPercent: 0, people: 1 };
+
+  var el = {
+    bill: document.getElementById('bill'),
+    tipPercent: document.getElementById('tipPercent'),
+    people: document.getElementById('people'),
+    errorMsg: document.getElementById('errorMsg'),
+    tipAmountVal: document.getElementById('tipAmountVal'),
+    totalVal: document.getElementById('totalVal'),
+    perPersonVal: document.getElementById('perPersonVal'),
+    status: document.querySelector('[data-atoms-status]')
+  };
+
+  var inputs = [el.bill, el.tipPercent, el.people];
+  var statusEl = el.status;
+
+  // source of truth: whole loaded object (preserving unknown fields)
+  var state = null;
+  var loaded = false;
+  var saving = false;
+
+  function setStatus(text) {
+    if (statusEl) statusEl.textContent = text;
+  }
+
+  function setControlsDisabled(disabled) {
+    inputs.forEach(function (i) { i.disabled = disabled; });
+  }
+
+  function isValidNumber(v) {
+    return typeof v === 'number' && isFinite(v);
+  }
+
+  // Normalize known fields in memory only (never auto-save).
+  function normalize(raw) {
+    var base = (raw && typeof raw === 'object' && !Array.isArray(raw)) ? raw : {};
+    var out = base; // keep reference to preserve unknown fields
+    if (!isValidNumber(out.bill) || out.bill < 0) out.bill = DEFAULTS.bill;
+    if (!isValidNumber(out.tipPercent) || out.tipPercent < 0) out.tipPercent = DEFAULTS.tipPercent;
+    if (!isValidNumber(out.people) || out.people < 1) out.people = DEFAULTS.people;
+    return out;
+  }
+
+  // Parse the raw string from an input; returns {ok, value} where value is number or null
+  function parseInput(inputEl, opts) {
+    var raw = inputEl.value;
+    if (raw === null || raw === undefined || String(raw).trim() === '') {
+      return { ok: false, reason: 'empty' };
+    }
+    var n = Number(raw);
+    if (!isFinite(n)) return { ok: false, reason: 'nonNumeric' };
+    if (opts && opts.min !== undefined && n < opts.min) return { ok: false, reason: 'belowMin' };
+    if (opts && opts.integer && !Number.isInteger(n)) return { ok: false, reason: 'nonInteger' };
+    return { ok: true, value: n };
+  }
+
+  function fmt2(n) {
+    var rounded = Math.round((n + Number.EPSILON) * 100) / 100;
+    return rounded.toFixed(2);
+  }
+
+  // Recompute + render. Does not persist.
+  function render() {
+    // Bill
+    var billP = parseInput(el.bill, { min: 0 });
+    var tipP = parseInput(el.tipPercent, { min: 0 });
+    var peopleP = parseInput(el.people, { min: 1, integer: true });
+
+    var errors = [];
+    if (!billP.ok) errors.push('请输入有效金额');
+    if (!tipP.ok) errors.push('请输入有效小费比例');
+    if (!peopleP.ok) errors.push('人数至少为1');
+
+    if (errors.length > 0) {
+      el.errorMsg.textContent = errors.join('；');
+      el.tipAmountVal.textContent = '—';
+      el.totalVal.textContent = '—';
+      el.perPersonVal.textContent = '—';
+      return null;
+    }
+
+    el.errorMsg.textContent = '';
+
+    var bill = billP.value;
+    var tipPercent = tipP.value;
+    var people = peopleP.value;
+
+    var tipAmount = bill * tipPercent / 100;
+    var total = bill + tipAmount;
+    var perPerson = total / people;
+
+    el.tipAmountVal.textContent = '¥' + fmt2(tipAmount);
+    el.totalVal.textContent = '¥' + fmt2(total);
+    el.perPersonVal.textContent = '¥' + fmt2(perPerson);
+
+    return { bill: bill, tipPercent: tipPercent, people: people, tipAmount: tipAmount, total: total, perPerson: perPerson };
+  }
+
+  // Build a next-state copy from current inputs, preserving unknown fields.
+  function buildNextState() {
+    var parsed = render(); // also refreshes UI
+    var next = {};
+    // copy all existing keys first (preserve unknown fields)
+    if (state && typeof state === 'object') {
+      for (var k in state) {
+        if (Object.prototype.hasOwnProperty.call(state, k)) next[k] = state[k];
+      }
+    }
+    // overwrite owned fields with in-memory defaults when invalid, so data stays well-formed
+    if (parsed) {
+      next.bill = parsed.bill;
+      next.tipPercent = parsed.tipPercent;
+      next.people = parsed.people;
+      next.tipAmount = parsed.tipAmount;
+      next.total = parsed.total;
+      next.perPerson = parsed.perPerson;
+    } else {
+      // invalid inputs: keep previously stored values; do not persist garbage
+      return null;
+    }
+    return next;
+  }
+
+  function persist(next) {
+    if (saving) return;
+    saving = true;
+    setStatus('正在保存');
+    var prev = state;
+    window.atoms.saveState(next).then(function () {
+      saving = false;
+      state = next;
+      setStatus('已保存');
+    }, function () {
+      saving = false;
+      // restore complete pre-mutation snapshot and re-render from it
+      state = prev;
+      applyStateToInputs(prev);
+      render();
+      setStatus('保存失败');
+    });
+  }
+
+  function applyStateToInputs(s) {
+    var src = s && typeof s === 'object' ? s : {};
+    var bill = isValidNumber(src.bill) && src.bill >= 0 ? src.bill : DEFAULTS.bill;
+    var tipPercent = isValidNumber(src.tipPercent) && src.tipPercent >= 0 ? src.tipPercent : DEFAULTS.tipPercent;
+    var people = isValidNumber(src.people) && src.people >= 1 ? src.people : DEFAULTS.people;
+    el.bill.value = String(bill);
+    el.tipPercent.value = String(tipPercent);
+    el.people.value = String(people);
+  }
+
+  function onInputChange() {
+    if (!loaded) return;
+    var next = buildNextState();
+    if (!next) return; // invalid inputs: no persist, keep stored state
+    persist(next);
+  }
+
+  inputs.forEach(function (i) {
+    i.addEventListener('input', onInputChange);
+  });
+
+  // Boot
+  setControlsDisabled(true);
+  setStatus('正在读取');
+  window.atoms.loadState().then(function (data) {
+    loaded = true;
+    state = normalize(data);
+    applyStateToInputs(state);
+    render();
+    setControlsDisabled(false);
+    setStatus('已读取');
+  }, function () {
+    // read error: show 读取失败 and keep ALL controls disabled; never attempt save
+    loaded = false;
+    setControlsDisabled(true);
+    setStatus('读取失败');
+  });
+})();
+</script>
+</body>
+</html>

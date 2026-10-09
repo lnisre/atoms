@@ -29,7 +29,7 @@ test.describe('stopping a native task leaves no stream errors or late results', 
   test('first generation stops after a cached artifact without publishing it', async ({ page }, info) => {
     const observations = observe(page);
     await page.goto('/');
-    await expect(page.getByRole('region', { name: '已有项目' }).getByRole('button', { name: /示例 · 专注番茄钟/ })).toBeVisible();
+    await expect(page.getByRole('region', { name: '已有项目' }).getByRole('button', { name: /示例 · 小费计算器/ })).toBeVisible();
     const before = await snapshot(page);
     await page.getByLabel('你想做什么？').fill('一次修复 停止返工');
     await page.getByRole('button', { name: '开始生成' }).click();

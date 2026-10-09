@@ -25,7 +25,7 @@ const env = Object.fromEntries(['PATH', 'HOME', 'TMPDIR', 'LANG'].filter(k => pr
 let server, context, page, logFd, groupId, spawnError, interrupted = false;
 let success = false, failure, browserStarted = false;
 const steps = [], requests = [], consoleErrors = [], cleanup = {};
-const plannedCoverage = ['home example', 'real start/pause and IndexedDB save', 'paused refresh', 'full browser restart and home reopen', 'zero API requests'];
+const plannedCoverage = ['home example and source history', 'real calculation and IndexedDB save', 'saved data refresh', 'full browser restart and home reopen', 'zero API requests'];
 const coverage = [];
 const step = (action, result) => { steps.push({ at: new Date().toISOString(), action, result }); record('actions', steps); };
 const stopSignal = () => { interrupted = true; };
@@ -72,10 +72,10 @@ async function closeBrowser(round) {
 }
 async function openCard() {
   await page.goto('/');
-  const card = page.getByRole('region', { name: '已有项目' }).getByRole('button', { name: /示例 · 专注番茄钟/ });
+  const card = page.getByRole('region', { name: '已有项目' }).getByRole('button', { name: /示例 · 小费计算器/ });
   await expect(card).toHaveCount(1);
   await card.click();
-  await expect(frame().locator('#toggleBtn')).toBeEnabled();
+  await expect(frame().getByLabel('账单金额（元）')).toBeEnabled();
 }
 try {
   assert.equal(listeners(port).length, 0, 'Port already occupied; do not drive it');
@@ -102,46 +102,44 @@ try {
   step('launch and doctor', 'passed');
   await launchBrowser(1);
   await openCard();
-  await expect(frame().locator('#timeDisplay')).toHaveText('25:00');
+  await expect(frame().locator('#perPersonVal')).toHaveText('¥5.25');
+  const source = page.getByRole('region', { name: '示例来源记录' });
+  await expect(source.locator('.generation-record')).toHaveCount(2);
+  await expect(source.locator('.execution-card time')).toHaveCount(72);
   const initial = await snapshot();
   assert.equal(initial.projects.length, 1);
-  assert.equal(initial.data.filter(row => row.state !== undefined).length, 0);
   const id = new URL(page.url()).searchParams.get('project');
   assert.equal(initial.projects[0].id, id);
-  assert(!initial.projects[0].initialGeneration, 'Example must not invent model history');
+  assert(!initial.projects[0].initialGeneration, 'Source history must not become this user’s task');
+  assert.deepEqual(initial.data.find(row => row.projectId === id).state,
+    { bill: 20, tipPercent: 5, people: 4, tipAmount: 1, total: 21, perPerson: 5.25 });
   record('initial', initial);
   await page.screenshot({ path: join(out, 'initial.png') });
-  step('open example through home card', { projectId: id, timer: '25:00', modelHistory: false });
-  coverage.push('home example');
-  await frame().getByRole('button', { name: '开始', exact: true }).click();
-  await expect(frame().locator('#status')).toHaveText('已保存');
-  await expect(frame().locator('#timeDisplay')).not.toHaveText('25:00', { timeout: 10000 });
-  step('start and observe real elapsed time', await frame().locator('#timeDisplay').innerText());
-  await frame().getByRole('button', { name: '暂停', exact: true }).click();
-  await expect(frame().getByRole('button', { name: '开始', exact: true })).toBeEnabled();
-  await expect(frame().locator('#status')).toHaveText('已保存');
+  step('open example through home card', { projectId: id, perPerson: '¥5.25', sourceRecords: 2, ownModelHistory: false });
+  coverage.push('home example and source history');
+  await frame().getByLabel('账单金额（元）').fill('80');
+  await expect(frame().locator('[data-atoms-status]')).toHaveText('已保存');
+  await expect(frame().locator('#perPersonVal')).toHaveText('¥21.00');
   await expect(page.getByText('应用数据已保存', { exact: true })).toBeVisible();
   const saved = await snapshot(), row = saved.data.find(row => row.projectId === id);
-  assert(row && row.state.running === false && row.state.remaining > 0 && row.state.remaining < 1500);
-  const time = await frame().locator('#timeDisplay').innerText();
-  assert.equal(time, String(Math.floor(row.state.remaining / 60)).padStart(2, '0') + ':' + String(row.state.remaining % 60).padStart(2, '0'));
+  assert.deepEqual(row.state, { bill: 80, tipPercent: 5, people: 4, tipAmount: 4, total: 84, perPerson: 21 });
   record('saved', saved);
-  step('pause; UI and committed IndexedDB agree', { timer: time, state: row.state });
-  coverage.push('real start/pause and IndexedDB save');
+  step('edit amount; calculation and committed IndexedDB agree', { state: row.state });
+  coverage.push('real calculation and IndexedDB save');
   await page.screenshot({ path: join(out, 'saved.png') });
   await page.reload();
-  await expect(frame().locator('#timeDisplay')).toHaveText(time);
-  await expect(frame().getByRole('button', { name: '开始', exact: true })).toBeEnabled();
+  await expect(frame().locator('#perPersonVal')).toHaveText('¥21.00');
+  await expect(source.locator('.generation-record')).toHaveCount(2);
   assert.deepEqual(await snapshot(), saved);
-  step('refresh project deep link', 'same code and committed paused data');
-  coverage.push('paused refresh');
+  step('refresh project deep link', 'same code, source history and committed data');
+  coverage.push('saved data refresh');
   await closeBrowser(1);
   ensureActive();
   await launchBrowser(2);
   await openCard();
   await expect(page).toHaveURL(new RegExp('project=' + id));
-  await expect(frame().locator('#timeDisplay')).toHaveText(time);
-  await expect(frame().getByRole('button', { name: '开始', exact: true })).toBeEnabled();
+  await expect(frame().locator('#perPersonVal')).toHaveText('¥21.00');
+  await expect(page.getByRole('region', { name: '示例来源记录' }).locator('.generation-record')).toHaveCount(2);
   const reopened = await snapshot();
   assert.deepEqual(reopened, saved);
   record('reopened', reopened);
@@ -151,7 +149,7 @@ try {
   coverage.push('zero API requests');
   assert.equal(consoleErrors.length, 0, 'Unexpected page error');
   ensureActive();
-  step('full Chrome restart; home card reopen', { timer: time, sameProjectCodeAndData: true, apiRequests: 0 });
+  step('full Chrome restart; home card reopen', { perPerson: '¥21.00', sameProjectCodeAndData: true, sourceRecords: 2, apiRequests: 0 });
   success = true;
 } catch (error) {
   failure = error.stack;
@@ -183,7 +181,7 @@ try {
   record('summary', { success, failure, cleanup, retained, evidence: out,
     plannedCoverage, coverage,
     unverified: [...plannedCoverage.filter(check => !coverage.includes(check)),
-      'running/expired timer restoration', 'fault injection', 'team and real model', 'other feature maps', 'production build/deployment'] });
+      'legacy project migration', 'fault injection', 'team and real model', 'other feature maps', 'production build/deployment'] });
   console.log(JSON.stringify({ success, failure, evidence: out, cleanup }));
   if (!success) process.exitCode = 1;
 }

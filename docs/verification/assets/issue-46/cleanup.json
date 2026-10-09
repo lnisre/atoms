@@ -1,0 +1,13 @@
+{
+  "mainDevPids": [
+    60907,
+    47979
+  ],
+  "ports": [
+    3274,
+    3275
+  ],
+  "browsers": "all test contexts closed; persistent profiles removed by finally",
+  "mainDev": "stopped after last run",
+  "smoke": "cleanup independently verified in smoke-cleanup.json"
+}

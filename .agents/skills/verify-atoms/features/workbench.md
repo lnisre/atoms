@@ -37,7 +37,7 @@ Authority: [#47](https://github.com/lnisre/atoms/issues/47), T1–T4 (#49/#53/#5
 
 | Expected result | Driver |
 | --- | --- |
-| Raw single `index.html`; same iframe/input/timer survives viewing; reading has no generation/storage effects; keyboard and three viewports | `source-browser.spec.ts` |
+| Raw single `index.html`; same iframe/input survives viewing (tip example preserves invalid, unsaved input); reading has no generation/storage effects; keyboard and three viewports | `source-browser.spec.ts` |
 | Current-file search, exact raw clipboard, rejection/unavailability/late completion; unknown/empty text | `source-reading.spec.ts` |
 | Candidate synchronizes both views; valid paths/positions survive; removed path returns to entry with explanation; adopt/abandon and transaction failure | `source-version.spec.ts` |
 | Retained draft/raw blocked source, failed save/copy, failed read/retry, multi-adoption recovery and cross-project reset | `source-recovery.spec.ts` |

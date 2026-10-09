@@ -1,0 +1,41 @@
+{
+  "success": true,
+  "cleanup": {
+    "browserClosed": true,
+    "serverStopped": true,
+    "portReleased": true,
+    "profileRemoved": true
+  },
+  "retained": {
+    "manifest.json": "6a5837b3c7d033f5f909225f1d02c3dd519b924900f177fb10f42b6822a233ba",
+    "actions.json": "52c4c69d5a3a939949536092b2dc0350c8513a0deef795523eac1b48e24faeb7",
+    "doctor.json": "839cb1ff91bc5c5a22401c2bed41d55a79f568648033d96b4368f4a7e8859dbd",
+    "saved.json": "b32c713c13df56e8c053044b843e8e3e0a939805a80369d7c65985cc8cc36c0c",
+    "reopened.json": "b32c713c13df56e8c053044b843e8e3e0a939805a80369d7c65985cc8cc36c0c",
+    "reopened.png": "32dd97f09d286308cf5fc0622734e3c76a7ae0f4d27df100aaa694b3ebab87dd",
+    "trace-1.zip": "e4631eea2324e90907221aae324b7e0cc2d8892e91b8206800950caad04a3203",
+    "trace-final.zip": "f1ace12845d6a6f874d800d545f08e2c207f2a14ec3281f1ca1f8073d3ef5b20"
+  },
+  "evidence": "/tmp/atoms-verify-46-delivery/smoke",
+  "plannedCoverage": [
+    "home example and source history",
+    "real calculation and IndexedDB save",
+    "saved data refresh",
+    "full browser restart and home reopen",
+    "zero API requests"
+  ],
+  "coverage": [
+    "home example and source history",
+    "real calculation and IndexedDB save",
+    "saved data refresh",
+    "full browser restart and home reopen",
+    "zero API requests"
+  ],
+  "unverified": [
+    "legacy project migration",
+    "fault injection",
+    "team and real model",
+    "other feature maps",
+    "production build/deployment"
+  ]
+}

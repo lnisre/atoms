@@ -1,0 +1,75 @@
+{
+  "sameProjectAndDataRecords": true,
+  "projects": [
+    {
+      "id": "09051a9f-f8bd-4801-9609-1f2de0a93763",
+      "title": "示例 · 小费计算器",
+      "currentCodeHash": "5ff7628d75b6b0a8395a51c3db7814b31f95a55cbd89a2d990ac041154dc2a0d",
+      "modificationRecords": 1,
+      "hasInitialGeneration": false,
+      "exampleSource": {
+        "kind": "builtin-example",
+        "templateId": "tip-calculator",
+        "version": 1,
+        "sourceCodeHash": "0bdda2b95e5f9d4cf58d071f65fae68d400b9346e5df321e27078af8c8e898f3",
+        "codeHash": "da317d0deedfa543013f4ae85decb80d59ce50a923d4c82b7ef3df20dd199b8e"
+      },
+      "retiredExampleSource": null
+    },
+    {
+      "id": "restart-legacy",
+      "title": "专注番茄钟",
+      "currentCodeHash": "42a08a2bf6d75bd36b417bd7a2822390f2e54f2673d70b8db023a4b63db79730",
+      "modificationRecords": 1,
+      "hasInitialGeneration": false,
+      "exampleSource": null,
+      "retiredExampleSource": {
+        "kind": "builtin-example",
+        "templateId": "focus-pomodoro",
+        "version": 1,
+        "sourceCodeHash": "a6c8df564b6088fc986ae137286e2b039d0cb9c10ab678d17a56bccd11dfc489",
+        "codeHash": "d1d6944ff3eda19b7f5150e9895cacc71579313be13e1e40232153f5b747871f"
+      }
+    }
+  ],
+  "businessData": [
+    {
+      "projectId": "$atoms:workspace:first-visit",
+      "kind": "workspace-initialization",
+      "completed": true
+    },
+    {
+      "projectId": "$atoms:workspace:tip-calculator",
+      "kind": "workspace-initialization",
+      "completed": true
+    },
+    {
+      "projectId": "09051a9f-f8bd-4801-9609-1f2de0a93763",
+      "state": {
+        "bill": 80,
+        "tipPercent": 5,
+        "people": 4,
+        "tipAmount": 4,
+        "total": 84,
+        "perPerson": 21
+      },
+      "updatedAt": "2026-10-09T13:50:19.716Z"
+    },
+    {
+      "projectId": "restart-legacy",
+      "state": {
+        "mode": "focus",
+        "remaining": 986,
+        "running": false,
+        "completedFocusCount": 4,
+        "custom": {
+          "keep": true
+        },
+        "focusSeconds": 1500,
+        "breakSeconds": 300,
+        "deadlineAt": null
+      },
+      "updatedAt": "2026-10-09T13:50:18.935Z"
+    }
+  ]
+}

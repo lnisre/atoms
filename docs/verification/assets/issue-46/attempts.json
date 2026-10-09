@@ -1,0 +1,1348 @@
+[
+  {
+    "run": "browser-first",
+    "stats": {
+      "startTime": "2026-10-09T12:32:35.692Z",
+      "duration": 387562.776,
+      "expected": 95,
+      "skipped": 0,
+      "unexpected": 4,
+      "flaky": 0
+    },
+    "cases": [
+      {
+        "title": "独立小费示例展示完整真实来源，两轮身份不写入用户任务，展开与恢复零模型调用",
+        "file": "builtin-example.spec.ts",
+        "status": "expected",
+        "attempts": [
+          {
+            "status": "passed",
+            "durationMs": 7995,
+            "errors": []
+          }
+        ]
+      },
+      {
+        "title": "真实计算、非法输入不保存、未知字段保全及关闭重开恢复",
+        "file": "builtin-example.spec.ts",
+        "status": "expected",
+        "attempts": [
+          {
+            "status": "passed",
+            "durationMs": 12691,
+            "errors": []
+          }
+        ]
+      },
+      {
+        "title": "应用读取失败禁止编辑和写入；保存失败完整回滚后可重试",
+        "file": "builtin-example.spec.ts",
+        "status": "expected",
+        "attempts": [
+          {
+            "status": "passed",
+            "durationMs": 4317,
+            "errors": []
+          }
+        ]
+      },
+      {
+        "title": "来源历史与本人修改分开；候选试用隔离、采用只换代码、重开恢复",
+        "file": "builtin-example.spec.ts",
+        "status": "expected",
+        "attempts": [
+          {
+            "status": "passed",
+            "durationMs": 3211,
+            "errors": []
+          }
+        ]
+      },
+      {
+        "title": "并发首访只有一份，旧标签无需升级可枚举项目，删除后与模板更新均不重灌",
+        "file": "builtin-example.spec.ts",
+        "status": "expected",
+        "attempts": [
+          {
+            "status": "passed",
+            "durationMs": 4487,
+            "errors": []
+          }
+        ]
+      },
+      {
+        "title": "素材校验失败可重试且不丢输入、不留半份记录",
+        "file": "builtin-example.spec.ts",
+        "status": "expected",
+        "attempts": [
+          {
+            "status": "passed",
+            "durationMs": 1950,
+            "errors": []
+          }
+        ]
+      },
+      {
+        "title": "初始化事务中止回滚项目与标记，重试成功",
+        "file": "builtin-example.spec.ts",
+        "status": "expected",
+        "attempts": [
+          {
+            "status": "passed",
+            "durationMs": 1566,
+            "errors": []
+          }
+        ]
+      },
+      {
+        "title": "读库失败不请求素材、不写标记，存储恢复可重试",
+        "file": "builtin-example.spec.ts",
+        "status": "expected",
+        "attempts": [
+          {
+            "status": "passed",
+            "durationMs": 1558,
+            "errors": []
+          }
+        ]
+      },
+      {
+        "title": "已有项目的初始化标记写入失败仍显示旧项目与数据",
+        "file": "builtin-example.spec.ts",
+        "status": "expected",
+        "attempts": [
+          {
+            "status": "passed",
+            "durationMs": 2399,
+            "errors": []
+          }
+        ]
+      },
+      {
+        "title": "已有项目保全、记录已处理，缺失深链接不被示例替换",
+        "file": "builtin-example.spec.ts",
+        "status": "expected",
+        "attempts": [
+          {
+            "status": "passed",
+            "durationMs": 5891,
+            "errors": []
+          }
+        ]
+      },
+      {
+        "title": "小费示例在代码模式采用后继续修改、放弃与再次采用，个人记录追加且来源不变",
+        "file": "builtin-example.spec.ts",
+        "status": "expected",
+        "attempts": [
+          {
+            "status": "passed",
+            "durationMs": 6207,
+            "errors": []
+          }
+        ]
+      },
+      {
+        "title": "同项目多轮使用最新候选；试用增删改、失败、放弃、刷新和关闭重开均保全正式数据",
+        "file": "candidate.spec.ts",
+        "status": "expected",
+        "attempts": [
+          {
+            "status": "passed",
+            "durationMs": 8480,
+            "errors": []
+          }
+        ]
+      },
+      {
+        "title": "复制正式数据读取失败不开始空试用；手动重试可成功",
+        "file": "candidate.spec.ts",
+        "status": "expected",
+        "attempts": [
+          {
+            "status": "passed",
+            "durationMs": 1930,
+            "errors": []
+          }
+        ]
+      },
+      {
+        "title": "修改超时结束等待，保留已采用应用供继续使用",
+        "file": "candidate.spec.ts",
+        "status": "expected",
+        "attempts": [
+          {
+            "status": "passed",
+            "durationMs": 1934,
+            "errors": []
+          }
+        ]
+      },
+      {
+        "title": "明确采用最新候选只保存代码与多轮记录；旧通道失效，正式操作和重开可恢复",
+        "file": "candidate.spec.ts",
+        "status": "expected",
+        "attempts": [
+          {
+            "status": "passed",
+            "durationMs": 6221,
+            "errors": []
+          }
+        ]
+      },
+      {
+        "title": "采用事务未完成不显示成功；中止保留候选和此前采用记录，可手动重试",
+        "file": "candidate.spec.ts",
+        "status": "expected",
+        "attempts": [
+          {
+            "status": "passed",
+            "durationMs": 5444,
+            "errors": []
+          }
+        ]
+      },
+      {
+        "title": "停止修改后迟到响应不能替换已有候选，正式数据仍可恢复",
+        "file": "candidate.spec.ts",
+        "status": "expected",
+        "attempts": [
+          {
+            "status": "passed",
+            "durationMs": 3522,
+            "errors": []
+          }
+        ]
+      },
+      {
+        "title": "完整说明安全显示，真实预览/数据步骤保存，刷新和同浏览器重开零调用",
+        "file": "first-generation.spec.ts",
+        "status": "expected",
+        "attempts": [
+          {
+            "status": "passed",
+            "durationMs": 4332,
+            "errors": []
+          }
+        ]
+      },
+      {
+        "title": "旧流事件仍实时可见，但缺少团队会话不能交付新 M5 结果",
+        "file": "first-generation.spec.ts",
+        "status": "expected",
+        "attempts": [
+          {
+            "status": "passed",
+            "durationMs": 1429,
+            "errors": []
+          }
+        ]
+      },
+      {
+        "title": "正文缺失降级保留应用，缺失状态也能恢复且不补调模型",
+        "file": "first-generation.spec.ts",
+        "status": "expected",
+        "attempts": [
+          {
+            "status": "passed",
+            "durationMs": 2774,
+            "errors": []
+          }
+        ]
+      },
+      {
+        "title": "传输中断、任务错配和无效 HTML 均结束等待，不保存或运行产物",
+        "file": "first-generation.spec.ts",
+        "status": "expected",
+        "attempts": [
+          {
+            "status": "passed",
+            "durationMs": 4041,
+            "errors": []
+          }
+        ]
+      },
+      {
+        "title": "日志事务失败明确提示，已提交项目和数据不被日志覆盖",
+        "file": "first-generation.spec.ts",
+        "status": "expected",
+        "attempts": [
+          {
+            "status": "passed",
+            "durationMs": 2910,
+            "errors": []
+          }
+        ]
+      },
+      {
+        "title": "新项目进入 M2 多轮修改与采用后保留首次说明，日志不覆盖采用代码",
+        "file": "first-generation.spec.ts",
+        "status": "expected",
+        "attempts": [
+          {
+            "status": "passed",
+            "durationMs": 3363,
+            "errors": []
+          }
+        ]
+      },
+      {
+        "title": "真实 Next.js 请求代理可进入流接口，校验失败不调用模型",
+        "file": "first-generation.spec.ts",
+        "status": "expected",
+        "attempts": [
+          {
+            "status": "passed",
+            "durationMs": 867,
+            "errors": []
+          }
+        ]
+      },
+      {
+        "title": "需求留在工作台，等待结束后运行隔离预览并保存项目",
+        "file": "generation.spec.ts",
+        "status": "expected",
+        "attempts": [
+          {
+            "status": "passed",
+            "durationMs": 1954,
+            "errors": []
+          }
+        ]
+      },
+      {
+        "title": "失败后保留需求并允许手动重新生成",
+        "file": "generation.spec.ts",
+        "status": "expected",
+        "attempts": [
+          {
+            "status": "passed",
+            "durationMs": 1663,
+            "errors": []
+          }
+        ]
+      },
+      {
+        "title": "浏览器等待超时后结束等待并提供重试",
+        "file": "generation.spec.ts",
+        "status": "expected",
+        "attempts": [
+          {
+            "status": "passed",
+            "durationMs": 1494,
+            "errors": []
+          }
+        ]
+      },
+      {
+        "title": "生成应用运行异常时提示而非宣称验证通过",
+        "file": "generation.spec.ts",
+        "status": "expected",
+        "attempts": [
+          {
+            "status": "passed",
+            "durationMs": 1635,
+            "errors": []
+          }
+        ]
+      },
+      {
+        "title": "手机首页不横向溢出，示例只填入需求",
+        "file": "generation.spec.ts",
+        "status": "expected",
+        "attempts": [
+          {
+            "status": "passed",
+            "durationMs": 1394,
+            "errors": []
+          }
+        ]
+      },
+      {
+        "title": "首页与项目网格真实接线、禁用与恢复 1440×900",
+        "file": "home-entry.spec.ts",
+        "status": "expected",
+        "attempts": [
+          {
+            "status": "passed",
+            "durationMs": 5138,
+            "errors": []
+          }
+        ]
+      },
+      {
+        "title": "首页与项目网格真实接线、禁用与恢复 1280×720",
+        "file": "home-entry.spec.ts",
+        "status": "expected",
+        "attempts": [
+          {
+            "status": "passed",
+            "durationMs": 5742,
+            "errors": []
+          }
+        ]
+      },
+      {
+        "title": "缺失项目反馈与首页/项目网格切换可达",
+        "file": "home-entry.spec.ts",
+        "status": "expected",
+        "attempts": [
+          {
+            "status": "passed",
+            "durationMs": 2922,
+            "errors": []
+          }
+        ]
+      },
+      {
+        "title": "运行跨刷新与关闭按真实时间恢复，跨到期只结算一次并暂停",
+        "file": "legacy-example.spec.ts",
+        "status": "expected",
+        "attempts": [
+          {
+            "status": "passed",
+            "durationMs": 8972,
+            "errors": []
+          }
+        ]
+      },
+      {
+        "title": "暂停、继续与重置保留统计未知字段，旧计时记录兼容",
+        "file": "legacy-example.spec.ts",
+        "status": "expected",
+        "attempts": [
+          {
+            "status": "passed",
+            "durationMs": 7192,
+            "errors": []
+          }
+        ]
+      },
+      {
+        "title": "结算写入失败不多计数，显式重试成功后重开幂等",
+        "file": "legacy-example.spec.ts",
+        "status": "expected",
+        "attempts": [
+          {
+            "status": "passed",
+            "durationMs": 4829,
+            "errors": []
+          }
+        ]
+      },
+      {
+        "title": "番茄钟读取失败不能写，恢复后原数据保留；开始保存失败可重试",
+        "file": "legacy-example.spec.ts",
+        "status": "expected",
+        "attempts": [
+          {
+            "status": "passed",
+            "durationMs": 3701,
+            "errors": []
+          }
+        ]
+      },
+      {
+        "title": "前台按原规则切换专注与休息，展示与输入不重置计时",
+        "file": "legacy-example.spec.ts",
+        "status": "expected",
+        "attempts": [
+          {
+            "status": "passed",
+            "durationMs": 3355,
+            "errors": []
+          }
+        ]
+      },
+      {
+        "title": "示例修改携带完整基线无业务数据，试用隔离，采用只更新代码与记录且重开零调用",
+        "file": "legacy-example.spec.ts",
+        "status": "expected",
+        "attempts": [
+          {
+            "status": "passed",
+            "durationMs": 4744,
+            "errors": []
+          }
+        ]
+      },
+      {
+        "title": "暂停与重置保存失败不覆盖原状态，重试后按实际时间暂停与保留统计",
+        "file": "legacy-example.spec.ts",
+        "status": "expected",
+        "attempts": [
+          {
+            "status": "passed",
+            "durationMs": 3200,
+            "errors": []
+          }
+        ]
+      },
+      {
+        "title": "已修改旧副本退休，原始源码、个人标题、计时与修改记录保全",
+        "file": "legacy-example.spec.ts",
+        "status": "expected",
+        "attempts": [
+          {
+            "status": "passed",
+            "durationMs": 9740,
+            "errors": []
+          }
+        ]
+      },
+      {
+        "title": "多轮回复和执行记录随最新代码采用，恢复零调用，首次消息和正式数据不变",
+        "file": "modification-records.spec.ts",
+        "status": "expected",
+        "attempts": [
+          {
+            "status": "passed",
+            "durationMs": 7766,
+            "errors": []
+          }
+        ]
+      },
+      {
+        "title": "失败、无效HTML与旧任务事件保留有效候选；放弃和刷新丢弃会话消息",
+        "file": "modification-records.spec.ts",
+        "status": "expected",
+        "attempts": [
+          {
+            "status": "passed",
+            "durationMs": 4528,
+            "errors": []
+          }
+        ]
+      },
+      {
+        "title": "采用事务失败不保存消息或代码，保留候选可重试，缺正文也可采用",
+        "file": "modification-records.spec.ts",
+        "status": "expected",
+        "attempts": [
+          {
+            "status": "passed",
+            "durationMs": 5330,
+            "errors": []
+          }
+        ]
+      },
+      {
+        "title": "修改等待期间展示真实事件，原候选可用，错误终态结束等待",
+        "file": "modification-records.spec.ts",
+        "status": "expected",
+        "attempts": [
+          {
+            "status": "passed",
+            "durationMs": 2089,
+            "errors": []
+          }
+        ]
+      },
+      {
+        "title": "真实HTTP修改入口验证失败返回任务终态，不触发模型",
+        "file": "modification-records.spec.ts",
+        "status": "expected",
+        "attempts": [
+          {
+            "status": "passed",
+            "durationMs": 60,
+            "errors": []
+          }
+        ]
+      },
+      {
+        "title": "采用后的日志追加失败如实提示，代码和消息已提交，重开不补造成功步骤",
+        "file": "modification-records.spec.ts",
+        "status": "expected",
+        "attempts": [
+          {
+            "status": "passed",
+            "durationMs": 3256,
+            "errors": []
+          }
+        ]
+      },
+      {
+        "title": "添加、完成、删除后刷新和关闭重开，恢复需求与业务数据且不调用模型",
+        "file": "persistence.spec.ts",
+        "status": "expected",
+        "attempts": [
+          {
+            "status": "passed",
+            "durationMs": 4821,
+            "errors": []
+          }
+        ]
+      },
+      {
+        "title": "多个项目数据隔离，外部伪造的保存消息被忽略",
+        "file": "persistence.spec.ts",
+        "status": "expected",
+        "attempts": [
+          {
+            "status": "passed",
+            "durationMs": 6539,
+            "errors": []
+          }
+        ]
+      },
+      {
+        "title": "业务数据事务中止时明确失败，不把请求成功当作保存成功",
+        "file": "persistence.spec.ts",
+        "status": "expected",
+        "attempts": [
+          {
+            "status": "passed",
+            "durationMs": 3387,
+            "errors": []
+          }
+        ]
+      },
+      {
+        "title": "项目写入失败仍展示结果和错误，不宣称项目已保存",
+        "file": "persistence.spec.ts",
+        "status": "expected",
+        "attempts": [
+          {
+            "status": "passed",
+            "durationMs": 1640,
+            "errors": []
+          }
+        ]
+      },
+      {
+        "title": "读取失败禁止覆盖原数据，恢复存储后仍能重开",
+        "file": "persistence.spec.ts",
+        "status": "expected",
+        "attempts": [
+          {
+            "status": "passed",
+            "durationMs": 4774,
+            "errors": []
+          }
+        ]
+      },
+      {
+        "title": "真实 head 装配、数据保存恢复和运行异常反馈：普通完整 HTML",
+        "file": "preview-document.spec.ts",
+        "status": "expected",
+        "attempts": [
+          {
+            "status": "passed",
+            "durationMs": 3207,
+            "errors": []
+          }
+        ]
+      },
+      {
+        "title": "真实 head 装配、数据保存恢复和运行异常反馈：<!-- example <head> -->",
+        "file": "preview-document.spec.ts",
+        "status": "expected",
+        "attempts": [
+          {
+            "status": "passed",
+            "durationMs": 3071,
+            "errors": []
+          }
+        ]
+      },
+      {
+        "title": "真实 head 装配、数据保存恢复和运行异常反馈：<!-- <head> --><!----><!-- <body> -->",
+        "file": "preview-document.spec.ts",
+        "status": "expected",
+        "attempts": [
+          {
+            "status": "passed",
+            "durationMs": 3186,
+            "errors": []
+          }
+        ]
+      },
+      {
+        "title": "恢复旧的不完整 HTML 时明确显示装配失败且不运行 iframe",
+        "file": "preview-document.spec.ts",
+        "status": "expected",
+        "attempts": [
+          {
+            "status": "passed",
+            "durationMs": 3856,
+            "errors": []
+          }
+        ]
+      },
+      {
+        "title": "minor: findings survive preview, automatic save and reopen; two repairs stop after three artifacts",
+        "file": "reviewer-preview.spec.ts",
+        "status": "expected",
+        "attempts": [
+          {
+            "status": "passed",
+            "durationMs": 3033,
+            "errors": []
+          }
+        ]
+      },
+      {
+        "title": "major: findings survive preview, automatic save and reopen; two repairs stop after three artifacts",
+        "file": "reviewer-preview.spec.ts",
+        "status": "expected",
+        "attempts": [
+          {
+            "status": "passed",
+            "durationMs": 3266,
+            "errors": []
+          }
+        ]
+      },
+      {
+        "title": "unavailable review keeps a restorable draft, truthful failure, and explicit first use without trial data",
+        "file": "reviewer-preview.spec.ts",
+        "status": "expected",
+        "attempts": [
+          {
+            "status": "passed",
+            "durationMs": 4402,
+            "errors": []
+          }
+        ]
+      },
+      {
+        "title": "data-risk candidate is visible but cannot be adopted, including after unavailable rereview; actual resolution unlocks adoption",
+        "file": "reviewer-preview.spec.ts",
+        "status": "expected",
+        "attempts": [
+          {
+            "status": "passed",
+            "durationMs": 4059,
+            "errors": []
+          }
+        ]
+      },
+      {
+        "title": "platform execution blocker does not mount even with model approval; code can be restored and modified",
+        "file": "reviewer-preview.spec.ts",
+        "status": "expected",
+        "attempts": [
+          {
+            "status": "passed",
+            "durationMs": 3097,
+            "errors": []
+          }
+        ]
+      },
+      {
+        "title": "真实旧产物保存时禁止新修改，下一次修改确认后立即关闭可恢复",
+        "file": "save-race.spec.ts",
+        "status": "expected",
+        "attempts": [
+          {
+            "status": "passed",
+            "durationMs": 3602,
+            "errors": []
+          }
+        ]
+      },
+      {
+        "title": "真实工作台搜索复制保全正式与试用数据、iframe、输入和请求数",
+        "file": "source-acceptance.spec.ts",
+        "status": "expected",
+        "attempts": [
+          {
+            "status": "passed",
+            "durationMs": 2417,
+            "errors": []
+          }
+        ]
+      },
+      {
+        "title": "代码模式修改失败、执行阻断、停止与迟到结果均保留已有候选",
+        "file": "source-acceptance.spec.ts",
+        "status": "expected",
+        "attempts": [
+          {
+            "status": "passed",
+            "durationMs": 3768,
+            "errors": []
+          }
+        ]
+      },
+      {
+        "title": "代码模式不解除数据风险采用限制，明确修复后采用仍排除试用数据",
+        "file": "source-acceptance.spec.ts",
+        "status": "expected",
+        "attempts": [
+          {
+            "status": "passed",
+            "durationMs": 2779,
+            "errors": []
+          }
+        ]
+      },
+      {
+        "title": "真实工作台：原始单文件、状态保全、只读副作用与恢复 1440",
+        "file": "source-browser.spec.ts",
+        "status": "expected",
+        "attempts": [
+          {
+            "status": "passed",
+            "durationMs": 4907,
+            "errors": []
+          }
+        ]
+      },
+      {
+        "title": "真实工作台：原始单文件、状态保全、只读副作用与恢复 1280",
+        "file": "source-browser.spec.ts",
+        "status": "expected",
+        "attempts": [
+          {
+            "status": "passed",
+            "durationMs": 5034,
+            "errors": []
+          }
+        ]
+      },
+      {
+        "title": "真实工作台：原始单文件、状态保全、只读副作用与恢复 736",
+        "file": "source-browser.spec.ts",
+        "status": "expected",
+        "attempts": [
+          {
+            "status": "passed",
+            "durationMs": 4901,
+            "errors": []
+          }
+        ]
+      },
+      {
+        "title": "示例项目：唯一文件为原始 HTML，查看期间保留未保存输入且重开零请求",
+        "file": "source-browser.spec.ts",
+        "status": "expected",
+        "attempts": [
+          {
+            "status": "passed",
+            "durationMs": 3953,
+            "errors": []
+          }
+        ]
+      },
+      {
+        "title": "无完整成果：生成期间和失败后入口禁用并解释原因",
+        "file": "source-browser.spec.ts",
+        "status": "expected",
+        "attempts": [
+          {
+            "status": "passed",
+            "durationMs": 2253,
+            "errors": []
+          }
+        ]
+      },
+      {
+        "title": "执行阻断：允许只读原始源码，切换视图仍不执行",
+        "file": "source-browser.spec.ts",
+        "status": "expected",
+        "attempts": [
+          {
+            "status": "passed",
+            "durationMs": 2668,
+            "errors": []
+          }
+        ]
+      },
+      {
+        "title": "公开输入上的合成多文件：嵌套、同名、长路径、空文本、键盘与阅读保留",
+        "file": "source-browser.spec.ts",
+        "status": "expected",
+        "attempts": [
+          {
+            "status": "passed",
+            "durationMs": 1779,
+            "errors": []
+          }
+        ]
+      },
+      {
+        "title": "当前文件搜索、键盘前后定位、长行滚动与同名文件切换",
+        "file": "source-reading.spec.ts",
+        "status": "expected",
+        "attempts": [
+          {
+            "status": "passed",
+            "durationMs": 879,
+            "errors": []
+          }
+        ]
+      },
+      {
+        "title": "实际剪贴板逐字符复制原文、未知语言及空文件，阅读保留同版本预览与输入",
+        "file": "source-reading.spec.ts",
+        "status": "expected",
+        "attempts": [
+          {
+            "status": "passed",
+            "durationMs": 1176,
+            "errors": []
+          }
+        ]
+      },
+      {
+        "title": "剪贴板拒绝或不可用如实反馈，源码仍可手动选择",
+        "file": "source-reading.spec.ts",
+        "status": "expected",
+        "attempts": [
+          {
+            "status": "passed",
+            "durationMs": 569,
+            "errors": []
+          }
+        ]
+      },
+      {
+        "title": "未完成的剪贴板写入不会提前成功或污染另一个同名文件",
+        "file": "source-reading.spec.ts",
+        "status": "expected",
+        "attempts": [
+          {
+            "status": "passed",
+            "durationMs": 635,
+            "errors": []
+          }
+        ]
+      },
+      {
+        "title": "fatal: 受限成果重开读取真实源码，查看与复制保留执行和采用限制",
+        "file": "source-recovery.spec.ts",
+        "status": "expected",
+        "attempts": [
+          {
+            "status": "passed",
+            "durationMs": 6144,
+            "errors": []
+          }
+        ]
+      },
+      {
+        "title": "unknown: 受限成果重开读取真实源码，查看与复制保留执行和采用限制",
+        "file": "source-recovery.spec.ts",
+        "status": "expected",
+        "attempts": [
+          {
+            "status": "passed",
+            "durationMs": 5485,
+            "errors": []
+          }
+        ]
+      },
+      {
+        "title": "待验证成果保存失败仍可复制，736px 下未保存反馈与阅读操作可达",
+        "file": "source-recovery.spec.ts",
+        "status": "expected",
+        "attempts": [
+          {
+            "status": "passed",
+            "durationMs": 3199,
+            "errors": []
+          }
+        ]
+      },
+      {
+        "title": "多轮采用及失败后重开，查找复制正确版本并恢复正式数据",
+        "file": "source-recovery.spec.ts",
+        "status": "expected",
+        "attempts": [
+          {
+            "status": "passed",
+            "durationMs": 7563,
+            "errors": []
+          }
+        ]
+      },
+      {
+        "title": "已有项目读取失败如实报错，恢复读取后默认预览而非空成果",
+        "file": "source-recovery.spec.ts",
+        "status": "expected",
+        "attempts": [
+          {
+            "status": "passed",
+            "durationMs": 3430,
+            "errors": []
+          }
+        ]
+      },
+      {
+        "title": "合成版本更新保留选择、目录与各文件阅读位置，缩短后收敛到有效范围",
+        "file": "source-version.spec.ts",
+        "status": "expected",
+        "attempts": [
+          {
+            "status": "passed",
+            "durationMs": 1640,
+            "errors": []
+          }
+        ]
+      },
+      {
+        "title": "合成移除当前文件回到新入口并解释，移除目录与位置不会在重新添加时复活",
+        "file": "source-version.spec.ts",
+        "status": "expected",
+        "attempts": [
+          {
+            "status": "passed",
+            "durationMs": 891,
+            "errors": []
+          }
+        ]
+      },
+      {
+        "title": "代码模式等待完整候选后自动同步，继续修改与放弃均对应整个版本",
+        "file": "source-version.spec.ts",
+        "status": "expected",
+        "attempts": [
+          {
+            "status": "passed",
+            "durationMs": 2600,
+            "errors": []
+          }
+        ]
+      },
+      {
+        "title": "代码模式采用失败保留候选，成功后源码不变并使用正式数据",
+        "file": "source-version.spec.ts",
+        "status": "expected",
+        "attempts": [
+          {
+            "status": "passed",
+            "durationMs": 2267,
+            "errors": []
+          }
+        ]
+      },
+      {
+        "title": "顺序消息、上翻保全、禁用工具与展示调整 1440",
+        "file": "workbench-stream.spec.ts",
+        "status": "expected",
+        "attempts": [
+          {
+            "status": "passed",
+            "durationMs": 2848,
+            "errors": []
+          }
+        ]
+      },
+      {
+        "title": "顺序消息、上翻保全、禁用工具与展示调整 1280",
+        "file": "workbench-stream.spec.ts",
+        "status": "expected",
+        "attempts": [
+          {
+            "status": "passed",
+            "durationMs": 2844,
+            "errors": []
+          }
+        ]
+      },
+      {
+        "title": "长内容桌面路径、独立滚动与详情状态保全 1280×720",
+        "file": "workbench.spec.ts",
+        "status": "expected",
+        "attempts": [
+          {
+            "status": "passed",
+            "durationMs": 5439,
+            "errors": []
+          }
+        ]
+      },
+      {
+        "title": "长内容桌面路径、独立滚动与详情状态保全 1440×900",
+        "file": "workbench.spec.ts",
+        "status": "expected",
+        "attempts": [
+          {
+            "status": "passed",
+            "durationMs": 5236,
+            "errors": []
+          }
+        ]
+      },
+      {
+        "title": "升级分支：旧首访标记，独立补入且刷新不重灌",
+        "file": "workspace-upgrade.spec.ts",
+        "status": "unexpected",
+        "attempts": [
+          {
+            "status": "failed",
+            "durationMs": 2563,
+            "errors": [
+              "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m"
+            ]
+          }
+        ]
+      },
+      {
+        "title": "升级分支：无标记其他项目，独立补入且刷新不重灌",
+        "file": "workspace-upgrade.spec.ts",
+        "status": "unexpected",
+        "attempts": [
+          {
+            "status": "failed",
+            "durationMs": 3425,
+            "errors": [
+              "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m"
+            ]
+          }
+        ]
+      },
+      {
+        "title": "升级分支：旧示例已移除，独立补入且刷新不重灌",
+        "file": "workspace-upgrade.spec.ts",
+        "status": "unexpected",
+        "attempts": [
+          {
+            "status": "failed",
+            "durationMs": 3249,
+            "errors": [
+              "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m"
+            ]
+          }
+        ]
+      },
+      {
+        "title": "升级分支：已初始化空工作区，独立补入且刷新不重灌",
+        "file": "workspace-upgrade.spec.ts",
+        "status": "unexpected",
+        "attempts": [
+          {
+            "status": "failed",
+            "durationMs": 3234,
+            "errors": [
+              "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m"
+            ]
+          }
+        ]
+      },
+      {
+        "title": "升级分支：已装小费但无标记，独立补入且刷新不重灌",
+        "file": "workspace-upgrade.spec.ts",
+        "status": "expected",
+        "attempts": [
+          {
+            "status": "passed",
+            "durationMs": 4099,
+            "errors": []
+          }
+        ]
+      },
+      {
+        "title": "竞争保护：素材准备期间旧标签通过 UI 保存并采用，多标签升级只提交一次",
+        "file": "workspace-upgrade.spec.ts",
+        "status": "expected",
+        "attempts": [
+          {
+            "status": "passed",
+            "durationMs": 7632,
+            "errors": []
+          }
+        ]
+      },
+      {
+        "title": "升级事务失败保全，工作台重试不丢源码与输入",
+        "file": "workspace-upgrade.spec.ts",
+        "status": "expected",
+        "attempts": [
+          {
+            "status": "passed",
+            "durationMs": 3202,
+            "errors": []
+          }
+        ]
+      },
+      {
+        "title": "升级素材校验失败保全，工作台重试不丢源码与输入",
+        "file": "workspace-upgrade.spec.ts",
+        "status": "expected",
+        "attempts": [
+          {
+            "status": "passed",
+            "durationMs": 3090,
+            "errors": []
+          }
+        ]
+      },
+      {
+        "title": "升级读取失败保全，工作台重试不丢源码与输入",
+        "file": "workspace-upgrade.spec.ts",
+        "status": "expected",
+        "attempts": [
+          {
+            "status": "passed",
+            "durationMs": 3055,
+            "errors": []
+          }
+        ]
+      },
+      {
+        "title": "升级保留 blocked 待验证原始源码及限制，跨项目不串源码",
+        "file": "workspace-upgrade.spec.ts",
+        "status": "expected",
+        "attempts": [
+          {
+            "status": "passed",
+            "durationMs": 4265,
+            "errors": []
+          }
+        ]
+      },
+      {
+        "title": "升级保留 allowed 待验证原始源码及限制，跨项目不串源码",
+        "file": "workspace-upgrade.spec.ts",
+        "status": "expected",
+        "attempts": [
+          {
+            "status": "passed",
+            "durationMs": 4409,
+            "errors": []
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "run": "browser-retry",
+    "stats": {
+      "startTime": "2026-10-09T12:40:35.811Z",
+      "duration": 26192.506999999998,
+      "expected": 5,
+      "skipped": 0,
+      "unexpected": 1,
+      "flaky": 0
+    },
+    "cases": [
+      {
+        "title": "完整浏览器重启同时恢复旧副本、新示例个人采用代码、正式数据与来源记录",
+        "file": "example-restart.spec.ts",
+        "status": "unexpected",
+        "attempts": [
+          {
+            "status": "failed",
+            "durationMs": 2297,
+            "errors": [
+              "Error: browserContext._wrapApiCall: Must start tracing before stopping"
+            ]
+          }
+        ]
+      },
+      {
+        "title": "升级分支：旧首访标记，独立补入且刷新不重灌",
+        "file": "workspace-upgrade.spec.ts",
+        "status": "expected",
+        "attempts": [
+          {
+            "status": "passed",
+            "durationMs": 4340,
+            "errors": []
+          }
+        ]
+      },
+      {
+        "title": "升级分支：无标记其他项目，独立补入且刷新不重灌",
+        "file": "workspace-upgrade.spec.ts",
+        "status": "expected",
+        "attempts": [
+          {
+            "status": "passed",
+            "durationMs": 5079,
+            "errors": []
+          }
+        ]
+      },
+      {
+        "title": "升级分支：旧示例已移除，独立补入且刷新不重灌",
+        "file": "workspace-upgrade.spec.ts",
+        "status": "expected",
+        "attempts": [
+          {
+            "status": "passed",
+            "durationMs": 4695,
+            "errors": []
+          }
+        ]
+      },
+      {
+        "title": "升级分支：已初始化空工作区，独立补入且刷新不重灌",
+        "file": "workspace-upgrade.spec.ts",
+        "status": "expected",
+        "attempts": [
+          {
+            "status": "passed",
+            "durationMs": 3708,
+            "errors": []
+          }
+        ]
+      },
+      {
+        "title": "升级分支：已装小费但无标记，独立补入且刷新不重灌",
+        "file": "workspace-upgrade.spec.ts",
+        "status": "expected",
+        "attempts": [
+          {
+            "status": "passed",
+            "durationMs": 4115,
+            "errors": []
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "run": "restart-final",
+    "stats": {
+      "startTime": "2026-10-09T12:42:38.420Z",
+      "duration": 17659.906000000003,
+      "expected": 1,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    },
+    "cases": [
+      {
+        "title": "完整浏览器重启同时恢复旧副本、新示例个人采用代码、正式数据与来源记录",
+        "file": "example-restart.spec.ts",
+        "status": "expected",
+        "attempts": [
+          {
+            "status": "passed",
+            "durationMs": 16922,
+            "errors": []
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "run": "restart-serialization",
+    "stats": {
+      "startTime": "2026-10-09T13:50:11.632Z",
+      "duration": 14044.505,
+      "expected": 1,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    },
+    "cases": [
+      {
+        "title": "完整浏览器重启同时恢复旧副本、新示例个人采用代码、正式数据与来源记录",
+        "file": "example-restart.spec.ts",
+        "status": "expected",
+        "attempts": [
+          {
+            "status": "passed",
+            "durationMs": 13395,
+            "errors": []
+          }
+        ]
+      }
+    ]
+  }
+]
