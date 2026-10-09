@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useId, useLayoutEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useId, useMemo, useRef, useState } from "react";
+import { useSourceReadingState } from "./source-reading-state";
 import styles from "./source-browser.module.css";
 
 // A read-only presentation boundary, independent of generation and persistence.
@@ -29,18 +30,11 @@ function directoryTree(files: SourceVersion["files"]) {
 }
 
 export function SourceBrowser({ version }: { version: SourceVersion }) {
-  const [selectedPath, setSelectedPath] = useState(version.entryPath);
-  const [expanded, setExpanded] = useState(() => {
-    const parts = version.entryPath.split("/");
-    return new Set(parts.slice(0, -1).map((_, index) => parts.slice(0, index + 1).join("/")));
-  });
+  const { selected, selectedPath, expanded, notice, source, rememberPosition, selectFile, toggleDirectory } = useSourceReadingState(version);
   const [treeOpen, setTreeOpen] = useState(true);
   const root = useRef<HTMLDivElement>(null);
-  const source = useRef<HTMLPreElement>(null);
-  const positions = useRef(new Map<string, { top: number; left: number }>());
   const treeId = useId();
   const tree = useMemo(() => directoryTree(version.files), [version.files]);
-  const selected = version.files.find(file => file.path === selectedPath)!;
 
   useEffect(() => {
     let wasNarrow = false;
@@ -53,24 +47,10 @@ export function SourceBrowser({ version }: { version: SourceVersion }) {
     return () => observer.disconnect();
   }, []);
 
-  useLayoutEffect(() => {
-    const position = positions.current.get(selectedPath);
-    source.current!.scrollTo({ top: position?.top ?? 0, left: position?.left ?? 0 });
-  }, [selectedPath]);
-
-  function selectFile(path: string) {
-    positions.current.set(selectedPath, { top: source.current!.scrollTop, left: source.current!.scrollLeft });
-    setSelectedPath(path);
-  }
-
   function renderDirectory(directory: Directory) {
     return <ul>
       {[...directory.directories.values()].sort((a, b) => a.name.localeCompare(b.name)).map(child => <li key={child.path}>
-        <button type="button" aria-label={`目录 ${child.path}`} aria-expanded={expanded.has(child.path)} aria-controls={`${treeId}-${encodeURIComponent(child.path)}`} onClick={() => setExpanded(current => {
-          const next = new Set(current);
-          if (next.has(child.path)) next.delete(child.path); else next.add(child.path);
-          return next;
-        })}>
+        <button type="button" aria-label={`目录 ${child.path}`} aria-expanded={expanded.has(child.path)} aria-controls={`${treeId}-${encodeURIComponent(child.path)}`} onClick={() => toggleDirectory(child.path)}>
           <span className={styles.chevron} aria-hidden="true">{expanded.has(child.path) ? "⌄" : "›"}</span><span>{child.name}</span>
         </button>
         <div id={`${treeId}-${encodeURIComponent(child.path)}`} hidden={!expanded.has(child.path)}>{renderDirectory(child)}</div>
@@ -89,6 +69,7 @@ export function SourceBrowser({ version }: { version: SourceVersion }) {
       <span className={styles.path} aria-label="当前文件路径">{selected.path}</span>
       <span className={styles.readonly}>只读</span>
     </div>
+    {notice && <p className={styles.update} role="status" key={version.id}>{notice}</p>}
     <div className={styles.body}>
       <nav id={treeId} className={styles.directory} aria-label="项目文件" hidden={!treeOpen}>
         <div className={styles.directoryTitle}>文件 <span>{version.files.length}</span></div>
@@ -96,7 +77,7 @@ export function SourceBrowser({ version }: { version: SourceVersion }) {
       </nav>
       <div className={styles.content}>
         {selected.text === "" && <p className={styles.empty} role="status">空文本文件</p>}
-        <pre ref={source} className={styles.source} tabIndex={0} role="region" aria-label={`源码 ${selected.path}`}><code>{selected.text}</code></pre>
+        <pre ref={source} onScroll={rememberPosition} className={styles.source} tabIndex={0} role="region" aria-label={`源码 ${selected.path}`}><code>{selected.text}</code></pre>
       </div>
     </div>
   </div>;

@@ -3,6 +3,7 @@
 .filebar button { flex-shrink: 0; border: 1px solid var(--ui-border); border-radius: 6px; background: var(--ui-surface); padding: 5px 8px; font-size: 11px; }
 .path { min-width: 0; overflow-wrap: anywhere; font-family: "SFMono-Regular", Consolas, monospace; line-height: 1.6; }
 .readonly { margin-left: auto; white-space: nowrap; color: var(--ui-secondary); font-size: 11px; }
+.update { margin: 0; padding: 8px 12px; flex-shrink: 0; font-size: 11px; line-height: 1.6; color: var(--ui-secondary); border-bottom: 1px solid var(--ui-border); }
 .body { display: flex; position: relative; flex: 1; min-height: 0; min-width: 0; }
 .directory { width: 184px; flex-shrink: 0; overflow: auto; background: #f8f8f8; border-right: 1px solid var(--ui-border); padding: 10px 8px; }
 .directory[hidden] { display: none; }

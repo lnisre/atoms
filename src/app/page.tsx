@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import {
   appendGenerationEvents,
   listProjects,
@@ -454,11 +454,11 @@ export default function Home() {
   // Use the same completed result and identity as the preview, before runtime injection.
   const result = task?.status === "complete" && projectSave !== "saving" ? candidate?.result ?? task.result : undefined;
   const versionId = project && task?.status === "complete" ? project.id + task.result.generatedAt + (candidate ? `:trial:${candidate.revision}` : ":adopted") : "";
-  const sourceVersion: SourceVersion | undefined = result ? {
+  const sourceVersion = useMemo<SourceVersion | undefined>(() => result ? {
     id: versionId,
     entryPath: "index.html",
     files: [{ path: "index.html", text: result.html }],
-  } : undefined;
+  } : undefined, [result, versionId]);
 
   return (
     <div className={project ? "app-shell workbench" : "app-shell"}>
@@ -528,7 +528,7 @@ export default function Home() {
             {task?.status === "complete" && projectSave === "saved" && <section className="modification-panel" aria-label="对话修改">
               <div className="modification-feedback" aria-live="polite">
                 {modifying && <button className="text-button" onClick={stopTask}>停止任务</button>}
-                {modifying && <p role="status">正在基于{candidate ? "最新候选" : "已采用代码"}修改，已等待 {seconds} 秒，最多 4 分钟。现有预览仍可使用。</p>}
+                {modifying && <p role="status">正在基于{candidate ? "最新候选" : "已采用代码"}修改，已等待 {seconds} 秒，最多 4 分钟。现有预览与完整源码仍可查看。</p>}
                 {modificationError && <p className="save-error" role="alert">{modificationError} 原应用与正式数据未被替换，可点击“生成候选”手动重试。</p>}
               </div>
               <form onSubmit={event => { event.preventDefault(); void modify(); }}>
