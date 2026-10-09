@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import {
   appendGenerationEvents,
   listProjects,
@@ -14,6 +14,8 @@ import {
 } from "@/lib/project-store";
 import type { TrialData } from "@/lib/trial-data";
 import { AppPreview } from "@/components/app-preview";
+import { ResultViewer } from "@/components/result-viewer";
+import type { SourceVersion } from "@/components/source-browser";
 import { HomeEntry, type HomeView } from "@/components/home-entry";
 import {
   MAX_REQUIREMENT_LENGTH,
@@ -97,7 +99,7 @@ export default function Home() {
   const busy = initialBusy || modifying || adopting;
   const policy = candidate?.session.record.team ? previewPolicy(candidate.session.record.team,candidate.result.html) : task?.status === "complete" ? task.policy : undefined;
   async function activateDraft() {
-    if (!project || task?.status !== "complete" || busy) return;
+    if (!project || task?.status !== "complete" || projectSave !== "saved" || busy) return;
     adoptionPending.current = true;
     setAdopting(true); setAdoptionError("");
     try {
@@ -449,6 +451,15 @@ export default function Home() {
     }
   }
 
+  // Use the same completed result and identity as the preview, before runtime injection.
+  const result = task?.status === "complete" && projectSave !== "saving" ? candidate?.result ?? task.result : undefined;
+  const versionId = project && task?.status === "complete" ? project.id + task.result.generatedAt + (candidate ? `:trial:${candidate.revision}` : ":adopted") : "";
+  const sourceVersion = useMemo<SourceVersion | undefined>(() => result ? {
+    id: versionId,
+    entryPath: "index.html",
+    files: [{ path: "index.html", text: result.html }],
+  } : undefined, [result, versionId]);
+
   return (
     <div className={project ? "app-shell workbench" : "app-shell"}>
       {project && <header className="topbar">
@@ -497,10 +508,10 @@ export default function Home() {
                 {initialBusy && <><p>正在处理需求，实际进展见平台执行记录。完整结果保存后会展示预览。</p><p className="elapsed">已等待 {seconds} 秒 · 最多 4 分钟</p></>}
                 {task?.status === "waiting" && <button className="text-button" onClick={stopTask}>停止任务</button>}
                 {task?.status === "failed" && <><p role="alert" style={{whiteSpace:"pre-wrap"}}>{task.error}</p><button className="primary-button" onClick={() => void generate(project)}>重新生成</button></>}
-                {task?.status === "complete" && <p>{restored ? "已读取保存的需求和代码，没有重新调用模型。" : "现在可以在预览中操作应用。生成完成不代表所有功能都已验证。"}</p>}
+                {task?.status === "complete" && <p>{restored ? "已读取保存的需求和代码，没有重新调用模型。" : projectSave === "failed" ? "完整源码仅保留在本页，可查看和复制；尚未保存，刷新后无法恢复。" : policy?.status === "blocked" ? "完整源码已保留，可只读查看和复制；当前代码禁止运行。" : "现在可以在预览中操作应用。生成完成不代表所有功能都已验证。"}</p>}
               </section>}
               {previousAttempts.map(attempt => <GenerationRecord key={attempt.record.taskId} title="此前任务" requirement={attempt.requirement} record={attempt.record} live={false} pending={false} saveError={false} saving={false} />)}
-              {generationRecord && <GenerationRecord record={generationRecord} live={!restored && task?.status !== "failed"} pending={task?.status === "waiting"} saveError={logSaveError} saving={logSavePending} resultLabel={task?.status === "complete" ? (projectSave === "saved" ? "首次生成 · 已保存" : "首次生成 · 尚未保存") : undefined} />}
+              {generationRecord && <GenerationRecord record={generationRecord} live={!restored && task?.status !== "failed"} pending={task?.status === "waiting"} saveError={logSaveError} saving={logSavePending} resultHint={projectSave === "failed" ? "成果尚未保存，请在右侧查看并复制需要保留的源码。" : task?.status === "complete" && task.policy?.status === "blocked" ? "此成果禁止运行，可在右侧查看和复制源码。" : undefined} resultLabel={task?.status === "complete" ? (projectSave === "saved" ? "首次生成 · 已保存" : "首次生成 · 尚未保存") : undefined} />}
               <section className="record-history" aria-label="已采用修改记录">
                 {records.length === 0 && !project.exampleSource && <p className="empty-history">还没有已采用的修改记录。</p>}
                 {records.map(record => <div key={record.id} className="adopted-group">
@@ -517,7 +528,7 @@ export default function Home() {
             {task?.status === "complete" && projectSave === "saved" && <section className="modification-panel" aria-label="对话修改">
               <div className="modification-feedback" aria-live="polite">
                 {modifying && <button className="text-button" onClick={stopTask}>停止任务</button>}
-                {modifying && <p role="status">正在基于{candidate ? "最新候选" : "已采用代码"}修改，已等待 {seconds} 秒，最多 4 分钟。现有预览仍可使用。</p>}
+                {modifying && <p role="status">正在基于{candidate ? "最新候选" : "已采用代码"}修改，已等待 {seconds} 秒，最多 4 分钟。现有预览与完整源码仍可查看。</p>}
                 {modificationError && <p className="save-error" role="alert">{modificationError} 原应用与正式数据未被替换，可点击“生成候选”手动重试。</p>}
               </div>
               <form onSubmit={event => { event.preventDefault(); void modify(); }}>
@@ -540,16 +551,14 @@ export default function Home() {
             </form>}
             {task?.status !== "failed" && !(task?.status === "complete" && projectSave === "saved") && <section className="modification-panel"><textarea aria-label="追加修改需求（生成完成后可用）" disabled placeholder="生成并保存后，可在这里继续修改" /><div className="composer-footer"><Unavailable label="添加附件">＋</Unavailable><span>等待当前任务完成</span><Unavailable label="发送修改">↑</Unavailable></div></section>}
           </aside>
-          {task?.status === "complete" && projectSave !== "saving" && policy?.status === "blocked" ? (
-            <section className="preview-panel" aria-label="预览已阻止"><PreviewNavigation /><p role="alert">暂未运行：{policy.reasons.join("；")}</p><p>代码和问题已保留，可继续修改。</p></section>
-          ) : task?.status === "complete" && projectSave !== "saving" ? (
-            <AppPreview
-              key={project.id + task.result.generatedAt + (candidate ? `:trial:${candidate.revision}` : ":adopted")}
-              html={(candidate?.result ?? task.result).html}
-              recordStep={candidate ? candidate.session.step : previewStep}
-              trial={candidate?.trial ?? draftTrial}
-              reviewNotice={policy ? `${policy.review === "unavailable" ? "审查未完成，代码已保留" : policy.review === "issues" ? "可预览，有待修复问题" : "代码审查通过"} · 业务运行尚未验证${policy.adoption === "blocked" ? "；存在待修复的数据问题，暂不可采用" : ""}` : undefined}
-              actions={candidate && <div className="candidate-actions" aria-label="候选操作">
+          <ResultViewer
+            key={project.id}
+            version={sourceVersion}
+            status={candidate ? "候选版本 · 未采用" : projectSave === "failed" ? "尚未保存" : policy?.dataMode === "trial" || policy?.status === "blocked" ? "待验证项目" : projectSave === "saved" ? "已采用版本" : "尚未保存"}
+            notice={result && policy ? policy.status === "blocked" ? `禁止运行：${policy.reasons.join("；")}。源码可只读查看和复制，暂不可采用。` : `${policy.review === "unavailable" ? "审查未完成，代码已保留" : policy.review === "issues" ? "可预览，有待修复问题" : "代码审查通过"} · 业务运行尚未验证${policy.adoption === "blocked" ? "；存在待修复的数据问题，暂不可采用" : ""}` : undefined}
+            actions={result && <>
+              {projectSave === "failed" && <p className="source-save-error save-error" role="alert">项目保存失败，完整源码仅保留在本页，可查看和复制；刷新或离开后无法恢复。请先复制需要保留的源码。</p>}
+              {candidate ? <div className="candidate-actions" aria-label="候选操作">
                 <div className="candidate-action-row"><strong>第 {candidate.revision} 轮候选 · 等待采用</strong><div>
                   <button className="text-button" disabled={busy} onClick={discardChanges}>放弃本轮修改</button>
                   <button className="primary-button" disabled={busy || policy?.adoption === "blocked"} onClick={() => void adopt()}>{adopting ? "正在保存采用…" : "采用修改"}</button>
@@ -558,27 +567,42 @@ export default function Home() {
                 <p>候选、试用数据和本轮对话仅在当前会话保留；放弃、离开项目、刷新或关闭后会丢失。</p>
                 {adopting && <p role="status">正在保存代码与修改记录，完成前仍为未采用候选。请等待保存成功再离开。</p>}
                 {adoptionError && <p className="save-error" role="alert">{adoptionError}</p>}
-              </div> || (draftTrial && <div className="candidate-actions"><p>待验证项目 · 代码与问题已保存，试用数据仅本次会话有效。</p><button disabled={busy || policy?.adoption === "blocked"} onClick={() => void activateDraft()}>使用此版本</button>{adoptionError && <p role="alert">{adoptionError}</p>}</div>)}
-              projectId={project.id}
-              projectSaved={projectSave === "saved"}
-              onRetry={() => {
-                document.getElementById("modification")?.focus();
-              }}
-            />
-          ) : (
-            <section className="preview-panel waiting-preview" aria-label="预览等待区"><PreviewNavigation /><div className="preview-placeholder">
-              <div className="preview-glyph" aria-hidden="true">
-                {busy ? "✳" : "↗"}
-              </div>
-              <h2>{busy ? "你的想法，正在成形" : "等待新的生成结果"}</h2>
-              <p>
-                {busy
-                  ? "完整应用返回后，会在这里打开可操作预览。"
-                  : "左侧保留了你的需求，可以重新发起生成。"}
-              </p>
-              <span>APP PREVIEW</span>
-            </div></section>
-          )}
+              </div> : draftTrial && <div className="candidate-actions">
+                <p>{projectSave === "saved" ? "待验证项目 · 代码与问题已保存，试用数据仅本次会话有效。" : "待验证成果 · 尚未保存，试用数据仅本次会话有效。"}</p>
+                <button disabled={busy || projectSave !== "saved" || policy?.adoption === "blocked"} onClick={() => void activateDraft()}>使用此版本</button>
+                {adoptionError && <p role="alert">{adoptionError}</p>}
+              </div>}
+            </>}
+          >
+            {result && policy?.status === "blocked" ? (
+              <section className="preview-panel" aria-label="预览已阻止"><PreviewNavigation /><p role="alert">暂未运行：{policy.reasons.join("；")}</p><p>{projectSave === "saved" ? "代码和问题已保存，可查看源码或继续修改。" : "代码仅保留在本页，可查看和复制源码。"}</p></section>
+            ) : result ? (
+              <AppPreview
+                key={versionId}
+                html={result.html}
+                recordStep={candidate ? candidate.session.step : previewStep}
+                trial={candidate?.trial ?? draftTrial}
+                projectId={project.id}
+                projectSaved={projectSave === "saved"}
+                onRetry={() => {
+                  document.getElementById("modification")?.focus();
+                }}
+              />
+            ) : (
+              <section className="preview-panel waiting-preview" aria-label="预览等待区"><PreviewNavigation /><div className="preview-placeholder">
+                <div className="preview-glyph" aria-hidden="true">
+                  {busy ? "✳" : "↗"}
+                </div>
+                <h2>{busy ? "你的想法，正在成形" : "等待新的生成结果"}</h2>
+                <p>
+                  {busy
+                    ? "完整应用返回后，会在这里打开可操作预览。"
+                    : "左侧保留了你的需求，可以重新发起生成。"}
+                </p>
+                <span>APP PREVIEW</span>
+              </div></section>
+            )}
+          </ResultViewer>
         </main>
       )}
     </div>

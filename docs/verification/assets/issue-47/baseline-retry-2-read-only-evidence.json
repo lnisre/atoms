@@ -1,0 +1,561 @@
+{
+  "sourceHash": "65814bc80956a4fcde82065440c92963229dd99ab5063a5dbaa9587dc135347a",
+  "instance": "133617a7-8a40-4fb9-b373-a35e558588ef",
+  "ticksBefore": 1,
+  "ticksAfter": "9",
+  "scrollTop": 950,
+  "requestsBefore": 1,
+  "requestsAfter": 1,
+  "before": {
+    "project": {
+      "id": "c28f22bf-ce3d-4b94-a7fb-607ab48fdd3f",
+      "requirement": "T1 源码状态保全",
+      "title": "T1 源码状态保全",
+      "result": {
+        "html": "<!DOCTYPE html><html><head><title>T1 受控应用</title></head><body>\n<h1>T1 受控应用</h1><label>应用草稿<input aria-label=\"应用草稿\" disabled></label>\n<button id=\"save\" disabled>保存应用数据</button><button id=\"start\">开始内存计时</button>\n<p>已保存：<output id=\"saved\"></output></p><p>计时：<output id=\"ticks\">0</output></p>\n<output id=\"instance\"></output><script>\nconst input=document.querySelector('input'),save=document.querySelector('#save');\ndocument.querySelector('#instance').textContent=crypto.randomUUID();\natoms.loadState().then(s=>{document.querySelector('#saved').textContent=s?.text??'';input.disabled=save.disabled=false});\nsave.onclick=async()=>{await atoms.saveState({text:input.value});document.querySelector('#saved').textContent=input.value};\nlet ticks=0;document.querySelector('#start').onclick=()=>{document.querySelector('#start').disabled=true;setInterval(()=>document.querySelector('#ticks').textContent=++ticks,100)};\n</script>\n<!-- 原始源码第 1 行，不含平台注入 -->\n<!-- 原始源码第 2 行，不含平台注入 -->\n<!-- 原始源码第 3 行，不含平台注入 -->\n<!-- 原始源码第 4 行，不含平台注入 -->\n<!-- 原始源码第 5 行，不含平台注入 -->\n<!-- 原始源码第 6 行，不含平台注入 -->\n<!-- 原始源码第 7 行，不含平台注入 -->\n<!-- 原始源码第 8 行，不含平台注入 -->\n<!-- 原始源码第 9 行，不含平台注入 -->\n<!-- 原始源码第 10 行，不含平台注入 -->\n<!-- 原始源码第 11 行，不含平台注入 -->\n<!-- 原始源码第 12 行，不含平台注入 -->\n<!-- 原始源码第 13 行，不含平台注入 -->\n<!-- 原始源码第 14 行，不含平台注入 -->\n<!-- 原始源码第 15 行，不含平台注入 -->\n<!-- 原始源码第 16 行，不含平台注入 -->\n<!-- 原始源码第 17 行，不含平台注入 -->\n<!-- 原始源码第 18 行，不含平台注入 -->\n<!-- 原始源码第 19 行，不含平台注入 -->\n<!-- 原始源码第 20 行，不含平台注入 -->\n<!-- 原始源码第 21 行，不含平台注入 -->\n<!-- 原始源码第 22 行，不含平台注入 -->\n<!-- 原始源码第 23 行，不含平台注入 -->\n<!-- 原始源码第 24 行，不含平台注入 -->\n<!-- 原始源码第 25 行，不含平台注入 -->\n<!-- 原始源码第 26 行，不含平台注入 -->\n<!-- 原始源码第 27 行，不含平台注入 -->\n<!-- 原始源码第 28 行，不含平台注入 -->\n<!-- 原始源码第 29 行，不含平台注入 -->\n<!-- 原始源码第 30 行，不含平台注入 -->\n<!-- 原始源码第 31 行，不含平台注入 -->\n<!-- 原始源码第 32 行，不含平台注入 -->\n<!-- 原始源码第 33 行，不含平台注入 -->\n<!-- 原始源码第 34 行，不含平台注入 -->\n<!-- 原始源码第 35 行，不含平台注入 -->\n<!-- 原始源码第 36 行，不含平台注入 -->\n<!-- 原始源码第 37 行，不含平台注入 -->\n<!-- 原始源码第 38 行，不含平台注入 -->\n<!-- 原始源码第 39 行，不含平台注入 -->\n<!-- 原始源码第 40 行，不含平台注入 -->\n<!-- 原始源码第 41 行，不含平台注入 -->\n<!-- 原始源码第 42 行，不含平台注入 -->\n<!-- 原始源码第 43 行，不含平台注入 -->\n<!-- 原始源码第 44 行，不含平台注入 -->\n<!-- 原始源码第 45 行，不含平台注入 -->\n<!-- 原始源码第 46 行，不含平台注入 -->\n<!-- 原始源码第 47 行，不含平台注入 -->\n<!-- 原始源码第 48 行，不含平台注入 -->\n<!-- 原始源码第 49 行，不含平台注入 -->\n<!-- 原始源码第 50 行，不含平台注入 -->\n<!-- 原始源码第 51 行，不含平台注入 -->\n<!-- 原始源码第 52 行，不含平台注入 -->\n<!-- 原始源码第 53 行，不含平台注入 -->\n<!-- 原始源码第 54 行，不含平台注入 -->\n<!-- 原始源码第 55 行，不含平台注入 -->\n<!-- 原始源码第 56 行，不含平台注入 -->\n<!-- 原始源码第 57 行，不含平台注入 -->\n<!-- 原始源码第 58 行，不含平台注入 -->\n<!-- 原始源码第 59 行，不含平台注入 -->\n<!-- 原始源码第 60 行，不含平台注入 -->\n<!-- 原始源码第 61 行，不含平台注入 -->\n<!-- 原始源码第 62 行，不含平台注入 -->\n<!-- 原始源码第 63 行，不含平台注入 -->\n<!-- 原始源码第 64 行，不含平台注入 -->\n<!-- 原始源码第 65 行，不含平台注入 -->\n<!-- 原始源码第 66 行，不含平台注入 -->\n<!-- 原始源码第 67 行，不含平台注入 -->\n<!-- 原始源码第 68 行，不含平台注入 -->\n<!-- 原始源码第 69 行，不含平台注入 -->\n<!-- 原始源码第 70 行，不含平台注入 -->\n<!-- 原始源码第 71 行，不含平台注入 -->\n<!-- 原始源码第 72 行，不含平台注入 -->\n<!-- 原始源码第 73 行，不含平台注入 -->\n<!-- 原始源码第 74 行，不含平台注入 -->\n<!-- 原始源码第 75 行，不含平台注入 -->\n<!-- 原始源码第 76 行，不含平台注入 -->\n<!-- 原始源码第 77 行，不含平台注入 -->\n<!-- 原始源码第 78 行，不含平台注入 -->\n<!-- 原始源码第 79 行，不含平台注入 -->\n<!-- 原始源码第 80 行，不含平台注入 -->\n<!-- 原始源码第 81 行，不含平台注入 -->\n<!-- 原始源码第 82 行，不含平台注入 -->\n<!-- 原始源码第 83 行，不含平台注入 -->\n<!-- 原始源码第 84 行，不含平台注入 -->\n<!-- 原始源码第 85 行，不含平台注入 -->\n<!-- 原始源码第 86 行，不含平台注入 -->\n<!-- 原始源码第 87 行，不含平台注入 -->\n<!-- 原始源码第 88 行，不含平台注入 -->\n<!-- 原始源码第 89 行，不含平台注入 -->\n<!-- 原始源码第 90 行，不含平台注入 -->\n<!-- 原始源码第 91 行，不含平台注入 -->\n<!-- 原始源码第 92 行，不含平台注入 -->\n<!-- 原始源码第 93 行，不含平台注入 -->\n<!-- 原始源码第 94 行，不含平台注入 -->\n<!-- 原始源码第 95 行，不含平台注入 -->\n<!-- 原始源码第 96 行，不含平台注入 -->\n<!-- 原始源码第 97 行，不含平台注入 -->\n<!-- 原始源码第 98 行，不含平台注入 -->\n<!-- 原始源码第 99 行，不含平台注入 -->\n<!-- 原始源码第 100 行，不含平台注入 -->\n<!-- 原始源码第 101 行，不含平台注入 -->\n<!-- 原始源码第 102 行，不含平台注入 -->\n<!-- 原始源码第 103 行，不含平台注入 -->\n<!-- 原始源码第 104 行，不含平台注入 -->\n<!-- 原始源码第 105 行，不含平台注入 -->\n<!-- 原始源码第 106 行，不含平台注入 -->\n<!-- 原始源码第 107 行，不含平台注入 -->\n<!-- 原始源码第 108 行，不含平台注入 -->\n<!-- 原始源码第 109 行，不含平台注入 -->\n<!-- 原始源码第 110 行，不含平台注入 -->\n<!-- 原始源码第 111 行，不含平台注入 -->\n<!-- 原始源码第 112 行，不含平台注入 -->\n<!-- 原始源码第 113 行，不含平台注入 -->\n<!-- 原始源码第 114 行，不含平台注入 -->\n<!-- 原始源码第 115 行，不含平台注入 -->\n<!-- 原始源码第 116 行，不含平台注入 -->\n<!-- 原始源码第 117 行，不含平台注入 -->\n<!-- 原始源码第 118 行，不含平台注入 -->\n<!-- 原始源码第 119 行，不含平台注入 -->\n<!-- 原始源码第 120 行，不含平台注入 -->\n<!-- 原始源码第 121 行，不含平台注入 -->\n<!-- 原始源码第 122 行，不含平台注入 -->\n<!-- 原始源码第 123 行，不含平台注入 -->\n<!-- 原始源码第 124 行，不含平台注入 -->\n<!-- 原始源码第 125 行，不含平台注入 -->\n<!-- 原始源码第 126 行，不含平台注入 -->\n<!-- 原始源码第 127 行，不含平台注入 -->\n<!-- 原始源码第 128 行，不含平台注入 -->\n<!-- 原始源码第 129 行，不含平台注入 -->\n<!-- 原始源码第 130 行，不含平台注入 -->\n<!-- 原始源码第 131 行，不含平台注入 -->\n<!-- 原始源码第 132 行，不含平台注入 -->\n<!-- 原始源码第 133 行，不含平台注入 -->\n<!-- 原始源码第 134 行，不含平台注入 -->\n<!-- 原始源码第 135 行，不含平台注入 -->\n<!-- 原始源码第 136 行，不含平台注入 -->\n<!-- 原始源码第 137 行，不含平台注入 -->\n<!-- 原始源码第 138 行，不含平台注入 -->\n<!-- 原始源码第 139 行，不含平台注入 -->\n<!-- 原始源码第 140 行，不含平台注入 -->\n<!-- 原始源码第 141 行，不含平台注入 -->\n<!-- 原始源码第 142 行，不含平台注入 -->\n<!-- 原始源码第 143 行，不含平台注入 -->\n<!-- 原始源码第 144 行，不含平台注入 -->\n<!-- 原始源码第 145 行，不含平台注入 -->\n<!-- 原始源码第 146 行，不含平台注入 -->\n<!-- 原始源码第 147 行，不含平台注入 -->\n<!-- 原始源码第 148 行，不含平台注入 -->\n<!-- 原始源码第 149 行，不含平台注入 -->\n<!-- 原始源码第 150 行，不含平台注入 -->\n<!-- 原始源码第 151 行，不含平台注入 -->\n<!-- 原始源码第 152 行，不含平台注入 -->\n<!-- 原始源码第 153 行，不含平台注入 -->\n<!-- 原始源码第 154 行，不含平台注入 -->\n<!-- 原始源码第 155 行，不含平台注入 -->\n<!-- 原始源码第 156 行，不含平台注入 -->\n<!-- 原始源码第 157 行，不含平台注入 -->\n<!-- 原始源码第 158 行，不含平台注入 -->\n<!-- 原始源码第 159 行，不含平台注入 -->\n<!-- 原始源码第 160 行，不含平台注入 -->\n</body></html>",
+        "model": "T1 SYNTHETIC RESPONSE",
+        "durationMs": 1,
+        "generatedAt": "1"
+      },
+      "previewPolicy": {
+        "status": "allowed",
+        "reasons": [],
+        "review": "clean",
+        "dataMode": "formal",
+        "adoption": "allowed"
+      },
+      "initialGeneration": {
+        "team": {
+          "protocol": "atoms-team/3",
+          "taskId": "e91ccdcb-582b-497d-853c-7d06ed7c94b9",
+          "projectId": "c28f22bf-ce3d-4b94-a7fb-607ab48fdd3f",
+          "codeHash": "65814bc80956a4fcde82065440c92963229dd99ab5063a5dbaa9587dc135347a",
+          "review": {
+            "kind": "code-review",
+            "schemaVersion": 1,
+            "resolutions": [],
+            "taskId": "e91ccdcb-582b-497d-853c-7d06ed7c94b9",
+            "codeHash": "65814bc80956a4fcde82065440c92963229dd99ab5063a5dbaa9587dc135347a",
+            "approved": true,
+            "summary": "SYNTHETIC REVIEW FIXTURE",
+            "issues": []
+          },
+          "outcome": "passed",
+          "deliveries": [
+            {
+              "role": "Mike",
+              "content": "{\"command\":\"assign\",\"to\":\"Requirements\",\"reason\":\"synthetic fixture\",\"instruction\":\"synthetic fixture\"}"
+            },
+            {
+              "role": "Requirements",
+              "content": "{\"requirements\":[{\"id\":\"synthetic\",\"description\":\"synthetic\"}]}"
+            },
+            {
+              "role": "Mike",
+              "content": "{\"command\":\"assign\",\"to\":\"Engineer\",\"reason\":\"synthetic fixture\",\"instruction\":\"synthetic fixture\"}"
+            },
+            {
+              "role": "Engineer",
+              "content": "{\"codeHash\":\"65814bc80956a4fcde82065440c92963229dd99ab5063a5dbaa9587dc135347a\",\"iteration\":1}"
+            },
+            {
+              "role": "Mike",
+              "content": "{\"command\":\"assign\",\"to\":\"Reviewer\",\"reason\":\"synthetic fixture\",\"instruction\":\"synthetic fixture\"}"
+            },
+            {
+              "role": "Reviewer",
+              "content": "{\"kind\":\"code-review\",\"schemaVersion\":1,\"resolutions\":[],\"taskId\":\"e91ccdcb-582b-497d-853c-7d06ed7c94b9\",\"codeHash\":\"65814bc80956a4fcde82065440c92963229dd99ab5063a5dbaa9587dc135347a\",\"approved\":true,\"summary\":\"SYNTHETIC REVIEW FIXTURE\",\"issues\":[]}"
+            },
+            {
+              "role": "Mike",
+              "content": "{\"command\":\"finish\"}"
+            }
+          ],
+          "calls": [
+            {
+              "call": 1,
+              "actor": "Mike",
+              "requestedModel": "fixture",
+              "status": "completed"
+            },
+            {
+              "call": 2,
+              "actor": "Requirements",
+              "requestedModel": "fixture",
+              "status": "completed"
+            },
+            {
+              "call": 3,
+              "actor": "Mike",
+              "requestedModel": "fixture",
+              "status": "completed"
+            },
+            {
+              "call": 4,
+              "actor": "Engineer",
+              "requestedModel": "fixture",
+              "status": "completed"
+            },
+            {
+              "call": 5,
+              "actor": "Mike",
+              "requestedModel": "fixture",
+              "status": "completed"
+            },
+            {
+              "call": 6,
+              "actor": "Reviewer",
+              "requestedModel": "fixture",
+              "status": "completed"
+            },
+            {
+              "call": 7,
+              "actor": "Mike",
+              "requestedModel": "fixture",
+              "status": "completed"
+            }
+          ]
+        },
+        "taskId": "e91ccdcb-582b-497d-853c-7d06ed7c94b9",
+        "startedAt": "2026-10-09T09:05:12.171Z",
+        "assistantReply": null,
+        "events": [
+          {
+            "taskId": "e91ccdcb-582b-497d-853c-7d06ed7c94b9",
+            "source": "browser",
+            "sequence": 1,
+            "stepId": "transport",
+            "label": "接收生成结果",
+            "status": "started",
+            "detail": "向服务端提交需求并持续读取实际执行事件。",
+            "at": "2026-10-09T09:05:12.171Z"
+          },
+          {
+            "taskId": "e91ccdcb-582b-497d-853c-7d06ed7c94b9",
+            "source": "browser",
+            "sequence": 2,
+            "stepId": "transport",
+            "label": "接收生成结果",
+            "status": "completed",
+            "detail": "完整代码已收到；实际审查与任务结束状态见团队记录。",
+            "at": "2026-10-09T09:05:12.279Z"
+          },
+          {
+            "taskId": "e91ccdcb-582b-497d-853c-7d06ed7c94b9",
+            "source": "browser",
+            "sequence": 3,
+            "stepId": "project-save",
+            "label": "保存项目与助手回复",
+            "status": "started",
+            "detail": "写入本浏览器项目存储，等待事务提交。",
+            "at": "2026-10-09T09:05:12.285Z"
+          },
+          {
+            "taskId": "e91ccdcb-582b-497d-853c-7d06ed7c94b9",
+            "source": "browser",
+            "sequence": 4,
+            "stepId": "project-save",
+            "label": "保存项目与助手回复",
+            "status": "completed",
+            "detail": "项目、HTML、助手回复及已有执行记录已提交；后续步骤独立追加。",
+            "at": "2026-10-09T09:05:12.303Z"
+          },
+          {
+            "taskId": "e91ccdcb-582b-497d-853c-7d06ed7c94b9",
+            "source": "browser",
+            "sequence": 5,
+            "stepId": "preview-assemble",
+            "label": "装配隔离预览",
+            "status": "started",
+            "detail": "向结构合格的完整 HTML 注入平台数据接口与隔离策略。",
+            "at": "2026-10-09T09:05:12.311Z"
+          },
+          {
+            "taskId": "e91ccdcb-582b-497d-853c-7d06ed7c94b9",
+            "source": "browser",
+            "sequence": 6,
+            "stepId": "preview-assemble",
+            "label": "装配隔离预览",
+            "status": "completed",
+            "detail": "完整预览文档已装配；未验证业务功能。",
+            "at": "2026-10-09T09:05:12.312Z"
+          },
+          {
+            "taskId": "e91ccdcb-582b-497d-853c-7d06ed7c94b9",
+            "source": "browser",
+            "sequence": 7,
+            "stepId": "preview-load",
+            "label": "载入隔离预览",
+            "status": "started",
+            "detail": "将完整文档载入 sandbox iframe。",
+            "at": "2026-10-09T09:05:12.312Z"
+          },
+          {
+            "taskId": "e91ccdcb-582b-497d-853c-7d06ed7c94b9",
+            "source": "browser",
+            "sequence": 8,
+            "stepId": "preview-assemble",
+            "label": "装配隔离预览",
+            "status": "started",
+            "detail": "向结构合格的完整 HTML 注入平台数据接口与隔离策略。",
+            "at": "2026-10-09T09:05:12.312Z"
+          },
+          {
+            "taskId": "e91ccdcb-582b-497d-853c-7d06ed7c94b9",
+            "source": "browser",
+            "sequence": 9,
+            "stepId": "preview-assemble",
+            "label": "装配隔离预览",
+            "status": "completed",
+            "detail": "完整预览文档已装配；未验证业务功能。",
+            "at": "2026-10-09T09:05:12.312Z"
+          },
+          {
+            "taskId": "e91ccdcb-582b-497d-853c-7d06ed7c94b9",
+            "source": "browser",
+            "sequence": 10,
+            "stepId": "preview-load",
+            "label": "载入隔离预览",
+            "status": "started",
+            "detail": "将完整文档载入 sandbox iframe。",
+            "at": "2026-10-09T09:05:12.312Z"
+          },
+          {
+            "taskId": "e91ccdcb-582b-497d-853c-7d06ed7c94b9",
+            "source": "browser",
+            "sequence": 11,
+            "stepId": "preview-load",
+            "label": "载入隔离预览",
+            "status": "completed",
+            "detail": "已观察到 iframe load 事件；请实际操作验证业务功能。",
+            "at": "2026-10-09T09:05:12.338Z"
+          },
+          {
+            "taskId": "e91ccdcb-582b-497d-853c-7d06ed7c94b9",
+            "source": "browser",
+            "sequence": 12,
+            "stepId": "data-913a1378-f9c4-4049-81a9-acfe226cd48b-1",
+            "label": "读取应用数据",
+            "status": "started",
+            "detail": "通过平台接口访问本项目的正式业务数据。",
+            "at": "2026-10-09T09:05:12.338Z"
+          },
+          {
+            "taskId": "e91ccdcb-582b-497d-853c-7d06ed7c94b9",
+            "source": "browser",
+            "sequence": 13,
+            "stepId": "data-913a1378-f9c4-4049-81a9-acfe226cd48b-1",
+            "label": "读取应用数据",
+            "status": "completed",
+            "detail": "读取已完成；未复制业务数据到执行记录。",
+            "at": "2026-10-09T09:05:12.349Z"
+          },
+          {
+            "taskId": "e91ccdcb-582b-497d-853c-7d06ed7c94b9",
+            "source": "browser",
+            "sequence": 14,
+            "stepId": "data-913a1378-f9c4-4049-81a9-acfe226cd48b-2",
+            "label": "保存应用数据",
+            "status": "started",
+            "detail": "通过平台接口访问本项目的正式业务数据。",
+            "at": "2026-10-09T09:05:12.405Z"
+          },
+          {
+            "taskId": "e91ccdcb-582b-497d-853c-7d06ed7c94b9",
+            "source": "browser",
+            "sequence": 15,
+            "stepId": "data-913a1378-f9c4-4049-81a9-acfe226cd48b-2",
+            "label": "保存应用数据",
+            "status": "completed",
+            "detail": "正式业务数据事务已提交。",
+            "at": "2026-10-09T09:05:12.417Z"
+          }
+        ]
+      },
+      "updatedAt": "2026-10-09T09:05:12.416Z"
+    },
+    "data": {
+      "projectId": "c28f22bf-ce3d-4b94-a7fb-607ab48fdd3f",
+      "state": {
+        "text": "已保存的数据"
+      },
+      "updatedAt": "2026-10-09T09:05:12.416Z"
+    }
+  },
+  "after": {
+    "project": {
+      "id": "c28f22bf-ce3d-4b94-a7fb-607ab48fdd3f",
+      "requirement": "T1 源码状态保全",
+      "title": "T1 源码状态保全",
+      "result": {
+        "html": "<!DOCTYPE html><html><head><title>T1 受控应用</title></head><body>\n<h1>T1 受控应用</h1><label>应用草稿<input aria-label=\"应用草稿\" disabled></label>\n<button id=\"save\" disabled>保存应用数据</button><button id=\"start\">开始内存计时</button>\n<p>已保存：<output id=\"saved\"></output></p><p>计时：<output id=\"ticks\">0</output></p>\n<output id=\"instance\"></output><script>\nconst input=document.querySelector('input'),save=document.querySelector('#save');\ndocument.querySelector('#instance').textContent=crypto.randomUUID();\natoms.loadState().then(s=>{document.querySelector('#saved').textContent=s?.text??'';input.disabled=save.disabled=false});\nsave.onclick=async()=>{await atoms.saveState({text:input.value});document.querySelector('#saved').textContent=input.value};\nlet ticks=0;document.querySelector('#start').onclick=()=>{document.querySelector('#start').disabled=true;setInterval(()=>document.querySelector('#ticks').textContent=++ticks,100)};\n</script>\n<!-- 原始源码第 1 行，不含平台注入 -->\n<!-- 原始源码第 2 行，不含平台注入 -->\n<!-- 原始源码第 3 行，不含平台注入 -->\n<!-- 原始源码第 4 行，不含平台注入 -->\n<!-- 原始源码第 5 行，不含平台注入 -->\n<!-- 原始源码第 6 行，不含平台注入 -->\n<!-- 原始源码第 7 行，不含平台注入 -->\n<!-- 原始源码第 8 行，不含平台注入 -->\n<!-- 原始源码第 9 行，不含平台注入 -->\n<!-- 原始源码第 10 行，不含平台注入 -->\n<!-- 原始源码第 11 行，不含平台注入 -->\n<!-- 原始源码第 12 行，不含平台注入 -->\n<!-- 原始源码第 13 行，不含平台注入 -->\n<!-- 原始源码第 14 行，不含平台注入 -->\n<!-- 原始源码第 15 行，不含平台注入 -->\n<!-- 原始源码第 16 行，不含平台注入 -->\n<!-- 原始源码第 17 行，不含平台注入 -->\n<!-- 原始源码第 18 行，不含平台注入 -->\n<!-- 原始源码第 19 行，不含平台注入 -->\n<!-- 原始源码第 20 行，不含平台注入 -->\n<!-- 原始源码第 21 行，不含平台注入 -->\n<!-- 原始源码第 22 行，不含平台注入 -->\n<!-- 原始源码第 23 行，不含平台注入 -->\n<!-- 原始源码第 24 行，不含平台注入 -->\n<!-- 原始源码第 25 行，不含平台注入 -->\n<!-- 原始源码第 26 行，不含平台注入 -->\n<!-- 原始源码第 27 行，不含平台注入 -->\n<!-- 原始源码第 28 行，不含平台注入 -->\n<!-- 原始源码第 29 行，不含平台注入 -->\n<!-- 原始源码第 30 行，不含平台注入 -->\n<!-- 原始源码第 31 行，不含平台注入 -->\n<!-- 原始源码第 32 行，不含平台注入 -->\n<!-- 原始源码第 33 行，不含平台注入 -->\n<!-- 原始源码第 34 行，不含平台注入 -->\n<!-- 原始源码第 35 行，不含平台注入 -->\n<!-- 原始源码第 36 行，不含平台注入 -->\n<!-- 原始源码第 37 行，不含平台注入 -->\n<!-- 原始源码第 38 行，不含平台注入 -->\n<!-- 原始源码第 39 行，不含平台注入 -->\n<!-- 原始源码第 40 行，不含平台注入 -->\n<!-- 原始源码第 41 行，不含平台注入 -->\n<!-- 原始源码第 42 行，不含平台注入 -->\n<!-- 原始源码第 43 行，不含平台注入 -->\n<!-- 原始源码第 44 行，不含平台注入 -->\n<!-- 原始源码第 45 行，不含平台注入 -->\n<!-- 原始源码第 46 行，不含平台注入 -->\n<!-- 原始源码第 47 行，不含平台注入 -->\n<!-- 原始源码第 48 行，不含平台注入 -->\n<!-- 原始源码第 49 行，不含平台注入 -->\n<!-- 原始源码第 50 行，不含平台注入 -->\n<!-- 原始源码第 51 行，不含平台注入 -->\n<!-- 原始源码第 52 行，不含平台注入 -->\n<!-- 原始源码第 53 行，不含平台注入 -->\n<!-- 原始源码第 54 行，不含平台注入 -->\n<!-- 原始源码第 55 行，不含平台注入 -->\n<!-- 原始源码第 56 行，不含平台注入 -->\n<!-- 原始源码第 57 行，不含平台注入 -->\n<!-- 原始源码第 58 行，不含平台注入 -->\n<!-- 原始源码第 59 行，不含平台注入 -->\n<!-- 原始源码第 60 行，不含平台注入 -->\n<!-- 原始源码第 61 行，不含平台注入 -->\n<!-- 原始源码第 62 行，不含平台注入 -->\n<!-- 原始源码第 63 行，不含平台注入 -->\n<!-- 原始源码第 64 行，不含平台注入 -->\n<!-- 原始源码第 65 行，不含平台注入 -->\n<!-- 原始源码第 66 行，不含平台注入 -->\n<!-- 原始源码第 67 行，不含平台注入 -->\n<!-- 原始源码第 68 行，不含平台注入 -->\n<!-- 原始源码第 69 行，不含平台注入 -->\n<!-- 原始源码第 70 行，不含平台注入 -->\n<!-- 原始源码第 71 行，不含平台注入 -->\n<!-- 原始源码第 72 行，不含平台注入 -->\n<!-- 原始源码第 73 行，不含平台注入 -->\n<!-- 原始源码第 74 行，不含平台注入 -->\n<!-- 原始源码第 75 行，不含平台注入 -->\n<!-- 原始源码第 76 行，不含平台注入 -->\n<!-- 原始源码第 77 行，不含平台注入 -->\n<!-- 原始源码第 78 行，不含平台注入 -->\n<!-- 原始源码第 79 行，不含平台注入 -->\n<!-- 原始源码第 80 行，不含平台注入 -->\n<!-- 原始源码第 81 行，不含平台注入 -->\n<!-- 原始源码第 82 行，不含平台注入 -->\n<!-- 原始源码第 83 行，不含平台注入 -->\n<!-- 原始源码第 84 行，不含平台注入 -->\n<!-- 原始源码第 85 行，不含平台注入 -->\n<!-- 原始源码第 86 行，不含平台注入 -->\n<!-- 原始源码第 87 行，不含平台注入 -->\n<!-- 原始源码第 88 行，不含平台注入 -->\n<!-- 原始源码第 89 行，不含平台注入 -->\n<!-- 原始源码第 90 行，不含平台注入 -->\n<!-- 原始源码第 91 行，不含平台注入 -->\n<!-- 原始源码第 92 行，不含平台注入 -->\n<!-- 原始源码第 93 行，不含平台注入 -->\n<!-- 原始源码第 94 行，不含平台注入 -->\n<!-- 原始源码第 95 行，不含平台注入 -->\n<!-- 原始源码第 96 行，不含平台注入 -->\n<!-- 原始源码第 97 行，不含平台注入 -->\n<!-- 原始源码第 98 行，不含平台注入 -->\n<!-- 原始源码第 99 行，不含平台注入 -->\n<!-- 原始源码第 100 行，不含平台注入 -->\n<!-- 原始源码第 101 行，不含平台注入 -->\n<!-- 原始源码第 102 行，不含平台注入 -->\n<!-- 原始源码第 103 行，不含平台注入 -->\n<!-- 原始源码第 104 行，不含平台注入 -->\n<!-- 原始源码第 105 行，不含平台注入 -->\n<!-- 原始源码第 106 行，不含平台注入 -->\n<!-- 原始源码第 107 行，不含平台注入 -->\n<!-- 原始源码第 108 行，不含平台注入 -->\n<!-- 原始源码第 109 行，不含平台注入 -->\n<!-- 原始源码第 110 行，不含平台注入 -->\n<!-- 原始源码第 111 行，不含平台注入 -->\n<!-- 原始源码第 112 行，不含平台注入 -->\n<!-- 原始源码第 113 行，不含平台注入 -->\n<!-- 原始源码第 114 行，不含平台注入 -->\n<!-- 原始源码第 115 行，不含平台注入 -->\n<!-- 原始源码第 116 行，不含平台注入 -->\n<!-- 原始源码第 117 行，不含平台注入 -->\n<!-- 原始源码第 118 行，不含平台注入 -->\n<!-- 原始源码第 119 行，不含平台注入 -->\n<!-- 原始源码第 120 行，不含平台注入 -->\n<!-- 原始源码第 121 行，不含平台注入 -->\n<!-- 原始源码第 122 行，不含平台注入 -->\n<!-- 原始源码第 123 行，不含平台注入 -->\n<!-- 原始源码第 124 行，不含平台注入 -->\n<!-- 原始源码第 125 行，不含平台注入 -->\n<!-- 原始源码第 126 行，不含平台注入 -->\n<!-- 原始源码第 127 行，不含平台注入 -->\n<!-- 原始源码第 128 行，不含平台注入 -->\n<!-- 原始源码第 129 行，不含平台注入 -->\n<!-- 原始源码第 130 行，不含平台注入 -->\n<!-- 原始源码第 131 行，不含平台注入 -->\n<!-- 原始源码第 132 行，不含平台注入 -->\n<!-- 原始源码第 133 行，不含平台注入 -->\n<!-- 原始源码第 134 行，不含平台注入 -->\n<!-- 原始源码第 135 行，不含平台注入 -->\n<!-- 原始源码第 136 行，不含平台注入 -->\n<!-- 原始源码第 137 行，不含平台注入 -->\n<!-- 原始源码第 138 行，不含平台注入 -->\n<!-- 原始源码第 139 行，不含平台注入 -->\n<!-- 原始源码第 140 行，不含平台注入 -->\n<!-- 原始源码第 141 行，不含平台注入 -->\n<!-- 原始源码第 142 行，不含平台注入 -->\n<!-- 原始源码第 143 行，不含平台注入 -->\n<!-- 原始源码第 144 行，不含平台注入 -->\n<!-- 原始源码第 145 行，不含平台注入 -->\n<!-- 原始源码第 146 行，不含平台注入 -->\n<!-- 原始源码第 147 行，不含平台注入 -->\n<!-- 原始源码第 148 行，不含平台注入 -->\n<!-- 原始源码第 149 行，不含平台注入 -->\n<!-- 原始源码第 150 行，不含平台注入 -->\n<!-- 原始源码第 151 行，不含平台注入 -->\n<!-- 原始源码第 152 行，不含平台注入 -->\n<!-- 原始源码第 153 行，不含平台注入 -->\n<!-- 原始源码第 154 行，不含平台注入 -->\n<!-- 原始源码第 155 行，不含平台注入 -->\n<!-- 原始源码第 156 行，不含平台注入 -->\n<!-- 原始源码第 157 行，不含平台注入 -->\n<!-- 原始源码第 158 行，不含平台注入 -->\n<!-- 原始源码第 159 行，不含平台注入 -->\n<!-- 原始源码第 160 行，不含平台注入 -->\n</body></html>",
+        "model": "T1 SYNTHETIC RESPONSE",
+        "durationMs": 1,
+        "generatedAt": "1"
+      },
+      "previewPolicy": {
+        "status": "allowed",
+        "reasons": [],
+        "review": "clean",
+        "dataMode": "formal",
+        "adoption": "allowed"
+      },
+      "initialGeneration": {
+        "team": {
+          "protocol": "atoms-team/3",
+          "taskId": "e91ccdcb-582b-497d-853c-7d06ed7c94b9",
+          "projectId": "c28f22bf-ce3d-4b94-a7fb-607ab48fdd3f",
+          "codeHash": "65814bc80956a4fcde82065440c92963229dd99ab5063a5dbaa9587dc135347a",
+          "review": {
+            "kind": "code-review",
+            "schemaVersion": 1,
+            "resolutions": [],
+            "taskId": "e91ccdcb-582b-497d-853c-7d06ed7c94b9",
+            "codeHash": "65814bc80956a4fcde82065440c92963229dd99ab5063a5dbaa9587dc135347a",
+            "approved": true,
+            "summary": "SYNTHETIC REVIEW FIXTURE",
+            "issues": []
+          },
+          "outcome": "passed",
+          "deliveries": [
+            {
+              "role": "Mike",
+              "content": "{\"command\":\"assign\",\"to\":\"Requirements\",\"reason\":\"synthetic fixture\",\"instruction\":\"synthetic fixture\"}"
+            },
+            {
+              "role": "Requirements",
+              "content": "{\"requirements\":[{\"id\":\"synthetic\",\"description\":\"synthetic\"}]}"
+            },
+            {
+              "role": "Mike",
+              "content": "{\"command\":\"assign\",\"to\":\"Engineer\",\"reason\":\"synthetic fixture\",\"instruction\":\"synthetic fixture\"}"
+            },
+            {
+              "role": "Engineer",
+              "content": "{\"codeHash\":\"65814bc80956a4fcde82065440c92963229dd99ab5063a5dbaa9587dc135347a\",\"iteration\":1}"
+            },
+            {
+              "role": "Mike",
+              "content": "{\"command\":\"assign\",\"to\":\"Reviewer\",\"reason\":\"synthetic fixture\",\"instruction\":\"synthetic fixture\"}"
+            },
+            {
+              "role": "Reviewer",
+              "content": "{\"kind\":\"code-review\",\"schemaVersion\":1,\"resolutions\":[],\"taskId\":\"e91ccdcb-582b-497d-853c-7d06ed7c94b9\",\"codeHash\":\"65814bc80956a4fcde82065440c92963229dd99ab5063a5dbaa9587dc135347a\",\"approved\":true,\"summary\":\"SYNTHETIC REVIEW FIXTURE\",\"issues\":[]}"
+            },
+            {
+              "role": "Mike",
+              "content": "{\"command\":\"finish\"}"
+            }
+          ],
+          "calls": [
+            {
+              "call": 1,
+              "actor": "Mike",
+              "requestedModel": "fixture",
+              "status": "completed"
+            },
+            {
+              "call": 2,
+              "actor": "Requirements",
+              "requestedModel": "fixture",
+              "status": "completed"
+            },
+            {
+              "call": 3,
+              "actor": "Mike",
+              "requestedModel": "fixture",
+              "status": "completed"
+            },
+            {
+              "call": 4,
+              "actor": "Engineer",
+              "requestedModel": "fixture",
+              "status": "completed"
+            },
+            {
+              "call": 5,
+              "actor": "Mike",
+              "requestedModel": "fixture",
+              "status": "completed"
+            },
+            {
+              "call": 6,
+              "actor": "Reviewer",
+              "requestedModel": "fixture",
+              "status": "completed"
+            },
+            {
+              "call": 7,
+              "actor": "Mike",
+              "requestedModel": "fixture",
+              "status": "completed"
+            }
+          ]
+        },
+        "taskId": "e91ccdcb-582b-497d-853c-7d06ed7c94b9",
+        "startedAt": "2026-10-09T09:05:12.171Z",
+        "assistantReply": null,
+        "events": [
+          {
+            "taskId": "e91ccdcb-582b-497d-853c-7d06ed7c94b9",
+            "source": "browser",
+            "sequence": 1,
+            "stepId": "transport",
+            "label": "接收生成结果",
+            "status": "started",
+            "detail": "向服务端提交需求并持续读取实际执行事件。",
+            "at": "2026-10-09T09:05:12.171Z"
+          },
+          {
+            "taskId": "e91ccdcb-582b-497d-853c-7d06ed7c94b9",
+            "source": "browser",
+            "sequence": 2,
+            "stepId": "transport",
+            "label": "接收生成结果",
+            "status": "completed",
+            "detail": "完整代码已收到；实际审查与任务结束状态见团队记录。",
+            "at": "2026-10-09T09:05:12.279Z"
+          },
+          {
+            "taskId": "e91ccdcb-582b-497d-853c-7d06ed7c94b9",
+            "source": "browser",
+            "sequence": 3,
+            "stepId": "project-save",
+            "label": "保存项目与助手回复",
+            "status": "started",
+            "detail": "写入本浏览器项目存储，等待事务提交。",
+            "at": "2026-10-09T09:05:12.285Z"
+          },
+          {
+            "taskId": "e91ccdcb-582b-497d-853c-7d06ed7c94b9",
+            "source": "browser",
+            "sequence": 4,
+            "stepId": "project-save",
+            "label": "保存项目与助手回复",
+            "status": "completed",
+            "detail": "项目、HTML、助手回复及已有执行记录已提交；后续步骤独立追加。",
+            "at": "2026-10-09T09:05:12.303Z"
+          },
+          {
+            "taskId": "e91ccdcb-582b-497d-853c-7d06ed7c94b9",
+            "source": "browser",
+            "sequence": 5,
+            "stepId": "preview-assemble",
+            "label": "装配隔离预览",
+            "status": "started",
+            "detail": "向结构合格的完整 HTML 注入平台数据接口与隔离策略。",
+            "at": "2026-10-09T09:05:12.311Z"
+          },
+          {
+            "taskId": "e91ccdcb-582b-497d-853c-7d06ed7c94b9",
+            "source": "browser",
+            "sequence": 6,
+            "stepId": "preview-assemble",
+            "label": "装配隔离预览",
+            "status": "completed",
+            "detail": "完整预览文档已装配；未验证业务功能。",
+            "at": "2026-10-09T09:05:12.312Z"
+          },
+          {
+            "taskId": "e91ccdcb-582b-497d-853c-7d06ed7c94b9",
+            "source": "browser",
+            "sequence": 7,
+            "stepId": "preview-load",
+            "label": "载入隔离预览",
+            "status": "started",
+            "detail": "将完整文档载入 sandbox iframe。",
+            "at": "2026-10-09T09:05:12.312Z"
+          },
+          {
+            "taskId": "e91ccdcb-582b-497d-853c-7d06ed7c94b9",
+            "source": "browser",
+            "sequence": 8,
+            "stepId": "preview-assemble",
+            "label": "装配隔离预览",
+            "status": "started",
+            "detail": "向结构合格的完整 HTML 注入平台数据接口与隔离策略。",
+            "at": "2026-10-09T09:05:12.312Z"
+          },
+          {
+            "taskId": "e91ccdcb-582b-497d-853c-7d06ed7c94b9",
+            "source": "browser",
+            "sequence": 9,
+            "stepId": "preview-assemble",
+            "label": "装配隔离预览",
+            "status": "completed",
+            "detail": "完整预览文档已装配；未验证业务功能。",
+            "at": "2026-10-09T09:05:12.312Z"
+          },
+          {
+            "taskId": "e91ccdcb-582b-497d-853c-7d06ed7c94b9",
+            "source": "browser",
+            "sequence": 10,
+            "stepId": "preview-load",
+            "label": "载入隔离预览",
+            "status": "started",
+            "detail": "将完整文档载入 sandbox iframe。",
+            "at": "2026-10-09T09:05:12.312Z"
+          },
+          {
+            "taskId": "e91ccdcb-582b-497d-853c-7d06ed7c94b9",
+            "source": "browser",
+            "sequence": 11,
+            "stepId": "preview-load",
+            "label": "载入隔离预览",
+            "status": "completed",
+            "detail": "已观察到 iframe load 事件；请实际操作验证业务功能。",
+            "at": "2026-10-09T09:05:12.338Z"
+          },
+          {
+            "taskId": "e91ccdcb-582b-497d-853c-7d06ed7c94b9",
+            "source": "browser",
+            "sequence": 12,
+            "stepId": "data-913a1378-f9c4-4049-81a9-acfe226cd48b-1",
+            "label": "读取应用数据",
+            "status": "started",
+            "detail": "通过平台接口访问本项目的正式业务数据。",
+            "at": "2026-10-09T09:05:12.338Z"
+          },
+          {
+            "taskId": "e91ccdcb-582b-497d-853c-7d06ed7c94b9",
+            "source": "browser",
+            "sequence": 13,
+            "stepId": "data-913a1378-f9c4-4049-81a9-acfe226cd48b-1",
+            "label": "读取应用数据",
+            "status": "completed",
+            "detail": "读取已完成；未复制业务数据到执行记录。",
+            "at": "2026-10-09T09:05:12.349Z"
+          },
+          {
+            "taskId": "e91ccdcb-582b-497d-853c-7d06ed7c94b9",
+            "source": "browser",
+            "sequence": 14,
+            "stepId": "data-913a1378-f9c4-4049-81a9-acfe226cd48b-2",
+            "label": "保存应用数据",
+            "status": "started",
+            "detail": "通过平台接口访问本项目的正式业务数据。",
+            "at": "2026-10-09T09:05:12.405Z"
+          },
+          {
+            "taskId": "e91ccdcb-582b-497d-853c-7d06ed7c94b9",
+            "source": "browser",
+            "sequence": 15,
+            "stepId": "data-913a1378-f9c4-4049-81a9-acfe226cd48b-2",
+            "label": "保存应用数据",
+            "status": "completed",
+            "detail": "正式业务数据事务已提交。",
+            "at": "2026-10-09T09:05:12.417Z"
+          }
+        ]
+      },
+      "updatedAt": "2026-10-09T09:05:12.416Z"
+    },
+    "data": {
+      "projectId": "c28f22bf-ce3d-4b94-a7fb-607ab48fdd3f",
+      "state": {
+        "text": "已保存的数据"
+      },
+      "updatedAt": "2026-10-09T09:05:12.416Z"
+    }
+  }
+}
