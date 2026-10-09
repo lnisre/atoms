@@ -1,4 +1,4 @@
-import { prepareBuiltinExample, type ExampleSource } from "./builtin-example";
+import { prepareBuiltinExample, EXAMPLE_STATE, type ExampleSource } from "./builtin-example";
 import { previewPolicy, type PreviewPolicy } from "./team/preview-policy";
 import { reviewedTeam, artifactTeam } from "./team/review";
 import { sha256 } from "./qa/contract";
@@ -107,8 +107,9 @@ export function listProjects() {
 
 // Metadata lives outside projects, under a non-project reserved key. Version 1
 // clients enumerate projects and read applicationData by UUID, so no upgrade or
-// project-list filter is needed. No business record is created for a null source.
+// project-list filter is needed. Initial data and both markers commit with the project.
 const FIRST_VISIT_KEY = "$atoms:workspace:first-visit";
+const TIP_EXAMPLE_KEY = "$atoms:workspace:tip-calculator";
 function initializeWorkspace(example?: SavedProject) {
   return transaction<{ projects: SavedProject[]; needsExample: boolean }>(
     ["projects", "applicationData"], "readwrite", (tx, done) => {
@@ -128,6 +129,8 @@ function initializeWorkspace(example?: SavedProject) {
           try {
             if (!saved.length && example) {
               projects.add(example);
+              metadata.add({ projectId: example.id, state: structuredClone(EXAMPLE_STATE) });
+              metadata.put({ projectId: TIP_EXAMPLE_KEY, kind: "workspace-initialization", completed: true });
               saved.push(example);
             }
             metadata.put({ projectId: FIRST_VISIT_KEY, kind: "workspace-initialization", completed: true });

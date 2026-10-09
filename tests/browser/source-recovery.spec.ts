@@ -82,7 +82,7 @@ for (const mode of ['fatal', 'unknown'] as const) test(`${mode}: 受限成果重
   const projectUrl = page.url();
   // Same React page, another project: no source or reading state crosses projects.
   await page.getByRole('button', { name: 'Atoms 首页', exact: true }).click();
-  await page.getByRole('region', { name: '已有项目' }).getByRole('button', { name: /专注番茄钟/ }).click();
+  await page.getByRole('region', { name: '已有项目' }).getByRole('button', { name: /小费计算器/ }).click();
   await expectFreshPreview(page);
   await expect(source(page)).not.toContainText('审查预览夹具');
   await expect(page.getByText('首次生成 · 已保存', { exact: true })).toHaveCount(0);
@@ -96,7 +96,7 @@ test('待验证成果保存失败仍可复制，736px 下未保存反馈与阅�
   let html = '', requests = 0;
   await page.route('**/api/generate', async route => { requests++; html = await respond(route, 'unknown'); });
   await page.goto('/');
-  await expect(page.getByRole('region', { name: '已有项目' }).getByRole('button', { name: /专注番茄钟/ })).toBeVisible();
+  await expect(page.getByRole('region', { name: '已有项目' }).getByRole('button', { name: /小费计算器/ })).toBeVisible();
   // Fail only the new project's actual write, after normal workspace setup.
   await page.evaluate(() => {
     const put = IDBObjectStore.prototype.put;

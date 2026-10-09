@@ -1,32 +1,31 @@
-# First-visit example and timer
+# 小费示例与旧副本保全
 
-## Sub-features
+## 验收时机
 
-| Expected observable result | Source |
+#50/#51 票内仅做类型、静态及直接相关的定向功能检查。两票全部交付并集成后，由 #46 在合入前统一调用 verify-atoms；票内不运行本功能完整矩阵或等价替代脚本。未执行项明确标注待集中验收。
+
+## 入口与覆盖
+
+新隔离 profile 访问 `/`，通过“已有项目”“我的项目”“最近项目”打开“示例 · 小费计算器”。首页保留创建入口、不自动跳转。有效 UUID 链接恢复对应项目，缺失链接显示缺失提示。
+
+| 可观察结果 | 驱动与依据 |
 | --- | --- |
-| Empty workspace gets one independent example without auto-opening/model calls; concurrent visits create one; existing projects/marker semantics survive | [ADR 0012](../../../../docs/adr/0012-first-visit-example-project.md), [#36](https://github.com/lnisre/atoms/issues/36) |
-| Start/pause/reset persist; running time recovers by elapsed time; expired reopen settles current segment once and pauses; paused state stays paused; unknown fields survive | ADR 0012, [#37](https://github.com/lnisre/atoms/issues/37) |
-| Read failure cannot overwrite data; initialization/transaction failures are retryable without half-projects; failed timer writes preserve committed state | ADR 0012 |
-| Preset requirement/assistant/delivery is identified truthfully; old example code/data do not migrate to show messages | ADR 0012, [#39](https://github.com/lnisre/atoms/issues/39) |
-| Modification uses normal candidate policy; adoption excludes trial data | ADR 0012 and [ADR 0011](../../../../docs/adr/0011-review-findings-and-preview.md) |
+| 一份独立项目及 20/5/4 数据；两轮真实来源回复、交付、8/7 次请求、42/30 个时间条目、首次解析失败；来源不写入个人任务 | `builtin-example.spec.ts`；#46/#50、ADR 0013 |
+| 小费 1、总额 21、每人 5.25；有效输入保存、非法输入不写；未知字段保留；读失败禁写、写失败回滚 | `builtin-example.spec.ts`；连续输入脚本定向回归在 `tests/tip-calculator.test.ts` |
+| 项目/业务数据/安装标记一起提交；多标签唯一；素材/读库/事务错误可重试；删除后不重建 | `builtin-example.spec.ts` |
+| 来源与本人记录分开；候选试用/放弃隔离，采用只换代码；继续修改、刷新/新标签恢复 | `builtin-example.spec.ts` 及既有 candidate/modification-records |
+| 当前单文件源码与预览一致，复制无注入，同版本切换保留输入/iframe；代码模式下候选/失败状态可达 | source-browser/source-version/source-recovery；#47 保持有效 |
+| 完整浏览器重启后恢复代码、数据、两轮来源且零模型请求 | `scripts/smoke-example.mjs`；带已采用个人修改的重启仍需 #46 扩展场景 |
+| 已有工作区补入、旧副本退休、升级并发/失败/旧标签保存采用保全 | #51 负责集成；T1 未实现。旧计时功能与已修改副本保护保留在 `legacy-example.spec.ts` |
 
-## How to get to it (user POV)
+## 驱动
 
-Visit `/` in a new isolated profile. Open “示例 · 专注番茄钟” in “已有项目”; also exercise “我的项目” and “最近项目” when entry coverage is required. Reopen via the project's UUID deep link or homepage after full browser restart. Idea chips only fill a new requirement; they are different from the installed example.
+集中验收按主技能启动独立实例，再选择 `tests/browser/builtin-example.spec.ts`、`legacy-example.spec.ts` 和受影响源码/工作台用例。全重启 smoke 改用真实小费输入、已保存值、同一隔离 profile 重开；本票只更新驱动，未执行。
 
-## Driving it with Playwright
+选择器：卡片限定“已有项目”；iframe `#bill`、`#tipPercent`、`#people`、`#perPersonVal`、`[data-atoms-status]`；来源区 `示例来源记录`。同时核对 UI 和对应项目 ID 的业务行，不以数据库写入代替用户动作。
 
-Use [Launch](../SKILL.md#launch) and its default smoke command. It clicks the card, observes 25:00, clicks 开始, observes elapsed wall time, clicks 暂停, waits for app `#status=已保存` and platform “应用数据已保存”, compares committed remaining time, refreshes, then closes/relaunches Chrome using the same isolated profile and reopens through the card. Complete code/data records must match; API attempts must be zero. No clock/state injection.
+## 边界
 
-For concurrency, expired/running recovery, failure protection, messages, old state and candidate boundaries:
-```sh
-TEST_BASE_URL="http://127.0.0.1:$PORT" pnpm exec playwright test tests/browser/builtin-example.spec.ts --workers=1 --retries=0 --trace=on --output="$RUN/browser" --reporter=json >"$RUN/playwright.json"
-```
+来源导出仅为 DOM 展示快照，不是原始 IndexedDB 全对象。素材修订关系、hash 与检查范围见 `docs/verification/issue-50.md`。来源 Reviewer 不证明修订代码通过审查；展示不会授予执行或采用资格。
 
-Selectors: card scoped to “已有项目”; iframe `#timeDisplay`, `#toggleBtn`, `#resetBtn`, `#countDisplay`, `#status`, “重试”. Capture before/action/after and the committed row for the URL project ID.
-
-## Gotchas
-
-Existing timer specs inject Date.now into each opaque iframe; real callbacks, DOM and storage still run. Label controlled time. The wall-time smoke proves paused recovery, not running/expired recovery.
-
-The initialization marker shares `applicationData`; select business rows by projectId/state, not array position. Fixed asset identity comes from `src/lib/builtin-example.ts`. Never clear a user's workspace to pass. Existing Enter-based boundary tests do not prove pointer interaction.
+T1 保持旧工作区语义及旧示例身份；T2 应更新对应边界用例，继续保留旧代码、数据、个人记录与受限源码保护。旧计时测试使用受控旧格式项目及 Date.now；不把这些结果写成新小费示例的行为。

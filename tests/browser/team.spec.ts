@@ -50,7 +50,7 @@ test.describe('native Team and code review using scripted test provider',()=>{
     await page.goto("about:blank");await expect.poll(()=>socketClosed).toBe(true);
     const reopened=await context.newPage();await reopened.goto('/');
     await expect(reopened.getByRole('region',{name:'已有项目'}).getByRole('button',{name:/打开项目/})).toHaveCount(1);
-    await expect(reopened.getByRole('region',{name:'已有项目'}).getByRole('button',{name:/示例 · 专注番茄钟/})).toBeVisible();
+    await expect(reopened.getByRole('region',{name:'已有项目'}).getByRole('button',{name:/示例 · 小费计算器/})).toBeVisible();
     expect(callsAtClose).toBeGreaterThan(0);expect(callsAfterClose).toBe(0);
   });
   test('wrong-code result is rejected and no project is delivered',async({page})=>{
@@ -107,7 +107,7 @@ test.describe('native Team and code review using scripted test provider',()=>{
     await expect(page.getByRole('heading',{name:'任务已停止'})).toBeVisible();await expect.poll(()=>closed).toBe(true);
     await expect(page.getByRole('button',{name:'停止任务'})).toHaveCount(0);await expect(page.locator('iframe')).toHaveCount(0);expect(callsAfterClose).toBe(0);
     await page.reload();await expect(page.getByRole('region',{name:'已有项目'}).getByRole('button',{name:/打开项目/})).toHaveCount(1);
-    await expect(page.getByRole('region',{name:'已有项目'}).getByRole('button',{name:/示例 · 专注番茄钟/})).toBeVisible();
+    await expect(page.getByRole('region',{name:'已有项目'}).getByRole('button',{name:/示例 · 小费计算器/})).toBeVisible();
   });
   test('clarification ends its task, retains questions and restarts with a new identity',async({page})=>{
     const taskIds: string[]=[];let calls=0;

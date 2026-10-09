@@ -87,7 +87,7 @@ test("浏览器等待超时后结束等待并提供重试", async ({ page }) => 
   await page.goto("/");
   // Wait for hydration and IndexedDB initialization before taking over timers.
   await expect(page.getByRole("region", { name: "已有项目" }).getByRole("button", { name: /打开项目/ })).toHaveCount(1);
-  await expect(page.getByRole("region", { name: "已有项目" }).getByRole("button", { name: /示例 · 专注番茄钟/ })).toBeVisible();
+  await expect(page.getByRole("region", { name: "已有项目" }).getByRole("button", { name: /示例 · 小费计算器/ })).toBeVisible();
   await page.clock.install();
   await page.getByLabel("你想做什么？").fill("超时验证");
   await page.getByRole("button", { name: "开始生成" }).click();

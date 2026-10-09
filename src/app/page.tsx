@@ -465,7 +465,7 @@ export default function Home() {
       {project && <header className="topbar">
         <div className="project-titlebar">
           <button className="brand" disabled={busy} onClick={goHome} aria-label="Atoms 首页"><AtomsMark /></button>
-          <h1 title={project.requirement}>{project.exampleSource ? "示例 · 专注番茄钟" : project.requirement}</h1>
+          <h1 title={project.requirement}>{project.exampleSource ? (project.exampleSource.templateId === "tip-calculator" ? "示例 · 小费计算器" : "示例 · 专注番茄钟") : project.requirement}</h1>
           <button className="text-button project-home" disabled={busy} onClick={goHome} aria-label="新建项目 / 已有项目" title="返回项目入口">⌄</button>
           <Unavailable label="代码历史与恢复">◴</Unavailable>
           <Unavailable label="收起对话">«</Unavailable>
@@ -495,11 +495,11 @@ export default function Home() {
           <aside className="project-panel">
             <ConversationScroll key={project.id}>
               <details className="project-details"><summary>项目详情与保存范围</summary>
-                <details className="requirement-block"><summary>{project.exampleSource ? "示例功能与计时基线" : "原需求详情"}</summary><p>{project.requirement}</p></details>
+                <details className="requirement-block"><summary>{project.exampleSource ? "示例功能基线" : "原需求详情"}</summary><p>{project.requirement}</p></details>
                 {task?.status === "complete" && (!project.exampleSource || candidate || records.length > 0) && <details className="generation-details"><summary>模型与耗时</summary><dl><div><dt>模型</dt><dd>{(candidate?.result ?? task.result).model}</dd></div><div><dt>{candidate ? "最近候选耗时" : "生成耗时"}</dt><dd>{((candidate?.result ?? task.result).durationMs / 1000).toFixed(1)} 秒</dd></div></dl></details>}
                 <details className="storage-details"><summary>保存与恢复范围</summary><p>自动保存到本浏览器的当前网址。项目与应用数据分别显示保存结果，请等待保存成功再离开。清除站点数据、无痕会话结束或存储被回收后可能丢失，不支持跨设备找回。</p></details>
               </details>
-              {project.exampleSource ? <ExampleConversation /> : <div className="user-message"><span>你 · 初始需求</span><p>{project.requirement}</p></div>}
+              {project.exampleSource ? <ExampleConversation source={project.exampleSource} /> : <div className="user-message"><span>你 · 初始需求</span><p>{project.requirement}</p></div>}
               {!project.exampleSource && <section className={`task-state ${task?.status}`} aria-live="polite" aria-atomic="true">
                 <div className="state-title">
                   <span className={initialBusy ? "spinner" : "state-symbol"} aria-hidden="true">{initialBusy ? "" : task?.status === "failed" ? "!" : "✓"}</span>

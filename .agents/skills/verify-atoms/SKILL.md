@@ -85,7 +85,7 @@ Full suite on dev may skip native tests; report skips, never call that complete 
 
 Stable controls: `你想做什么？`, `开始生成`, `追加修改需求`, `生成候选`, `采用修改`, `放弃本轮修改`. App controls belong in `page.frameLocator('iframe')`. Assert the action and transaction-confirmed saving before recovery. Existing specs sometimes use Enter for the observed opaque-iframe pointer race; keyboard checks do not prove pointer coverage.
 
-Recovery levels: refresh; page close/new page in the same BrowserContext; full persistent Chrome context close and relaunch with the same isolated profile and exact origin. `crossAppWorkflow` covers the first two. The smoke proves the third for the paused example; extend the scenario when running timer/generated-app full restart is required.
+Recovery levels: refresh; page close/new page in the same BrowserContext; full persistent Chrome context close and relaunch with the same isolated profile and exact origin. `crossAppWorkflow` covers the first two. The smoke targets the third for the saved tip example; record execution evidence separately. Extend the scenario for adopted personal modifications and legacy timer recovery.
 
 ## Evidence
 

@@ -65,7 +65,7 @@ test("恢复旧的不完整 HTML 时明确显示装配失败且不运行 iframe"
   await page.goto("/");
   // Disabled is also true in SSR; wait for the actual storage-ready UI.
   await expect(page.getByRole("region", { name: "已有项目" }).getByRole("button", { name: /打开项目/ })).toHaveCount(1);
-  await expect(page.getByRole("region", { name: "已有项目" }).getByRole("button", { name: /示例 · 专注番茄钟/ })).toBeVisible();
+  await expect(page.getByRole("region", { name: "已有项目" }).getByRole("button", { name: /示例 · 小费计算器/ })).toBeVisible();
   await page.evaluate(async () => {
     const db = await new Promise<IDBDatabase>(resolve => { const request = indexedDB.open("atoms-projects", 1); request.onsuccess = () => resolve(request.result); });
     await new Promise<void>((resolve, reject) => {

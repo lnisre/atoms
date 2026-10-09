@@ -40,10 +40,10 @@ export async function doctor({ url, pid, mode = 'dev' }) {
   const response = await fetch(target, { redirect: 'error', signal: AbortSignal.timeout(30000) });
   assert.equal(response.status, 200, 'Home did not return HTTP 200');
   assert((await response.text()).includes('Atoms'), 'Unexpected application');
-  const asset = await fetch(new URL('/examples/pomodoro-v1.html', target), { redirect: 'error', signal: AbortSignal.timeout(10000) });
+  const asset = await fetch(new URL('/examples/tip-calculator-v1.html', target), { redirect: 'error', signal: AbortSignal.timeout(10000) });
   assert.equal(asset.status, 200, 'Example asset missing');
   const assetHash = sha(await asset.text());
-  assert.equal(assetHash, sha(readFileSync(resolve(root, 'public/examples/pomodoro-v1.html'))), 'Served asset differs from checkout');
+  assert.equal(assetHash, sha(readFileSync(resolve(root, 'public/examples/tip-calculator-v1.html'))), 'Served asset differs from checkout');
   const buildFile = resolve(root, '.next/BUILD_ID');
   if (mode === 'team') assert(existsSync(buildFile), 'Build the standalone runtime first');
   return { status: 'passed', mode, url: target.origin, pid, ownership, worktree: root,
