@@ -1,0 +1,445 @@
+{
+  "note": "Started before the user changed the verification strategy. Already finished successfully when the stop was requested. No further regression expansion/retry. This is not full PRD acceptance.",
+  "stats": {
+    "startTime": "2026-10-09T08:04:22.995Z",
+    "duration": 266297.78500000003,
+    "expected": 36,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  },
+  "tests": [
+    {
+      "file": "builtin-example.spec.ts",
+      "title": "新工作区只创建一份独立示例、无业务记录、无伪造历史且零模型调用",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "durationMs": 13712,
+          "errors": []
+        }
+      ]
+    },
+    {
+      "file": "builtin-example.spec.ts",
+      "title": "并发首访只有一份，旧标签无需升级可枚举项目，删除后与模板更新均不重灌",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "durationMs": 7851,
+          "errors": []
+        }
+      ]
+    },
+    {
+      "file": "builtin-example.spec.ts",
+      "title": "已有项目保全、记录已处理，缺失深链接不被示例替换",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "durationMs": 8179,
+          "errors": []
+        }
+      ]
+    },
+    {
+      "file": "builtin-example.spec.ts",
+      "title": "素材校验失败可重试且不丢输入、不留半份记录",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "durationMs": 3473,
+          "errors": []
+        }
+      ]
+    },
+    {
+      "file": "builtin-example.spec.ts",
+      "title": "初始化事务中止回滚项目与标记，重试成功",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "durationMs": 2263,
+          "errors": []
+        }
+      ]
+    },
+    {
+      "file": "builtin-example.spec.ts",
+      "title": "读库失败不请求素材、不写标记，存储恢复可重试",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "durationMs": 2407,
+          "errors": []
+        }
+      ]
+    },
+    {
+      "file": "builtin-example.spec.ts",
+      "title": "素材准备期间另一旧标签保存正常项目，初始化不追加或覆盖",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "durationMs": 1650,
+          "errors": []
+        }
+      ]
+    },
+    {
+      "file": "builtin-example.spec.ts",
+      "title": "运行跨刷新与关闭按真实时间恢复，跨到期只结算一次并暂停",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "durationMs": 8691,
+          "errors": []
+        }
+      ]
+    },
+    {
+      "file": "builtin-example.spec.ts",
+      "title": "暂停、继续与重置保留统计未知字段，旧计时记录兼容",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "durationMs": 8064,
+          "errors": []
+        }
+      ]
+    },
+    {
+      "file": "builtin-example.spec.ts",
+      "title": "结算写入失败不多计数，显式重试成功后重开幂等",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "durationMs": 4511,
+          "errors": []
+        }
+      ]
+    },
+    {
+      "file": "builtin-example.spec.ts",
+      "title": "番茄钟读取失败不能写，恢复后原数据保留；开始保存失败可重试",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "durationMs": 3576,
+          "errors": []
+        }
+      ]
+    },
+    {
+      "file": "builtin-example.spec.ts",
+      "title": "前台按原规则切换专注与休息，展示与输入不重置计时",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "durationMs": 3041,
+          "errors": []
+        }
+      ]
+    },
+    {
+      "file": "builtin-example.spec.ts",
+      "title": "示例修改携带完整基线无业务数据，试用隔离，采用只更新代码与记录且重开零调用",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "durationMs": 9194,
+          "errors": []
+        }
+      ]
+    },
+    {
+      "file": "builtin-example.spec.ts",
+      "title": "已有项目的初始化标记写入失败仍显示旧项目与数据",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "durationMs": 3838,
+          "errors": []
+        }
+      ]
+    },
+    {
+      "file": "builtin-example.spec.ts",
+      "title": "暂停与重置保存失败不覆盖原状态，重试后按实际时间暂停与保留统计",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "durationMs": 5296,
+          "errors": []
+        }
+      ]
+    },
+    {
+      "file": "builtin-example.spec.ts",
+      "title": "已保存且修改过的旧示例显示助手消息，不迁移或覆盖代码与数据",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "durationMs": 5604,
+          "errors": []
+        }
+      ]
+    },
+    {
+      "file": "candidate.spec.ts",
+      "title": "同项目多轮使用最新候选；试用增删改、失败、放弃、刷新和关闭重开均保全正式数据",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "durationMs": 10990,
+          "errors": []
+        }
+      ]
+    },
+    {
+      "file": "candidate.spec.ts",
+      "title": "复制正式数据读取失败不开始空试用；手动重试可成功",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "durationMs": 2102,
+          "errors": []
+        }
+      ]
+    },
+    {
+      "file": "candidate.spec.ts",
+      "title": "修改超时结束等待，保留已采用应用供继续使用",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "durationMs": 2007,
+          "errors": []
+        }
+      ]
+    },
+    {
+      "file": "candidate.spec.ts",
+      "title": "明确采用最新候选只保存代码与多轮记录；旧通道失效，正式操作和重开可恢复",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "durationMs": 6269,
+          "errors": []
+        }
+      ]
+    },
+    {
+      "file": "candidate.spec.ts",
+      "title": "采用事务未完成不显示成功；中止保留候选和此前采用记录，可手动重试",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "durationMs": 5675,
+          "errors": []
+        }
+      ]
+    },
+    {
+      "file": "candidate.spec.ts",
+      "title": "停止修改后迟到响应不能替换已有候选，正式数据仍可恢复",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "durationMs": 3706,
+          "errors": []
+        }
+      ]
+    },
+    {
+      "file": "preview-document.spec.ts",
+      "title": "真实 head 装配、数据保存恢复和运行异常反馈：普通完整 HTML",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "durationMs": 3137,
+          "errors": []
+        }
+      ]
+    },
+    {
+      "file": "preview-document.spec.ts",
+      "title": "真实 head 装配、数据保存恢复和运行异常反馈：<!-- example <head> -->",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "durationMs": 3429,
+          "errors": []
+        }
+      ]
+    },
+    {
+      "file": "preview-document.spec.ts",
+      "title": "真实 head 装配、数据保存恢复和运行异常反馈：<!-- <head> --><!----><!-- <body> -->",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "durationMs": 6257,
+          "errors": []
+        }
+      ]
+    },
+    {
+      "file": "preview-document.spec.ts",
+      "title": "恢复旧的不完整 HTML 时明确显示装配失败且不运行 iframe",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "durationMs": 11356,
+          "errors": []
+        }
+      ]
+    },
+    {
+      "file": "reviewer-preview.spec.ts",
+      "title": "minor: findings survive preview, automatic save and reopen; two repairs stop after three artifacts",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "durationMs": 6531,
+          "errors": []
+        }
+      ]
+    },
+    {
+      "file": "reviewer-preview.spec.ts",
+      "title": "major: findings survive preview, automatic save and reopen; two repairs stop after three artifacts",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "durationMs": 14695,
+          "errors": []
+        }
+      ]
+    },
+    {
+      "file": "reviewer-preview.spec.ts",
+      "title": "unavailable review keeps a restorable draft, truthful failure, and explicit first use without trial data",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "durationMs": 17405,
+          "errors": []
+        }
+      ]
+    },
+    {
+      "file": "reviewer-preview.spec.ts",
+      "title": "data-risk candidate is visible but cannot be adopted, including after unavailable rereview; actual resolution unlocks adoption",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "durationMs": 23775,
+          "errors": []
+        }
+      ]
+    },
+    {
+      "file": "reviewer-preview.spec.ts",
+      "title": "platform execution blocker does not mount even with model approval; code can be restored and modified",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "durationMs": 11077,
+          "errors": []
+        }
+      ]
+    },
+    {
+      "file": "save-race.spec.ts",
+      "title": "真实旧产物保存时禁止新修改，下一次修改确认后立即关闭可恢复",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "durationMs": 11495,
+          "errors": []
+        }
+      ]
+    },
+    {
+      "file": "workbench-stream.spec.ts",
+      "title": "顺序消息、上翻保全、禁用工具与展示调整 1440",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "durationMs": 7389,
+          "errors": []
+        }
+      ]
+    },
+    {
+      "file": "workbench-stream.spec.ts",
+      "title": "顺序消息、上翻保全、禁用工具与展示调整 1280",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "durationMs": 4561,
+          "errors": []
+        }
+      ]
+    },
+    {
+      "file": "workbench.spec.ts",
+      "title": "长内容桌面路径、独立滚动与详情状态保全 1280×720",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "durationMs": 6745,
+          "errors": []
+        }
+      ]
+    },
+    {
+      "file": "workbench.spec.ts",
+      "title": "长内容桌面路径、独立滚动与详情状态保全 1440×900",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "durationMs": 6513,
+          "errors": []
+        }
+      ]
+    }
+  ]
+}

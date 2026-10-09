@@ -1,0 +1,810 @@
+[
+  {
+    "title": "Launch browser",
+    "startTime": 1734.986,
+    "endTime": 3563.803,
+    "error": null
+  },
+  {
+    "title": "Create context",
+    "startTime": 3573.813,
+    "endTime": 3621.09,
+    "error": null
+  },
+  {
+    "title": "Create page",
+    "startTime": 3666.642,
+    "endTime": 4340.663,
+    "error": null
+  },
+  {
+    "title": "Set viewport size",
+    "startTime": 4345.875,
+    "endTime": 4370.391,
+    "error": null
+  },
+  {
+    "title": "Route requests",
+    "startTime": 4373.786,
+    "endTime": 4376.59,
+    "error": null
+  },
+  {
+    "title": "Navigate",
+    "startTime": 4377.471,
+    "endTime": 6542.241,
+    "error": null
+  },
+  {
+    "title": "Fill \"T1 源码状态保全\"",
+    "startTime": 6550.742,
+    "endTime": 6707.663,
+    "error": null
+  },
+  {
+    "title": "Click",
+    "startTime": 6711.19,
+    "endTime": 7139.345,
+    "error": null
+  },
+  {
+    "title": "Route requests",
+    "startTime": 6930.224,
+    "endTime": 6934.943,
+    "error": null
+  },
+  {
+    "title": "Fulfill request",
+    "startTime": 6937.74,
+    "endTime": 6948.044,
+    "error": null
+  },
+  {
+    "title": "Expect \"toBeVisible\"",
+    "startTime": 7155.546,
+    "endTime": 7309.111,
+    "error": null
+  },
+  {
+    "title": "Expect \"toHaveAttribute\"",
+    "startTime": 7318.826,
+    "endTime": 7355.058,
+    "error": null
+  },
+  {
+    "title": "Fill \"已保存的数据\"",
+    "startTime": 7363.748,
+    "endTime": 7468.39,
+    "error": null
+  },
+  {
+    "title": "Press \"Enter\"",
+    "startTime": 7471.752,
+    "endTime": 7525.194,
+    "error": null
+  },
+  {
+    "title": "Expect \"toBeVisible\"",
+    "startTime": 7526.755,
+    "endTime": 7567.532,
+    "error": null
+  },
+  {
+    "title": "Fill \"未提交的应用输入\"",
+    "startTime": 7572.141,
+    "endTime": 7592.975,
+    "error": null
+  },
+  {
+    "title": "Press \"Enter\"",
+    "startTime": 7600.401,
+    "endTime": 7622.687,
+    "error": null
+  },
+  {
+    "title": "Expect \"poll not toBe\"",
+    "startTime": 7623.165,
+    "endTime": 7770.182,
+    "error": null
+  },
+  {
+    "title": "Get text content",
+    "startTime": 7629.015,
+    "endTime": 7643.664,
+    "error": null
+  },
+  {
+    "title": "Expect \"not toBe\"",
+    "startTime": 7644.299,
+    "endTime": 7650.234,
+    "error": {
+      "name": "",
+      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mnot\u001b[2m.\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: not \u001b[32m\"0\"\u001b[39m",
+      "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mnot\u001b[2m.\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: not \u001b[32m\"0\"\u001b[39m\n    at /private/tmp/atoms-source-browser-t1/tests/browser/source-browser.spec.ts:62:5"
+    }
+  },
+  {
+    "title": "Get text content",
+    "startTime": 7754.033,
+    "endTime": 7769.06,
+    "error": null
+  },
+  {
+    "title": "Expect \"not toBe\"",
+    "startTime": 7769.874,
+    "endTime": 7770.034,
+    "error": null
+  },
+  {
+    "title": "Wait for selector",
+    "startTime": 7777.105,
+    "endTime": 7800.993,
+    "error": null
+  },
+  {
+    "title": "Get text content",
+    "startTime": 7806.201,
+    "endTime": 7894.119,
+    "error": null
+  },
+  {
+    "title": "Fill \"未提交的项目级修改\"",
+    "startTime": 7894.916,
+    "endTime": 7948.817,
+    "error": null
+  },
+  {
+    "title": "Evaluate",
+    "startTime": 7950.803,
+    "endTime": 7985.183,
+    "error": null
+  },
+  {
+    "title": "Get text content",
+    "startTime": 7987.611,
+    "endTime": 8008.772,
+    "error": null
+  },
+  {
+    "title": "Click",
+    "startTime": 8012.683,
+    "endTime": 8112.603,
+    "error": null
+  },
+  {
+    "title": "Expect \"toBeVisible\"",
+    "startTime": 8114.292,
+    "endTime": 8166.496,
+    "error": null
+  },
+  {
+    "title": "Get text content",
+    "startTime": 8167.505,
+    "endTime": 8175.474,
+    "error": null
+  },
+  {
+    "title": "Expect \"toBe\"",
+    "startTime": 8175.983,
+    "endTime": 8176.058,
+    "error": null
+  },
+  {
+    "title": "Expect \"toHaveCount\"",
+    "startTime": 8176.878,
+    "endTime": 8184.459,
+    "error": null
+  },
+  {
+    "title": "Expect \"toHaveText\"",
+    "startTime": 8184.909,
+    "endTime": 8203.174,
+    "error": null
+  },
+  {
+    "title": "Expect \"toHaveCount\"",
+    "startTime": 8204.332,
+    "endTime": 8211.039,
+    "error": null
+  },
+  {
+    "title": "Expect \"toHaveAttribute\"",
+    "startTime": 8212.049,
+    "endTime": 8222.508,
+    "error": null
+  },
+  {
+    "title": "Bounding box",
+    "startTime": 8225.181,
+    "endTime": 8259.213,
+    "error": null
+  },
+  {
+    "title": "Expect \"not toBeNull\"",
+    "startTime": 8259.817,
+    "endTime": 8261.296,
+    "error": null
+  },
+  {
+    "title": "Expect \"toBeGreaterThanOrEqual\"",
+    "startTime": 8263.348,
+    "endTime": 8263.837,
+    "error": null
+  },
+  {
+    "title": "Expect \"toBeGreaterThanOrEqual\"",
+    "startTime": 8264.247,
+    "endTime": 8264.367,
+    "error": null
+  },
+  {
+    "title": "Expect \"toBeLessThanOrEqual\"",
+    "startTime": 8264.76,
+    "endTime": 8264.9,
+    "error": null
+  },
+  {
+    "title": "Expect \"toBeLessThanOrEqual\"",
+    "startTime": 8265.148,
+    "endTime": 8265.176,
+    "error": null
+  },
+  {
+    "title": "Bounding box",
+    "startTime": 8265.582,
+    "endTime": 8281.166,
+    "error": null
+  },
+  {
+    "title": "Bounding box",
+    "startTime": 8282.07,
+    "endTime": 8294.162,
+    "error": null
+  },
+  {
+    "title": "Expect \"toBeLessThanOrEqual\"",
+    "startTime": 8294.632,
+    "endTime": 8294.663,
+    "error": null
+  },
+  {
+    "title": "Expect \"toBeGreaterThan\"",
+    "startTime": 8295.554,
+    "endTime": 8295.914,
+    "error": null
+  },
+  {
+    "title": "Screenshot",
+    "startTime": 8298.876,
+    "endTime": 8453.982,
+    "error": null
+  },
+  {
+    "title": "Click",
+    "startTime": 8459.282,
+    "endTime": 8496.707,
+    "error": null
+  },
+  {
+    "title": "Focus",
+    "startTime": 8498.207,
+    "endTime": 8516.246,
+    "error": null
+  },
+  {
+    "title": "Bounding box",
+    "startTime": 8517.055,
+    "endTime": 8529.591,
+    "error": null
+  },
+  {
+    "title": "Mouse move",
+    "startTime": 8531.133,
+    "endTime": 8541.4,
+    "error": null
+  },
+  {
+    "title": "Mouse down",
+    "startTime": 8542.851,
+    "endTime": 8553.463,
+    "error": null
+  },
+  {
+    "title": "Mouse move",
+    "startTime": 8555.541,
+    "endTime": 8590.689,
+    "error": null
+  },
+  {
+    "title": "Mouse up",
+    "startTime": 8592.546,
+    "endTime": 8600.635,
+    "error": null
+  },
+  {
+    "title": "Evaluate",
+    "startTime": 8601.023,
+    "endTime": 8610.239,
+    "error": null
+  },
+  {
+    "title": "Expect \"toBeTruthy\"",
+    "startTime": 8610.732,
+    "endTime": 8610.908,
+    "error": null
+  },
+  {
+    "title": "Hover",
+    "startTime": 8611.458,
+    "endTime": 8664.447,
+    "error": null
+  },
+  {
+    "title": "Mouse wheel",
+    "startTime": 8665.065,
+    "endTime": 8682.712,
+    "error": null
+  },
+  {
+    "title": "Expect \"poll toBeGreaterThan\"",
+    "startTime": 8683.052,
+    "endTime": 8747.296,
+    "error": null
+  },
+  {
+    "title": "Evaluate",
+    "startTime": 8684.144,
+    "endTime": 8745.044,
+    "error": null
+  },
+  {
+    "title": "Expect \"toBeGreaterThan\"",
+    "startTime": 8745.851,
+    "endTime": 8747.253,
+    "error": null
+  },
+  {
+    "title": "Evaluate",
+    "startTime": 8747.904,
+    "endTime": 8775.84,
+    "error": null
+  },
+  {
+    "title": "Expect \"poll toBeGreaterThan\"",
+    "startTime": 8776.186,
+    "endTime": 8806.403,
+    "error": null
+  },
+  {
+    "title": "Get text content",
+    "startTime": 8778.006,
+    "endTime": 8805.483,
+    "error": null
+  },
+  {
+    "title": "Expect \"toBeGreaterThan\"",
+    "startTime": 8806.063,
+    "endTime": 8806.257,
+    "error": null
+  },
+  {
+    "title": "Evaluate",
+    "startTime": 8807.334,
+    "endTime": 8832.555,
+    "error": null
+  },
+  {
+    "title": "Expect \"toEqual\"",
+    "startTime": 8837.722,
+    "endTime": 8840.61,
+    "error": null
+  },
+  {
+    "title": "Expect \"toHaveLength\"",
+    "startTime": 8841.623,
+    "endTime": 8842.506,
+    "error": null
+  },
+  {
+    "title": "Focus",
+    "startTime": 8845.204,
+    "endTime": 8925.927,
+    "error": null
+  },
+  {
+    "title": "Press \"Enter\"",
+    "startTime": 8926.826,
+    "endTime": 8950.062,
+    "error": null
+  },
+  {
+    "title": "Expect \"toHaveValue\"",
+    "startTime": 8953.926,
+    "endTime": 8975.835,
+    "error": null
+  },
+  {
+    "title": "Get text content",
+    "startTime": 8977.291,
+    "endTime": 8991.546,
+    "error": null
+  },
+  {
+    "title": "Expect \"toBe\"",
+    "startTime": 8991.87,
+    "endTime": 8991.91,
+    "error": null
+  },
+  {
+    "title": "Evaluate",
+    "startTime": 8992.197,
+    "endTime": 8996.525,
+    "error": null
+  },
+  {
+    "title": "Expect \"toBe\"",
+    "startTime": 8998.863,
+    "endTime": 8999.087,
+    "error": null
+  },
+  {
+    "title": "Press \"Tab\"",
+    "startTime": 8999.996,
+    "endTime": 9011.717,
+    "error": null
+  },
+  {
+    "title": "Expect \"toBeFocused\"",
+    "startTime": 9012.573,
+    "endTime": 9030.806,
+    "error": null
+  },
+  {
+    "title": "Press \"Space\"",
+    "startTime": 9031.965,
+    "endTime": 9048.294,
+    "error": null
+  },
+  {
+    "title": "Press \"Tab\"",
+    "startTime": 9048.813,
+    "endTime": 9062.148,
+    "error": null
+  },
+  {
+    "title": "Expect \"toBeFocused\"",
+    "startTime": 9063.887,
+    "endTime": 9072.859,
+    "error": null
+  },
+  {
+    "title": "Press \"Tab\"",
+    "startTime": 9073.479,
+    "endTime": 9085.209,
+    "error": null
+  },
+  {
+    "title": "Expect \"toBeFocused\"",
+    "startTime": 9085.948,
+    "endTime": 9110.832,
+    "error": null
+  },
+  {
+    "title": "Evaluate",
+    "startTime": 9113.745,
+    "endTime": 9138.818,
+    "error": null
+  },
+  {
+    "title": "Expect \"toBe\"",
+    "startTime": 9139.871,
+    "endTime": 9139.941,
+    "error": null
+  },
+  {
+    "title": "Expect \"toHaveValue\"",
+    "startTime": 9140.718,
+    "endTime": 9157.388,
+    "error": null
+  },
+  {
+    "title": "Bounding box",
+    "startTime": 9159.577,
+    "endTime": 9180.443,
+    "error": null
+  },
+  {
+    "title": "Expect \"not toBeNull\"",
+    "startTime": 9181.112,
+    "endTime": 9182.221,
+    "error": null
+  },
+  {
+    "title": "Expect \"toBeGreaterThanOrEqual\"",
+    "startTime": 9186.729,
+    "endTime": 9187.076,
+    "error": null
+  },
+  {
+    "title": "Expect \"toBeGreaterThanOrEqual\"",
+    "startTime": 9190.173,
+    "endTime": 9190.371,
+    "error": null
+  },
+  {
+    "title": "Expect \"toBeLessThanOrEqual\"",
+    "startTime": 9191.295,
+    "endTime": 9191.33,
+    "error": null
+  },
+  {
+    "title": "Expect \"toBeLessThanOrEqual\"",
+    "startTime": 9191.633,
+    "endTime": 9191.653,
+    "error": null
+  },
+  {
+    "title": "Bounding box",
+    "startTime": 9191.965,
+    "endTime": 9205.341,
+    "error": null
+  },
+  {
+    "title": "Expect \"not toBeNull\"",
+    "startTime": 9205.946,
+    "endTime": 9205.981,
+    "error": null
+  },
+  {
+    "title": "Expect \"toBeGreaterThanOrEqual\"",
+    "startTime": 9206.419,
+    "endTime": 9206.434,
+    "error": null
+  },
+  {
+    "title": "Expect \"toBeGreaterThanOrEqual\"",
+    "startTime": 9206.921,
+    "endTime": 9206.938,
+    "error": null
+  },
+  {
+    "title": "Expect \"toBeLessThanOrEqual\"",
+    "startTime": 9207.162,
+    "endTime": 9207.18,
+    "error": null
+  },
+  {
+    "title": "Expect \"toBeLessThanOrEqual\"",
+    "startTime": 9207.377,
+    "endTime": 9207.389,
+    "error": null
+  },
+  {
+    "title": "Bounding box",
+    "startTime": 9208.011,
+    "endTime": 9222.683,
+    "error": null
+  },
+  {
+    "title": "Expect \"not toBeNull\"",
+    "startTime": 9223.002,
+    "endTime": 9223.022,
+    "error": null
+  },
+  {
+    "title": "Expect \"toBeGreaterThanOrEqual\"",
+    "startTime": 9223.22,
+    "endTime": 9223.233,
+    "error": null
+  },
+  {
+    "title": "Expect \"toBeGreaterThanOrEqual\"",
+    "startTime": 9223.418,
+    "endTime": 9223.43,
+    "error": null
+  },
+  {
+    "title": "Expect \"toBeLessThanOrEqual\"",
+    "startTime": 9223.691,
+    "endTime": 9223.711,
+    "error": null
+  },
+  {
+    "title": "Expect \"toBeLessThanOrEqual\"",
+    "startTime": 9223.985,
+    "endTime": 9224.007,
+    "error": null
+  },
+  {
+    "title": "Focus",
+    "startTime": 9224.293,
+    "endTime": 9243.583,
+    "error": null
+  },
+  {
+    "title": "Expect \"toBeFocused\"",
+    "startTime": 9244.54,
+    "endTime": 9252.685,
+    "error": null
+  },
+  {
+    "title": "Get text content",
+    "startTime": 9255.837,
+    "endTime": 9269.814,
+    "error": null
+  },
+  {
+    "title": "Evaluate",
+    "startTime": 9270.342,
+    "endTime": 9296.377,
+    "error": null
+  },
+  {
+    "title": "Click",
+    "startTime": 9307.353,
+    "endTime": 9457.526,
+    "error": null
+  },
+  {
+    "title": "Route requests",
+    "startTime": 9423.445,
+    "endTime": 9428.823,
+    "error": null
+  },
+  {
+    "title": "Fulfill request",
+    "startTime": 9431.554,
+    "endTime": 9437.746,
+    "error": null
+  },
+  {
+    "title": "Expect \"toBeEnabled\"",
+    "startTime": 9458.154,
+    "endTime": 9649.803,
+    "error": null
+  },
+  {
+    "title": "Expect \"toHaveLength\"",
+    "startTime": 9651.479,
+    "endTime": 9655.212,
+    "error": null
+  },
+  {
+    "title": "Expect \"toBe\"",
+    "startTime": 9660.667,
+    "endTime": 9660.783,
+    "error": null
+  },
+  {
+    "title": "Expect \"toHaveAttribute\"",
+    "startTime": 9665.414,
+    "endTime": 9750.134,
+    "error": null
+  },
+  {
+    "title": "Bounding box",
+    "startTime": 9751.051,
+    "endTime": 9796.111,
+    "error": null
+  },
+  {
+    "title": "Expect \"not toBeNull\"",
+    "startTime": 9797.239,
+    "endTime": 9797.293,
+    "error": null
+  },
+  {
+    "title": "Expect \"toBeGreaterThanOrEqual\"",
+    "startTime": 9797.697,
+    "endTime": 9797.74,
+    "error": null
+  },
+  {
+    "title": "Expect \"toBeGreaterThanOrEqual\"",
+    "startTime": 9798.144,
+    "endTime": 9798.179,
+    "error": null
+  },
+  {
+    "title": "Expect \"toBeLessThanOrEqual\"",
+    "startTime": 9806.614,
+    "endTime": 9806.719,
+    "error": null
+  },
+  {
+    "title": "Expect \"toBeLessThanOrEqual\"",
+    "startTime": 9808.108,
+    "endTime": 9808.158,
+    "error": null
+  },
+  {
+    "title": "Click",
+    "startTime": 9808.602,
+    "endTime": 10086.162,
+    "error": null
+  },
+  {
+    "title": "Reload",
+    "startTime": 10087.988,
+    "endTime": 14266.912,
+    "error": null
+  },
+  {
+    "title": "Expect \"toHaveAttribute\"",
+    "startTime": 14268.855,
+    "endTime": 14369.561,
+    "error": null
+  },
+  {
+    "title": "Expect \"toHaveText\"",
+    "startTime": 14371.314,
+    "endTime": 14451.101,
+    "error": null
+  },
+  {
+    "title": "Click",
+    "startTime": 14457.29,
+    "endTime": 14585.887,
+    "error": null
+  },
+  {
+    "title": "Get text content",
+    "startTime": 14587.549,
+    "endTime": 14607.406,
+    "error": null
+  },
+  {
+    "title": "Expect \"toBe\"",
+    "startTime": 14609.911,
+    "endTime": 14611.049,
+    "error": null
+  },
+  {
+    "title": "Evaluate",
+    "startTime": 14617.346,
+    "endTime": 14646.584,
+    "error": null
+  },
+  {
+    "title": "Expect \"toBe\"",
+    "startTime": 14649.857,
+    "endTime": 14650.213,
+    "error": null
+  },
+  {
+    "title": "Click",
+    "startTime": 14655.242,
+    "endTime": 14864.659,
+    "error": null
+  },
+  {
+    "title": "Click",
+    "startTime": 14882.008,
+    "endTime": 15046.586,
+    "error": null
+  },
+  {
+    "title": "Expect \"toHaveURL\"",
+    "startTime": 15050.264,
+    "endTime": 15062.676,
+    "error": null
+  },
+  {
+    "title": "Expect \"toHaveAttribute\"",
+    "startTime": 15063.971,
+    "endTime": 15079.329,
+    "error": null
+  },
+  {
+    "title": "Expect \"toHaveLength\"",
+    "startTime": 15080.764,
+    "endTime": 15082.999,
+    "error": null
+  },
+  {
+    "title": "Close context",
+    "startTime": 15667.039,
+    "endTime": 15761.842,
+    "error": null
+  }
+]

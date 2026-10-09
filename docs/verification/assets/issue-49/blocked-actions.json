@@ -1,0 +1,110 @@
+[
+  {
+    "title": "Create context",
+    "startTime": 80290.283,
+    "endTime": 80401.294,
+    "error": null
+  },
+  {
+    "title": "Create page",
+    "startTime": 80415.853,
+    "endTime": 81742.713,
+    "error": null
+  },
+  {
+    "title": "Route requests",
+    "startTime": 81775.705,
+    "endTime": 81793.364,
+    "error": null
+  },
+  {
+    "title": "Navigate",
+    "startTime": 81802.824,
+    "endTime": 86753.859,
+    "error": null
+  },
+  {
+    "title": "Fill \"禁止执行的完整源码\"",
+    "startTime": 86758.189,
+    "endTime": 86955.936,
+    "error": null
+  },
+  {
+    "title": "Click",
+    "startTime": 86958.604,
+    "endTime": 87522.52,
+    "error": null
+  },
+  {
+    "title": "Route requests",
+    "startTime": 87249.201,
+    "endTime": 87252.864,
+    "error": null
+  },
+  {
+    "title": "Fulfill request",
+    "startTime": 87255.103,
+    "endTime": 87257.862,
+    "error": null
+  },
+  {
+    "title": "Expect \"toBeVisible\"",
+    "startTime": 87550.38,
+    "endTime": 87587.026,
+    "error": null
+  },
+  {
+    "title": "Expect \"toHaveCount\"",
+    "startTime": 87590.058,
+    "endTime": 87600.326,
+    "error": null
+  },
+  {
+    "title": "Click",
+    "startTime": 87602.031,
+    "endTime": 87638.935,
+    "error": null
+  },
+  {
+    "title": "Get text content",
+    "startTime": 87642.608,
+    "endTime": 87651.732,
+    "error": null
+  },
+  {
+    "title": "Expect \"toBe\"",
+    "startTime": 87652.245,
+    "endTime": 87652.305,
+    "error": null
+  },
+  {
+    "title": "Expect \"toHaveCount\"",
+    "startTime": 87652.547,
+    "endTime": 87659.029,
+    "error": null
+  },
+  {
+    "title": "Click",
+    "startTime": 87659.814,
+    "endTime": 87704.082,
+    "error": null
+  },
+  {
+    "title": "Expect \"toBeVisible\"",
+    "startTime": 87705.115,
+    "endTime": 87708.7,
+    "error": null
+  },
+  {
+    "title": "Expect \"toHaveCount\"",
+    "startTime": 87709.063,
+    "endTime": 87711.98,
+    "error": null
+  },
+  {
+    "title": "Close context",
+    "startTime": 87792.336,
+    "endTime": 87829.021,
+    "error": null
+  }
+]

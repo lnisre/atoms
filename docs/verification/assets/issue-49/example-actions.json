@@ -1,0 +1,176 @@
+[
+  {
+    "title": "Create context",
+    "startTime": 47433.233,
+    "endTime": 47796.223,
+    "error": null
+  },
+  {
+    "title": "Create page",
+    "startTime": 47850.378,
+    "endTime": 49970.743,
+    "error": null
+  },
+  {
+    "title": "Route requests",
+    "startTime": 50014.062,
+    "endTime": 50027.408,
+    "error": null
+  },
+  {
+    "title": "Navigate",
+    "startTime": 50034.994,
+    "endTime": 55453.333,
+    "error": null
+  },
+  {
+    "title": "Click",
+    "startTime": 55460.063,
+    "endTime": 56457.146,
+    "error": null
+  },
+  {
+    "title": "Expect \"toHaveText\"",
+    "startTime": 56474.156,
+    "endTime": 56642.016,
+    "error": null
+  },
+  {
+    "title": "Press \"Enter\"",
+    "startTime": 56645.396,
+    "endTime": 56726.619,
+    "error": null
+  },
+  {
+    "title": "Click",
+    "startTime": 56729.773,
+    "endTime": 56874.884,
+    "error": null
+  },
+  {
+    "title": "Get text content",
+    "startTime": 56880.435,
+    "endTime": 56896.184,
+    "error": null
+  },
+  {
+    "title": "Expect \"toBe\"",
+    "startTime": 56902.028,
+    "endTime": 56902.254,
+    "error": null
+  },
+  {
+    "title": "Expect \"poll not toBe\"",
+    "startTime": 56904.562,
+    "endTime": 58093.68,
+    "error": null
+  },
+  {
+    "title": "Get text content",
+    "startTime": 56910.906,
+    "endTime": 56932.058,
+    "error": null
+  },
+  {
+    "title": "Expect \"not toBe\"",
+    "startTime": 56933.049,
+    "endTime": 56939.106,
+    "error": {
+      "name": "",
+      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mnot\u001b[2m.\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: not \u001b[32m\"25:00\"\u001b[39m",
+      "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mnot\u001b[2m.\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: not \u001b[32m\"25:00\"\u001b[39m\n    at /private/tmp/atoms-source-browser-t1/tests/browser/source-browser.spec.ts:138:3"
+    }
+  },
+  {
+    "title": "Get text content",
+    "startTime": 57042.658,
+    "endTime": 57058.123,
+    "error": null
+  },
+  {
+    "title": "Expect \"not toBe\"",
+    "startTime": 57058.768,
+    "endTime": 57059.161,
+    "error": {
+      "name": "",
+      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mnot\u001b[2m.\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: not \u001b[32m\"25:00\"\u001b[39m",
+      "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mnot\u001b[2m.\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: not \u001b[32m\"25:00\"\u001b[39m\n    at /private/tmp/atoms-source-browser-t1/tests/browser/source-browser.spec.ts:138:3"
+    }
+  },
+  {
+    "title": "Get text content",
+    "startTime": 57318.893,
+    "endTime": 57370,
+    "error": null
+  },
+  {
+    "title": "Expect \"not toBe\"",
+    "startTime": 57373.371,
+    "endTime": 57375.412,
+    "error": {
+      "name": "",
+      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mnot\u001b[2m.\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: not \u001b[32m\"25:00\"\u001b[39m",
+      "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mnot\u001b[2m.\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: not \u001b[32m\"25:00\"\u001b[39m\n    at /private/tmp/atoms-source-browser-t1/tests/browser/source-browser.spec.ts:138:3"
+    }
+  },
+  {
+    "title": "Get text content",
+    "startTime": 57979.985,
+    "endTime": 58069,
+    "error": null
+  },
+  {
+    "title": "Expect \"not toBe\"",
+    "startTime": 58078.306,
+    "endTime": 58078.489,
+    "error": null
+  },
+  {
+    "title": "Screenshot",
+    "startTime": 58115.055,
+    "endTime": 58747.582,
+    "error": null
+  },
+  {
+    "title": "Click",
+    "startTime": 58788.748,
+    "endTime": 59117.096,
+    "error": null
+  },
+  {
+    "title": "Press \"Enter\"",
+    "startTime": 59125.408,
+    "endTime": 59200.74,
+    "error": null
+  },
+  {
+    "title": "Expect \"toBeVisible\"",
+    "startTime": 59212.904,
+    "endTime": 59354.814,
+    "error": null
+  },
+  {
+    "title": "Reload",
+    "startTime": 59356.372,
+    "endTime": 70209.209,
+    "error": null
+  },
+  {
+    "title": "Expect \"toHaveAttribute\"",
+    "startTime": 70233.447,
+    "endTime": 70373.015,
+    "error": null
+  },
+  {
+    "title": "Expect \"toEqual\"",
+    "startTime": 70373.393,
+    "endTime": 70375.44,
+    "error": null
+  },
+  {
+    "title": "Close context",
+    "startTime": 70861.101,
+    "endTime": 70975.556,
+    "error": null
+  }
+]

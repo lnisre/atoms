@@ -1,0 +1,13 @@
+{
+  "serverSession": 90197,
+  "serverProcess": 70679,
+  "listenerProcess": 70718,
+  "serverSessionExitCode": 0,
+  "port": 3214,
+  "portReleased": true,
+  "t1PlaywrightExitCode": 0,
+  "existingRegressionPlaywrightExitCode": 0,
+  "browsers": "closed by completed Playwright runners",
+  "evidenceRetained": true,
+  "verificationPolicy": "No further broad verification after user adjustment; PRD-level verify-atoms deferred to completion of #47."
+}

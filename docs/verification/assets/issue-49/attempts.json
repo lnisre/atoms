@@ -1,0 +1,19 @@
+{
+  "initial": {
+    "startTime": "2026-10-09T08:03:01.698Z",
+    "duration": 24823.894,
+    "expected": 7,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  },
+  "final": {
+    "startTime": "2026-10-09T08:06:40.258Z",
+    "duration": 93690.54500000001,
+    "expected": 7,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  },
+  "changeBetween": "Result actions use the same complete-result gate as preview and code; JSX cleanup and awaited assertion. No product acceptance failures in either run."
+}

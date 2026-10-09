@@ -1,0 +1,80 @@
+[
+  {
+    "title": "Create context",
+    "startTime": 71918.796,
+    "endTime": 72063.773,
+    "error": null
+  },
+  {
+    "title": "Create page",
+    "startTime": 72099.341,
+    "endTime": 72983.022,
+    "error": null
+  },
+  {
+    "title": "Route requests",
+    "startTime": 73003.562,
+    "endTime": 73005.158,
+    "error": null
+  },
+  {
+    "title": "Navigate",
+    "startTime": 73009.15,
+    "endTime": 79047.917,
+    "error": null
+  },
+  {
+    "title": "Fill \"未完成成果\"",
+    "startTime": 79055.227,
+    "endTime": 79229.857,
+    "error": null
+  },
+  {
+    "title": "Click",
+    "startTime": 79232.271,
+    "endTime": 79753.678,
+    "error": null
+  },
+  {
+    "title": "Expect \"toBeDisabled\"",
+    "startTime": 79768.753,
+    "endTime": 79825.262,
+    "error": null
+  },
+  {
+    "title": "Expect \"toBeVisible\"",
+    "startTime": 79826.319,
+    "endTime": 79844.256,
+    "error": null
+  },
+  {
+    "title": "Expect \"toBeVisible\"",
+    "startTime": 79844.572,
+    "endTime": 79934.241,
+    "error": null
+  },
+  {
+    "title": "Fulfill request",
+    "startTime": 79845.429,
+    "endTime": 79861.677,
+    "error": null
+  },
+  {
+    "title": "Expect \"toBeDisabled\"",
+    "startTime": 79934.925,
+    "endTime": 79951.326,
+    "error": null
+  },
+  {
+    "title": "Expect \"toHaveCount\"",
+    "startTime": 79954.009,
+    "endTime": 79961.077,
+    "error": null
+  },
+  {
+    "title": "Close context",
+    "startTime": 80102,
+    "endTime": 80183.323,
+    "error": null
+  }
+]

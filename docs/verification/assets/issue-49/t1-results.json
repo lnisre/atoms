@@ -1,0 +1,129 @@
+{
+  "mode": "Real workbench / iframe / IndexedDB; synthetic protocol responses; zero real provider calls. Separate synthetic file input harness is not a production project.",
+  "stats": {
+    "startTime": "2026-10-09T08:06:40.258Z",
+    "duration": 93690.54500000001,
+    "expected": 7,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  },
+  "tests": [
+    {
+      "name": "workbench-1440",
+      "test": "真实工作台：原始单文件、状态保全、只读副作用与恢复 1440",
+      "status": "passed",
+      "durationMs": 12188,
+      "startTime": "2026-10-09T08:06:41.062Z",
+      "attachments": [
+        "workbench-1440-read-only-evidence.json",
+        "workbench-1440-actions.json",
+        "source-1440.png"
+      ],
+      "trace": {
+        "temporaryPath": "/private/tmp/atoms-t1-evidence/final/browser/source-browser-真实工作台：原始单文件、状态保全、只读副作用与恢复-1440/trace.zip",
+        "sha256": "ca56297a99a44de6076823195b30a7ec545eab83c94894de3dd3d46e00e851a1",
+        "archived": false
+      }
+    },
+    {
+      "name": "workbench-1280",
+      "test": "真实工作台：原始单文件、状态保全、只读副作用与恢复 1280",
+      "status": "passed",
+      "durationMs": 10494,
+      "startTime": "2026-10-09T08:06:55.547Z",
+      "attachments": [
+        "workbench-1280-read-only-evidence.json",
+        "workbench-1280-actions.json",
+        "source-1280.png"
+      ],
+      "trace": {
+        "temporaryPath": "/private/tmp/atoms-t1-evidence/final/browser/source-browser-真实工作台：原始单文件、状态保全、只读副作用与恢复-1280/trace.zip",
+        "sha256": "35a5a1850fab788c54aec97cd9ee3f50b80af8648e933970288e9a9f60fb4469",
+        "archived": false
+      }
+    },
+    {
+      "name": "workbench-736",
+      "test": "真实工作台：原始单文件、状态保全、只读副作用与恢复 736",
+      "status": "passed",
+      "durationMs": 18537,
+      "startTime": "2026-10-09T08:07:06.499Z",
+      "attachments": [
+        "workbench-736-read-only-evidence.json",
+        "workbench-736-actions.json",
+        "source-736.png"
+      ],
+      "trace": {
+        "temporaryPath": "/private/tmp/atoms-t1-evidence/final/browser/source-browser-真实工作台：原始单文件、状态保全、只读副作用与恢复-736/trace.zip",
+        "sha256": "59333616836e1875a197a9dcb88ddfc2faa8e0bd37ae727e62ce381f4b48a5a9",
+        "archived": false
+      }
+    },
+    {
+      "name": "example",
+      "test": "示例项目：唯一文件为原始 HTML，查看期间计时继续且重开零请求",
+      "status": "passed",
+      "durationMs": 23598,
+      "startTime": "2026-10-09T08:07:26.397Z",
+      "attachments": [
+        "example-example-requests.json",
+        "example-actions.json",
+        "example-source.png"
+      ],
+      "trace": {
+        "temporaryPath": "/private/tmp/atoms-t1-evidence/final/browser/source-browser-示例项目：唯一文件为原始-HTML，查看期间计时继续且重开零请求/trace.zip",
+        "sha256": "e8068fd0e030643739bd1c6f56a13ba36737471213a61897fdca62a0e1da602a",
+        "archived": false
+      }
+    },
+    {
+      "name": "unavailable",
+      "test": "无完整成果：生成期间和失败后入口禁用并解释原因",
+      "status": "passed",
+      "durationMs": 8271,
+      "startTime": "2026-10-09T08:07:51.192Z",
+      "attachments": [
+        "unavailable-actions.json"
+      ],
+      "trace": {
+        "temporaryPath": "/private/tmp/atoms-t1-evidence/final/browser/source-browser-无完整成果：生成期间和失败后入口禁用并解释原因/trace.zip",
+        "sha256": "68e91794e4c497d24076d5646f51df5992e7ddc2d8f4befbe1c59fc8339f5269",
+        "archived": false
+      }
+    },
+    {
+      "name": "blocked",
+      "test": "执行阻断：允许只读原始源码，切换视图仍不执行",
+      "status": "passed",
+      "durationMs": 7531,
+      "startTime": "2026-10-09T08:07:59.633Z",
+      "attachments": [
+        "blocked-actions.json"
+      ],
+      "trace": {
+        "temporaryPath": "/private/tmp/atoms-t1-evidence/final/browser/source-browser-执行阻断：允许只读原始源码，切换视图仍不执行/trace.zip",
+        "sha256": "0c7d371ff175c12b4d7df13c4dccc1a54169996cadd47ca8324ac3607c3c08d7",
+        "archived": false
+      }
+    },
+    {
+      "name": "synthetic-files",
+      "test": "公开输入上的合成多文件：嵌套、同名、长路径、空文本、键盘与阅读保留",
+      "status": "passed",
+      "durationMs": 5972,
+      "startTime": "2026-10-09T08:08:07.245Z",
+      "attachments": [
+        "synthetic-files-synthetic-input-evidence.json",
+        "synthetic-files-actions.json",
+        "synthetic-files-desktop.png",
+        "synthetic-files-narrow.png"
+      ],
+      "trace": {
+        "temporaryPath": "/private/tmp/atoms-t1-evidence/final/browser/source-browser-公开输入上的合成多文件：嵌套、同名、长路径、空文本、键盘与阅读保留/trace.zip",
+        "sha256": "6ad53dbda0128fdcdbb6fb49877c84d56f63d079087bb3a66a4c040627c42b4f",
+        "archived": false
+      }
+    }
+  ]
+}

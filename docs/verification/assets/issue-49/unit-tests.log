@@ -1,0 +1,66 @@
+
+> atoms@0.1.0 test /private/tmp/atoms-source-browser-t1
+> node --import tsx --test tests/generate.test.ts tests/team.test.ts tests/team-socket.test.ts tests/team-client.test.ts tests/preview-policy.test.ts
+
+✔ 无效需求与跨源请求不调用模型 (66.016708ms)
+✔ 未配置密钥时明确失败 (0.547ms)
+✔ 模型错误不会透传原始响应或返回假应用 (3.661542ms)
+✔ 真实请求合同、完整 HTML 与调用耗时 (12.902708ms)
+✔ 截断、空白或非 HTML 结果不作为成功 (2.166666ms)
+✔ 服务端超时结束请求并给出可重试错误 (0.447334ms)
+✔ 仅解包模型返回的唯一完整文档，不执行前后说明 (1.212041ms)
+✔ 修改完整传递基础代码、追加需求与成功对话；不沿用首次需求长度限制截断代码 (1.216375ms)
+✔ 缺失或超限修改输入明确失败，不丢弃上下文继续生成 (45.278209ms)
+✔ 注释中的结构标签不能冒充真实 head/body，无法装配时明确失败 (15.638542ms)
+✔ 单次请求分离完整正文与 HTML，模型等待期间已传递真实开始事件 (2.860958ms)
+✔ 缺少或无效正文保留完整应用，不补调模型；超长正文不静默截断 (7.194666ms)
+✔ 模型、提取、结构失败均发出实际失败与终态，不透传敏感错误 (4.845709ms)
+✔ 客户端收到产物后连接异常也不提交成功；取消读取会取消上游 (21.894292ms)
+✔ 修改沿用同次正文协议与实时事件，保留完整上下文和缺正文降级 (2.8065ms)
+✔ three implementations (two repairs) may finish with major nonfatal findings; fourth is rejected (18.217125ms)
+✔ review evidence is bound to current code; unsupported fatal labels cannot block preview (0.681958ms)
+✔ minor does not authorize repair; data risk permits trial but not adoption (16.313125ms)
+✔ changing code without a resolution cannot erase data risk; current-code resolution can (6.651375ms)
+✔ a third artifact with unavailable review cannot inherit second-artifact data resolution (1.412041ms)
+✔ only platform structural and proven empty-loop rules block; normal errors, strings, finite loops do not (11.288459ms)
+✔ client keeps a complete artifact on local deadline but not on explicit stop or malformed terminal (169.675833ms)
+✔ readTeam heartbeat lifecycle: abort (4908.07225ms)
+✔ readTeam heartbeat lifecycle: timeout (14646.71025ms)
+✔ readTeam heartbeat lifecycle: socket-error (4748.537333ms)
+✔ readTeam heartbeat lifecycle: ack-rejected (4440.188333ms)
+✔ readTeam heartbeat lifecycle: normal (8551.478167ms)
+✔ readTeam heartbeat lifecycle: complete-pending (4599.104958ms)
+✔ readTeam heartbeat lifecycle: abort-after-ack (4613.048625ms)
+✔ reader cancellation followed by normal socket close never closes the stream twice (75.530917ms)
+✔ normal events drain in order; control success/rejection stays out of the stream (2.052375ms)
+✔ cancel settles all pending controls and ignores late events without waiting for a close callback (10.973542ms)
+✔ abort settles all pending controls and ignores late events without waiting for a close callback (5.170917ms)
+✔ close settles all pending controls and ignores late events without waiting for a close callback (2.395209ms)
+✔ normal-close settles all pending controls and ignores late events without waiting for a close callback (1.559083ms)
+✔ abnormal-close settles all pending controls and ignores late events without waiting for a close callback (1.861292ms)
+✔ error settles all pending controls and ignores late events without waiting for a close callback (1.107916ms)
+✔ protocol settles all pending controls and ignores late events without waiting for a close callback (1.30875ms)
+✔ socket-error settles all pending controls and ignores late events without waiting for a close callback (2.983083ms)
+✔ timeout settles all pending controls and ignores late events without waiting for a close callback (1.661375ms)
+✔ send-error settles all pending controls and ignores late events without waiting for a close callback (1.57825ms)
+✔ an already aborted signal never starts a task or retains listeners (0.860375ms)
+✔ abort while connecting prevents start even if open arrives later (0.54875ms)
+✔ start send failure errors the reader and cleans up the connection (0.91525ms)
+✔ platform rules are appended independently; missing or renamed business checks reject (6.43825ms)
+✔ request bound evidence rejects omissions, wrong task, stale hash and weakened expected values (1.74975ms)
+✔ HTTP boundary rejects opaque origin, malformed first tasks and missing task owners without model calls (66.289833ms)
+✔ a missing Python executable emits an explicit terminal error, never a result (30.941917ms)
+✔ review gate binds approval to this code and all four roles (4.33275ms)
+✔ handoff gate rejects stale approval, unchanged code, second repair and wrong task (0.911792ms)
+✔ cancel and original deadline terminate the actual supervised process (11348.799625ms)
+✔ modification input admits complete large code but rejects missing context and business records (270.172917ms)
+✔ adoption rejects wrong project, stale final code and broken successful-round lineage before storage (283.837667ms)
+✔ bounded read-only observations keep exact expectations at the tool boundary (1.819125ms)
+ℹ tests 54
+ℹ suites 0
+ℹ pass 54
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 47002.61175

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState, type ReactNode } from "react";
+import { useEffect, useRef, useState } from "react";
 import { PreviewNavigation } from "@/components/workbench-controls";
 import type { RecordStep } from "@/lib/execution";
 import type { TrialData } from "@/lib/trial-data";
@@ -13,18 +13,14 @@ export function AppPreview({
   projectSaved,
   onRetry,
   trial,
-  actions,
   recordStep,
-  reviewNotice,
 }: {
   html: string;
   projectId: string;
   projectSaved: boolean;
   onRetry: () => void;
   trial?: TrialData;
-  actions?: ReactNode;
   recordStep?: RecordStep;
-  reviewNotice?: string;
 }) {
   // Keep event callbacks fresh without remounting the document on log updates.
   const recorder = useRef(recordStep);
@@ -198,8 +194,6 @@ export function AppPreview({
   return (
     <section className="preview-panel" aria-label="应用预览">
       <PreviewNavigation />
-      {actions}
-      {reviewNotice && <p role="status">{reviewNotice}</p>}
       <div className="preview-toolbar">
         <span>
           <span className="status-dot" />
