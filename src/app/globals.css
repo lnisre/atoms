@@ -102,6 +102,7 @@ details p { white-space: pre-wrap; overflow-wrap: anywhere; line-height: 1.8; }
 .candidate-actions p { margin: 5px 0 0; font-size: 11px; line-height: 1.6; }
 .save-error, .preview-error { color: #9d3d24; background: #fff1e8; padding: 10px; font-size: 12px; line-height: 1.7; overflow-wrap: anywhere; }
 .preview-error { flex-shrink: 0; }
+.source-save-error { margin: 0; flex-shrink: 0; max-height: 25%; overflow: auto; }
 .preview-error button { border: 0; background: none; text-decoration: underline; margin-left: 12px; }
 .preview-placeholder { display: flex; flex: 1; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 30px; }
 .preview-glyph { font-size: 48px; color: #a8b5ec; }

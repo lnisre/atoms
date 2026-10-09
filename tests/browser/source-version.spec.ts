@@ -10,14 +10,15 @@ const position = (page: Page, path: string) => source(page, path).evaluate(el =>
 
 async function openHarness(page: Page) {
   const bundle = await build({ entryPoints: ['tests/fixtures/source-version-harness.tsx'], bundle: true, write: false, outdir: 'out', format: 'iife', jsx: 'automatic', define: { 'process.env.NODE_ENV': '"production"' } });
-  await page.route('http://source-version.test/**', route => {
+  await page.route('https://source-version.test/**', route => {
     const path = new URL(route.request().url()).pathname;
     if (path === '/') return route.fulfill({ contentType: 'text/html', body: '<!doctype html><html lang="zh"><head><meta charset="utf-8"><link rel="stylesheet" href="/harness.css"></head><body><div id="root"></div><script src="/harness.js"></script></body></html>' });
     const suffix = path.endsWith('.js') ? '.js' : '.css';
     return route.fulfill({ contentType: suffix === '.js' ? 'text/javascript' : 'text/css', body: bundle.outputFiles!.find(file => file.path.endsWith(suffix))!.text });
   });
+  await page.context().grantPermissions(['clipboard-read', 'clipboard-write']);
   await page.setViewportSize({ width: 1440, height: 900 });
-  await page.goto('http://source-version.test/');
+  await page.goto('https://source-version.test/');
   await codeMode(page).click();
 }
 
@@ -34,14 +35,24 @@ test('合成版本更新保留选择、目录与各文件阅读位置，缩短�
   await directory(page, 'src').click();
   await directory(page, 'src/components').click();
   await page.getByRole('button', { name: 'src/main.ts', exact: true }).click();
+  await page.getByRole('searchbox', { name: '在当前文件中搜索' }).fill(' 1 ');
+  await expect(page.getByLabel('当前文件搜索结果')).toHaveText('1 / 1');
+  await page.getByRole('button', { name: '复制当前文件', exact: true }).click();
+  await expect(page.getByText('已复制当前文件的完整源码', { exact: true })).toBeVisible();
   const mainPosition = await scrollSource(page, 'src/main.ts');
   await page.getByRole('button', { name: '收起目录', exact: true }).click();
   await page.getByRole('button', { name: '合成更新', exact: true }).click();
   await expect(codeMode(page)).toHaveAttribute('aria-pressed', 'true');
-  await expect(page.getByRole('status')).toHaveText('源码已更新至当前展示版本。');
+  await expect(page.getByText('源码已更新至当前展示版本。', { exact: true })).toBeVisible();
   await expect(source(page, 'src/main.ts')).toContainText('新候选内容 1');
   await expect(source(page, 'src/main.ts')).not.toContainText('src/main.ts 1');
   expect(await position(page, 'src/main.ts')).toEqual(mainPosition);
+  await expect(page.getByLabel('当前文件搜索结果')).toHaveText('1 / 1');
+  await expect(page.getByText('已复制当前文件的完整源码', { exact: true })).toHaveCount(0);
+  await page.getByRole('button', { name: '复制当前文件', exact: true }).click();
+  await expect(page.getByText('已复制当前文件的完整源码', { exact: true })).toBeVisible();
+  expect(await page.evaluate(() => navigator.clipboard.readText())).toBe(await source(page, 'src/main.ts').textContent());
+  await page.getByRole('searchbox', { name: '在当前文件中搜索' }).fill('');
   await expect(page.getByRole('navigation', { name: '项目文件' })).toBeHidden();
   await page.getByRole('button', { name: '展开目录', exact: true }).click();
   await expect(directory(page, 'src')).toHaveAttribute('aria-expanded', 'true');
@@ -70,7 +81,7 @@ test('合成移除当前文件回到新入口并解释，移除目录与位置�
   await page.getByRole('button', { name: '合成移除', exact: true }).click();
   await expect(page.getByLabel('当前文件路径')).toHaveText('app/start.html');
   await expect(source(page, 'app/start.html')).toHaveText('<h1>新入口 · 合成输入</h1>');
-  await expect(page.getByRole('status')).toHaveText('源码已更新。文件“src/main.ts”已从此版本移除，已打开入口文件“app/start.html”。');
+  await expect(page.getByRole('status').filter({ hasText: '源码已更新。文件' })).toHaveText('源码已更新。文件“src/main.ts”已从此版本移除，已打开入口文件“app/start.html”。');
   await expect(directory(page, 'app')).toHaveAttribute('aria-expanded', 'true');
   await expect(directory(page, 'src')).toHaveCount(0);
   await page.getByRole('button', { name: '合成恢复', exact: true }).click();
