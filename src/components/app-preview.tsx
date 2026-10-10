@@ -14,6 +14,8 @@ export function AppPreview({
   onRetry,
   trial,
   recordStep,
+  readOnly = false,
+  readOnlyState = null,
 }: {
   html: string;
   projectId: string;
@@ -21,6 +23,8 @@ export function AppPreview({
   onRetry: () => void;
   trial?: TrialData;
   recordStep?: RecordStep;
+  readOnly?: boolean;
+  readOnlyState?: unknown;
 }) {
   // Keep event callbacks fresh without remounting the document on log updates.
   const recorder = useRef(recordStep);
@@ -84,14 +88,15 @@ export function AppPreview({
         try {
           if (trial && trial.projectId !== projectId)
             throw new Error("试用数据与项目不匹配，已阻止读写。");
-          if (!projectSaved)
+          if (readOnly && message.method === "save") throw new Error("示例为只读，请先保存个人副本。");
+          if (!readOnly && !projectSaved)
             throw new Error(
               "项目尚未保存，应用数据无法保存。请保留页面并检查浏览器存储权限或空间。",
             );
           let state: unknown;
           let hasData = false;
           if (message.method === "load") {
-            const record = trial
+            const record = readOnly ? { state: structuredClone(readOnlyState) } : trial
               ? (trial.hasData ? { state: structuredClone(trial.state) } : undefined)
               : await loadApplicationData(projectId);
             state = record?.state ?? null;
@@ -131,7 +136,7 @@ export function AppPreview({
           if (!pending) {
             setStorageError(false);
             setStorage(
-              trial
+              readOnly ? "只读示例 · 未创建个人项目" : trial
                 ? "试用数据已更新 · 仅本轮会话有效，未写入正式数据"
                 : hasData ? "应用数据已保存" : "应用数据已读取 · 尚无已保存数据",
             );
@@ -169,7 +174,7 @@ export function AppPreview({
     // Mount only after the listener exists: a generated script may load state immediately.
     recorder.current?.("preview-assemble", "装配隔离预览", "started", "向结构合格的完整 HTML 注入平台数据接口与隔离策略。");
     try {
-      setDocument(previewDocument(html, channel, window.location.origin));
+      setDocument(previewDocument(html, channel, window.location.origin, readOnly));
       recorder.current?.("preview-assemble", "装配隔离预览", "completed", "完整预览文档已装配；未验证业务功能。");
       recorder.current?.("preview-load", "载入隔离预览", "started", "将完整文档载入 sandbox iframe。");
       loadTimer.current = setTimeout(() => {
@@ -189,7 +194,7 @@ export function AppPreview({
       window.removeEventListener("message", receive);
       window.removeEventListener("beforeunload", beforeUnload);
     };
-  }, [html, projectId, projectSaved, trial]);
+  }, [html, projectId, projectSaved, trial, readOnly, readOnlyState]);
 
   return (
     <section className="preview-panel" aria-label="应用预览">
@@ -197,9 +202,9 @@ export function AppPreview({
       <div className="preview-toolbar">
         <span>
           <span className="status-dot" />
-          {trial ? "候选试用 · 未采用" : "运行预览 · 已采用应用"}
+          {readOnly ? "示例预览 · 只读" : trial ? "候选试用 · 未采用" : "运行预览 · 已采用应用"}
         </span>
-        <span>{loaded ? "预览已加载 · 请实际操作检查" : "正在加载预览"}</span>
+        <span>{loaded ? readOnly ? "预览已加载" : "预览已加载 · 请实际操作检查" : "正在加载预览"}</span>
       </div>
       <p
         className={`data-status ${storageError ? "save-error" : ""}`}
@@ -210,12 +215,13 @@ export function AppPreview({
       {failed && (
         <div className="preview-error" role="alert">
           预览出现运行错误，部分功能可能不可用。
-          <button onClick={onRetry}>{trial ? "修改需求后重新发起" : "重新生成"}</button>
+          <button onClick={onRetry}>{readOnly ? "重新读取示例" : trial ? "修改需求后重新发起" : "重新生成"}</button>
         </div>
       )}
       {document && (
         <iframe
           ref={frame}
+          tabIndex={readOnly ? -1 : undefined}
           title="生成的应用"
           sandbox="allow-scripts"
           referrerPolicy="no-referrer"

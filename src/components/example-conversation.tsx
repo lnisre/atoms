@@ -24,10 +24,10 @@ function LegacyExampleConversation() {
 
 
 // Captured display history belongs to its source, never to the new user's tasks.
-export function ExampleConversation({ source }: { source: ExampleSource }) {
+export function ExampleConversation({ source, readOnly = false }: { source: ExampleSource; readOnly?: boolean }) {
   if (source.templateId !== "tip-calculator") return <LegacyExampleConversation />;
   return <section aria-label="示例来源记录">
-    <p className="record-note">示例来源记录 · 以下是小费计算器形成时的真实对话。本次打开无需生成，右侧可直接使用。</p>
+    <p className="record-note">示例来源记录 · 以下是小费计算器形成时的真实对话。本次打开无需生成。{readOnly ? "右侧只读，保存个人副本后才能修改。" : "右侧可直接使用。"}</p>
     {history.records.map((record, i) => <AssistantMessage key={record.taskId}
       title={`${record.title} · 示例来源`} requirement={record.requirement} requirementLabel="来源需求">
       <GenerationRecordBody reply={record.assistantReply} note={record.note} statuses={record.statuses}
@@ -35,7 +35,7 @@ export function ExampleConversation({ source }: { source: ExampleSource }) {
         resultLabel={i === 0 ? "首次生成 · 来源已保存" : undefined}
         resultHint="此轮只保留来源过程记录，未导出首版完整代码；右侧以修改后采用的版本为基础。" />
     </AssistantMessage>)}
-    <div className="result-card"><strong>布局与配色修改 · 来源已采用</strong><p>本地示例以这次已采用版本为基础，并修复连续输入的保存问题。你后续采用的修改显示在下方。</p><small><time dateTime={history.adoptedAt}>2026/10/9 14:58:08</time> · 来源采用时间</small></div>
-    <details className="record-note"><summary>示例来源与保存范围</summary><p>当前预置代码是来源代码的修订版：修复保存期间连续输入被忽略的问题。上述 Reviewer 结论仅对应来源代码，修订版未重新调用模型审查。</p><p>上述调用、审查与执行时间属于来源项目。你的项目与演示数据独立保存，后续真实修改会显示在下方。来源首版仅保留过程记录，不提供历史代码回退。</p><p>来源项目：{history.sourceProjectId}。来源代码 SHA-256：<code>{source.sourceCodeHash}</code>。预置修订版 SHA-256：<code>{source.codeHash}</code>。</p><p>数据仅保存在同一浏览器、同一网址。清除站点数据后无法从这里恢复。</p></details>
+    <div className="result-card"><strong>布局与配色修改 · 来源已采用</strong><p>本示例以这次已采用版本为基础，并修复连续输入的保存问题。</p><small><time dateTime={history.adoptedAt}>2026/10/9 14:58:08</time> · 来源采用时间</small></div>
+    <details className="record-note"><summary>示例来源与保存范围</summary><p>当前预置代码是来源代码的修订版：修复保存期间连续输入被忽略的问题。上述 Reviewer 结论仅对应来源代码，修订版未重新调用模型审查。</p><p>上述调用、审查与执行时间属于来源项目。保存个人副本后，项目与演示数据独立。来源首版仅保留过程记录，不提供历史代码回退。</p><p>来源项目：{history.sourceProjectId}。来源代码 SHA-256：<code>{source.sourceCodeHash}</code>。预置修订版 SHA-256：<code>{source.codeHash}</code>。</p>{!readOnly && <p>数据仅保存在同一浏览器、同一网址。清除站点数据后无法从这里恢复。</p>}</details>
   </section>;
 }

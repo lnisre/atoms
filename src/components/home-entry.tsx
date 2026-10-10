@@ -49,6 +49,8 @@ function Avatars() {
 }
 
 type Props = {
+  accountSlot?: ReactNode;
+  onOpenExample?: () => void;
   view: HomeView;
   onViewChange: (view: HomeView) => void;
   requirement: string;
@@ -62,7 +64,7 @@ type Props = {
   onOpenProject: (project: SavedProject) => void;
   onGenerate: () => void;
 };
-export function HomeEntry({ view, onViewChange, requirement, onRequirementChange, projects, loadingProjects, listError, exampleError, onRetryProjects, examples, onOpenProject, onGenerate }: Props) {
+export function HomeEntry({ accountSlot, onOpenExample, view, onViewChange, requirement, onRequirementChange, projects, loadingProjects, listError, exampleError, onRetryProjects, examples, onOpenProject, onGenerate }: Props) {
   const input = useRef<HTMLTextAreaElement>(null);
   const main = useRef<HTMLElement>(null);
   function changeView(next: HomeView) {
@@ -72,7 +74,7 @@ export function HomeEntry({ view, onViewChange, requirement, onRequirementChange
   return <div className={styles.shell}>
     <aside className={styles.sidebar} aria-label="侧栏">
       <div className={styles.brandRow}><button className={styles.brand} onClick={() => changeView("home")} aria-label="Atoms 首页"><Mark/><strong>Atoms</strong><span>Demo</span></button><Unavailable label="收起侧栏" className={styles.iconButton}><Icon name="panel"/></Unavailable></div>
-      <Unavailable label="切换工作区" className={styles.workspace}><span className={styles.workspaceAvatar}>本</span><span>本浏览器工作区</span><Icon name="chevron"/></Unavailable>
+      <Unavailable label="切换工作区" className={styles.workspace}><span className={styles.workspaceAvatar}>A</span><span>个人工作区</span><Icon name="chevron"/></Unavailable>
       <nav className={styles.navigation} aria-label="主导航">
         <button aria-current={view === "home" ? "page" : undefined} onClick={() => changeView("home")}><Icon name="home"/>首页</button>
         <Unavailable label="资源"><Icon name="compass"/>资源<small>未提供</small></Unavailable>
@@ -85,15 +87,15 @@ export function HomeEntry({ view, onViewChange, requirement, onRequirementChange
       <div className={styles.sidebarBottom}>
         <Unavailable label="升级到 Pro" className={styles.offer}><Icon name="diamond"/><span>升级到 Pro<small>当前未提供</small></span><span>›</span></Unavailable>
         <Unavailable label="获取免费积分" className={styles.offer}><Icon name="gift"/><span>获取免费积分<small>当前未提供</small></span><span>›</span></Unavailable>
-        <div className={styles.account}><Unavailable label="账号" className={styles.iconButton}><span className={styles.localAvatar}>本</span></Unavailable><span>本地使用</span><Unavailable label="设置" className={styles.iconButton}><Icon name="settings"/></Unavailable><Unavailable label="通知" className={styles.iconButton}><Icon name="bell"/></Unavailable></div>
+        <div className={styles.account}>{accountSlot}</div>
       </div>
     </aside>
     <main className={styles.main} ref={main}>
-      <div className={styles.banner}>从一个想法开始，构建你的轻量应用。<span>本浏览器保存</span></div>
+      <div className={styles.banner}>从一个想法开始，构建你的轻量应用。<span>账号私有项目</span></div>
       <div className={styles.topActions}><Unavailable label="积分余额" className={styles.balance}><Icon name="diamond"/>积分 · 未提供</Unavailable></div>
       <div hidden={view !== "home"}>
         <section className={styles.hero} aria-label="创建应用">
-          <div className={styles.notice}>Atoms Demo <span>·</span> 无需注册，描述需求即可开始</div>
+          <div className={styles.notice}>Atoms Demo <span>·</span> 先看示例，登录后创建自己的项目</div>
           <Avatars/>
           <h1>你好，你想创造什么？</h1>
           <div className={styles.composerGroup}>
@@ -111,19 +113,20 @@ export function HomeEntry({ view, onViewChange, requirement, onRequirementChange
             <Unavailable label="连接外部工具" className={styles.connector}><Icon name="plug"/><span>将你的工具连接到 Atoms</span><small>当前未提供</small><span aria-hidden="true">＋</span></Unavailable>
           </div>
           <div className={styles.examples}><span>试试这些想法</span>{examples.map(example => <button key={example.name} type="button" onClick={() => { onRequirementChange(example.text); input.current?.focus(); }}>{example.name}<span aria-hidden="true">↗</span></button>)}</div>
-          <div className={styles.homeNotes}><p>灰色控件当前未提供。头像仅为装饰，不代表多智能体执行。</p><details><summary>保存与恢复范围</summary><p>项目和应用数据自动保存在同一浏览器、同一网址下，请等待保存成功再离开。清除站点数据、无痕会话结束或存储被回收后可能丢失，不支持跨设备恢复。</p></details></div>
+          <div className={styles.homeNotes}><p>灰色控件当前未提供。头像仅为装饰，不代表多智能体执行。</p><details><summary>保存与恢复范围</summary><p>示例只读。登录后通过明确操作创建自己的项目；旧浏览器项目不会自动导入或删除。</p></details></div>
         </section>
       </div>
+      {onOpenExample && <section className={styles.projects} aria-label="只读示例"><h2>看看示例</h2><p>查看小费计算器的界面与制作说明。编辑前需登录并保存个人副本。</p><button className="secondary-button" onClick={onOpenExample}>查看只读示例</button></section>}
       <section className={`${styles.projects} ${view === "home" ? styles.homeProjects : styles.allProjects}`} aria-label="已有项目" id="projects">
         {view === "projects" ? <><h1>我的项目</h1><div className={styles.projectToolbar}><span className={styles.selectedTab}>全部 <small>{projects.length}</small></span><Unavailable label="已收藏">已收藏</Unavailable><span className={styles.toolbarSpacer}/><Unavailable label="搜索项目" className={styles.search}><Icon name="search"/>搜索项目 · 未提供</Unavailable><Unavailable label="切换项目视图" className={styles.iconButton}><Icon name="grid"/></Unavailable></div></> : <div className={styles.projectToolbar}><Unavailable label="发现">发现</Unavailable><h2>我的项目</h2><Unavailable label="模板">模板</Unavailable><span className={styles.toolbarSpacer}/><button onClick={() => changeView("projects")}>查看全部 <span aria-hidden="true">›</span></button></div>}
         {loadingProjects && <p className={styles.empty} role="status">正在读取已有项目…</p>}
         {(listError || exampleError) && <div className={styles.error} role="alert"><p>{listError || exampleError}</p><button type="button" disabled={loadingProjects} onClick={onRetryProjects}>重试读取与准备</button></div>}
-        {!loadingProjects && !listError && projects.length === 0 && <div className={styles.empty}><Icon name="projects"/><h2>还没有已保存的项目</h2><p>在首页描述你的想法，生成的应用会自动保存在这里。</p>{view === "projects" && <button onClick={() => changeView("home")}>创建第一个应用 <span aria-hidden="true">↗</span></button>}</div>}
+        {!loadingProjects && !listError && projects.length === 0 && <div className={styles.empty}><Icon name="projects"/><h2>还没有已保存的项目</h2><p>这里显示当前账号的云端项目。</p>{view === "projects" && <button onClick={() => changeView("home")}>创建第一个应用 <span aria-hidden="true">↗</span></button>}</div>}
         <div className={styles.projectGrid}>{(view === "home" ? projects.slice(0, 3) : projects).map(project => <button key={project.id} className={styles.projectCard} onClick={() => onOpenProject(project)} title={`打开项目：${project.title}`}>
           <span className={styles.cover}><Icon name="projects"/><span>项目封面占位</span><small>尚未提供应用截图</small></span>
           <span className={styles.projectMeta}><strong>{project.title}</strong>{project.exampleSource && <small>示例项目</small>}<time dateTime={project.updatedAt}>更新于 {new Date(project.updatedAt).toLocaleString("zh-CN")}</time><span className={styles.openHint}>打开项目 ↗</span></span>
         </button>)}</div>
-        {view === "projects" && projects.length > 0 && <p className={styles.listNote}>仅显示此浏览器已保存的项目 · 封面为占位，不运行应用生成截图</p>}
+        {view === "projects" && projects.length > 0 && <p className={styles.listNote}>仅显示当前账号的项目 · 封面为占位，不运行应用生成截图</p>}
       </section>
     </main>
   </div>;

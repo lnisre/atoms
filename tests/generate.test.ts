@@ -1,7 +1,11 @@
-import { afterEach, test } from "node:test";
+import { authenticatedCookie, modelFetch, withCookie } from "./helpers/auth";
+import { afterEach, beforeEach, test } from "node:test";
 import assert from "node:assert/strict";
-import { POST } from "../src/app/api/generate/route";
+import { POST as guardedPOST } from "../src/app/api/generate/route";
 
+let authCookie = "";
+beforeEach(async () => { authCookie = await authenticatedCookie(); modelFetch(async () => { throw new Error("unexpected model call"); }); });
+const POST = (request: Request) => guardedPOST(withCookie(request, authCookie));
 const originalFetch = globalThis.fetch;
 const originalKey = process.env.DEEPSEEK_API_KEY;
 const originalTimeout = AbortSignal.timeout;
@@ -22,9 +26,9 @@ const request = (
   });
 
 test("无效需求与跨源请求不调用模型", async () => {
-  globalThis.fetch = async () => {
+  modelFetch(async () => {
     throw new Error("Must not call provider");
-  };
+  });
   assert.equal((await POST(request("  "))).status, 400);
   assert.equal((await POST(request("x".repeat(4001)))).status, 400);
   assert.equal((await POST(request("待办", "null"))).status, 403);
@@ -38,8 +42,8 @@ test("未配置密钥时明确失败", async () => {
 test("模型错误不会透传原始响应或返回假应用", async () => {
   process.env.DEEPSEEK_API_KEY = "test-secret-do-not-expose";
   for (const status of [401, 402, 429, 500]) {
-    globalThis.fetch = async () =>
-      new Response("test-secret-do-not-expose", { status });
+    modelFetch(async () =>
+      new Response("test-secret-do-not-expose", { status }));
     const response = await POST(request());
     const body = await response.text();
     assert.ok(response.status >= 400);
@@ -50,7 +54,7 @@ test("真实请求合同、完整 HTML 与调用耗时", async () => {
   process.env.DEEPSEEK_API_KEY = "test-key";
   const html =
     "<!DOCTYPE html><html><head><style>body{color:black}</style></head><body><button>添加</button><script>void 0</script></body></html>";
-  globalThis.fetch = async (url, options) => {
+  modelFetch(async (url, options) => {
     assert.equal(url, "https://api.deepseek.com/chat/completions");
     const payload = JSON.parse(String(options?.body));
     assert.equal(payload.model, "deepseek-v4-flash");
@@ -60,7 +64,7 @@ test("真实请求合同、完整 HTML 与调用耗时", async () => {
       model: "deepseek-flash",
       choices: [{ finish_reason: "stop", message: { content: html } }],
     });
-  };
+  });
   const response = await POST(request());
   const result = await response.json();
   assert.equal(response.status, 200);
@@ -76,10 +80,10 @@ test("截断、空白或非 HTML 结果不作为成功", async () => {
     ["stop", ""],
     ["stop", "Here is your app"],
   ]) {
-    globalThis.fetch = async () =>
+    modelFetch(async () =>
       Response.json({
         choices: [{ finish_reason: reason, message: { content } }],
-      });
+      }));
     const response = await POST(request());
     assert.equal(response.status, 502);
     assert.equal((await response.json()).html, undefined);
@@ -89,10 +93,10 @@ test("服务端超时结束请求并给出可重试错误", async () => {
   process.env.DEEPSEEK_API_KEY = "test-key";
   const controller = new AbortController();
   AbortSignal.timeout = () => controller.signal;
-  globalThis.fetch = async () => {
+  modelFetch(async () => {
     controller.abort();
     throw new DOMException("timeout", "TimeoutError");
-  };
+  });
   const response = await POST(request());
   assert.equal(response.status, 504);
   assert.match((await response.json()).error, /120 秒/);
@@ -101,7 +105,7 @@ test("服务端超时结束请求并给出可重试错误", async () => {
 test("仅解包模型返回的唯一完整文档，不执行前后说明", async () => {
   process.env.DEEPSEEK_API_KEY = "test-key";
   const html = "<!DOCTYPE html><html><head></head><body>真实生成</body></html>";
-  globalThis.fetch = async () =>
+  modelFetch(async () =>
     Response.json({
       choices: [
         {
@@ -109,12 +113,12 @@ test("仅解包模型返回的唯一完整文档，不执行前后说明", async
           message: { content: "说明\n```html\n" + html + "\n```\n更多说明" },
         },
       ],
-    });
+    }));
   assert.equal((await (await POST(request())).json()).html, html);
-  globalThis.fetch = async () =>
+  modelFetch(async () =>
     Response.json({
       choices: [{ finish_reason: "stop", message: { content: html + html } }],
-    });
+    }));
   assert.equal((await POST(request())).status, 502);
 });
 
@@ -126,18 +130,18 @@ test("修改完整传递基础代码、追加需求与成功对话；不沿用�
   process.env.DEEPSEEK_API_KEY = "test-key";
   const html = "<!DOCTYPE html><html><head></head><body>候选</body></html>";
   const baseHtml = html + " ".repeat(30000);
-  globalThis.fetch = async (_url, options) => {
+  modelFetch(async (_url, options) => {
     const payload = JSON.parse(String(options?.body));
     const input = JSON.parse(payload.messages.at(-1).content);
     assert.deepEqual(input, { originalRequirement: "原始待办需求", modification: "把筛选放到顶部", baseHtml, successfulModifications: ["增加优先级与筛选"] });
     assert.match(payload.messages[0].content, /window.atoms/);
     assert.match(payload.messages[1].content, /session-only trial copy/);
     return Response.json({ choices: [{ finish_reason: "stop", message: { content: html } }] });
-  };
+  });
   assert.equal((await POST(editRequest({ baseHtml, modification: "把筛选放到顶部", context: ["增加优先级与筛选"] }))).status, 200);
 });
 test("缺失或超限修改输入明确失败，不丢弃上下文继续生成", async () => {
-  globalThis.fetch = async () => { throw new Error("Must not call provider"); };
+  modelFetch(async () => { throw new Error("Must not call provider"); });
   const valid = { baseHtml: "existing html", modification: "增加筛选", context: [] };
   for (const fields of [
     { ...valid, baseHtml: undefined }, { ...valid, baseHtml: "x".repeat(500001) },
@@ -154,7 +158,7 @@ test("注释中的结构标签不能冒充真实 head/body，无法装配时明�
     "<!DOCTYPE html><html><head></head><!-- <body> --></html>",
     "<!DOCTYPE html><html><script>void 0</script><head></head><body>脚本先于真实 head</body></html>",
   ]) {
-    globalThis.fetch = async () => Response.json({ choices: [{ finish_reason: "stop", message: { content: html } }] });
+    modelFetch(async () => Response.json({ choices: [{ finish_reason: "stop", message: { content: html } }] }));
     const response = await POST(request());
     assert.equal(response.status, 502);
     assert.match((await response.json()).error, /完整 HTML/);
@@ -172,13 +176,13 @@ test("单次请求分离完整正文与 HTML，模型等待期间已传递真实
   process.env.DEEPSEEK_API_KEY = "test-key";
   let resolve!: (value: Response) => void;
   let calls = 0;
-  globalThis.fetch = async (_url, options) => {
+  modelFetch(async (_url, options) => {
     calls++;
     const payload = JSON.parse(String(options?.body));
     assert.match(payload.messages[0].content, /assistantReply/);
     assert.equal(payload.max_tokens, 12288);
     return new Promise<Response>(done => { resolve = done; });
-  };
+  });
   const response = await POST(streamedRequest());
   const reader = response.body!.getReader();
   const decoder = new TextDecoder();
@@ -204,11 +208,11 @@ test("缺少或无效正文保留完整应用，不补调模型；超长正文�
   process.env.DEEPSEEK_API_KEY = "test-key";
   for (const content of [fullHtml, JSON.stringify({ html: fullHtml }), JSON.stringify({ html: fullHtml, assistantReply: { text: "invalid" } }), JSON.stringify({ html: fullHtml, assistantReply: " " })]) {
     let calls = 0;
-    globalThis.fetch = async () => { calls++; return Response.json({ choices: [{ finish_reason: "stop", message: { content } }] }); };
+    modelFetch(async () => { calls++; return Response.json({ choices: [{ finish_reason: "stop", message: { content } }] }); });
     const result = (await events(await POST(streamedRequest()))).at(-1);
     assert.equal(result.type, "result"); assert.equal(result.result.html, fullHtml); assert.equal(result.assistantReply, null); assert.equal(calls, 1);
   }
-  globalThis.fetch = async () => Response.json({ choices: [{ finish_reason: "stop", message: { content: JSON.stringify({ html: fullHtml, assistantReply: "x".repeat(32001) }) } }] });
+  modelFetch(async () => Response.json({ choices: [{ finish_reason: "stop", message: { content: JSON.stringify({ html: fullHtml, assistantReply: "x".repeat(32001) }) } }] }));
   const output = await events(await POST(streamedRequest()));
   assert.equal(output.at(-1).result.html, fullHtml);
   assert.equal(output.at(-1).assistantReply, null);
@@ -224,7 +228,7 @@ test("模型、提取、结构失败均发出实际失败与终态，不透传�
     { response: Response.json({ choices: [{ finish_reason: "stop", message: { content: JSON.stringify({ html: "<!DOCTYPE html><html><head></head><body>incomplete", assistantReply: "完整说明" }) } }] }), step: "html" },
   ];
   for (const {response, step} of cases) {
-    globalThis.fetch = async () => response;
+    modelFetch(async () => response);
     const output = await events(await POST(streamedRequest()));
     assert.equal(output.at(-2).event.status, "failed"); assert.equal(output.at(-2).event.stepId, step); assert.equal(output.at(-1).type, "error");
     assert.equal(output.some(x => x.type === "result"), false); assert.doesNotMatch(JSON.stringify(output), /test-secret/);
@@ -245,9 +249,9 @@ test("客户端收到产物后连接异常也不提交成功；取消读取会�
 
   process.env.DEEPSEEK_API_KEY = "test-key";
   let aborted = false;
-  globalThis.fetch = async (_url, options) => new Promise((_resolve, reject) => {
+  modelFetch(async (_url, options) => new Promise((_resolve, reject) => {
     options!.signal!.addEventListener("abort", () => { aborted = true; reject(new Error("cancelled")); });
-  });
+  }));
   const streaming = await POST(streamedRequest());
   const reader = streaming.body!.getReader();
   for (let n=0;n<3;n++) await reader.read();
@@ -259,14 +263,14 @@ test("修改沿用同次正文协议与实时事件，保留完整上下文和�
   process.env.DEEPSEEK_API_KEY = "test-key";
   for (const missing of [false, true]) {
     let calls = 0;
-    globalThis.fetch = async (_url, options) => {
+    modelFetch(async (_url, options) => {
       calls++;
       const payload = JSON.parse(String(options?.body));
       assert.match(payload.messages[0].content, /assistantReply/);
       assert.equal(payload.max_tokens, 12288);
       assert.deepEqual(JSON.parse(payload.messages.at(-1).content).successfulModifications, ["上一轮"]);
       return Response.json({ choices: [{ finish_reason: "stop", message: { content: JSON.stringify({ html: fullHtml, ...(missing ? {} : { assistantReply: "本轮真实说明" }) }) } }] });
-    };
+    });
     const req = editRequest({ baseHtml: fullHtml, modification: "本轮修改", context: ["上一轮"] });
     req.headers.set("Accept", "application/x-ndjson"); req.headers.set("X-Atoms-Task-Id", "modification-task");
     const output = await events(await POST(req));

@@ -1,3 +1,4 @@
+import { authFailure, requireAccount, checkOrigin } from "@/lib/auth/server";
 import { teamEntry } from "@/lib/team/server";
 import { createRecorder, type GenerationEvent } from "@/lib/execution";
 import { MAX_ASSISTANT_LENGTH } from "@/lib/generation";
@@ -28,6 +29,7 @@ function failure(error: string, status: number) {
 
 export async function POST(request: Request) {
   if (request.headers.get("x-atoms-protocol") === "atoms-team/3") return teamEntry(request);
+  try { await requireAccount(request); } catch (error) { return authFailure(error); }
   if (request.headers.has("x-atoms-protocol")) return failure("团队协议已更新，请刷新页面后重试。", 409);
   // Negotiated streaming keeps the existing M2 JSON contract available.
   if (!request.headers.get("accept")?.includes("application/x-ndjson")) return generate(request);
@@ -72,10 +74,7 @@ async function generate(request: Request, record?: ReturnType<typeof createRecor
   };
   start("context", "准备请求与上下文", "读取并校验本次需求与生成配置。");
   // Opaque sandbox frames and cross-site forms must not invoke the paid endpoint.
-  const origin = request.headers.get("origin");
-  if (origin && origin !== new URL(request.url).origin) {
-    return fail("请从本网站重新发起生成。", 403);
-  }
+  try { checkOrigin(request); } catch (error) { return authFailure(error); }
   if (!request.headers.get("content-type")?.includes("application/json")) {
     return fail("请求格式不正确，请重新发起。", 415);
   }

@@ -125,3 +125,13 @@ details p { white-space: pre-wrap; overflow-wrap: anywhere; line-height: 1.8; }
   .candidate-action-row > div { flex-wrap: wrap; gap: 6px; }
 }
 @media (prefers-reduced-motion: reduce) { .spinner { animation: none; } }
+
+.public-example { padding: 24px; height: 100dvh; overflow: auto; background: #f8f9f6; }
+.public-example > header { display: flex; align-items: center; gap: 20px; justify-content: space-between; }
+.public-example h1 { font-size: 20px; }
+.public-example > p { font-size: 14px; margin: 20px 0 12px; }
+.public-example-content { display: grid; grid-template-columns: minmax(240px, 1fr) minmax(400px, 2fr); gap: 24px; margin-top: 24px; }
+.public-example-content .preview-panel { min-height: 650px; }
+.account-notice { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); max-width: calc(100vw - 32px); z-index: 30; padding: 16px 40px 16px 20px; border-radius: 12px; background: #243c31; color: white; box-shadow: 0 8px 30px #0002; font-size: 14px; }
+.account-notice button { position: absolute; right: 12px; top: 10px; border: 0; background: none; color: inherit; font-size: 20px; cursor: pointer; }
+@media (max-width: 760px) { .public-example > header { flex-wrap: wrap; } .public-example-content { display: flex; flex-direction: column; } .public-example { padding: 16px; } }

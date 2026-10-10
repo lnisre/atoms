@@ -1,8 +1,13 @@
+import { authenticatedCookie, fixtureAccount, modelFetch, withCookie } from "./helpers/auth";
 import assert from "node:assert/strict";
-import { test } from "node:test";
+import { test, beforeEach } from "node:test";
 import { completePlan, mandatoryScenarios, type Specification } from "../src/lib/team/contract";
 import { validateRequest, validateResult, expected, type ToolRequest } from "../src/lib/qa/contract";
-import { startTeam, teamControl } from "../src/lib/team/server";
+import { startTeam as startRuntime, teamControl as guardedControl } from "../src/lib/team/server";
+let authCookie = "";
+beforeEach(async () => { authCookie = await authenticatedCookie(); modelFetch(async () => { throw new Error("no provider call expected"); }); });
+const startTeam = (request: Request, started?: number) => startRuntime(request, started, fixtureAccount.id);
+const teamControl = (request: Request) => guardedControl(withCookie(request, authCookie));
 const spec: Specification = { summary: "counter", requirements: [{id:"increment",description:"increment and persist"}], probe:{seed:{count:1},prepare:[],commitSelector:"#add",changed:{path:["count"],equals:2}} };
 const business = [{id:"increment",seed:{count:1},checks:[{id:"click",label:"click",command:{op:"click" as const,selector:"#add"}},{id:"data",label:"saved",command:{op:"data" as const,path:["count"],equals:2}}]}];
 test("platform rules are appended independently; missing or renamed business checks reject",()=>{

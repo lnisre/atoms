@@ -1,3 +1,4 @@
+import { authFailure, requireAccount, checkOrigin } from "../auth/server";
 import { MAX_REQUEST_LENGTH } from "../generation";
 import { validTeamInput } from "./input";
 import { spawn, type ChildProcessWithoutNullStreams } from "node:child_process";
@@ -10,17 +11,20 @@ import { TEAM_PROTOCOL, TEAM_TIMEOUT_MS, isTeamOutcome, type TeamOutcome, type D
 
 // Ephemeral, single process task ownership. A missing owner fails closed (410),
 // never recreates a paid task or resets its budget. Container uses one Node worker.
-type Session = { token: string; deadline: number; lease: number; process: ChildProcessWithoutNullStreams; stop: (reason?: string, outcome?: TeamOutcome) => void };
+type Session = { ownerId: string; token: string; deadline: number; lease: number; process: ChildProcessWithoutNullStreams; stop: (reason?: string, outcome?: TeamOutcome) => void };
 const globalTasks = globalThis as typeof globalThis & { atomsTeamTasks?: Map<string, Session>; atomsTeamKey?: Buffer };
 const tasks = globalTasks.atomsTeamTasks ??= new Map();
 const signingKey = globalTasks.atomsTeamKey ??= randomBytes(32);
+const consumedTickets = new Map<string, number>();
 const hash = (value: string) => createHash("sha256").update(value).digest("hex");
-const equalSecret = (a: unknown, b: string) => typeof a === "string" && a.length === b.length && timingSafeEqual(Buffer.from(a), Buffer.from(b));
+const equalSecret = (a: unknown, b: string) => typeof a === "string" && Buffer.byteLength(a) === Buffer.byteLength(b) && timingSafeEqual(Buffer.from(a), Buffer.from(b));
 
 
 // HTTP start negotiates a signed, short-lived task ticket. Only the container
 // gateway can consume it, over the same socket that carries tool feedback.
 export async function teamEntry(request: Request) {
+  let account;
+  try { account = await requireAccount(request); } catch (error) { return authFailure(error); }
   if (process.env.NODE_ENV === "production" && !process.env.QA_TOOL_SIGNING_KEY) return Response.json({error:"团队签名配置缺失，未调用模型。"},{status:503});
   const key = process.env.QA_TOOL_SIGNING_KEY || signingKey;
   const mac = (payload: string) => createHmac("sha256", key).update(payload).digest("hex");
@@ -29,30 +33,40 @@ export async function teamEntry(request: Request) {
       const { ticket } = await request.json();
       if (!ticket || typeof ticket.payload !== "string" || ticket.payload.length > MAX_REQUEST_LENGTH + 1000 || !equalSecret(ticket.signature, mac(ticket.payload))) throw new Error();
       const payload = JSON.parse(ticket.payload);
+      if (payload.ownerId !== account.id) throw new Error();
       if (!Number.isFinite(payload.started) || payload.started > Date.now() || Date.now() >= payload.started + TEAM_TIMEOUT_MS) throw new Error();
+      for (const [id, deadline] of consumedTickets) if (deadline <= Date.now()) consumedTickets.delete(id);
+      if (consumedTickets.has(payload.taskId)) return Response.json({ error: "这次生成已启动，请勿重复提交。" }, { status: 409 });
+      consumedTickets.set(payload.taskId, payload.started + TEAM_TIMEOUT_MS);
       const internal = new Request(request.url, { method: "POST", headers: { "Content-Type": "application/json", "X-Atoms-Task-Id": payload.taskId }, body: JSON.stringify(payload.body), signal: request.signal });
-      return startTeam(internal, payload.started);
+      return startTeam(internal, payload.started, account.id);
     } catch { return Response.json({error:"团队票据无效或已过期"},{status:400}); }
   }
-  if (request.headers.get("origin") && request.headers.get("origin") !== new URL(request.url).origin) return Response.json({error:"非法来源"},{status:403});
+
   if (!process.env.ATOMS_INTERNAL_KEY) return Response.json({error:"四角色需要通过团队连接网关启动，尚未配置运行环境。"},{status:503});
   try {
     const raw = await request.text(); if(raw.length > MAX_REQUEST_LENGTH) throw new Error();
     const body = JSON.parse(raw), taskId = request.headers.get("x-atoms-task-id");
     if(!/^[a-f0-9-]{36}$/.test(taskId ?? "") || !validTeamInput(body)) throw new Error();
-    const payload = JSON.stringify({taskId, body, started:Date.now()});
+    const payload = JSON.stringify({taskId, body, ownerId: account.id, started:Date.now()});
     return Response.json({protocol:TEAM_PROTOCOL, transport:"websocket", taskId, ticket:{payload,signature:mac(payload)}},{headers:{"Cache-Control":"no-store"}});
   } catch {return Response.json({error:"团队任务输入无效"},{status:400});}
 }
 
 export async function teamControl(request: Request) {
-  if (request.headers.get("origin") && request.headers.get("origin") !== new URL(request.url).origin) return Response.json({ error: "非法来源" }, { status: 403 });
+  let ownerId: string | undefined;
+  try {
+    checkOrigin(request);
+    if (!(process.env.ATOMS_INTERNAL_KEY && equalSecret(request.headers.get("x-atoms-internal"), process.env.ATOMS_INTERNAL_KEY)))
+      ownerId = (await requireAccount(request)).id;
+  } catch (error) { return authFailure(error); }
+
   try {
     const raw = await request.text();
     if (raw.length > 3_000_000) throw new Error("工具回传过大");
     const body = JSON.parse(raw);
     const session = tasks.get(body.taskId);
-    if (!session || !equalSecret(body.token, session.token)) return Response.json({ error: "任务已结束或执行实例不可用，请重新发起。" }, { status: 410 });
+    if (!session || (ownerId !== undefined && ownerId !== session.ownerId) || !equalSecret(body.token, session.token)) return Response.json({ error: "任务已结束或执行实例不可用，请重新发起。" }, { status: 410 });
     if (Date.now() >= session.deadline || Date.now() - session.lease > 15_000) { session.stop("任务超时或浏览器已断线。", Date.now() >= session.deadline ? "limit" : "stopped"); return Response.json({ error: "任务已过期" }, { status: 410 }); }
     if (body.action === "cancel") { session.stop("本次任务已停止。", "stopped"); return Response.json({ ok: true }); }
     if (body.action === "heartbeat") { session.lease = Date.now(); return Response.json({ ok: true }); }
@@ -60,7 +74,7 @@ export async function teamControl(request: Request) {
   } catch (error) { return Response.json({ error: error instanceof Error ? error.message : "检查协议错误" }, { status: 400 }); }
 }
 
-export async function startTeam(request: Request, started = Date.now()) {
+export async function startTeam(request: Request, started = Date.now(), ownerId = "") {
   if (request.headers.get("origin") && request.headers.get("origin") !== new URL(request.url).origin) return Response.json({ error: "请从本网站发起生成。" }, { status: 403 });
   if (!request.headers.get("content-type")?.includes("application/json")) return Response.json({ error: "请求格式错误" }, { status: 415 });
   let body;
@@ -93,7 +107,7 @@ export async function startTeam(request: Request, started = Date.now()) {
         send({ type: "error", protocol: TEAM_PROTOCOL, taskId, error: reason, outcome, team, ...(available ? {result:resultOf(),assistantReply:artifact!.assistantReply} : {}) });
         terminal = true; cleanup(); if (!cancelled) controller.close();
       };
-      const session: Session = { token, deadline, lease: Date.now(), process: child, stop };
+      const session: Session = { ownerId, token, deadline, lease: Date.now(), process: child, stop };
       tasks.set(taskId, session);
       const abort = () => stop("生成连接已断开，停止后续步骤。", "stopped");
       request.signal.addEventListener("abort", abort, { once: true });

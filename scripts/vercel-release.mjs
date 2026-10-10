@@ -59,14 +59,15 @@ async function main() {
   const tree = await request(`/v6/deployments/${id}/files`);
   const builds = await request(`/v1/deployments/${id}/builds`);
   const result = verifyDeployment(manifest, deployment, alias, tree, builds);
-  // Negotiate only: do not consume the ticket or start a Python/model task.
+  // Anonymous release probe must be rejected before issuing a ticket or starting a model task.
+  // Authenticated negotiation and user lifecycle acceptance remain separate.
   const taskId = randomUUID();
   const response = await fetch(`${productionOrigin}/api/generate`, { method: 'POST', redirect: 'error', headers: { 'Content-Type': 'application/json', Origin: productionOrigin, 'X-Atoms-Protocol': 'atoms-team/3', 'X-Atoms-Task-Id': taskId }, body: JSON.stringify({ projectId: randomUUID(), requirement: '发布入口零模型检查：创建一个计数器。' }), signal: AbortSignal.timeout(30_000) });
   const entry = await response.json();
-  if (response.status !== 200 || entry.protocol !== 'atoms-team/3' || entry.transport !== 'websocket' || entry.taskId !== taskId || !entry.ticket?.signature) throw new Error(`Team gateway negotiation failed: HTTP ${response.status}`);
+  if (response.status !== 401 || entry.code !== 'unauthenticated' || entry.ticket) throw new Error(`Anonymous team entry was not rejected: HTTP ${response.status}`);
   // Recheck alias after probing so a concurrent release cannot pass unnoticed.
   if ((await request('/v13/deployments/v0-test0-nine.vercel.app')).id !== id) throw new Error('Production alias changed during verification');
-  save('verification.json', { ...result, teamEntry: { status: response.status, protocol: entry.protocol, transport: entry.transport, modelRequests: 0 }, businessAcceptance: 'pending-independent-real-model-check' });
+  save('verification.json', { ...result, anonymousTeamEntry: { status: response.status, code: entry.code, modelRequests: 0 }, authenticatedTeamEntry: 'pending-authorized-user-check', businessAcceptance: 'pending-independent-real-model-check' });
   console.log(JSON.stringify(load('verification.json')));
 }
 main().catch(error => { console.error(error.message); process.exitCode = 1; });
