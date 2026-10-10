@@ -142,6 +142,6 @@ node .agents/skills/verify-atoms/scripts/smoke-example.mjs /tmp/atoms-smoke-new 
 
 完整团队服务需要同时承载 Next.js、同源 WebSocket 网关和 Python 子进程。仓库提供 [Dockerfile.vercel](Dockerfile.vercel)；仅部署普通 Next.js 页面不足以提供团队生成能力。Vercel 凭据、访问保护和部署操作见 [项目说明](docs/agents/vercel.md)，运行时细节见 [runtime/team](runtime/team/README.md)。
 
-保持固定域名和 IndexedDB 名称、结构兼容，才能让同一浏览器在更新部署后继续恢复项目。`.vercelignore` 排除凭据、环境文件、私人资料及测试产物；部署应从明确的源码集合构建，不上传整个工作区归档。
+保持固定域名和 IndexedDB 名称、结构兼容，才能让同一浏览器在更新部署后继续恢复项目。`.vercelignore` 排除凭据、环境文件、私人资料及测试产物；部署使用 `pnpm release:vercel plan/create/status/verify`，从冻结 Git 提交生成并核对完整容器源码清单；命令和证据要求见 [完整容器发布](docs/agents/vercel.md#完整容器发布63)。发布后还需真实团队业务验收。
 
 公开演示生成接口会消耗维护者的模型额度，目前没有账户配额或持久化限流。当前不提供账号与跨设备恢复、项目发布/导出、真实多文件运行或历史版本回退。
