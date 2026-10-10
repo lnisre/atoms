@@ -160,3 +160,6 @@ details p { white-space: pre-wrap; overflow-wrap: anywhere; line-height: 1.8; }
   .cloud-project-content > section:last-child { min-height: 750px; }
 }
 .reauth-button { position: fixed; right: 24px; bottom: 100px; z-index: 31; }
+
+.cloud-save-panel label { display: block; margin-bottom: 6px; font-weight: 600; }
+.cloud-save-panel textarea { display: block; width: 100%; box-sizing: border-box; margin: 0 0 10px; padding: 10px; border: 1px solid #cbd7cf; border-radius: 8px; background: #fff; resize: vertical; line-height: 1.5; }

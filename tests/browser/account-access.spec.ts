@@ -56,7 +56,7 @@ test("游客只读示例阻断鼠标、键盘、API与原始数据桥；不创�
   expect(await page.evaluate(()=>Reflect.get(window,"idbCalls"))).toBe(0);expect(auth.stats().modelCalls).toBe(0);
   await page.screenshot({path:info.outputPath("readonly-example.png"),fullPage:true});
 });
-test("登录错误保留需求，取消不续接；成功只验证一次且不提前调用未接入的生成",async({page},info)=>{
+test("登录错误保留需求，取消不续接；成功只验证一次并续接一次生成",async({page},info)=>{
   const auth=await authFixture(page);await page.goto("/");
   const input=page.getByLabel("你想做什么？");await input.fill("保留这次明确发起的需求");await page.getByRole("button",{name:"开始生成",exact:true}).click();
   await expect(page.getByText("已保留刚才的操作与输入，登录后继续。")).toBeVisible();
@@ -69,8 +69,8 @@ test("登录错误保留需求，取消不续接；成功只验证一次且不�
   await page.getByRole("button",{name:"开始生成",exact:true}).click();
   await page.getByLabel("邮箱地址",{exact:true}).fill("fixture@example.invalid");await page.getByRole("button",{name:"发送验证码",exact:true}).click();
   await page.getByLabel("6 位验证码",{exact:true}).fill("123456");await page.getByRole("button",{name:"验证并登录"}).evaluate((button: HTMLButtonElement) => { button.click(); button.click(); });
-  await expect(page.getByRole("dialog")).toHaveCount(0);await expect(page.getByRole("status").filter({hasText:"需求已保留"})).toBeVisible();
-  expect(auth.stats()).toEqual({verifies:2,modelCalls:0});await expect(input).toHaveValue("保留这次明确发起的需求");
+  await expect(page.getByRole("dialog")).toHaveCount(0);await expect(page.getByRole("alert").filter({hasText:"unexpected model call"})).toBeVisible();
+  expect(auth.stats()).toEqual({verifies:2,modelCalls:1});
 });
 test("普通登录和有效会话恢复无生成/复制副作用；退出清除账号和输入，旧本地数据保留",async({page})=>{
   const auth=await authFixture(page);await page.goto("/");

@@ -55,7 +55,7 @@ function validState(value: unknown) {
   if (json === undefined || Buffer.byteLength(json) > MAX_STATE_BYTES) throw new ProjectError("input", "应用数据仅支持不超过 1 MB 的 JSON 状态。", 413);
   return value;
 }
-export async function projectInput(request: Request) {
+export async function projectInput(request: Request, maxBytes = MAX_STATE_BYTES + 4096) {
   if (!request.headers.get("content-type")?.includes("application/json")) throw new ProjectError("input", "请求格式不正确。", 415);
   // Bound the stream, including requests with no Content-Length.
   const reader = request.body?.getReader();
@@ -64,7 +64,7 @@ export async function projectInput(request: Request) {
   for (;;) {
     const { value, done } = await reader.read(); if (done) break;
     length += value.byteLength;
-    if (length > MAX_STATE_BYTES + 4096) { await reader.cancel(); throw new ProjectError("input", "保存内容过大。", 413); }
+    if (length > maxBytes) { await reader.cancel(); throw new ProjectError("input", "保存内容过大。", 413); }
     chunks.push(value);
   }
   try {

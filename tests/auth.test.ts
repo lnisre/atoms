@@ -8,7 +8,7 @@ import { authenticatedCookie, authConfig, authProfile, cookies } from "./helpers
 const oldFetch = globalThis.fetch;
 const oldEnv = { ...process.env };
 beforeEach(() => { Object.assign(process.env, authConfig); delete process.env.ATOMS_APP_ORIGIN; });
-afterEach(() => { globalThis.fetch = oldFetch; for (const name of [...Object.keys(authConfig), "ATOMS_APP_ORIGIN", "ATOMS_INTERNAL_KEY"]) { if (oldEnv[name] === undefined) delete process.env[name]; else process.env[name] = oldEnv[name]; } });
+afterEach(() => { globalThis.fetch = oldFetch; for (const name of [...Object.keys(authConfig), "ATOMS_APP_ORIGIN", "ATOMS_INTERNAL_KEY", "ATOMS_ARTIFACT_SECRET"]) { if (oldEnv[name] === undefined) delete process.env[name]; else process.env[name] = oldEnv[name]; } });
 function request(path: string, body: unknown = {}, cookie = "", origin = "http://localhost") {
   return new Request(`http://localhost/api/${path}`, { method: "POST", headers: { "Content-Type": "application/json", origin, cookie }, body: JSON.stringify(body) });
 }
@@ -104,14 +104,14 @@ test("expired/tampered session cannot start a new operation", async t => {
   assert.equal(calls,0);
 });
 test("task ticket binds verified owner and can be consumed only once, without resetting original start time", async () => {
-  const cookie=await authenticatedCookie();process.env.ATOMS_INTERNAL_KEY='fixture-internal-key';
-  let profile=authProfile;globalThis.fetch=async()=>Response.json(profile);
+  const cookie=await authenticatedCookie();process.env.ATOMS_INTERNAL_KEY='fixture-internal-key';process.env.ATOMS_ARTIFACT_SECRET='b'.repeat(64);
+  let profile=authProfile;globalThis.fetch=async url=>String(url).endsWith('/user/me')?Response.json(profile):Response.json({projectId:crypto.randomUUID(),version:{code:1,data:1},updatedAt:new Date().toISOString()});
   const req=request('generate',{projectId:crypto.randomUUID(),requirement:'synthetic no-model task'},cookie);
   req.headers.set('x-atoms-task-id',crypto.randomUUID());
   const negotiated=await teamEntry(req);assert.equal(negotiated.status,200);
-  const {ticket}=await negotiated.json();const payload=JSON.parse(ticket.payload);assert.equal(payload.ownerId,authProfile.sub);
+  const {ticket}=await negotiated.json();const payload=JSON.parse(ticket.payload);assert.equal(payload.binding.ownerId,authProfile.sub);
   const consume=()=>{const r=request('generate',{ticket},cookie);r.headers.set('x-atoms-internal','fixture-internal-key');return teamEntry(r);};
-  profile={...authProfile,sub:'different-account'};assert.equal((await consume()).status,400);
+  profile={...authProfile,sub:'different-account'};assert.equal((await consume()).status,403);
   profile=authProfile;
   const first=await consume();assert.equal(first.status,503); // no Python/model configuration in this test
   assert.equal((await consume()).status,409);

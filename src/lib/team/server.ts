@@ -1,10 +1,13 @@
-import { authFailure, requireAccount, checkOrigin } from "../auth/server";
+import { authFailure, requireAccount, requireIdentity, checkOrigin } from "../auth/server";
 import { MAX_REQUEST_LENGTH } from "../generation";
 import { validTeamInput } from "./input";
 import { spawn, type ChildProcessWithoutNullStreams } from "node:child_process";
 import { createHash, createHmac, randomBytes, timingSafeEqual } from "node:crypto";
 import path from "node:path";
-import { createRecorder } from "../execution";
+import { attestArtifact, prepareGeneration, claimGeneration, type GenerationBinding } from "../cloud-projects/artifacts";
+import { ProjectError } from "../cloud-projects/contract";
+import { MAX_PROOF_BYTES } from "../cloud-projects/artifact-contract";
+import { createRecorder, type ExecutionEvent } from "../execution";
 import { previewHeadOffset } from "../html-document";
 import { validClassifiedReview, artifactTeam, inspectDeliveries } from "./review";
 import { TEAM_PROTOCOL, TEAM_TIMEOUT_MS, isTeamOutcome, type TeamOutcome, type Delivery, type ModelCall, type Specification, type TeamRecord } from "./contract";
@@ -23,34 +26,38 @@ const equalSecret = (a: unknown, b: string) => typeof a === "string" && Buffer.b
 // HTTP start negotiates a signed, short-lived task ticket. Only the container
 // gateway can consume it, over the same socket that carries tool feedback.
 export async function teamEntry(request: Request) {
-  let account;
-  try { account = await requireAccount(request); } catch (error) { return authFailure(error); }
-  if (process.env.NODE_ENV === "production" && !process.env.QA_TOOL_SIGNING_KEY) return Response.json({error:"团队签名配置缺失，未调用模型。"},{status:503});
-  const key = process.env.QA_TOOL_SIGNING_KEY || signingKey;
-  const mac = (payload: string) => createHmac("sha256", key).update(payload).digest("hex");
-  if (process.env.ATOMS_INTERNAL_KEY && equalSecret(request.headers.get("x-atoms-internal"), process.env.ATOMS_INTERNAL_KEY)) {
-    try {
-      const { ticket } = await request.json();
-      if (!ticket || typeof ticket.payload !== "string" || ticket.payload.length > MAX_REQUEST_LENGTH + 1000 || !equalSecret(ticket.signature, mac(ticket.payload))) throw new Error();
-      const payload = JSON.parse(ticket.payload);
-      if (payload.ownerId !== account.id) throw new Error();
-      if (!Number.isFinite(payload.started) || payload.started > Date.now() || Date.now() >= payload.started + TEAM_TIMEOUT_MS) throw new Error();
-      for (const [id, deadline] of consumedTickets) if (deadline <= Date.now()) consumedTickets.delete(id);
-      if (consumedTickets.has(payload.taskId)) return Response.json({ error: "这次生成已启动，请勿重复提交。" }, { status: 409 });
-      consumedTickets.set(payload.taskId, payload.started + TEAM_TIMEOUT_MS);
-      const internal = new Request(request.url, { method: "POST", headers: { "Content-Type": "application/json", "X-Atoms-Task-Id": payload.taskId }, body: JSON.stringify(payload.body), signal: request.signal });
-      return startTeam(internal, payload.started, account.id);
-    } catch { return Response.json({error:"团队票据无效或已过期"},{status:400}); }
-  }
-
-  if (!process.env.ATOMS_INTERNAL_KEY) return Response.json({error:"四角色需要通过团队连接网关启动，尚未配置运行环境。"},{status:503});
   try {
-    const raw = await request.text(); if(raw.length > MAX_REQUEST_LENGTH) throw new Error();
-    const body = JSON.parse(raw), taskId = request.headers.get("x-atoms-task-id");
-    if(!/^[a-f0-9-]{36}$/.test(taskId ?? "") || !validTeamInput(body)) throw new Error();
-    const payload = JSON.stringify({taskId, body, ownerId: account.id, started:Date.now()});
-    return Response.json({protocol:TEAM_PROTOCOL, transport:"websocket", taskId, ticket:{payload,signature:mac(payload)}},{headers:{"Cache-Control":"no-store"}});
-  } catch {return Response.json({error:"团队任务输入无效"},{status:400});}
+    const identity = await requireIdentity(request), account = identity.account;
+    const owner = request.headers.get("x-atoms-account");
+    if (owner && owner !== account.id) throw new ProjectError("account_changed", "请重新登录原账号。", 403);
+    if (process.env.NODE_ENV === "production" && !process.env.QA_TOOL_SIGNING_KEY) throw new ProjectError("not_configured", "团队签名配置缺失，未调用模型。");
+    const key = process.env.QA_TOOL_SIGNING_KEY || signingKey;
+    const mac = (payload: string) => createHmac("sha256", key).update(payload).digest("hex");
+    const raw = await request.text();
+    if (Buffer.byteLength(raw) > MAX_PROOF_BYTES * 2) throw new ProjectError("input", "任务输入过大。", 413);
+    if (process.env.ATOMS_INTERNAL_KEY && equalSecret(request.headers.get("x-atoms-internal"), process.env.ATOMS_INTERNAL_KEY)) {
+      const { ticket } = JSON.parse(raw);
+      if (!ticket || typeof ticket.payload !== "string" || !equalSecret(ticket.signature, mac(ticket.payload))) throw new ProjectError("ticket", "任务票据无效。", 403);
+      const payload = JSON.parse(ticket.payload), binding = payload.binding as GenerationBinding;
+      if (binding.ownerId !== account.id || !Number.isFinite(payload.started) || payload.started > Date.now() || Date.now() >= payload.started + TEAM_TIMEOUT_MS) throw new ProjectError("ticket", "任务票据不属于当前账号或已过期。", 403);
+      for (const [id, deadline] of consumedTickets) if (deadline <= Date.now()) consumedTickets.delete(id);
+      if (consumedTickets.has(binding.taskId)) throw new ProjectError("duplicate", "这次生成已启动，请勿重复提交。", 409);
+      consumedTickets.set(binding.taskId, payload.started + TEAM_TIMEOUT_MS);
+      // The DB claim is global across containers and repeat HTTP tickets. A lost
+      // claim response never starts another paid task. No budget is refreshed.
+      await claimGeneration(identity, binding);
+      const internal = new Request(request.url, { method: "POST", headers: { "Content-Type": "application/json", "X-Atoms-Task-Id": binding.taskId }, body: JSON.stringify(binding.input), signal: request.signal });
+      return startTeam(internal, payload.started, account.id, binding);
+    }
+    if (!process.env.ATOMS_INTERNAL_KEY) throw new ProjectError("not_configured", "四角色需要通过团队连接网关启动，尚未配置运行环境。");
+    const binding = await prepareGeneration(identity, JSON.parse(raw), request.headers.get("x-atoms-task-id") ?? "");
+    const payload = JSON.stringify({ binding, started: Date.now() });
+    return Response.json({ protocol: TEAM_PROTOCOL, transport: "websocket", taskId: binding.taskId, ticket: { payload, signature: mac(payload) } }, { headers: { "Cache-Control": "no-store" } });
+  } catch (error) {
+    if (error instanceof ProjectError) return Response.json({ code: error.code, error: error.message }, { status: error.status, headers: { "Cache-Control": "no-store" } });
+    if (error instanceof SyntaxError) return Response.json({ error: "任务输入无效" }, { status: 400 });
+    return authFailure(error);
+  }
 }
 
 export async function teamControl(request: Request) {
@@ -74,7 +81,7 @@ export async function teamControl(request: Request) {
   } catch (error) { return Response.json({ error: error instanceof Error ? error.message : "检查协议错误" }, { status: 400 }); }
 }
 
-export async function startTeam(request: Request, started = Date.now(), ownerId = "") {
+export async function startTeam(request: Request, started = Date.now(), ownerId = "", binding?: GenerationBinding) {
   if (request.headers.get("origin") && request.headers.get("origin") !== new URL(request.url).origin) return Response.json({ error: "请从本网站发起生成。" }, { status: 403 });
   if (!request.headers.get("content-type")?.includes("application/json")) return Response.json({ error: "请求格式错误" }, { status: 415 });
   let body;
@@ -91,7 +98,13 @@ export async function startTeam(request: Request, started = Date.now(), ownerId 
     start(controller) {
       let terminal = false;
       const send = (value: unknown) => { if (!cancelled && !terminal) controller.enqueue(new TextEncoder().encode(JSON.stringify(value) + "\n")); };
-      const record = createRecorder(taskId, "server", event => send({ type: "step", event }));
+      const events: ExecutionEvent[] = [];
+      const record = createRecorder(taskId, "server", event => { events.push(event); send({ type: "step", event }); });
+      const proof = (result: NonNullable<ReturnType<typeof resultOf>>, reply: string) => {
+        if (!binding) return undefined;
+        try { return attestArtifact(binding, result, reply, team, events, started); }
+        catch { return undefined; } // Keep complete code downloadable; never crash cleanup or invent save eligibility.
+      };
       const team: TeamRecord = { protocol: TEAM_PROTOCOL, taskId, projectId: body.projectId, calls: [], deliveries: [], ...(body.baseHtml ? { baseCodeHash: hash(body.baseHtml), baseDataIssues: body.baseDataIssues ?? [] } : {}) };
       const child = spawn(process.env.ATOMS_TEAM_PYTHON!, [path.join(process.cwd(), "runtime/team/runner.py")], { env: { NODE_ENV: process.env.NODE_ENV, HTTPS_PROXY: process.env.HTTPS_PROXY, HTTP_PROXY: process.env.HTTP_PROXY, ALL_PROXY: process.env.ALL_PROXY, NO_PROXY: process.env.NO_PROXY, PATH: process.env.PATH, HOME: process.env.ATOMS_TEAM_HOME ?? process.env.HOME, METAGPT_PROJECT_ROOT: process.env.METAGPT_PROJECT_ROOT, DEEPSEEK_API_KEY: process.env.DEEPSEEK_API_KEY, PYTHONUNBUFFERED: "1" }, stdio: "pipe" });
       // Never forward framework stderr: it may include full prompts/tracebacks.
@@ -104,7 +117,7 @@ export async function startTeam(request: Request, started = Date.now(), ownerId 
         team.outcome = outcome; team.durationMs = Date.now()-started;
         record("team", "四角色执行结束", "failed", reason);
         const available = preserve && artifact && !["stopped","clarification","unsupported"].includes(outcome) && artifactTeam(team,artifact.codeHash,true);
-        send({ type: "error", protocol: TEAM_PROTOCOL, taskId, error: reason, outcome, team, ...(available ? {result:resultOf(),assistantReply:artifact!.assistantReply} : {}) });
+        send({ type: "error", protocol: TEAM_PROTOCOL, taskId, error: reason, outcome, team, ...(available ? {result:resultOf(),assistantReply:artifact!.assistantReply, proof:proof(resultOf()!,artifact!.assistantReply)} : {}) });
         terminal = true; cleanup(); if (!cancelled) controller.close();
       };
       const session: Session = { ownerId, token, deadline, lease: Date.now(), process: child, stop };
@@ -189,7 +202,8 @@ export async function startTeam(request: Request, started = Date.now(), ownerId 
         team.outcome = team.review?.issues.length ? "issues" : "passed"; team.codeHash = generatedHash; team.durationMs = Date.now() - started;
         record("review-scope", "代码审查完成", "completed", "已保留静态审查意见；预览资格独立判断，未执行业务运行验证。");
         record("team", "TeamLeader 确认交付", "completed", `${team.calls.length} 次实际请求，总耗时 ${team.durationMs} ms。`);
-        send({ type: "result", protocol: TEAM_PROTOCOL, taskId, team, assistantReply: candidateResult.assistantReply, result: { html: candidateResult.html, model: team.calls.filter(c => c.responseModel).at(-1)?.responseModel ?? "deepseek-flash", durationMs: team.durationMs, generatedAt: new Date().toISOString() } });
+        const result = { html: candidateResult.html, model: team.calls.filter(c => c.responseModel).at(-1)?.responseModel ?? "deepseek-flash", durationMs: team.durationMs, generatedAt: new Date().toISOString() };
+        send({ type: "result", protocol: TEAM_PROTOCOL, taskId, team, assistantReply: candidateResult.assistantReply, result, proof:proof(result,candidateResult.assistantReply) });
         terminal = true; cleanup(); controller.close();
       });
       if (request.signal.aborted) abort();

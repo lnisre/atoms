@@ -1,5 +1,7 @@
 # Generation and cross-app lifecycle
 
+Current account/cloud entry and selectors: [account-cloud.md](account-cloud.md), accepted by #65/#68 and ADR 0015. The local workbench/IndexedDB recipes below describe the historical surface and are not current cloud acceptance.
+
 ## Sub-features
 
 | Expected observable result | Source |

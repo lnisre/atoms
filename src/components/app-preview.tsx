@@ -95,7 +95,7 @@ export function AppPreview({
           if (trial && trial.projectId !== projectId)
             throw new Error("试用数据与项目不匹配，已阻止读写。");
           if (readOnly && message.method === "save") throw new Error("示例为只读，请先保存个人副本。");
-          if (!readOnly && !projectSaved)
+          if (!readOnly && !trial && !projectSaved)
             throw new Error(
               "项目尚未保存，应用数据无法保存。请保留页面并重试项目保存。",
             );

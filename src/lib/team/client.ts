@@ -18,7 +18,7 @@ export async function readTeam(response: Response, taskId: string, projectId: st
   if (!response.body || !response.headers.get("content-type")?.includes("application/x-ndjson")) throw new ProtocolError("缺少团队交付协议。");
   let token = "", sequence = 0, buffer = "", total = 0, heartbeat: ReturnType<typeof setInterval> | undefined;
   let team: TeamRecord = { protocol: TEAM_PROTOCOL, taskId, projectId, baseCodeHash, ...(baseHtml ? {baseDataIssues} : {}), deliveries: [], calls: [] };
-  type Received = { result: GenerationResult; assistantReply: string | null; team: TeamRecord };
+  type Received = { proof?: import("../cloud-projects/artifact-contract").ArtifactProof; result: GenerationResult; assistantReply: string | null; team: TeamRecord };
   let cached: Received | undefined, outcome: Received | undefined;
   let receivedTerminal = false, transportFailed = false;
   const control = async () => {
@@ -37,7 +37,7 @@ export async function readTeam(response: Response, taskId: string, projectId: st
     const t = m.team as TeamRecord, result = m.result as GenerationResult;
     if (m.protocol !== TEAM_PROTOCOL || !t || t.taskId !== taskId || t.projectId !== projectId || t.baseCodeHash !== baseCodeHash || JSON.stringify(t.baseDataIssues ?? []) !== JSON.stringify(baseDataIssues) || typeof result?.html !== "string" || result.html.length > 500000 || !artifactTeam(t,await sha256(result.html),terminal) || previewHeadOffset(result.html) === null || !Number.isFinite(result.durationMs) || typeof result.generatedAt !== "string" || (m.assistantReply !== null && typeof m.assistantReply !== "string") || (t.review && !validClassifiedReview(t.review,t.codeHash!,result.html))) throw new ProtocolError("缺少完整且归属正确的代码产物或角色记录");
     if (team.deliveries.length && (JSON.stringify(t.deliveries) !== JSON.stringify(team.deliveries) || JSON.stringify(t.calls) !== JSON.stringify(team.calls))) throw new ProtocolError("结果与实际角色交接不一致");
-    return {result,assistantReply:m.assistantReply as string|null,team:t};
+    return {result,assistantReply:m.assistantReply as string|null,team:t, ...(terminal && m.proof ? {proof:m.proof as import("../cloud-projects/artifact-contract").ArtifactProof} : {})};
   };
   try {
     while (true) {
@@ -47,7 +47,7 @@ export async function readTeam(response: Response, taskId: string, projectId: st
       signal.throwIfAborted();
       if (transportFailed) throw new Error("团队连接中断");
       total += value?.length ?? 0;
-      if (total > 4_000_000) throw new ProtocolError("团队响应过大");
+      if (total > 16_000_000) throw new ProtocolError("团队响应过大");
       buffer += decoder.decode(value, { stream: !done });
       let newline;
       while ((newline = buffer.indexOf("\n")) !== -1) {

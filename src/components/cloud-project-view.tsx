@@ -6,6 +6,7 @@ import { ResultViewer } from "./result-viewer";
 import { ExampleConversation } from "./example-conversation";
 import { GenerationRecord } from "./generation-record";
 import { CloudDataSession, downloadUnsavedCopy, type DataSessionStatus } from "@/lib/cloud-projects/client";
+import type { TrialData } from "@/lib/trial-data";
 import type { CloudProject } from "@/lib/cloud-projects/contract";
 
 export function UnsavedDialog({ action, onCancel, onConfirm, onDownload }: {
@@ -21,15 +22,15 @@ export function UnsavedDialog({ action, onCancel, onConfirm, onDownload }: {
   </dialog>;
 }
 
-export function CloudProjectView({ cloud, session, accountSlot, onBack, onReload, onLogin }: {
-  cloud: CloudProject; session: CloudDataSession; accountSlot: ReactNode;
+export function CloudProjectView({ cloud, session, accountSlot, onBack, onReload, onLogin, children, trialData }: {
+  trialData?: TrialData; children?: ReactNode; cloud: CloudProject; session: CloudDataSession; accountSlot: ReactNode;
   onBack: () => void; onReload: () => void; onLogin: () => void;
 }) {
   const [status, setStatus] = useState<DataSessionStatus>(session.status);
   const [frameVersion, setFrameVersion] = useState(0);
   const project = cloud.project, result = project.draftResult ?? project.result;
   const restricted = project.previewPolicy?.dataMode === "trial";
-  const trial = useMemo(() => restricted ? { projectId: project.id, state: null, hasData: false } : undefined, [project.id, restricted]);
+  const trial = useMemo(() => restricted ? trialData ?? { projectId: project.id, state: null, hasData: false } : undefined, [project.id, restricted, trialData]);
   const source = useMemo(() => ({ id: `${project.id}:${cloud.version.code}`, entryPath: "index.html", files: [{ path: "index.html", text: result.html }] }), [project.id, cloud.version.code, result.html]);
   useEffect(() => session.subscribe(setStatus), [session]);
   async function retry() {
@@ -41,10 +42,11 @@ export function CloudProjectView({ cloud, session, accountSlot, onBack, onReload
     <p className="cloud-scope">账号私有项目 · 云端已保存代码 · 未保存内容与试用数据仅在当前页面保留</p>
     <div className="cloud-project-content">
       <section className="cloud-project-history" aria-label="项目说明与记录">
+        {children}
         <h2>项目需求</h2><p>{project.requirement}</p>
         {project.exampleSource && <ExampleConversation source={project.exampleSource}/>}
         {project.initialGeneration && <GenerationRecord live={false} pending={false} saveError={false} saving={false} record={project.initialGeneration}/>}
-        {project.modificationRecords?.map(record => <section key={record.id}><h3>已采用修改</h3><p>{record.summary}</p>{record.generations?.map(generation => <GenerationRecord live={false} pending={false} saveError={false} saving={false} key={generation.taskId} record={generation}/>)}</section>)}
+        {project.modificationRecords?.map(record => <section key={record.id}><h3>已采用修改</h3><p>{record.summary}</p>{record.generations?.map(generation => <GenerationRecord live={false} pending={false} saveError={false} saving={false} key={generation.taskId} title="已采用修改" requirement={generation.requirement} record={generation}/>)}</section>)}
       </section>
       <ResultViewer version={source} status={restricted ? "待验证代码 · 仅副本试用" : "已保存代码"} actions={<div className="cloud-save-panel">
         {!restricted && project.previewPolicy?.status !== "blocked" && <p role={status.phase === "failed" ? "alert" : "status"}>

@@ -4,12 +4,14 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { HomeEntry, type HomeView } from "@/components/home-entry";
 import { AccountAccess, LoginDialog, authRequest } from "@/components/account-access";
 import { AppPreview } from "@/components/app-preview";
-import { CloudProjectView, UnsavedDialog } from "@/components/cloud-project-view";
+import { UnsavedDialog } from "@/components/cloud-project-view";
 import { ExampleConversation } from "@/components/example-conversation";
 import { EXAMPLE_STATE, prepareBuiltinExample } from "@/lib/builtin-example";
 import { PendingLoginAction, type Account, type LoginIntent } from "@/lib/auth/contract";
 import { CloudDataSession, copyExample, downloadUnsavedCopy, listProjects, readProject } from "@/lib/cloud-projects/client";
 import type { CloudProject, ProjectSummary } from "@/lib/cloud-projects/contract";
+import { CloudWorkbench } from "@/components/cloud-workbench";
+import { CloudWorkbenchSession } from "@/lib/cloud-projects/workbench";
 import type { SavedProject } from "@/lib/project-store";
 
 type ExampleSave = { owner: Account; operationId: string; example: SavedProject };
@@ -38,6 +40,8 @@ export default function Home() {
   const [copyError, setCopyError] = useState("");
   const [logoutFailed, setLogoutFailed] = useState(false);
   const [leaving, setLeaving] = useState<{ action: string; run: () => void } | null>(null);
+  const [workbench, setWorkbench] = useState<CloudWorkbenchSession | null>(null);
+  const workbenchRef = useRef<CloudWorkbenchSession | null>(null);
   const pending = useRef(new PendingLoginAction());
   const epoch = useRef(0);
   const accountRef = useRef<Account | null>(null);
@@ -58,20 +62,22 @@ export default function Home() {
       .catch(() => { if (!disposed) setError("暂时无法确认登录状态，请重试登录。"); })
       .finally(() => { if (!disposed) setLoading(false); });
     const beforeUnload = (event: BeforeUnloadEvent) => {
-      if (copyRef.current || sessionRef.current?.status.pending) { event.preventDefault(); event.returnValue = ""; }
+      if (copyRef.current || workbenchRef.current?.dirty || sessionRef.current?.status.pending) { event.preventDefault(); event.returnValue = ""; }
     };
     window.addEventListener("beforeunload", beforeUnload);
-    return () => { disposed = true; sessionRef.current?.dispose(); window.removeEventListener("beforeunload", beforeUnload); };
+    return () => { disposed = true; workbenchRef.current?.dispose(); sessionRef.current?.dispose(); window.removeEventListener("beforeunload", beforeUnload); };
   }, []);
 
   const openProject = useCallback(async (owner: Account, id: string) => {
     const current = epoch.current, sequence = ++openSequence.current;
-    const pendingAtStart = sessionRef.current?.status.pending;
+    const dataAtStart = workbenchRef.current?.data ?? sessionRef.current;
+    const pendingAtStart = dataAtStart?.status.pending;
+    const workAtStart = workbenchRef.current?.state;
     setNotice("正在读取云端项目…"); setError("");
     try {
       const cloud = await readProject(owner.id, id);
       if (current !== epoch.current || sequence !== openSequence.current || accountRef.current?.id !== owner.id) return;
-      if (sessionRef.current?.status.pending && sessionRef.current.status.pending !== pendingAtStart) {
+      if ((dataAtStart?.status.pending && dataAtStart.status.pending !== pendingAtStart) || (workbenchRef.current?.dirty && workbenchRef.current.state !== workAtStart)) {
         setNotice(""); setError("读取期间产生了新的未确认保存，已保留当前页面。请先重试或下载，再重新载入。"); return;
       }
       sessionRef.current?.dispose();
@@ -79,6 +85,8 @@ export default function Home() {
         if (current !== epoch.current) return;
         setProjects(items => items.map(p => p.id === id ? { ...p, updatedAt: receipt.updatedAt } : p).sort((a, b) => b.updatedAt.localeCompare(a.updatedAt)));
       });
+      workbenchRef.current?.dispose();
+      workbenchRef.current = new CloudWorkbenchSession(owner.id, id, cloud, session); setWorkbench(workbenchRef.current);
       sessionRef.current = session;
       setOpened({ cloud, session }); setExample(null); setNotice(""); setProjects(items => [cloud.project, ...items.filter(p => p.id !== cloud.project.id)]);
       window.history.replaceState(null, "", `/?project=${encodeURIComponent(id)}`);
@@ -97,7 +105,7 @@ export default function Home() {
     }).catch(error => { if (!disposed && current === epoch.current) setListError(error instanceof Error ? error.message : "项目列表读取失败，请重试。"); })
       .finally(() => { if (!disposed && current === epoch.current) setLoadingProjects(false); });
     const id = new URLSearchParams(window.location.search).get("project");
-    if (id && !sessionRef.current) void openProject(account, id);
+    if (id && !sessionRef.current && !workbenchRef.current) void openProject(account, id);
     return () => { disposed = true; };
   }, [account, listAttempt, openProject]);
   async function saveExample(task: ExampleSave) {
@@ -116,7 +124,11 @@ export default function Home() {
   }
   function continueAction(intent: LoginIntent, owner: Account) {
     if (intent.kind === "save-example" && example && !copyRef.current) void saveExample({ owner, operationId: intent.id, example });
-    else if (intent.kind === "generate") setNotice("登录成功，需求已保留。账号项目生成正在接入，尚未调用模型。");
+    else if (intent.kind === "generate" && !workbenchRef.current) {
+      const session = new CloudWorkbenchSession(owner.id, crypto.randomUUID());
+      workbenchRef.current = session; setWorkbench(session); setExample(null);
+      void session.generate(intent.id, intent.requirement);
+    }
   }
   function requestAction(intent: LoginIntent) {
     setError(""); setNotice("");
@@ -127,18 +139,20 @@ export default function Home() {
     if (accountRef.current && accountRef.current.id !== next.id) {
       // Verification has changed the cookie; never let old content write with it.
       epoch.current++; openSequence.current++; sessionRef.current?.dispose(); sessionRef.current = null;
+      workbenchRef.current?.dispose(); workbenchRef.current=null; setWorkbench(null);
+      copyRef.current=null; setCopyPending(null); setExample(null); setRequirement("");
       setOpened(null); setProjects([]); setNotice("登录账号已改变，旧账号内容不能在此账号保存。");
-      // Retain a failed example only for download; its owner prevents retry.
     }
     accountRef.current = next; setAccount(next); setLogin(false); setError("");
     const intent = pending.current.take(); setContinuing(false);
     if (intent) continueAction(intent, next);
   }
   function protectLeave(action: string, run: () => void) {
-    if (copyRef.current || sessionRef.current?.status.pending) setLeaving({ action, run });
+    if (copyRef.current || workbenchRef.current?.dirty || sessionRef.current?.status.pending) setLeaving({ action, run });
     else run();
   }
   function downloadPending() {
+    if (workbenchRef.current) { workbenchRef.current.download(); return; }
     if (copyRef.current) downloadUnsavedCopy(copyRef.current.example, EXAMPLE_STATE);
     else if (opened) downloadUnsavedCopy(opened.cloud.project, opened.session.status.pending?.state);
   }
@@ -148,6 +162,7 @@ export default function Home() {
     // Invalidate the page before awaiting network; late data responses cannot
     // restore a logged-out view. A committed transaction is never undone.
     epoch.current++; openSequence.current++; sessionRef.current?.dispose(); sessionRef.current = null;
+    workbenchRef.current?.dispose(); workbenchRef.current=null; setWorkbench(null);
     pending.current.clear(); copyRef.current = null; accountRef.current = null;
     setOpened(null); setCopyPending(null); setCopyBusy(false); setCopyError(""); setProjects([]); setLoadingProjects(false); setListError(""); setExample(null); setRequirement("");
     setAccount(null); setLogin(false); setContinuing(false); setNotice(""); setView("home");
@@ -166,6 +181,7 @@ export default function Home() {
   }
   function back() {
     protectLeave("返回项目列表", () => {
+      workbenchRef.current?.dispose(); workbenchRef.current=null; setWorkbench(null);
       openSequence.current++; sessionRef.current?.dispose(); sessionRef.current = null;
       setOpened(null); setExample(null); setView("projects"); setNotice(""); setError("");
       window.history.replaceState(null, "", "/"); setListAttempt(value => value + 1);
@@ -174,7 +190,13 @@ export default function Home() {
   const loginAgain = () => { pending.current.clear(); setContinuing(false); setLogin(true); };
   const accountSlot = <AccountAccess account={account} loading={loading} onLogin={loginAgain} onLogout={() => protectLeave("退出登录", () => void signOut())}/>;
   return <>
-    {opened ? <CloudProjectView key={opened.session.instanceId} {...opened} accountSlot={accountSlot} onBack={back} onReload={() => protectLeave("重新载入", () => { if (account) void openProject(account, opened.cloud.project.id); })} onLogin={loginAgain}/> : example ? <main className="public-example">
+    {workbench ? <CloudWorkbench key={workbench.id} session={workbench} accountSlot={accountSlot} onBack={back} onReload={() => protectLeave("重新载入", () => { if (account) void openProject(account, workbench.projectId); })} onLogin={loginAgain} onRestart={requirement => protectLeave("开始新任务", () => {
+      if (!accountRef.current) return;
+      workbenchRef.current?.dispose();
+      const next = new CloudWorkbenchSession(accountRef.current.id, crypto.randomUUID());
+      workbenchRef.current=next; setWorkbench(next); setRequirement(requirement);
+      void next.generate(crypto.randomUUID(),requirement);
+    })}/> : example ? <main className="public-example">
       <header><button className="secondary-button" onClick={() => protectLeave("返回首页", () => { copyRef.current = null; setCopyPending(null); setExample(null); })}>返回首页</button><h1>小费计算器 · 只读示例</h1>{accountSlot}</header>
       <p>可以查看界面和制作说明。修改代码或业务数据前，请先保存到自己的账号。</p>
       <button className="primary-button" disabled={loading || !!copyPending} onClick={() => requestAction({ id: crypto.randomUUID(), kind: "save-example", templateId: "tip-calculator" })}>保存此示例到我的项目</button>

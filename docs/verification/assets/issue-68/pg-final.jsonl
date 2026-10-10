@@ -1,0 +1,17 @@
+{"label":"single task claim and duplicate paid start rejected","requestId":"4fdccd6d-dd3c-484a-9207-c6a9d9b755cb","status":200}
+{"label":"first artifact commits once; changed payload and another owner rejected","requestId":"2a5bd155-1e18-40c9-8f48-67662e164ba5","status":200}
+{"label":"other ordinary role cannot replay artifact or read signing key","requestId":"ebe109d3-8bde-496f-bc81-e85b94be6b8d","status":200}
+{"label":"direct ordinary RPC cannot forge HTML/policy without proof","requestId":"fd0775d3-ff74-4125-bce4-b83f6c2e0551","status":200}
+{"label":"formal data before candidate remains independent","requestId":"c04c450f-a506-4de6-a7b0-92453f501701","status":200}
+{"label":"both devices can start from current code; stale input rejected at start","requestId":"92b4381b-43ed-4788-8658-1415b45c262e","status":200}
+{"label":"adoption rollback leaves original code/data/records, then atomic commit","requestId":"5726678d-8819-4869-9202-12c9b752ca59","status":200}
+{"label":"log append/replay after adoption and data does not revert either","requestId":"a3aaf7f2-4994-441e-947d-d83e085dbbb6","status":200}
+{"label":"claim simultaneous adoption contenders","requestId":"fbf4f69c-9db5-4a07-a56a-f0a4fe7a50ca","status":200}
+{"label":"simultaneous code adoptions: one commit, one conflict","results":[{"requestId":"1167049f-32a3-4765-a378-517657040790","status":200},{"requestId":"5180bb74-0a49-4704-9a7e-1a4903c256aa","status":200,"errorCode":"FailedOperation.PGExecuteSqlError","sqlState":"PT409"}]}
+{"label":"concurrent adoption preserves formal data and appends one record","requestId":"e70e8f37-6c6a-43e4-bdfa-4848ce2a9fb1","status":200}
+{"label":"restricted artifact saved from first delivery; activation true","requestId":"271b57e6-25de-4ce9-95a0-c449618afdc8","status":200}
+{"label":"restricted artifact saved from first delivery; activation false","requestId":"f4aaecf0-5078-47f8-adde-11ea7a013389","status":200}
+{"label":"anonymous claims rejected at every new public function","requestId":"b4ba9e16-35a9-4bb6-8cf6-9b2ca2d7c65a","status":200}
+{"passed":13,"identity":"synthetic claims and authenticated SQL role, signed synthetic artifacts; not real email/JWT/model acceptance"}
+{"label":"cleanup isolated projects operations and task claims","requestId":"f87dbb16-0e3a-4f0f-a8d1-155d6c2dfa49","status":200}
+{"label":"verify cleanup","requestId":"e0f510b9-2fee-4a10-88b9-57ae84cf5853","status":200}

@@ -37,6 +37,7 @@ export class CloudDataSession {
   private flight?: Promise<void>;
   constructor(readonly owner: string, readonly projectId: string, readonly codeVersion: number,
     private committed?: (receipt: CommitReceipt) => void) {}
+  get version() { return this.snapshot?.version; }
   subscribe(listener: (status: DataSessionStatus) => void) {
     this.listeners.add(listener); listener(this.status);
     return () => { this.listeners.delete(listener); };

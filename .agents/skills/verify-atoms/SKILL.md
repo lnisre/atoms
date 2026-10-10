@@ -15,7 +15,8 @@ Primary surface: home/workbench at `/` and `/?project=<UUID>`. Secondary: team H
 
 | Mode | Evidence boundary | Launch |
 | --- | --- | --- |
-| UI/storage | Real DOM, iframe bridge, IndexedDB; existing generated/team regression responses are explicit fixtures | Local dev below |
+| Account/cloud UI | Real DOM and iframe bridge; Auth, BFF cloud and model responses are explicit synthetic fixtures | Local dev + [account/cloud](features/account-cloud.md) |
+| Historical UI/storage | IndexedDB-era drivers; migration needed for current #65 behavior | Historical recipes only |
 | Offline native team | Real gateway/Python routing, budgets and cancellation; scripted provider | [Team setup](references/team.md#offline-native-team) |
 | Real model | Actual provider artifacts plus independent business checks | [Real target](references/team.md#real-model-and-target) |
 
@@ -25,15 +26,7 @@ Use the current task's authorization for provider calls/deployment; selecting th
 
 Run from this skill's repository root in its own worktree. Use Node **24.x**, pnpm **10.12.1**, installed Google Chrome and `lsof`/`ps` (helpers support macOS/Linux). Check versions, select an installed Node 24, then `pnpm install --frozen-lockfile` (add `--offline` when cached). Keep this worktree's `node_modules` and `.next` independent.
 
-Default smoke needs no environment file, model/signing key or Python:
-
-```sh
-RUN_PARENT="$(mktemp -d /tmp/atoms-verify.XXXXXX)"
-RUN="$RUN_PARENT/example"
-node .agents/skills/verify-atoms/scripts/smoke-example.mjs "$RUN" 3210
-```
-
-The helper requires a new evidence directory and unused port. It starts `next dev --webpack --hostname 127.0.0.1 --port 3210`, waits for HTTP, runs Doctor/UI operations, and tears down its browser/server. Webpack follows the previously verified local path; no product config changes. Read `summary.json` even on failure.
+Account/cloud checks require no real email or model calls when using the explicit route fixtures in [account-cloud.md](features/account-cloud.md). Use the owned dev instance below. The old `smoke-example.mjs` and IndexedDB cross-app drivers describe the pre-account workbench; port them during #69 before using them as current acceptance evidence.
 
 For selected existing UI specs, use one terminal session:
 
@@ -66,10 +59,10 @@ Doctor does not start/stop processes, open browsers, alter project storage or te
 Read [features/README.md](features/README.md), then relevant feature files. Prefer existing specs/current selectors. Against the owned UI instance:
 
 ```sh
-TEST_BASE_URL="http://127.0.0.1:$PORT" pnpm exec playwright test tests/browser/builtin-example.spec.ts --workers=1 --retries=0 --trace=on --output="$RUN/browser" --reporter=json >"$RUN/playwright.json"
+TEST_BASE_URL="http://127.0.0.1:$PORT" pnpm exec playwright test tests/browser/account-access.spec.ts tests/browser/cloud-projects.spec.ts tests/browser/cloud-generation.spec.ts --workers=1 --retries=0 --trace=on --output="$RUN/browser" --reporter=json >"$RUN/playwright.json"
 ```
 
-The example spec covers more example boundaries than the smoke.
+These specs cover current guest/account entry, cloud data protection and #68 generation/candidate/session behavior using explicit external-boundary fixtures. They do not establish real email/JWT/PG/model acceptance.
 
 After changing shared cross-app helpers or the TypeScript launch path, also run the persistent zero-model browser regression:
 
