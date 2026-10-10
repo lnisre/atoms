@@ -2,12 +2,12 @@ import { previewHeadOffset } from "./html-document";
 
 // This bridge is injected before generated scripts. The application never chooses
 // a project ID; the parent binds this frame/session to its own project record.
-export function previewDocument(html: string, channel: string, origin: string) {
+export function previewDocument(html: string, channel: string, origin: string, readOnly = false) {
   const offset = previewHeadOffset(html);
   if (offset === null) throw new Error("应用 HTML 结构不完整，无法装配预览。");
-  const config = JSON.stringify({ channel, origin }).replace(/</g, "\\u003c");
+  const config = JSON.stringify({ channel, origin, readOnly }).replace(/</g, "\\u003c");
   const guard = `<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src data: blob:; font-src 'none'; connect-src 'none'; frame-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'"><script>(()=>{
-    const {channel,origin}=${config};
+    const {channel,origin,readOnly}=${config};
     const pending=new Map();let sequence=0;
     let saves=0,lockedBody,wasInert=false,focused;
     // Lock synchronously at the API boundary, including for previously saved HTML.
@@ -24,8 +24,9 @@ export function previewDocument(html: string, channel: string, origin: string) {
     }
     // Also guard handlers in modal dialogs (which can escape ancestor inertness).
     for(const type of ['click','dblclick','pointerdown','pointerup','mousedown','mouseup','keydown','keyup','beforeinput','input','change','submit','touchstart','touchend','drop']){
-      addEventListener(type,event=>{if(saves){event.preventDefault();event.stopImmediatePropagation();}},{capture:true,passive:false});
+      addEventListener(type,event=>{if(readOnly||saves){event.preventDefault();event.stopImmediatePropagation();}},{capture:true,passive:false});
     }
+    if(readOnly)addEventListener('DOMContentLoaded',()=>{document.body.inert=true;},{once:true});
     const send=(message)=>parent.postMessage({...message,channel},origin);
     const report=()=>send({type:'atoms:preview-error'});
     addEventListener('error',report);addEventListener('unhandledrejection',report);
@@ -37,6 +38,7 @@ export function previewDocument(html: string, channel: string, origin: string) {
       if(m.ok)request.resolve(m.state);else request.reject(new Error(m.error));
     });
     function request(method,state){
+      if(readOnly&&method==='save')return Promise.reject(new Error('示例为只读，请先保存个人副本。'));
       if(method==='save')lock();
       return new Promise((resolve,reject)=>{
         const id=++sequence;

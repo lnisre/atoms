@@ -13,3 +13,6 @@ test-results
 playwright-report
 playwright.config.ts
 *.tsbuildinfo
+
+# Local cloud management credentials
+tx.tokens

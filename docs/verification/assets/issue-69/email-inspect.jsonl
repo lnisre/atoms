@@ -1,0 +1,3 @@
+{"action":"DescribeLoginConfig","status":200,"requestId":"75dad0a6-1375-49ac-a297-ce4fb12884cf"}
+{"action":"GetProviders","status":200,"requestId":"fa6aeeff-2102-4f51-8f15-ae2a1a4536cd"}
+{"envId":"atoms-d9gdf8r2036664366","region":"ap-shanghai","emailLogin":false,"usernameLogin":true,"anonymousLogin":false,"phoneLogin":false,"emailProvider":"FALSE","platformEmail":"FALSE"}

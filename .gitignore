@@ -51,3 +51,6 @@ next-env.d.ts
 # Python runtime caches
 __pycache__/
 *.pyc
+
+# Local cloud management credentials
+tx.tokens

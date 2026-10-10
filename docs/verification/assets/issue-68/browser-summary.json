@@ -1,0 +1,389 @@
+{
+  "mode": "real UI/iframe with synthetic Auth/BFF and model transport; zero real model/mail",
+  "reports": [
+    {
+      "attempt": "playwright",
+      "stats": {
+        "startTime": "2026-10-10T17:38:35.934Z",
+        "duration": 98681.007,
+        "expected": 10,
+        "skipped": 0,
+        "unexpected": 2,
+        "flaky": 0
+      },
+      "tests": [
+        {
+          "file": "account-access.spec.ts",
+          "title": "游客只读示例阻断鼠标、键盘、API与原始数据桥；不创建或读取本地库",
+          "results": [
+            {
+              "status": "passed",
+              "duration": 2627,
+              "error": null
+            }
+          ]
+        },
+        {
+          "file": "account-access.spec.ts",
+          "title": "登录错误保留需求，取消不续接；成功只验证一次并续接一次生成",
+          "results": [
+            {
+              "status": "passed",
+              "duration": 2186,
+              "error": null
+            }
+          ]
+        },
+        {
+          "file": "account-access.spec.ts",
+          "title": "普通登录和有效会话恢复无生成/复制副作用；退出清除账号和输入，旧本地数据保留",
+          "results": [
+            {
+              "status": "passed",
+              "duration": 3367,
+              "error": null
+            }
+          ]
+        },
+        {
+          "file": "cloud-generation.spec.ts",
+          "title": "guest intent runs once; first save response loss and separate log failure retry without generation; second browser restores",
+          "results": [
+            {
+              "status": "passed",
+              "duration": 3479,
+              "error": null
+            }
+          ]
+        },
+        {
+          "file": "cloud-generation.spec.ts",
+          "title": "multi-round trial never writes official data; atomic adoption replays and other device candidate conflicts",
+          "results": [
+            {
+              "status": "timedOut",
+              "duration": 30248,
+              "error": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
+            }
+          ]
+        },
+        {
+          "file": "cloud-generation.spec.ts",
+          "title": "natural expiry retains started result; same-account reauthentication saves without another model task",
+          "results": [
+            {
+              "status": "timedOut",
+              "duration": 30278,
+              "error": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
+            }
+          ]
+        },
+        {
+          "file": "cloud-generation.spec.ts",
+          "title": "cancelled exit keeps task; confirmed logout unmounts and ignores late result before another account signs in",
+          "results": [
+            {
+              "status": "passed",
+              "duration": 2288,
+              "error": null
+            }
+          ]
+        },
+        {
+          "file": "cloud-generation.spec.ts",
+          "title": "restored restricted code remains trial; explicit permitted activation never copies trial data",
+          "results": [
+            {
+              "status": "passed",
+              "duration": 3065,
+              "error": null
+            }
+          ]
+        },
+        {
+          "file": "cloud-projects.spec.ts",
+          "title": "explicit guest copy continues once; lost response retries same operation; independent browser restores and another owner is denied",
+          "results": [
+            {
+              "status": "passed",
+              "duration": 5191,
+              "error": null
+            }
+          ]
+        },
+        {
+          "file": "cloud-projects.spec.ts",
+          "title": "saving waits for acknowledgment, failed payload downloads from platform, replay restores submitted values",
+          "results": [
+            {
+              "status": "passed",
+              "duration": 1929,
+              "error": null
+            }
+          ]
+        },
+        {
+          "file": "cloud-projects.spec.ts",
+          "title": "two stale pages conflict; download/cancel/reload protect failed content, read failure never triggers a write",
+          "results": [
+            {
+              "status": "passed",
+              "duration": 5201,
+              "error": null
+            }
+          ]
+        },
+        {
+          "file": "cloud-projects.spec.ts",
+          "title": "a new unsaved edit while reload is reading cannot be silently discarded",
+          "results": [
+            {
+              "status": "passed",
+              "duration": 1797,
+              "error": null
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "attempt": "playwright-retry",
+      "stats": {
+        "startTime": "2026-10-10T17:42:36.070Z",
+        "duration": 18262.873,
+        "expected": 5,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      },
+      "tests": [
+        {
+          "file": "cloud-generation.spec.ts",
+          "title": "guest intent runs once; first save response loss and separate log failure retry without generation; second browser restores",
+          "results": [
+            {
+              "status": "passed",
+              "duration": 5134,
+              "error": null
+            }
+          ]
+        },
+        {
+          "file": "cloud-generation.spec.ts",
+          "title": "multi-round trial never writes official data; atomic adoption replays and other device candidate conflicts",
+          "results": [
+            {
+              "status": "passed",
+              "duration": 4244,
+              "error": null
+            }
+          ]
+        },
+        {
+          "file": "cloud-generation.spec.ts",
+          "title": "natural expiry retains started result; same-account reauthentication saves without another model task",
+          "results": [
+            {
+              "status": "passed",
+              "duration": 1850,
+              "error": null
+            }
+          ]
+        },
+        {
+          "file": "cloud-generation.spec.ts",
+          "title": "cancelled exit keeps task; confirmed logout unmounts and ignores late result before another account signs in",
+          "results": [
+            {
+              "status": "passed",
+              "duration": 1908,
+              "error": null
+            }
+          ]
+        },
+        {
+          "file": "cloud-generation.spec.ts",
+          "title": "restored restricted code remains trial; explicit permitted activation never copies trial data",
+          "results": [
+            {
+              "status": "passed",
+              "duration": 2955,
+              "error": null
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "attempt": "playwright-lifecycle",
+      "stats": {
+        "startTime": "2026-10-10T17:46:10.582Z",
+        "duration": 8280.903999999999,
+        "expected": 2,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      },
+      "tests": [
+        {
+          "file": "cloud-generation.spec.ts",
+          "title": "logout during uncertain commit clears old page; late commit remains private to the original account",
+          "results": [
+            {
+              "status": "passed",
+              "duration": 3072,
+              "error": null
+            }
+          ]
+        },
+        {
+          "file": "cloud-generation.spec.ts",
+          "title": "execution-blocked draft remains blocked after reopening and cannot be activated by the page",
+          "results": [
+            {
+              "status": "passed",
+              "duration": 2762,
+              "error": null
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "attempt": "playwright-final",
+      "stats": {
+        "startTime": "2026-10-10T17:50:55.963Z",
+        "duration": 30498.529000000002,
+        "expected": 8,
+        "skipped": 0,
+        "unexpected": 1,
+        "flaky": 0
+      },
+      "tests": [
+        {
+          "file": "cloud-generation.spec.ts",
+          "title": "guest intent runs once; first save response loss and separate log failure retry without generation; second browser restores",
+          "results": [
+            {
+              "status": "passed",
+              "duration": 4226,
+              "error": null
+            }
+          ]
+        },
+        {
+          "file": "cloud-generation.spec.ts",
+          "title": "multi-round trial never writes official data; atomic adoption replays and other device candidate conflicts",
+          "results": [
+            {
+              "status": "failed",
+              "duration": 6563,
+              "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByText('应用数据已保存到云端', { exact: true })\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" getByText('应用数据已保存到云端', { exact: true }) with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByText('应用数据已保存到云端', { exact: true })\u001b[22m\n"
+            }
+          ]
+        },
+        {
+          "file": "cloud-generation.spec.ts",
+          "title": "natural expiry retains started result; same-account reauthentication saves without another model task",
+          "results": [
+            {
+              "status": "passed",
+              "duration": 1961,
+              "error": null
+            }
+          ]
+        },
+        {
+          "file": "cloud-generation.spec.ts",
+          "title": "cancelled exit keeps task; confirmed logout unmounts and ignores late result before another account signs in",
+          "results": [
+            {
+              "status": "passed",
+              "duration": 1763,
+              "error": null
+            }
+          ]
+        },
+        {
+          "file": "cloud-generation.spec.ts",
+          "title": "restored restricted code remains trial; explicit permitted activation never copies trial data",
+          "results": [
+            {
+              "status": "passed",
+              "duration": 2962,
+              "error": null
+            }
+          ]
+        },
+        {
+          "file": "cloud-generation.spec.ts",
+          "title": "logout during uncertain commit clears old page; late commit remains private to the original account",
+          "results": [
+            {
+              "status": "passed",
+              "duration": 1776,
+              "error": null
+            }
+          ]
+        },
+        {
+          "file": "cloud-generation.spec.ts",
+          "title": "execution-blocked draft remains blocked after reopening and cannot be activated by the page",
+          "results": [
+            {
+              "status": "passed",
+              "duration": 2833,
+              "error": null
+            }
+          ]
+        },
+        {
+          "file": "cloud-generation.spec.ts",
+          "title": "first generation failure preserves editable requirement and explicitly starts a fresh task",
+          "results": [
+            {
+              "status": "passed",
+              "duration": 1635,
+              "error": null
+            }
+          ]
+        },
+        {
+          "file": "cloud-generation.spec.ts",
+          "title": "restored restricted trial changes trigger exit protection and download includes the session copy",
+          "results": [
+            {
+              "status": "passed",
+              "duration": 2879,
+              "error": null
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "attempt": "playwright-candidate-final",
+      "stats": {
+        "startTime": "2026-10-10T17:53:44.417Z",
+        "duration": 7101.292,
+        "expected": 1,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      },
+      "tests": [
+        {
+          "file": "cloud-generation.spec.ts",
+          "title": "multi-round trial never writes official data; atomic adoption replays and other device candidate conflicts",
+          "results": [
+            {
+              "status": "passed",
+              "duration": 4770,
+              "error": null
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

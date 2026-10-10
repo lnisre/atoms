@@ -1,0 +1,54 @@
+{
+  "records": [
+    {
+      "path": "/",
+      "method": "GET",
+      "status": 200,
+      "expected": 200
+    },
+    {
+      "path": "/api/projects",
+      "method": "GET",
+      "status": 401,
+      "expected": 401
+    },
+    {
+      "path": "/api/generate",
+      "method": "POST",
+      "status": 401,
+      "expected": 401
+    },
+    {
+      "path": "/api/team",
+      "method": "POST",
+      "status": 401,
+      "expected": 401
+    },
+    {
+      "path": "/api/auth/code",
+      "method": "POST",
+      "status": 403,
+      "expected": 403
+    },
+    {
+      "path": "/api/auth/code",
+      "method": "POST",
+      "status": 400,
+      "expected": 400
+    },
+    {
+      "path": "/api/team/socket",
+      "origin": "http://127.0.0.1:3179",
+      "status": 401,
+      "expected": 401
+    },
+    {
+      "path": "/api/team/socket",
+      "origin": "https://foreign.invalid",
+      "status": 403,
+      "expected": 403
+    }
+  ],
+  "modelRequests": 0,
+  "emailRequests": 0
+}

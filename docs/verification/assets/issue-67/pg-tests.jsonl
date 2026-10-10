@@ -1,0 +1,18 @@
+{"label":"copy as simulated authenticated role","requestId":"bb1c7f0d-36eb-4875-b74e-740001cc49b1","status":200}
+{"label":"inspect only fixture identity","requestId":"a488ec5c-b43c-482c-b3d5-099787b50304","status":200}
+{"label":"replay copy after committed response lost; no duplicate","requestId":"61eb8a9e-7d8e-494c-b684-89bc1adec64d","status":200}
+{"label":"direct write denied and cross-account rows hidden by RLS","requestId":"a57f0fc5-b29b-472a-8e6e-b927b1483ebd","status":200}
+{"label":"normal data commit and stale version rejection","requestId":"2b6d528c-3b56-4347-af39-448081a682c4","status":200}
+{"label":"lost save response replay wins over stale expected version","requestId":"121c97d7-14a4-4227-a283-bb5cbb7635d0","status":200}
+{"label":"forced transaction failure rolls back data and receipt together","requestId":"f3ff8ff3-9856-40eb-b835-9e23d808baf4","status":200}
+{"label":"prepare isolated newer code version","requestId":"1b4d43ee-bc13-413c-96be-d956bf0aa67a","status":200}
+{"label":"old running code rejected for reads and writes","requestId":"939eefe0-1958-4021-8e91-97fb4fd2f97a","status":200}
+{"label":"ordinary users cannot bypass versioned RPC with direct writes","requestId":"3b969900-abd7-4bb8-a642-3112bb6631f2","status":200}
+{"label":"concurrent same-version writes: one commit, one conflict","results":[{"requestId":"6347d272-9744-4225-a1e6-bdce260fcd1d","status":200},{"requestId":"f3d2fae0-e00c-4e1c-aac0-a08df0ec7952","status":200,"errorCode":"FailedOperation.PGExecuteSqlError","sqlState":"PT409"}]}
+{"label":"concurrent winner visible; saved null remains valid JSON data","requestId":"aff80c65-df2c-49b8-907c-d53a63c15259","status":200}
+{"label":"prepare isolated restricted project","requestId":"c712f6cc-a30c-4700-8f0f-6c32063b15a5","status":200}
+{"label":"restricted code cannot read/write formal data and retains restrictions","requestId":"25db7c0a-9188-4c24-90d8-a0427afb70db","status":200}
+{"label":"anonymous denied even when function owner is privileged","requestId":"d28ec330-de6f-4788-8266-65b68269a288","status":200}
+{"passed":14,"identity":"management SQL, simulated authenticated role and JWT claims; no real email/JWT gateway"}
+{"label":"cleanup only this run fixture rows and receipts","requestId":"275bfad4-a815-4422-ad07-a3f8845c6fc0","status":200}
+{"label":"verify fixture cleanup","requestId":"4c20c823-bb7e-457c-8a26-5a71711df98b","status":200}

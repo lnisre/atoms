@@ -1,5 +1,15 @@
 # Home and workbench
 
+## Current account verification (#65/#69)
+
+Current account routes and shared matrix: [account-cloud](account-cloud.md). The current cloud workbench keeps one ResultViewer across generation/candidate/adoption, saved history before the current round, ConversationScroll, and a separate modification control area. “我的项目” leaves through unsaved protection. Source viewing never grants permission to execute or adopt restricted code.
+
+Run `cloud-regressions.spec.ts` for candidate code-mode/search retention, same-version iframe continuity, long-history scrolling and controls at 1440×900, 1280×720 and 736×900. `account-access.spec.ts` covers guest read-only source/preview. `source-reading.spec.ts` is an independent public SourceVersion component harness and remains valid for search/clipboard faults; it does not prove cloud persistence.
+
+Old home/workbench/source page tests seed IndexedDB or assume anonymous generation. Do not run those as current cloud acceptance. The standalone source harnesses remain component evidence. Existing #15/#18 visual-reference comparison gaps remain unverified; layout checks do not establish visual fidelity. #69 records the implemented cloud regressions and actual screenshots.
+
+## Historical local-workbench reference (not executable cloud acceptance)
+
 ## Sub-features
 
 | Expected result | Source |

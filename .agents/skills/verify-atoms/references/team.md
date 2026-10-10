@@ -1,5 +1,7 @@
 # Native team and real target setup
 
+Current account warning (#65/#69): the native browser and `live-cross-app.ts` launch recipes below still assume anonymous/IndexedDB. Their Python prerequisites and offline `test_runner.py` are valid, but those UI drivers cannot prove current account behavior until adapted. The current reading adapter is `live-cloud-cross-app.ts` (manifest first; two already authenticated isolated profiles); its fixture regression is `cloud-cross-app.spec.ts`. See account-cloud and the #69 report for actual executed coverage. Never bypass production auth to make the old recipes run.
+
 Read only when selected criteria need native routing, provider calls or `/qa`. Ordinary UI/example checks need none of this. Runtime authority: [runtime/team/README.md](../../../../runtime/team/README.md), [Dockerfile.vercel](../../../../Dockerfile.vercel), current [ADR 0011](../../../../docs/adr/0011-review-findings-and-preview.md).
 
 ## Offline native team

@@ -4,11 +4,14 @@ Select by current criteria, not historical counts. Distinct entry points in each
 
 | Feature | Existing recipes | Acceptance authority |
 | --- | --- | --- |
+| [Account cloud generation and session lifecycle](account-cloud.md) | account-access, cloud-projects, cloud-generation; public service and isolated PG tests | #65–#69; ADR 0015/0016 |
 | [Generation and cross-app lifecycle](generation.md) | generation, first-generation, team, team-stop, cross-app, cross-app-draft | #2/#3; current ADR 0011 |
 | [Modification, trial and adoption](modification.md) | candidate, modification-records, persistence, save-race, reviewer-preview, cross-app-acceptance, cross-app-draft, record-assertions, team-modification, team-stop | #5/#6/#17/#27; ADR 0011 |
 | [Review, repairs and preview](review-policy.md) | reviewer-preview, cross-app-draft, team, team-stop, preview-document | ADR 0011 / #35 |
 | [小费示例与旧副本保全](example.md) | builtin-example, workspace-upgrade, legacy-example, example-restart; full-browser smoke | ADR 0013 / #46/#50/#51 |
 | [Home and workbench](workbench.md) | home-entry, workbench, workbench-stream, source-browser, source-reading, source-version, source-recovery, source-acceptance | #15/#18/#47; retain visual reference gaps |
+
+For the account UI introduced by #65, start with account-cloud.md. The older local-storage recipes below require migration before they can prove current cloud behavior; their historical expectations do not override #65.
 
 Requirements live in linked Issues/ADRs. Selectors/commands are checkout observations; reconcile drift before changing expectations.
 

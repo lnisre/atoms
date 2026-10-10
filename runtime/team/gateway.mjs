@@ -10,26 +10,32 @@ const origin=`http://localhost:${internalPort}`;
 const transportOrigin=`http://127.0.0.1:${internalPort}`;
 const child=spawn(process.execPath,[process.env.ATOMS_NEXT_ENTRY||'.next/standalone/server.js'],{stdio:'inherit',env:{...process.env,PORT:String(internalPort),HOSTNAME:'127.0.0.1',ATOMS_INTERNAL_KEY:internalKey}});
 const server=http.createServer((req,res)=>{
-  const expectedOrigin=`${req.headers['x-forwarded-proto']||'http'}://${req.headers.host}`;
+  const expectedOrigin=process.env.ATOMS_APP_ORIGIN||`${req.headers['x-forwarded-proto']||'http'}://${req.headers.host}`;
   if(req.headers.origin && req.headers.origin!==expectedOrigin){res.writeHead(403);res.end('Forbidden origin');return}
   const headers={...req.headers,host:`localhost:${internalPort}`,'x-forwarded-host':`localhost:${internalPort}`,'x-forwarded-proto':'http'};
-  if(headers.origin)headers.origin=origin;
+  if(headers.origin && !process.env.ATOMS_APP_ORIGIN)headers.origin=origin;
   delete headers['x-atoms-internal'];
   const upstream=http.request(transportOrigin+req.url,{method:req.method,headers},r=>{res.writeHead(r.statusCode,r.headers);r.pipe(res)});
   upstream.on('error',()=>{if(!res.headersSent)res.writeHead(503);res.end('Application is starting')});
   req.on('aborted',()=>upstream.destroy());res.on('close',()=>upstream.destroy());req.pipe(upstream);
 });
 const sockets=new WebSocketServer({noServer:true,maxPayload:8_000_000});
-server.on('upgrade',(req,socket,head)=>{
+server.on('upgrade',async(req,socket,head)=>{
   const url=new URL(req.url,'http://localhost');
-  const expectedOrigin=`${req.headers['x-forwarded-proto']||'http'}://${req.headers.host}`;
+  const expectedOrigin=process.env.ATOMS_APP_ORIGIN||`${req.headers['x-forwarded-proto']||'http'}://${req.headers.host}`;
   if(url.pathname!=='/api/team/socket'||req.headers.origin!==expectedOrigin){socket.end('HTTP/1.1 403 Forbidden\r\n\r\n');return}
-  sockets.handleUpgrade(req,socket,head,ws=>sockets.emit('connection',ws));
+  try {
+    const session = await fetch(transportOrigin+'/api/auth/session',{headers:{cookie:req.headers.cookie||''},signal:AbortSignal.timeout(15000)});
+    await session.body?.cancel();
+    if(!session.ok){socket.end(session.status===401||session.status===403?'HTTP/1.1 401 Unauthorized\r\n\r\n':'HTTP/1.1 503 Service Unavailable\r\n\r\n');return}
+  } catch {socket.end('HTTP/1.1 503 Service Unavailable\r\n\r\n');return}
+  if(socket.destroyed)return;
+  sockets.handleUpgrade(req,socket,head,ws=>sockets.emit('connection',ws,req.headers.cookie||''));
 });
-sockets.on('connection',ws=>{
+sockets.on('connection',(ws,cookie)=>{
   const abort=new AbortController();let started=false;let taskId,token;let bytes=0;
   const send=value=>{if(ws.readyState===1)ws.send(JSON.stringify(value))};
-  const post=(endpoint,body)=>fetch(transportOrigin+endpoint,{method:'POST',headers:{'Content-Type':'application/json','X-Atoms-Internal':internalKey,'X-Atoms-Protocol':'atoms-team/3'},body:JSON.stringify(body),signal:abort.signal});
+  const post=(endpoint,body)=>fetch(transportOrigin+endpoint,{method:'POST',headers:{'Content-Type':'application/json','X-Atoms-Internal':internalKey,'X-Atoms-Protocol':'atoms-team/3','Cookie':cookie},body:JSON.stringify(body),signal:abort.signal});
   const startTimer=setTimeout(()=>ws.close(1008,'start required'),5000);
   ws.on('close',()=>{clearTimeout(startTimer);if(taskId&&token){void fetch(transportOrigin+'/api/team',{method:'POST',headers:{'Content-Type':'application/json','X-Atoms-Internal':internalKey},body:JSON.stringify({action:'cancel',taskId,token}),signal:AbortSignal.timeout(1500)}).then(r=>r.body?.cancel()).catch(()=>{});}abort.abort()});ws.on('error',()=>abort.abort());
   ws.on('message',async raw=>{
