@@ -1,0 +1,15 @@
+{
+  "ports": {
+    "3169": [],
+    "3179": [],
+    "3180": []
+  },
+  "browserContextsClosed": true,
+  "persistentTestProfileRemoved": true,
+  "remoteTestRowsCreated": 0,
+  "emailRequests": 0,
+  "realModelRequests": 0,
+  "artifactKeySourceRetained": true,
+  "localConfigMode": "600",
+  "evidenceRetained": true
+}

@@ -1,0 +1,32 @@
+{
+  "project": {
+    "id": "prj_eErnQuAz4P719xKTyuT6XT2Qu5ab",
+    "name": "v0-test0",
+    "nodeVersion": "24.x",
+    "framework": "nextjs",
+    "automationBypassCount": 1
+  },
+  "deployment": {
+    "id": "dpl_VK3bPMP6QkTj66NJKm51yQfPoiYA",
+    "url": "v0-test0-dlsxzs49c-lnisres-projects.vercel.app",
+    "target": "production",
+    "readyState": "READY",
+    "sourceCommit": "6f49a6416694b9a770cc0da6784cfb4f9df25e22"
+  },
+  "env": [
+    {
+      "key": "QA_TOOL_SIGNING_KEY",
+      "target": [
+        "production"
+      ],
+      "type": "encrypted"
+    },
+    {
+      "key": "DEEPSEEK_API_KEY",
+      "target": [
+        "production"
+      ],
+      "type": "encrypted"
+    }
+  ]
+}
