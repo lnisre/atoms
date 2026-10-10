@@ -21,15 +21,36 @@ export function validateFiles(files, read) {
   for (const file of paths) if (!allowed(file) || unsafe(file)) throw new Error(`Unsafe release path: ${file}`);
   for (const file of required) if (!paths.has(file)) throw new Error(`Missing release input: ${file}`);
   for (const root of roots) if (![...paths].some(file => file.startsWith(root))) throw new Error(`Empty release directory: ${root}`);
-  const dockerfile = read('Dockerfile.vercel').toString();
-  if (!/^CMD \["node", "runtime\/team\/gateway\.mjs"\]$/m.test(dockerfile)) throw new Error('Container must start the team gateway');
-  if (!/^FROM python:3\.11[^\n]*$/m.test(dockerfile) || !dockerfile.includes('pip check') || !dockerfile.includes('python runtime/team/test_runner.py')) throw new Error('Missing Python runtime/build gates');
-  for (const line of dockerfile.split('\n')) {
-    if (/^ADD\s/i.test(line)) throw new Error('Review ADD inputs before releasing');
-    if (!/^COPY\s/i.test(line) || /^COPY --from=\S+ /i.test(line)) continue;
-    const words = line.trim().split(/\s+/).slice(1);
-    words.pop();
-    if (!words.length || words.some(word => !/^[\w./-]+$/.test(word) || word.startsWith('/') || word.split('/').includes('..') || word === '.')) throw new Error('Unsupported Docker COPY; update release input validation');
+  const instructions = read('Dockerfile.vercel').toString().split('\n')
+    .map(line => line.trim()).filter(line => line && !line.startsWith('#'))
+    .map(line => {
+      const match = /^([a-z]+)\s+(.+)$/i.exec(line);
+      if (!match || line.endsWith('\\')) throw new Error('Unsupported Docker instruction; review release validation');
+      return { name: match[1].toUpperCase(), value: match[2] };
+    });
+  const finalStage = instructions.findLastIndex(instruction => instruction.name === 'FROM');
+  if (finalStage < 0 || !/^python:3\.11[\w.-]+$/i.test(instructions[finalStage].value)) throw new Error('Final container stage must supply Python 3.11');
+  const runtime = instructions.slice(finalStage + 1);
+  const commands = runtime.filter(instruction => instruction.name === 'CMD');
+  if (commands.length !== 1 || commands[0].value !== '["node", "runtime/team/gateway.mjs"]') throw new Error('Final container stage must start the team gateway with exactly one CMD');
+  if (!runtime.some(instruction => instruction.name === 'RUN' && instruction.value.includes('pip check') && instruction.value.includes('python runtime/team/test_runner.py'))) throw new Error('Missing Python runtime/build gates');
+  const stages = new Set();
+  for (const { name, value } of instructions) {
+    if (!['FROM', 'RUN', 'WORKDIR', 'COPY', 'ENV', 'EXPOSE', 'CMD'].includes(name)) throw new Error(`Unsupported Docker instruction: ${name}`);
+    if (name === 'FROM') {
+      const stage = / AS (\w+)$/i.exec(value)?.[1];
+      if (stage) stages.add(stage);
+    }
+    if (name !== 'COPY') continue;
+    const words = value.split(/\s+/);
+    const from = /^--from=(\w+)$/.exec(words[0]);
+    if (from) {
+      if (!stages.has(from[1])) throw new Error('Unsupported Docker COPY stage');
+      words.shift();
+    }
+    const destination = words.pop();
+    if (!destination || !/^[\w.@/-]+$/.test(destination) || !words.length || words.some(word => !/^[\w.@/-]+$/.test(word) || word.split('/').includes('..') || (!from && (word.startsWith('/') || word === '.')))) throw new Error('Unsupported Docker COPY; update release input validation');
+    if (from) continue;
     for (const source of words) {
       const normalized = source.replace(/^\.\//, '').replace(/\/$/, '');
       if (!paths.has(normalized) && ![...paths].some(file => file.startsWith(normalized + '/'))) throw new Error(`Missing Docker COPY source: ${source}`);

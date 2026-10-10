@@ -27,13 +27,13 @@ test('Python runner, pinned dependencies, patch, config and schema cannot be omi
 });
 
 test('new Docker COPY inputs and unsupported syntax fail closed', () => {
-  for (const copy of ['COPY deployment/new-input.json /app/', 'COPY . /app/', 'COPY ["new.json", "/app/"]']) {
+  for (const copy of ['COPY deployment/new-input.json /app/', '  COPY deployment/new-input.json /app/', 'copy deployment/new-input.json /app/', 'COPY . /app/', 'COPY ["new.json", "/app/"]']) {
     assert.throws(() => validateFiles(manifest.files, file => file === 'Dockerfile.vercel' ? `${read(file)}\n${copy}` : read(file)), /Missing Docker COPY|Unsupported Docker COPY/);
   }
 });
 
 test('ordinary Next entry or missing Python build gates cannot masquerade as a team container', () => {
-  for (const dockerfile of [read('Dockerfile.vercel').toString().replace('CMD ["node", "runtime/team/gateway.mjs"]', 'CMD ["node", "server.js"]'), read('Dockerfile.vercel').toString().replace('python runtime/team/test_runner.py', 'true')]) {
+  for (const dockerfile of [read('Dockerfile.vercel').toString() + '\nCMD ["node", "server.js"]', read('Dockerfile.vercel').toString().replace('CMD ["node", "runtime/team/gateway.mjs"]', 'CMD ["node", "server.js"]'), read('Dockerfile.vercel').toString().replace('python runtime/team/test_runner.py', 'true')]) {
     assert.throws(() => validateFiles(manifest.files, file => file === 'Dockerfile.vercel' ? dockerfile : read(file)), /team gateway|Python runtime/);
   }
 });
@@ -79,4 +79,11 @@ test('READY and matching metadata are insufficient without container output and 
 
 test('working Docker recipe still meets the same gate before commit', () => {
   validateFiles(manifest.files, file => readFileSync(new URL(`../${file}`, import.meta.url)));
+});
+
+
+test('ENTRYPOINT, ADD and unknown multiline COPY semantics fail closed', () => {
+  for (const extra of ['ENTRYPOINT ["node", "server.js"]', '  ADD https://example.invalid/file /app/', 'COPY --chown=app src /app/', 'COPY src ' + String.fromCharCode(92) + '\n /app/']) {
+    assert.throws(() => validateFiles(manifest.files, file => file === 'Dockerfile.vercel' ? `${read(file)}\n${extra}` : read(file)), /Unsupported Docker/);
+  }
 });

@@ -12,13 +12,17 @@
 
 | 预期与依据 | 观察与证据 | 结果 |
 | --- | --- | --- |
-| #63：上传前拒绝 Dockerfile/Python 运行输入遗漏 | 新增 9 项发布测试，重现删除 Dockerfile、依赖、patch、config、schema 的失败；拒绝新增未覆盖 COPY、清单篡改及远端普通 Node 产物 | 通过 |
+| #63：上传前拒绝 Dockerfile/Python 运行输入遗漏 | 新增 10 项发布测试，重现删除 Dockerfile、依赖、patch、config、schema 的失败；拒绝新增未覆盖 COPY、清单篡改及远端普通 Node 产物 | 通过 |
 | 工程静态、类型与服务端检查 | [lint](assets/issue-63/lint.txt)、[typecheck](assets/issue-63/typecheck.txt)、[71 项测试](assets/issue-63/tests.txt)，含团队停止/心跳生命周期 | 通过，0 跳过 |
 | 同一源码生产构建 | [Next 16.3.6 正式构建](assets/issue-63/build.txt)，Node 24.18.0、pnpm 10.12.1；随后 prepare standalone | 通过 |
 | #63：既有项目与示例兼容、候选采用、刷新恢复 | 真实本机网关 + 独立 Chrome + 合成生成响应；9 个文件共 58 项，覆盖小费示例、旧工作区升级、旧副本、完整浏览器重启、候选、持久化、代码查看/版本/恢复 | [58/58，0 失败/跳过/重试](assets/issue-63/browser-summary.json) |
 | 自有资源清理 | 网关 PID 4374 与 Next PID 4395 已退出，3263/3264 均无监听 | 通过 |
 
 本机浏览器场次的 Doctor 在提交前记录基线及未提交修复文件的哈希，见汇总 source 字段；没有将合成 Reviewer 响应称作真实模型证据。Python 原生回归由独立验收会话在已核实的上游 SHA 环境执行；生产容器自身仍需通过 Docker 配方中的 `pip check` 与 `test_runner.py`，实施侧本机浏览器不证明 Python 安装。
+
+## 独立审查修订
+
+首轮独立审查复现 P2：末尾第二个 CMD 会覆盖网关入口，缩进 COPY/ADD 会漏检。已按规范化指令与最终阶段检查入口，拒绝 ENTRYPOINT、额外 CMD、未知 COPY 选项与续行形式。两个原始反例及扩展负例已纳入 [10 项发布复验](assets/issue-63/release-tests-v2.txt)，静态检查再次通过。首次解析修订过严，拒绝 pnpm 路径中的 `@`，在提交前补齐该现有合法路径后全部通过；未改 Docker 配方或任何产品运行输入。原有 71 项与浏览器证据仍对应相同运行源码。
 
 ## 发布与独立验收
 
