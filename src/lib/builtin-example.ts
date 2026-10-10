@@ -22,6 +22,10 @@ export async function prepareBuiltinExample(): Promise<SavedProject> {
   const response = await fetch(EXAMPLE_ASSET, { signal: AbortSignal.timeout(10_000) });
   if (!response.ok) throw new Error("示例素材暂不可用");
   const html = await response.text();
+  return builtinExampleFromHtml(html);
+}
+
+export async function builtinExampleFromHtml(html: string): Promise<SavedProject> {
   if (await sha256(html) !== EXAMPLE_HASH) throw new Error("示例素材校验失败");
   const now = new Date().toISOString();
   return {

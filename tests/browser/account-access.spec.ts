@@ -3,6 +3,7 @@ import { test, expect, type Page } from "@playwright/test";
 // Synthetic Auth HTTP responses verify UI behavior only; real mail/Auth is #69.
 async function authFixture(page: Page) {
   let signedIn = false, verifies = 0, modelCalls = 0;
+  await page.route("**/api/projects", route => route.fulfill({json:[]}));
   await page.route("**/api/auth/session", route => route.fulfill({ status: signedIn ? 200 : 401, json: signedIn ? { account: { id: "fixture", email: "fixture@example.invalid" } } : {error:"请先登录"} }));
   await page.route("**/api/auth/code", route => route.fulfill({json:{sent:true,retryAfter:60,expiresIn:600}}));
   await page.route("**/api/auth/verify", route => {

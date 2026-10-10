@@ -8,7 +8,7 @@
     "start": "next start",
     "lint": "eslint",
     "typecheck": "next typegen && tsc --noEmit",
-    "test": "node --import tsx --test tests/generate.test.ts tests/team.test.ts tests/team-socket.test.ts tests/team-client.test.ts tests/preview-policy.test.ts tests/source-code.test.ts tests/tip-calculator.test.ts tests/generation-record.test.tsx tests/release.test.mjs tests/auth.test.ts tests/auth-gateway.test.mjs",
+    "test": "node --import tsx --test tests/generate.test.ts tests/team.test.ts tests/team-socket.test.ts tests/team-client.test.ts tests/preview-policy.test.ts tests/source-code.test.ts tests/tip-calculator.test.ts tests/generation-record.test.tsx tests/release.test.mjs tests/auth.test.ts tests/auth-gateway.test.mjs tests/cloud-projects.test.ts",
     "test:e2e": "playwright test",
     "team:build": "next build && node runtime/team/prepare.mjs",
     "team:start": "node runtime/team/gateway.mjs",

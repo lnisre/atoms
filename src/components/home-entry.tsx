@@ -1,6 +1,6 @@
 import { useRef, type ReactNode } from "react";
 import { MAX_REQUIREMENT_LENGTH } from "@/lib/generation";
-import type { SavedProject } from "@/lib/project-store";
+import type { ProjectSummary } from "@/lib/cloud-projects/contract";
 import styles from "./home-entry.module.css";
 
 export type HomeView = "home" | "projects";
@@ -55,13 +55,13 @@ type Props = {
   onViewChange: (view: HomeView) => void;
   requirement: string;
   onRequirementChange: (value: string) => void;
-  projects: SavedProject[];
+  projects: ProjectSummary[];
   loadingProjects: boolean;
   listError: string;
   exampleError: string;
   onRetryProjects: () => void;
   examples: { name: string; text: string }[];
-  onOpenProject: (project: SavedProject) => void;
+  onOpenProject: (project: ProjectSummary) => void;
   onGenerate: () => void;
 };
 export function HomeEntry({ accountSlot, onOpenExample, view, onViewChange, requirement, onRequirementChange, projects, loadingProjects, listError, exampleError, onRetryProjects, examples, onOpenProject, onGenerate }: Props) {
@@ -120,7 +120,7 @@ export function HomeEntry({ accountSlot, onOpenExample, view, onViewChange, requ
       <section className={`${styles.projects} ${view === "home" ? styles.homeProjects : styles.allProjects}`} aria-label="已有项目" id="projects">
         {view === "projects" ? <><h1>我的项目</h1><div className={styles.projectToolbar}><span className={styles.selectedTab}>全部 <small>{projects.length}</small></span><Unavailable label="已收藏">已收藏</Unavailable><span className={styles.toolbarSpacer}/><Unavailable label="搜索项目" className={styles.search}><Icon name="search"/>搜索项目 · 未提供</Unavailable><Unavailable label="切换项目视图" className={styles.iconButton}><Icon name="grid"/></Unavailable></div></> : <div className={styles.projectToolbar}><Unavailable label="发现">发现</Unavailable><h2>我的项目</h2><Unavailable label="模板">模板</Unavailable><span className={styles.toolbarSpacer}/><button onClick={() => changeView("projects")}>查看全部 <span aria-hidden="true">›</span></button></div>}
         {loadingProjects && <p className={styles.empty} role="status">正在读取已有项目…</p>}
-        {(listError || exampleError) && <div className={styles.error} role="alert"><p>{listError || exampleError}</p><button type="button" disabled={loadingProjects} onClick={onRetryProjects}>重试读取与准备</button></div>}
+        {(listError || exampleError) && <div className={styles.error} role="alert"><p>{listError || exampleError}</p><button type="button" disabled={loadingProjects} onClick={onRetryProjects}>重试读取项目</button></div>}
         {!loadingProjects && !listError && projects.length === 0 && <div className={styles.empty}><Icon name="projects"/><h2>还没有已保存的项目</h2><p>这里显示当前账号的云端项目。</p>{view === "projects" && <button onClick={() => changeView("home")}>创建第一个应用 <span aria-hidden="true">↗</span></button>}</div>}
         <div className={styles.projectGrid}>{(view === "home" ? projects.slice(0, 3) : projects).map(project => <button key={project.id} className={styles.projectCard} onClick={() => onOpenProject(project)} title={`打开项目：${project.title}`}>
           <span className={styles.cover}><Icon name="projects"/><span>项目封面占位</span><small>尚未提供应用截图</small></span>

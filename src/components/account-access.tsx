@@ -19,11 +19,11 @@ export function AccountAccess({ account, loading, onLogin, onLogout }: { account
     <button type="button" onClick={account ? onLogout : onLogin} disabled={loading}>{account ? "退出登录" : "登录 / 注册"}</button>
   </div>;
 }
-export function LoginDialog({ onClose, onSuccess, continuing }: { onClose: () => void; onSuccess: (account: Account) => void; continuing: boolean }) {
+export function LoginDialog({ onClose, onSuccess, continuing, expectedEmail }: { expectedEmail?: string; onClose: () => void; onSuccess: (account: Account) => void; continuing: boolean }) {
   const dialog = useRef<HTMLDialogElement>(null);
   const live = useRef(true);
   const pending = useRef(false);
-  const [email, setEmail] = useState("");
+  const [email, setEmail] = useState(expectedEmail ?? "");
   const [sentEmail, setSentEmail] = useState("");
   const [code, setCode] = useState("");
   const [busy, setBusy] = useState(false);
@@ -59,7 +59,7 @@ export function LoginDialog({ onClose, onSuccess, continuing }: { onClose: () =>
     {continuing && <p className={styles.note}>已保留刚才的操作与输入，登录后继续。</p>}
     <form onSubmit={event => { event.preventDefault(); void submit(!sentEmail); }}>
       <label htmlFor="login-email">邮箱地址</label>
-      <input id="login-email" type="email" autoComplete="email" maxLength={254} required value={email} disabled={!!sentEmail || busy} onChange={event => setEmail(event.target.value)}/>
+      <input id="login-email" type="email" autoComplete="email" maxLength={254} required readOnly={!!expectedEmail} value={email} disabled={!!sentEmail || busy} onChange={event => setEmail(event.target.value)}/>
       {sentEmail && <>
         <p role="status">验证码已发送至 {sentEmail}，请在有效期内输入。</p>
         <label htmlFor="login-code">6 位验证码</label>

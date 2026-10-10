@@ -14,6 +14,7 @@ import {
   type ModificationRecord,
   type SavedProject,
 } from "@/lib/project-store";
+import type { ProjectSummary } from "@/lib/cloud-projects/contract";
 import type { TrialData } from "@/lib/trial-data";
 import { AppPreview } from "@/components/app-preview";
 import { ResultViewer } from "@/components/result-viewer";
@@ -504,7 +505,7 @@ export default function ProjectWorkbench() {
           exampleError={exampleError}
           onRetryProjects={retryHomeLoad}
           examples={examples}
-          onOpenProject={openProject}
+          onOpenProject={(summary: ProjectSummary) => { const saved = projects.find(item => item.id === summary.id); if (saved) openProject(saved); }}
           onGenerate={() => {
             if (requirement.trim() && !loadingProjects)
               void generate({ id: crypto.randomUUID(), requirement: requirement.trim() });
