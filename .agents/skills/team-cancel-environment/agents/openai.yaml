@@ -1,0 +1,4 @@
+interface:
+  display_name: "Team cancellation environment"
+  short_description: "Create isolated Issue 41 experiment runs"
+  default_prompt: "Use $team-cancel-environment to prepare a fresh isolated Atoms Issue 41 cancellation experiment environment and verify its fixed slice identity."
