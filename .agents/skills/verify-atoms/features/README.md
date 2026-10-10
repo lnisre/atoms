@@ -4,7 +4,7 @@ Select by current criteria, not historical counts. Distinct entry points in each
 
 | Feature | Existing recipes | Acceptance authority |
 | --- | --- | --- |
-| [Account cloud generation and session lifecycle](account-cloud.md) | account-access, cloud-projects, cloud-generation; public service and isolated PG tests | #65–#68; ADR 0015/0016 |
+| [Account cloud generation and session lifecycle](account-cloud.md) | account-access, cloud-projects, cloud-generation; public service and isolated PG tests | #65–#69; ADR 0015/0016 |
 | [Generation and cross-app lifecycle](generation.md) | generation, first-generation, team, team-stop, cross-app, cross-app-draft | #2/#3; current ADR 0011 |
 | [Modification, trial and adoption](modification.md) | candidate, modification-records, persistence, save-race, reviewer-preview, cross-app-acceptance, cross-app-draft, record-assertions, team-modification, team-stop | #5/#6/#17/#27; ADR 0011 |
 | [Review, repairs and preview](review-policy.md) | reviewer-preview, cross-app-draft, team, team-stop, preview-document | ADR 0011 / #35 |

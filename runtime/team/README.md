@@ -1,6 +1,6 @@
 # M5 bounded native team runtime
 
-The product entry point remains the existing homepage and `/api/generate`. Generation and modification negotiate `atoms-team/3` and uses a pinned same-origin WebSocket; both use the same bounded native team. A browser refresh only restores IndexedDB, never starts a model task.
+The product entry point remains the existing homepage and `/api/generate`. Generation and modification negotiate `atoms-team/3` and uses a pinned same-origin WebSocket; both use the same bounded native team. A browser refresh restores the signed-in account’s latest committed cloud project, never starts a model task. Unadopted candidates and trial data remain page-local.
 
 The Python adapter retains `FoundationAgents/MetaGPT@11cdf466d042aece04fc6cfd13b28e1a70341b1f` native Team/MGXEnv scheduling and the bounded deepseek-flash HTTP transport; upstream run/observe/think/act/react/publication implementations remain inherited. New tasks use `atoms-team/3`. Reviewer reports major/minor findings with exact code quotes, triggers and consequences, plus evidence for resolved prior findings. Approval means no findings, not permission to preview. Major findings allow at most two whole-code repairs (three implementations), minor findings finish directly. Format correction is still once per task. All work shares 240 seconds and 20 requests; no extra model call is required to preserve a completed artifact after failure or timeout.
 

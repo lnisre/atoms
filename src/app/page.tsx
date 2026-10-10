@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { HomeEntry, type HomeView } from "@/components/home-entry";
 import { AccountAccess, LoginDialog, authRequest } from "@/components/account-access";
+import { ResultViewer } from "@/components/result-viewer";
 import { AppPreview } from "@/components/app-preview";
 import { UnsavedDialog } from "@/components/cloud-project-view";
 import { ExampleConversation } from "@/components/example-conversation";
@@ -206,7 +207,7 @@ export default function Home() {
         <button className="secondary-button" onClick={loginAgain}>重新登录原账号</button>
         <p>未确认保存的内容仅保留在当前页面，刷新或关闭后无法恢复。</p>
       </div>}
-      <div className="public-example-content"><section aria-label="示例说明">{example.exampleSource && <ExampleConversation source={example.exampleSource} readOnly/>}</section><AppPreview html={example.result.html} projectId="public-example" projectSaved={false} readOnly readOnlyState={EXAMPLE_STATE} onRetry={() => void openExample()}/></div>
+      <div className="public-example-content"><section aria-label="示例说明">{example.exampleSource && <ExampleConversation source={example.exampleSource} readOnly/>}</section><ResultViewer version={{id:example.id,entryPath:"index.html",files:[{path:"index.html",text:example.result.html}]}} status="只读示例"><AppPreview html={example.result.html} projectId="public-example" projectSaved={false} readOnly readOnlyState={EXAMPLE_STATE} onRetry={() => void openExample()}/></ResultViewer></div>
     </main> : <HomeEntry view={view} onViewChange={setView} requirement={requirement} onRequirementChange={setRequirement} projects={projects} loadingProjects={loading || loadingProjects} listError={listError} exampleError="" onRetryProjects={() => setListAttempt(value => value + 1)} examples={examples} onOpenProject={project => { if (account) void openProject(account, project.id); }} onGenerate={() => { if (requirement.trim()) requestAction({ id: crypto.randomUUID(), kind: "generate", requirement: requirement.trim() }); }} accountSlot={accountSlot} onOpenExample={() => void openExample()}/>}
     {(notice || error) && <div className="account-notice" role={error ? "alert" : "status"}>{error || notice}<button aria-label="关闭提示" onClick={() => { setError(""); setNotice(""); }}>×</button></div>}
     {logoutFailed && <div className="cloud-save-panel" role="alert">页面已清除，云端退出尚未成功。<button onClick={() => void signOut()}>重试退出登录</button></div>}

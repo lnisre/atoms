@@ -54,6 +54,11 @@ test("游客只读示例阻断鼠标、键盘、API与原始数据桥；不创�
   }),config);
   expect(bridge).toMatchObject({ok:false,error:expect.stringContaining("只读")});
   expect(await page.evaluate(()=>Reflect.get(window,"idbCalls"))).toBe(0);expect(auth.stats().modelCalls).toBe(0);
+  const iframe=await page.locator('iframe').elementHandle();
+  await page.getByRole('button',{name:'查看代码',exact:true}).click();
+  await expect(page.getByRole('region',{name:'源码 index.html',exact:true})).toContainText('小费');
+  await page.getByRole('button',{name:'预览',exact:true}).click();expect(await iframe!.evaluate(el=>el.isConnected)).toBe(true);
+  await expect(input).toHaveValue('20');
   await page.screenshot({path:info.outputPath("readonly-example.png"),fullPage:true});
 });
 test("登录错误保留需求，取消不续接；成功只验证一次并续接一次生成",async({page},info)=>{

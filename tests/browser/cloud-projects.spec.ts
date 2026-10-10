@@ -98,6 +98,10 @@ test("explicit guest copy continues once; lost response retries same operation; 
   await expect(retry(page)).toBeEnabled(); expect(store.records.size).toBe(1);
   await retry(page).click(); await expect(saved(page)).toBeVisible(); expect(store.records.size).toBe(1);
   expect(store.copyBodies[0]).toEqual(store.copyBodies[1]);
+  await page.getByText('示例来源与保存范围',{exact:true}).click();
+  await expect(page.getByText('个人副本保存到当前账号。',{exact:false})).toBeVisible();
+  await expect(page.getByText('数据仅保存在同一浏览器、同一网址。',{exact:false})).toHaveCount(0);
+
   await frame(page).getByLabel("账单金额（元）").fill("80"); await expect(saved(page)).toBeVisible(); await expect(frame(page).locator("#perPersonVal")).toHaveText("¥21.00");
   const url = page.url(), otherDevice = await browser.newContext(), stranger = await browser.newContext();
   try {

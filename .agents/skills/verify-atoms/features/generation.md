@@ -1,5 +1,15 @@
 # Generation and cross-app lifecycle
 
+## Current account verification (#65/#69)
+
+Use the current account matrix in [account-cloud](account-cloud.md). Guest generation first logs in; ordinary login starts no task. “我的项目” leaves through unsaved protection; “停止生成” stops the active task. Saved projects restore through ordinary-user cloud reads, never IndexedDB.
+
+`cloud-generation.spec.ts` covers continuation, commit/log retries, expiry and exit. `cloud-regressions.spec.ts` adds failure/stop retention and a terminal result without proof (download only). `preview-document.spec.ts` now uses the current account UI and explicit Auth/BFF/provider fixtures. Actual generated add/delete/toggle behavior still requires real-model acceptance.
+
+The frozen synthetic requirements and independent plans in `tests/team/cross-app-scenarios.ts` remain useful. `cross-app-workflow.ts`, `live-cross-app.ts`, first-generation and native browser team drivers still assume anonymous/local storage; do not execute them as current account acceptance. The new `cloud-cross-app-workflow.ts` and `live-cloud-cross-app.ts` use ordinary-user public cloud reads and two authenticated contexts; their UI/provider-fixture regression is `cloud-cross-app.spec.ts`. Current native UI stop path and authorized real-target execution remain gaps in #69.
+
+## Historical local-workbench reference (not executable cloud acceptance)
+
 Current account/cloud entry and selectors: [account-cloud.md](account-cloud.md), accepted by #65/#68 and ADR 0015. The local workbench/IndexedDB recipes below describe the historical surface and are not current cloud acceptance.
 
 ## Sub-features
