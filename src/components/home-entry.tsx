@@ -80,6 +80,9 @@ export function HomeEntry({ accountSlot, onOpenExample, view, onViewChange, requ
         <Unavailable label="资源"><Icon name="compass"/>资源<small>未提供</small></Unavailable>
         <button aria-current={view === "projects" ? "page" : undefined} onClick={() => changeView("projects")}><Icon name="projects"/>我的项目</button>
       </nav>
+      {onOpenExample && <section className={styles.exampleProject} aria-label="平台示例">
+        <button onClick={onOpenExample} aria-label="查看只读示例：小费计算器"><Icon name="projects"/><span>小费计算器<small>示例 · 只读</small></span><span aria-hidden="true">›</span></button>
+      </section>}
       <section className={styles.recent} aria-label="最近项目"><h2>最近</h2>
         {projects.slice(0, 5).map(project => <button key={project.id} title={project.title} onClick={() => onOpenProject(project)}>{project.title}</button>)}
         {!loadingProjects && !listError && projects.length === 0 && <p>还没有已保存的项目</p>}
@@ -116,7 +119,7 @@ export function HomeEntry({ accountSlot, onOpenExample, view, onViewChange, requ
           <div className={styles.homeNotes}><p>灰色控件当前未提供。头像仅为装饰，不代表多智能体执行。</p><details><summary>保存与恢复范围</summary><p>示例只读。登录后通过明确操作创建自己的项目；旧浏览器项目不会自动导入或删除。</p></details></div>
         </section>
       </div>
-      {onOpenExample && <section className={styles.projects} aria-label="只读示例"><h2>看看示例</h2><p>查看小费计算器的界面与制作说明。编辑前需登录并保存个人副本。</p><button className="secondary-button" onClick={onOpenExample}>查看只读示例</button></section>}
+
       <section className={`${styles.projects} ${view === "home" ? styles.homeProjects : styles.allProjects}`} aria-label="已有项目" id="projects">
         {view === "projects" ? <><h1>我的项目</h1><div className={styles.projectToolbar}><span className={styles.selectedTab}>全部 <small>{projects.length}</small></span><Unavailable label="已收藏">已收藏</Unavailable><span className={styles.toolbarSpacer}/><Unavailable label="搜索项目" className={styles.search}><Icon name="search"/>搜索项目 · 未提供</Unavailable><Unavailable label="切换项目视图" className={styles.iconButton}><Icon name="grid"/></Unavailable></div></> : <div className={styles.projectToolbar}><Unavailable label="发现">发现</Unavailable><h2>我的项目</h2><Unavailable label="模板">模板</Unavailable><span className={styles.toolbarSpacer}/><button onClick={() => changeView("projects")}>查看全部 <span aria-hidden="true">›</span></button></div>}
         {loadingProjects && <p className={styles.empty} role="status">正在读取已有项目…</p>}
