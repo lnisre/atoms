@@ -164,3 +164,13 @@ details p { white-space: pre-wrap; overflow-wrap: anywhere; line-height: 1.8; }
 
 .cloud-project-history > .cloud-save-panel { max-height: 48%; overflow: auto; }
 .public-example-content > section[aria-label="项目成果"] { height: 750px; }
+
+.history-heading { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px; }
+.history-list { list-style: none; margin: 12px 0; padding: 0; }
+.history-list li { border-top: 1px solid #d8e4e1; padding: 12px 0; }
+.history-list h3 { margin: 0 0 6px; font-size: 14px; }
+.history-time { font-size: 12px; color: #536b63; }
+.history-panel p { overflow-wrap: anywhere; }
+
+.cloud-project-history > .history-panel { max-height: 65%; }
+.history-panel > div:not(.history-heading) { display: block; }

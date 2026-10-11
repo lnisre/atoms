@@ -4,7 +4,8 @@ import { createHash } from 'node:crypto';
 import { builtinExampleFromHtml, EXAMPLE_STATE } from '../../src/lib/builtin-example.ts';
 import { managementArgs, managementSql, sqlLiteral } from './pg-management.mjs';
 const args = managementArgs();
-const sql = managementSql(args.credentials, args.envId);
+const execute = managementSql(args.credentials, args.envId);
+const sql = statement => execute(statement.replace(/\batoms_/g, args.namespace + "_"));
 const migration = readFileSync(new URL('../../db/migrations/001_account_projects.sql', import.meta.url), 'utf8');
 const example = await builtinExampleFromHtml(readFileSync(new URL('../../public/examples/tip-calculator-v1.html', import.meta.url), 'utf8'));
 // Template provenance has no synthetic task history, user identity or credentials.
@@ -13,7 +14,7 @@ void id; void updatedAt;
 document.result.generatedAt = '2026-10-10T00:00:00.000Z';
 const template = JSON.stringify(document), state = JSON.stringify(EXAMPLE_STATE);
 const checksum = createHash('sha256').update(migration + template + state).digest('hex');
-console.log(JSON.stringify({ environment: args.envId, region: 'ap-shanghai', migration: '001_account_projects', checksum, apply: args.apply }));
+console.log(JSON.stringify({ environment: args.envId, namespace: args.namespace, region: 'ap-shanghai', migration: '001_account_projects', checksum, apply: args.apply }));
 try {
   if (!args.apply) {
     const result = await sql("SELECT to_regclass('atoms_private.migrations') IS NOT NULL AS installed");
@@ -58,7 +59,7 @@ try {
       END IF;
     END $migration$;`);
     console.log(JSON.stringify({...nextResult.summary, migration:'002_trusted_artifacts',checksum:nextChecksum,applied:true}));
-    for (const name of ['003_artifact_receipt']) {
+    for (const name of ['003_artifact_receipt', '004_project_history', '005_history_restore']) {
       const content=readFileSync(new URL(`../../db/migrations/${name}.sql`,import.meta.url),'utf8');
       const digest=createHash('sha256').update(content).digest('hex');
       const patched=await sql(`DO $migration$ DECLARE previous text; BEGIN

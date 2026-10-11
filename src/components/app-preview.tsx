@@ -14,6 +14,7 @@ export function AppPreview({
   projectSaved,
   onRetry,
   trial,
+  trialKind = "candidate",
   recordStep,
   readOnly = false,
   readOnlyState = null,
@@ -24,6 +25,7 @@ export function AppPreview({
   projectSaved: boolean;
   onRetry: () => void;
   trial?: TrialData;
+  trialKind?: "candidate" | "history";
   recordStep?: RecordStep;
   readOnly?: boolean;
   readOnlyState?: unknown;
@@ -212,7 +214,7 @@ export function AppPreview({
       <div className="preview-toolbar">
         <span>
           <span className="status-dot" />
-          {readOnly ? "示例预览 · 只读" : trial ? "候选试用 · 未采用" : "运行预览 · 已采用应用"}
+          {readOnly ? "示例预览 · 只读" : trial ? trialKind === "history" ? "历史副本试用 · 不改变当前项目" : "候选试用 · 未采用" : "运行预览 · 已采用应用"}
         </span>
         <span>{loaded ? readOnly ? "预览已加载" : "预览已加载 · 请实际操作检查" : "正在加载预览"}</span>
       </div>
@@ -225,7 +227,7 @@ export function AppPreview({
       {failed && (
         <div className="preview-error" role="alert">
           预览出现运行错误，部分功能可能不可用。
-          <button onClick={onRetry}>{readOnly ? "重新读取示例" : cloud ? "重新载入云端版本" : trial ? "修改需求后重新发起" : "重新生成"}</button>
+          <button onClick={onRetry}>{readOnly ? "重新读取示例" : cloud ? "重新载入云端版本" : trial ? trialKind === "history" ? "重新读取保存点" : "修改需求后重新发起" : "重新生成"}</button>
         </div>
       )}
       {document && (

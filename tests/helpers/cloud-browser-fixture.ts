@@ -2,7 +2,7 @@ import { expect, type BrowserContext, type Page } from "@playwright/test";
 import { syntheticArtifact } from "./artifact";
 import { signProof } from "../../src/lib/cloud-projects/artifacts";
 import type { Artifact } from "../../src/lib/cloud-projects/artifact-contract";
-import type { CloudProject, CommitReceipt } from "../../src/lib/cloud-projects/contract";
+import type { CloudProject, CommitReceipt, HistorySnapshot } from "../../src/lib/cloud-projects/contract";
 // Explicit in-memory Auth/BFF/provider seam. Real DOM and iframe; no email/model/PG claims.
 const html=(revision:number)=>`<!doctype html><html><head></head><body><h1>Counter ${revision}</h1><button id="add" disabled>增加</button><output id="count"></output><p id="status"></p><script>
 let state;const button=document.querySelector('#add'),out=document.querySelector('#count'),status=document.querySelector('#status');
@@ -12,6 +12,12 @@ button.onclick=async()=>{state.count++;out.textContent=state.count;status.textCo
 export async function fixture() {
  process.env.ATOMS_ARTIFACT_SECRET='b'.repeat(64);
  const rows=new Map<string,{owner:string;cloud:CloudProject}>(),operations=new Map<string,CommitReceipt>();
+ const histories=new Map<string,HistorySnapshot[]>(),backups=new Map<string,{cloud:CloudProject;points:HistorySnapshot[]}>();
+ let historyFailure=0,historyLost=false,readbackFailure=false;
+ function point(cloud:CloudProject,sequence:number):HistorySnapshot {
+  return {projectId:cloud.project.id,project:structuredClone(cloud.project),state:structuredClone(cloud.state),hasData:cloud.hasData,
+   entry:{id:crypto.randomUUID(),sequence,origin:sequence===1?'initial':'adopted',recordId:cloud.project.modificationRecords?.at(-1)?.id??null,summary:sequence===1?'首次计数器':`修改 ${sequence}`,pairedAt:new Date().toISOString(),dataSavedAt:cloud.hasData?new Date().toISOString():null,hasData:cloud.hasData,nextSequence:null,status:'current',protectedReason:'current'}};
+ }
  let render=html, includeProof=true;
  let calls=0, lost=false, logsFail=false, generationFail=false, policy:Artifact['policy']|undefined;
  let generationGate:Promise<void>|undefined,releaseGeneration=()=>{},saveGate:Promise<void>|undefined,releaseSave=()=>{};
@@ -59,6 +65,9 @@ export async function fixture() {
       Object.assign(project,{draftResult:a.result,result:{...a.result,html:'<!doctype html><html><head></head><body>待验证代码，请使用新版客户端。</body></html>'}});
      }else Reflect.deleteProperty(project,'draftResult');
      const cloud:CloudProject={project,version:{code:(old?.cloud.version.code??0)+1,data:old?.cloud.version.data??1},state:old?.cloud.state??null,hasData:old?.cloud.hasData??false};
+     const points=histories.get(a.projectId)??[];
+     if(old && points.length){const last=points.at(-1)!;last.project=structuredClone(old.cloud.project);last.state=structuredClone(old.cloud.state);last.hasData=old.cloud.hasData;Object.assign(last.entry,{status:'available',protectedReason:null,hasData:old.cloud.hasData,dataSavedAt:new Date().toISOString(),pairedAt:new Date().toISOString(),nextSequence:last.entry.sequence+1});}
+     cloud.historyRevision=old?.cloud.historyRevision??0;cloud.restore=null;backups.delete(a.projectId);points.forEach(s=>{s.entry.protectedReason=null;});points.push(point(cloud,(points.at(-1)?.entry.sequence??0)+1));histories.set(a.projectId,points);
      rows.set(a.projectId,{owner:account,cloud});receipt={projectId:a.projectId,version:{...cloud.version},updatedAt:project.updatedAt};operations.set(key,receipt);
     }
     if(lost){lost=false;return route.abort('failed');}
@@ -71,17 +80,47 @@ export async function fixture() {
    }
    const id=url.pathname.split('/')[3],row=rows.get(id);
    if(!row||row.owner!==account)return route.fulfill({status:404,json:{error:'项目不可见'}});
+   if(url.pathname.includes('/history')){
+    const points=histories.get(id)??[];
+    if(req.method()==='GET'){
+     const snapshotId=url.pathname.split('/')[5];
+     if(snapshotId){const snapshot=points.find(s=>s.entry.id===snapshotId && s.entry.status!=='cleared');return route.fulfill({status:snapshot?200:410,json:snapshot??{code:'PT410',error:'已清理，无法恢复'}});}
+     return route.fulfill({json:{projectId:id,version:row.cloud.version,revision:row.cloud.historyRevision??0,currentId:points.at(-1)?.entry.id??null,entries:points.map(s=>s.entry).reverse()}});
+    }
+    bodies.push(body);const key=account+body.operationId;let receipt=operations.get(key);
+    if(!receipt){
+     if(historyFailure){const status=historyFailure;historyFailure=0;return route.fulfill({status,json:{code:status===507?'storage_full':'unavailable',error:status===507?'云端空间不足，本次操作未完成。':'操作失败，原状态保留。'}});}
+     if(JSON.stringify(body.expected)!==JSON.stringify(row.cloud.version)||body.expectedHistory!==(row.cloud.historyRevision??0))return route.fulfill({status:409,json:{code:'conflict',error:'云端已有更新，请重新核对。'}});
+     const target=points.find(s=>s.entry.id===body.targetId),backup=backups.get(id),old=row.cloud;
+     if(body.action==='undo'){
+      if(!backup||old.restore?.id!==body.targetId)return route.fulfill({status:412,json:{code:'PT412',error:'撤销机会已结束'}});
+      row.cloud=structuredClone(backup.cloud);histories.set(id,structuredClone(backup.points));row.cloud.restore=null;backups.delete(id);
+     }else{
+      if(!target||target.entry.status==='cleared')return route.fulfill({status:410,json:{code:'PT410',error:'已清理，无法恢复'}});
+      if(target.entry.status==='current'||(body.action==='clear'&&target.entry.protectedReason))return route.fulfill({status:423,json:{code:'PT423',error:'当前项目或撤销依赖，不能清理'}});
+      if(body.action==='restore'){
+       backups.set(id,{cloud:structuredClone(old),points:structuredClone(points)});
+       row.cloud={...structuredClone(old),project:structuredClone(target.project),state:structuredClone(target.state),hasData:target.hasData,restore:{id:body.operationId,targetId:target.entry.id,sequence:target.entry.sequence,restoredAt:new Date().toISOString()}};
+       const kept=points.filter(s=>s.entry.sequence<=target.entry.sequence);kept.forEach(s=>{s.entry.status=s===target?'current':'available';s.entry.protectedReason=s===target?'current':'undo';});histories.set(id,kept);
+      }else{target.entry.status='cleared';target.entry.protectedReason=null;}
+     }
+     row.cloud.version=body.action==='clear'?{...old.version}:{code:old.version.code+1,data:old.version.data+1};row.cloud.historyRevision=(old.historyRevision??0)+1;
+     row.cloud.project.updatedAt=new Date().toISOString();receipt={projectId:id,version:{...row.cloud.version},updatedAt:row.cloud.project.updatedAt};operations.set(key,receipt);
+    }
+    if(historyLost){historyLost=false;return route.abort('failed');}return route.fulfill({json:receipt});
+   }
    if(url.pathname.endsWith('/data')){
     if(req.method()==='GET')return route.fulfill({json:{state:row.cloud.state,hasData:row.cloud.hasData,version:row.cloud.version}});
     if(JSON.stringify(body.expected)!==JSON.stringify(row.cloud.version))return route.fulfill({status:409,json:{code:'conflict',error:'云端已有更新，已拒绝覆盖。'}});
     row.cloud.state=body.state;row.cloud.hasData=true;row.cloud.version.data++;
     return route.fulfill({json:{projectId:id,version:row.cloud.version,updatedAt:new Date().toISOString()}});
    }
+   if(readbackFailure){readbackFailure=false;return route.fulfill({status:503,json:{code:'unavailable',error:'提交后回读失败'}});}
    return route.fulfill({json:row.cloud});
   });
   return {expire:()=>{authenticated=false;},switchTo:(id:string)=>{account=id;authenticated=false;}};
  }
- return {rows,connect,bodies,withoutProof:()=>{includeProof=false;},render:(value:typeof html)=>{render=value;},failGeneration:()=>{generationFail=true;},calls:()=>calls,loseSave:()=>{lost=true;},failLogs:(b:boolean)=>{logsFail=b;},restrict:(value:Artifact['policy'])=>{policy=value;},
+ return {rows,connect,bodies,histories,failHistory:(status=503)=>{historyFailure=status;},loseHistory:()=>{historyLost=true;},failReadback:()=>{readbackFailure=true;},withoutProof:()=>{includeProof=false;},render:(value:typeof html)=>{render=value;},failGeneration:()=>{generationFail=true;},calls:()=>calls,loseSave:()=>{lost=true;},failLogs:(b:boolean)=>{logsFail=b;},restrict:(value:Artifact['policy'])=>{policy=value;},
   holdGeneration:()=>{generationGate=new Promise<void>(r=>{releaseGeneration=r;});},releaseGeneration:()=>{releaseGeneration();generationGate=undefined;},
   holdSave:()=>{saveGate=new Promise<void>(r=>{releaseSave=r;});},releaseSave:()=>{releaseSave();saveGate=undefined;}};
 }

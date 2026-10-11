@@ -1,0 +1,44 @@
+{
+  "phase": "cleared",
+  "observedAt": "2026-10-11T09:35:23.732Z",
+  "identity": "read-only management corroboration of UI-created synthetic project, not JWT proof",
+  "requestId": "d3334721-51cf-478c-a61b-b8a72c499ea4",
+  "status": 200,
+  "isV2": true,
+  "state": {
+    "bill": 120,
+    "total": 126,
+    "people": 4,
+    "perPerson": 31.5,
+    "tipAmount": 6,
+    "tipPercent": 5
+  },
+  "tasks": 2,
+  "history": [
+    {
+      "id": "bcd0c97b-9554-432f-9d02-bb8c6e02e129",
+      "bill": null,
+      "pairedAt": "2026-10-11T17:21:38.981335+08:00",
+      "sequence": 1,
+      "available": false,
+      "dataSavedAt": "2026-10-11T17:13:46.010149+08:00"
+    },
+    {
+      "id": "f3fce8e8-86e8-421f-b54b-aa6827295fb3",
+      "bill": 100,
+      "pairedAt": "2026-10-11T17:21:38.989989+08:00",
+      "sequence": 2,
+      "available": true,
+      "dataSavedAt": "2026-10-11T17:13:46.010149+08:00"
+    }
+  ],
+  "records": 1,
+  "version": {
+    "code": 4,
+    "data": 6
+  },
+  "codeHash": "ffa857416e51d4885577a09f6d0c8e14769643828d37d9c05ec8aa96a01a8895",
+  "projectId": "4ea02b7b-cd1c-4cd2-88ce-2030640d8a72",
+  "undoExists": false,
+  "historyRevision": 3
+}

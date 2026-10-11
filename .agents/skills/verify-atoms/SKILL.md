@@ -1,6 +1,6 @@
 ---
 name: verify-atoms
-description: "Verify Atoms web UI, project persistence, candidate adoption and bounded team behavior using existing Playwright drivers. Use for Atoms acceptance checks, regression evidence, or reproducing a user workflow."
+description: "Verify Atoms web UI, project persistence, candidate adoption, paired history restore/undo/cleanup and bounded team behavior using existing Playwright drivers. Use for Atoms acceptance checks, regression evidence, or reproducing a user workflow."
 ---
 
 # Verify Atoms
@@ -59,7 +59,7 @@ Doctor does not start/stop processes, open browsers, alter project storage or te
 Read [features/README.md](features/README.md), then relevant feature files. Prefer existing specs/current selectors. Against the owned UI instance:
 
 ```sh
-TEST_BASE_URL="http://127.0.0.1:$PORT" pnpm exec playwright test tests/browser/account-access.spec.ts tests/browser/cloud-projects.spec.ts tests/browser/cloud-generation.spec.ts --workers=1 --retries=0 --trace=on --output="$RUN/browser" --reporter=json >"$RUN/playwright.json"
+TEST_BASE_URL="http://127.0.0.1:$PORT" pnpm exec playwright test tests/browser/account-access.spec.ts tests/browser/cloud-projects.spec.ts tests/browser/cloud-generation.spec.ts tests/browser/cloud-history.spec.ts --workers=1 --retries=0 --trace=on --output="$RUN/browser" --reporter=json >"$RUN/playwright.json"
 ```
 
 These specs cover current guest/account entry, cloud data protection and #68 generation/candidate/session behavior using explicit external-boundary fixtures. They do not establish real email/JWT/PG/model acceptance.
