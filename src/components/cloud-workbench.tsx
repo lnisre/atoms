@@ -40,7 +40,7 @@ export function CloudWorkbench({ session, accountSlot, onBack, onReload, onLogin
     {state.pending && <><button className="primary-button" disabled={state.saving} onClick={()=>void session.retry()}>重试原保存</button><button className="secondary-button" onClick={()=>session.download()}>下载未保存副本</button></>}
     {(state.error || state.logError) && <button className="secondary-button" onClick={onLogin}>重新登录原账号</button>}
     {state.cloud && !artifact && state.cloud.project.previewPolicy?.dataMode === "trial" && <><p>待验证项目：启用前仅使用会话试用数据。</p><button className="primary-button" disabled={state.generating || state.saving || state.cloud.project.previewPolicy.adoption !== "allowed"} onClick={()=>void session.activate()}>使用此版本</button></>}
-    {state.logsPending && <p role={state.logError ? "alert" : "status"}>{state.logError || "代码已保存，正在追加云端提交步骤日志…"}{state.logError && <button onClick={()=>void session.retryLogs()}>重试记录保存</button>}</p>}
+    {state.logsPending && <p role={state.logError ? "alert" : "status"}>{state.logError || "代码已保存，正在追加云端提交步骤日志…"}{state.logError && <button className="secondary-button" onClick={()=>void session.retryLogs()}>重试记录保存</button>}</p>}
     <p>候选、本轮未保存对话和试用数据只保留在此页面，刷新或关闭后无法恢复。</p>
   </section>;
   const cloud=state.cloud, project=cloud?.project;

@@ -1,4 +1,5 @@
 "use client";
+import { useEffect, useRef } from "react";
 import type { CloudWorkbenchSession, WorkbenchState } from "@/lib/cloud-projects/workbench";
 import type { HistoryEntry } from "@/lib/cloud-projects/contract";
 
@@ -10,7 +11,7 @@ export function historyTime(entry: HistoryEntry) {
 }
 export function CloudHistory({ session, state }: { session: CloudWorkbenchSession; state: WorkbenchState }) {
   if (!state.cloud) return null;
-  if (!state.historyOpen) return <button className="secondary-button" onClick={() => void session.openHistory()}>历史保存点</button>;
+  if (!state.historyOpen) return <button className="secondary-button history-toggle" onClick={() => void session.openHistory()}>历史保存点</button>;
   const history = state.history;
   const unpaired = state.cloud.project.modificationRecords?.filter(record => !history?.entries.some(entry => entry.recordId === record.id)) ?? [];
   return <section className="cloud-save-panel history-panel" aria-label="历史保存点">
@@ -28,11 +29,13 @@ export function CloudHistory({ session, state }: { session: CloudWorkbenchSessio
         {entry.origin === "baseline" && <p>更早的代码与数据没有快照，不能补回。</p>}
         {entry.status === "current" && <p>当前业务数据可能继续更新，将在采用下一版本前配对保留。</p>}
         {entry.status === "available" && <>
-          <button className="primary-button" disabled={session.historyBusy || !!state.artifact} onClick={() => session.prepareHistory("restore", entry)}>恢复到 V{entry.sequence}</button>
-          <button className="secondary-button" disabled={session.historyBusy || !!entry.protectedReason} onClick={() => session.prepareHistory("clear", entry)}>清理 V{entry.sequence} 保存点</button>
+          <div className="history-entry-actions">
+            <button className="primary-button" disabled={session.historyBusy || !!state.artifact} onClick={() => session.prepareHistory("restore", entry)}>恢复到 V{entry.sequence}</button>
+            <button className="secondary-button" aria-pressed={state.historyTrial?.snapshot.entry.id === entry.id} disabled={state.historySnapshotLoading} onClick={() => void session.tryHistory(entry.id)}>试用 V{entry.sequence} 副本</button>
+            <button className="secondary-button danger-button" disabled={session.historyBusy || !!entry.protectedReason} onClick={() => session.prepareHistory("clear", entry)}>清理 V{entry.sequence} 保存点</button>
+          </div>
           {entry.protectedReason === "undo" && <p>有效撤销依赖此保存点，暂不可清理。</p>}
         </>}
-        {entry.status === "available" && <button className="secondary-button" aria-pressed={state.historyTrial?.snapshot.entry.id === entry.id} disabled={state.historySnapshotLoading} onClick={() => void session.tryHistory(entry.id)}>试用 V{entry.sequence} 副本</button>}
       </li>)}</ol>
       {unpaired.length > 0 && <div><h3>未保留快照的旧记录</h3>{unpaired.map(record => <p key={record.id}>{record.requests.join("；")} · 仅修改记录，无法恢复</p>)}</div>}
     </>}
@@ -41,12 +44,28 @@ export function CloudHistory({ session, state }: { session: CloudWorkbenchSessio
 
 export function HistoryConfirmation({ session, state }: { session: CloudWorkbenchSession; state: WorkbenchState }) {
   const confirmation = state.confirmation;
-  if (!confirmation) return null;
+  const ref = useRef<HTMLDialogElement>(null);
+  const cancelRef = useRef<HTMLButtonElement>(null);
+  // Once submitted, the workbench owns progress, errors and same-operation retry.
+  const visible = !!confirmation && !state.pending;
+  useEffect(() => {
+    if (!visible) return;
+    const dialog = ref.current;
+    const trigger = document.activeElement;
+    dialog?.showModal();
+    cancelRef.current?.focus();
+    return () => {
+      dialog?.close();
+      if (trigger instanceof HTMLElement && trigger.isConnected) trigger.focus();
+    };
+  }, [visible]);
+  if (!confirmation || !visible) return null;
   const { action, entry } = confirmation;
   const title = action === "undo" ? "确认撤销本次恢复" : action === "clear" ? `确认清理 V${entry!.sequence} 保存点` : `确认恢复到 V${entry!.sequence}`;
-  return <section className="cloud-save-panel" role="dialog" aria-modal="false" aria-label={title}>
+  return <dialog ref={ref} className="history-confirmation" aria-label={title} onCancel={event => { event.preventDefault(); session.cancelConfirmation(); }}>
     <h2>{title}</h2>
-    {entry && <><p>{entry.summary}</p><p>{historyTime(entry)}</p></>}
+    <div className="history-confirmation-body" tabIndex={0} role="region" aria-label="操作影响说明">
+    {entry && <p>{historyTime(entry)}</p>}
     {action === "restore" ? <>
       <p>将使用此保存点的代码和配对数据，替换当前业务数据。此版本之后的版本与对话将从当前历史移除，后续生成仅使用保留的需求。</p>
       <p>恢复前完整状态将保留，可通过“撤销本次恢复”找回。历史副本中的修改不会参与恢复。</p>
@@ -56,7 +75,11 @@ export function HistoryConfirmation({ session, state }: { session: CloudWorkbenc
       <p>恢复后保存的新业务数据、当前未采用候选、未提交需求和试用修改都会舍弃，不进行合并。恢复前已主动放弃的候选不会找回。</p>
       <p>成功后本次撤销机会结束，不提供重做。</p>
     </> : <p>将永久删除此保存点的代码和数据快照，无法再试用或恢复。对应修改记录和对话保留。清理不保证释放的空间足够完成其他保存。</p>}
+    {entry && <p>保存点说明：{entry.summary}</p>}
+    </div>
+    <div className="history-confirmation-actions">
     <button className="primary-button" disabled={session.historyBusy} onClick={() => void session.confirmHistory()}>{action === "undo" ? "确认撤销恢复" : action === "clear" ? "永久清理保存点" : "确认恢复"}</button>
-    <button className="secondary-button" disabled={state.saving || !!state.pending} onClick={() => session.cancelConfirmation()}>取消</button>
-  </section>;
+    <button ref={cancelRef} className="secondary-button" disabled={state.saving || !!state.pending} onClick={() => session.cancelConfirmation()}>取消</button>
+    </div>
+  </dialog>;
 }
