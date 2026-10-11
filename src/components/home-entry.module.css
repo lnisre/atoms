@@ -133,3 +133,9 @@
   .allProjects { min-height: 400px; }
   .search { display: none !important; }
 }
+
+.exampleProject { margin-top: 12px; flex-shrink: 0; }
+.shell .exampleProject button { display: flex; align-items: center; gap: 10px; width: 100%; padding: 10px; text-align: left; border: 1px solid var(--ui-border); border-radius: var(--ui-radius-control); background: var(--ui-surface); font-size: 13px; }
+.exampleProject button:hover { background: var(--ui-hover); }
+.exampleProject button > span:first-of-type { flex: 1; }
+.exampleProject small { display: block; margin-top: 3px; color: var(--ui-secondary); font-size: 11px; }

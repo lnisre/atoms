@@ -126,15 +126,8 @@ details p { white-space: pre-wrap; overflow-wrap: anywhere; line-height: 1.8; }
 }
 @media (prefers-reduced-motion: reduce) { .spinner { animation: none; } }
 
-.public-example { padding: 24px; height: 100dvh; overflow: auto; background: #f8f9f6; }
-.public-example > header { display: flex; align-items: center; gap: 20px; justify-content: space-between; }
-.public-example h1 { font-size: 20px; }
-.public-example > p { font-size: 14px; margin: 20px 0 12px; }
-.public-example-content { display: grid; grid-template-columns: minmax(240px, 1fr) minmax(400px, 2fr); gap: 24px; margin-top: 24px; }
-.public-example-content .preview-panel { min-height: 650px; }
 .account-notice { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); max-width: calc(100vw - 32px); z-index: 30; padding: 16px 40px 16px 20px; border-radius: 12px; background: #243c31; color: white; box-shadow: 0 8px 30px #0002; font-size: 14px; }
 .account-notice button { position: absolute; right: 12px; top: 10px; border: 0; background: none; color: inherit; font-size: 20px; cursor: pointer; }
-@media (max-width: 760px) { .public-example > header { flex-wrap: wrap; } .public-example-content { display: flex; flex-direction: column; } .public-example { padding: 16px; } }
 
 .cloud-project { height: 100dvh; overflow: hidden; display: flex; flex-direction: column; padding: 12px; background: #f8f9f6; }
 .cloud-project > header { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
@@ -163,7 +156,6 @@ details p { white-space: pre-wrap; overflow-wrap: anywhere; line-height: 1.8; }
 .cloud-save-panel textarea { display: block; width: 100%; box-sizing: border-box; margin: 0 0 10px; padding: 10px; border: 1px solid #cbd7cf; border-radius: 8px; background: #fff; resize: vertical; line-height: 1.5; }
 
 .cloud-project-history > .cloud-save-panel { max-height: 48%; overflow: auto; }
-.public-example-content > section[aria-label="项目成果"] { height: 750px; }
 
 .history-heading { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px; }
 .history-list { list-style: none; margin: 12px 0; padding: 0; }
@@ -174,3 +166,10 @@ details p { white-space: pre-wrap; overflow-wrap: anywhere; line-height: 1.8; }
 
 .cloud-project-history > .history-panel { max-height: 65%; }
 .history-panel > div:not(.history-heading) { display: block; }
+
+@media (max-width: 600px) {
+  .cloud-project { height: auto; min-height: 100dvh; overflow: visible; }
+  .cloud-project-content { grid-template-columns: minmax(0, 1fr); flex: none; }
+  .cloud-project-history { height: 65dvh; min-height: 360px; }
+  .cloud-project-content > section[aria-label="项目成果"] { height: 75dvh; min-height: 480px; }
+}

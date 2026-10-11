@@ -6,6 +6,7 @@ import { AccountAccess, LoginDialog, authRequest } from "@/components/account-ac
 import { ResultViewer } from "@/components/result-viewer";
 import { AppPreview } from "@/components/app-preview";
 import { UnsavedDialog } from "@/components/cloud-project-view";
+import { ProjectWorkbenchLayout } from "@/components/project-workbench-layout";
 import { ExampleConversation } from "@/components/example-conversation";
 import { EXAMPLE_STATE, prepareBuiltinExample } from "@/lib/builtin-example";
 import { PendingLoginAction, type Account, type LoginIntent } from "@/lib/auth/contract";
@@ -197,18 +198,25 @@ export default function Home() {
       const next = new CloudWorkbenchSession(accountRef.current.id, crypto.randomUUID());
       workbenchRef.current=next; setWorkbench(next); setRequirement(requirement);
       void next.generate(crypto.randomUUID(),requirement);
-    })}/> : example ? <main className="public-example">
-      <header><button className="secondary-button" onClick={() => protectLeave("返回首页", () => { copyRef.current = null; setCopyPending(null); setExample(null); })}>返回首页</button><h1>小费计算器 · 只读示例</h1>{accountSlot}</header>
-      <p>可以查看界面和制作说明。修改代码或业务数据前，请先保存到自己的账号。</p>
+    })}/> : example ? <ProjectWorkbenchLayout
+      title="小费计算器 · 只读示例"
+      navigation={<button className="secondary-button" onClick={() => protectLeave("返回首页", () => { copyRef.current = null; setCopyPending(null); setExample(null); })}>返回首页</button>}
+      account={accountSlot}
+      scope="平台只读示例 · 保存个人副本后才能修改代码与业务数据"
+      conversation={example.exampleSource && <ExampleConversation source={example.exampleSource} readOnly/>}
+      controls={<section className="cloud-save-panel" aria-label="保存示例">
+      <p>此示例尚未保存到你的账号。</p>
       <button className="primary-button" disabled={loading || !!copyPending} onClick={() => requestAction({ id: crypto.randomUUID(), kind: "save-example", templateId: "tip-calculator" })}>保存此示例到我的项目</button>
-      {copyPending && <div className="cloud-save-panel"><p role={copyError ? "alert" : "status"}>{copyBusy ? "正在保存个人副本…云端提交后才会确认" : copyError || "个人副本尚未确认保存。"}</p>
+      {copyPending && <div><p role={copyError ? "alert" : "status"}>{copyBusy ? "正在保存个人副本…云端提交后才会确认" : copyError || "个人副本尚未确认保存。"}</p>
         <button className="primary-button" disabled={copyBusy || account?.id !== copyPending.owner.id} onClick={() => void saveExample(copyPending)}>重试原保存</button>
         <button className="secondary-button" onClick={downloadPending}>下载未保存副本</button>
         <button className="secondary-button" onClick={loginAgain}>重新登录原账号</button>
         <p>未确认保存的内容仅保留在当前页面，刷新或关闭后无法恢复。</p>
       </div>}
-      <div className="public-example-content"><section aria-label="示例说明">{example.exampleSource && <ExampleConversation source={example.exampleSource} readOnly/>}</section><ResultViewer version={{id:example.id,entryPath:"index.html",files:[{path:"index.html",text:example.result.html}]}} status="只读示例"><AppPreview html={example.result.html} projectId="public-example" projectSaved={false} readOnly readOnlyState={EXAMPLE_STATE} onRetry={() => void openExample()}/></ResultViewer></div>
-    </main> : <HomeEntry view={view} onViewChange={setView} requirement={requirement} onRequirementChange={setRequirement} projects={projects} loadingProjects={loading || loadingProjects} listError={listError} exampleError="" onRetryProjects={() => setListAttempt(value => value + 1)} examples={examples} onOpenProject={project => { if (account) void openProject(account, project.id); }} onGenerate={() => { if (requirement.trim()) requestAction({ id: crypto.randomUUID(), kind: "generate", requirement: requirement.trim() }); }} accountSlot={accountSlot} onOpenExample={() => void openExample()}/>}
+      </section>}
+    >
+      <ResultViewer version={{id:example.id,entryPath:"index.html",files:[{path:"index.html",text:example.result.html}]}} status="只读示例"><AppPreview html={example.result.html} projectId="public-example" projectSaved={false} readOnly readOnlyState={EXAMPLE_STATE} onRetry={() => void openExample()}/></ResultViewer>
+    </ProjectWorkbenchLayout> : <HomeEntry view={view} onViewChange={setView} requirement={requirement} onRequirementChange={setRequirement} projects={projects} loadingProjects={loading || loadingProjects} listError={listError} exampleError="" onRetryProjects={() => setListAttempt(value => value + 1)} examples={examples} onOpenProject={project => { if (account) void openProject(account, project.id); }} onGenerate={() => { if (requirement.trim()) requestAction({ id: crypto.randomUUID(), kind: "generate", requirement: requirement.trim() }); }} accountSlot={accountSlot} onOpenExample={() => void openExample()}/>}
     {(notice || error) && <div className="account-notice" role={error ? "alert" : "status"}>{error || notice}<button aria-label="关闭提示" onClick={() => { setError(""); setNotice(""); }}>×</button></div>}
     {logoutFailed && <div className="cloud-save-panel" role="alert">页面已清除，云端退出尚未成功。<button onClick={() => void signOut()}>重试退出登录</button></div>}
     {(error || listError) && account && <button className="reauth-button secondary-button" onClick={loginAgain}>重新登录原账号</button>}

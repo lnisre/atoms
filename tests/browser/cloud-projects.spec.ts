@@ -163,3 +163,79 @@ test("a new unsaved edit while reload is reading cannot be silently discarded", 
   expect((await download(page)).businessState.bill).toBe(140);
   store.releaseSave(); await expect(saved(page)).toBeVisible();
 });
+
+for (const viewport of [{ width: 1440, height: 900 }, { width: 1280, height: 720 }, { width: 390, height: 844 }]) {
+  test(`guest example shares account conversation layout at ${viewport.width}x${viewport.height}`, async ({ page, context }, info) => {
+    await page.setViewportSize(viewport);
+    const store = await fixture(); await store.connect(context, "layout-owner", false);
+    await page.goto("/");
+    const entry = page.getByRole("complementary", { name: "侧栏" }).getByRole("button", { name: "查看只读示例：小费计算器" });
+    await expect(entry).toBeInViewport();
+    await page.getByRole("button", { name: "我的项目", exact: true }).click();
+    await expect(entry).toBeInViewport();
+    await expect(page.getByText("全部 0", { exact: true })).toBeVisible();
+    await page.getByRole("button", { name: "首页", exact: true }).click();
+    await page.reload(); await expect(entry).toBeInViewport();
+    await page.screenshot({ path: info.outputPath("guest-home.png"), fullPage: true });
+    await entry.click();
+    await expect(frame(page).getByLabel("账单金额（元）")).toHaveValue("20");
+    await page.getByRole("button", { name: "返回首页", exact: true }).click();
+    await expect(entry).toBeInViewport(); await entry.click();
+    await expect(frame(page).getByLabel("账单金额（元）")).toHaveValue("20");
+    const metrics = async () => page.evaluate(() => {
+      const pick = (selector: string) => { const el = document.querySelector(selector)!; const css = getComputedStyle(el); const rect = el.getBoundingClientRect(); return { width: rect.width, x: rect.x, background: css.backgroundColor, border: css.border, radius: css.borderRadius, padding: css.padding, font: css.font, lineHeight: css.lineHeight }; };
+      return { panel: pick('.cloud-project-history'), scroll: pick('.conversation-scroll'), message: pick('.assistant-reply'), columns: getComputedStyle(document.querySelector('.cloud-project-content')!).gridTemplateColumns };
+    });
+    const checkScroll = async () => {
+      const scroll = page.getByRole("region", { name: "项目对话与详情", exact: true });
+      await scroll.focus(); await scroll.press("Control+Home"); await scroll.press("Home");
+      await expect(page.getByRole("button", { name: "回到最新消息" })).toBeVisible();
+      const resultBounds = () => page.getByRole("region", { name: "项目成果", exact: true }).evaluate(el => { const rect = el.getBoundingClientRect(); return { x: rect.x, y: rect.y + scrollY, width: rect.width, height: rect.height }; });
+      const before = await resultBounds();
+      const detail = scroll.locator("details summary").first(); await detail.click();
+      await expect(detail.locator('..')).toHaveAttribute('open', '');
+      expect(await resultBounds()).toEqual(before);
+      await page.getByRole("button", { name: "回到最新消息" }).click();
+      await expect.poll(() => scroll.evaluate(el => el.scrollHeight - el.scrollTop - el.clientHeight)).toBeLessThan(24);
+      expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+    };
+    await checkScroll();
+    const guest = await metrics();
+    await page.getByRole("region", { name: "项目对话与详情", exact: true }).hover();
+    await page.mouse.wheel(0, -10000);
+    await expect.poll(() => page.locator('.conversation-scroll').evaluate(el => el.scrollTop)).toBe(0);
+    await page.screenshot({ path: info.outputPath("guest-example.png"), fullPage: true });
+    await page.getByRole("button", { name: "查看代码", exact: true }).click();
+    await expect(page.getByRole("region", { name: "源码 index.html", exact: true })).toContainText("小费");
+    await page.getByRole("button", { name: "预览", exact: true }).click();
+    await expect(page.getByLabel("追加修改需求")).toHaveCount(0);
+    await expect(page.getByRole("button", { name: "历史保存点" })).toHaveCount(0);
+    expect(store.stats()).toEqual({ modelCalls: 0, copyCalls: 0, saveCalls: 0 });
+    await page.getByRole("button", { name: "保存此示例到我的项目", exact: true }).click();
+    await page.getByLabel("邮箱地址", { exact: true }).fill("layout-owner@example.invalid");
+    await page.getByRole("button", { name: "发送验证码", exact: true }).click();
+    await page.getByLabel("6 位验证码", { exact: true }).fill("123456");
+    await page.getByRole("button", { name: "验证并登录" }).click();
+    await expect(saved(page)).toBeVisible();
+    await checkScroll();
+    expect(await metrics()).toEqual(guest);
+    await page.getByRole("region", { name: "项目对话与详情", exact: true }).hover();
+    await page.mouse.wheel(0, -10000);
+    await expect.poll(() => page.locator('.conversation-scroll').evaluate(el => el.scrollTop)).toBe(0);
+    await page.screenshot({ path: info.outputPath("account-example.png"), fullPage: true });
+    expect(store.records.size).toBe(1); expect(store.stats().copyCalls).toBe(1); expect(store.stats().modelCalls).toBe(0);
+  });
+}
+
+test("ordinary login while browsing the example never creates a personal copy", async ({ page, context }) => {
+  const store = await fixture(); await store.connect(context, "ordinary-owner", false);
+  await page.goto("/"); await page.getByRole("button", { name: "查看只读示例" }).click();
+  await page.getByRole("button", { name: "登录 / 注册", exact: true }).click();
+  await page.getByLabel("邮箱地址", { exact: true }).fill("ordinary-owner@example.invalid");
+  await page.getByRole("button", { name: "发送验证码", exact: true }).click();
+  await page.getByLabel("6 位验证码", { exact: true }).fill("123456");
+  await page.getByRole("button", { name: "验证并登录" }).click();
+  await expect(page.getByRole("button", { name: "退出登录" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "小费计算器 · 只读示例", exact: true })).toBeVisible();
+  expect(store.records.size).toBe(0); expect(store.stats()).toEqual({ modelCalls: 0, copyCalls: 0, saveCalls: 0 });
+});
