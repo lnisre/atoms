@@ -6,9 +6,28 @@ import { join } from "node:path";
 import { spawn } from "node:child_process";
 import { WebSocket } from "ws";
 import net from "node:net";
+import { randomInt } from "node:crypto";
+
+async function freeGatewayPorts() {
+  // The gateway and its internal server need a consecutive pair. Stay below the
+  // OS ephemeral range so outgoing connections cannot immediately consume it.
+  for (let attempt = 0; attempt < 20; attempt++) {
+    const port = randomInt(20000, 40000), reserved = [];
+    try {
+      for (const candidate of [port, port + 1]) {
+        const server = net.createServer();
+        await new Promise((resolve, reject) => { server.once("error", reject); server.listen(candidate, "0.0.0.0", resolve); });
+        reserved.push(server);
+      }
+      return port;
+    } catch (error) { if (error.code !== "EADDRINUSE") throw error; }
+    finally { await Promise.all(reserved.map(server => new Promise(resolve => server.close(resolve)))); }
+  }
+  throw new Error("No free gateway/internal-server port pair");
+}
 
 for (const deployed of [false,true]) test(`real gateway ${deployed ? "deployment origin" : "local origin"} rejects anonymous/invalid upgrades and forwards the verified cookie`, async () => {
-  const port = await new Promise(resolve => { const s=net.createServer();s.listen(0,"127.0.0.1",()=>{const address=s.address();if (!address || typeof address === "string")throw new Error();const p=address.port;s.close(()=>resolve(p));}); });
+  const port = await freeGatewayPorts();
   const dir=await mkdtemp(join(tmpdir(),"atoms-auth-gateway-"));
   const entry=join(dir,"server.mjs");
   await writeFile(entry, `import http from 'node:http';

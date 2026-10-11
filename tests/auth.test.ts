@@ -135,3 +135,9 @@ test("independent browser devices keep distinct provider sessions and logout tar
   for(const cookie of [first,second])assert.equal((await getSession(request("auth/session",{},cookie))).status,200);
   assert.equal((await logout(request("auth/logout",{},first))).status,200);assert.equal((await getSession(request("auth/session",{},first))).status,401);assert.equal((await getSession(request("auth/session",{},second))).status,200);
 });
+
+test("provider-rejected email aliases give an actionable safe input error", async () => {
+  globalThis.fetch=async()=>Response.json({error:"invalid_argument",error_description:"invalid Request.Email: regex rejected SECRET"},{status:400});
+  const result=await sendCode(request("auth/code",{email:"synthetic+alias@example.invalid"}));
+  assert.equal(result.status,400);const body=await result.json();assert.equal(body.code,"unsupported_email");assert.match(body.error,/邮箱格式/);assert.doesNotMatch(body.error,/SECRET|regex/);
+});

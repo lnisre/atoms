@@ -54,7 +54,7 @@ test("versions and state are required; stale writes remain distinct from lost-re
   const cookie = await authenticatedCookie(); let code = "PT409", writes = 0;
   globalThis.fetch = async (url) => {
     if (String(url).endsWith("/user/me")) return Response.json(authProfile);
-    writes++; return code ? Response.json({ code, message: "secret SQL/token detail" }, { status: 400 }) : Response.json(receipt);
+    writes++; return code ? Response.json({ code, message: "secret SQL/token detail" }, { status: code === "PT409" ? 409 : 500 }) : Response.json(receipt);
   };
   for (const expected of [undefined, { code: 1 }, { code: 1, data: 0 }, { code: "1", data: 1 }]) assert.equal((await save(request("PUT", { operationId, expected, state: {} }, cookie), context)).status, 400);
   assert.equal((await save(request("PUT", { operationId, expected: version }, cookie), context)).status, 413);
@@ -144,6 +144,8 @@ test('gateway-wrapped SQLSTATE keeps a conflict distinct without exposing provid
  const {requireIdentity}=await import('../src/lib/auth/server');
  const identity=await requireIdentity(new Request('http://localhost/api/projects',{headers:{cookie}}));
  await assert.rejects(listCloudProjects(identity),error=>{assert.ok(error instanceof ProjectError);assert.equal(error.code,'conflict');assert.equal(error.status,409);assert.doesNotMatch(error.message,/private/);return true;});
+ globalThis.fetch=async()=>Response.json({code:'DATABASE_PT409',message:'private database detail'},{status:503});
+ await assert.rejects(listCloudProjects(identity),error=>{assert.ok(error instanceof ProjectError);assert.equal(error.code,'unavailable');return true;});
  globalThis.fetch=async()=>Response.json({message:'PT409: unrelated provider failure'},{status:503});
  await assert.rejects(listCloudProjects(identity),error=>{assert.ok(error instanceof ProjectError);assert.equal(error.code,'unavailable');return true;});
 });

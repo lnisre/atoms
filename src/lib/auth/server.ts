@@ -61,6 +61,8 @@ async function provider(path: string, body?: unknown, accessToken?: string, devi
   if (!response.ok || data.error) {
     const code = typeof data.error === "string" ? data.error : "unavailable";
     // Never expose provider descriptions, credentials or raw responses.
+    if (path === "/verification" && code === "invalid_argument" && response.status === 400 && typeof data.error_description === "string" && /\.Email\b/.test(data.error_description))
+      throw new AuthError("unsupported_email", "登录服务不支持此邮箱格式，请使用不含“+”的其他邮箱地址。", 400);
     if (path === "/verification/verify" && code === "invalid_argument" && response.status === 400)
       throw new AuthError("invalid_code", "验证码错误或已失效，请检查后重试，或重新发送。", 400);
     if (code === "invalid_verification_code") throw new AuthError("invalid_code", "验证码错误，请重新输入。", 400);
