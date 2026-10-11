@@ -1,0 +1,99 @@
+{
+  "deploymentId": "dpl_46tFPwSL48c6nqvQsXGQCSYAeLKg",
+  "sourceCommit": "54567695a44834b24ea4f3b0d36ae176fe84beaf",
+  "projectId": "22322cfb-f3bf-42ce-aab3-0c50e373bd4c",
+  "provider": "DeepSeek",
+  "authorizedLimits": {
+    "tasks": 3,
+    "modelCallsPerTask": 20,
+    "durationMsPerTask": 240000
+  },
+  "tasks": [
+    {
+      "taskId": "3a133d92-a3bf-4812-990a-e01ecf0fa36e",
+      "modelCalls": 7,
+      "durationMs": 39546,
+      "outcome": "passed",
+      "codeHash": "be402a8f68235fa67ed6f79835d0f4afd4bd93af25b30ba424439f0620aab8b5",
+      "review": {
+        "approved": true,
+        "issueCount": 0,
+        "issues": []
+      }
+    },
+    {
+      "taskId": "c8402caa-5495-4c90-aa5f-f71e45abfb74",
+      "modelCalls": 8,
+      "durationMs": 43046,
+      "outcome": "passed",
+      "codeHash": "08bff7e692acb382128b771128599b77b9be199cf37d35dc299d6e2d69ef3beb",
+      "baseCodeHash": "be402a8f68235fa67ed6f79835d0f4afd4bd93af25b30ba424439f0620aab8b5",
+      "review": {
+        "approved": true,
+        "issueCount": 0,
+        "issues": []
+      }
+    },
+    {
+      "taskId": "91f994fa-2810-41ca-9fb7-57a857ccc6af",
+      "modelCalls": 8,
+      "durationMs": 43513,
+      "outcome": "issues",
+      "codeHash": "a5655f2e33d2084dbf4e20447dbb65f57a367ff0aa81f2728424d03334a047ed",
+      "baseCodeHash": "08bff7e692acb382128b771128599b77b9be199cf37d35dc299d6e2d69ef3beb",
+      "review": {
+        "approved": false,
+        "issueCount": 1,
+        "issues": [
+          {
+            "id": "filter-empty-msg",
+            "trigger": "筛选为 active/complete 且某些状态记录被过滤掉、但 books 数组本身非空时，visibleBooks 返回空。",
+            "category": "functionality",
+            "severity": "minor",
+            "codeQuote": "empty.textContent = getBooks(state).length === 0 ? \"还没有记录。\" : \"没有符合筛选的记录。\";",
+            "consequence": "显示\"还没有记录。\"（用户实际有记录只是被筛选隐藏），提示与实际数据不符，属局部文案误导，不影响数据与保存。"
+          }
+        ]
+      }
+    }
+  ],
+  "totalModelCalls": 23,
+  "adopted": {
+    "codeVersion": 2,
+    "dataVersion": 5,
+    "state": {
+      "books": [
+        {
+          "id": "验收书 A",
+          "name": "验收书 A",
+          "status": "finished"
+        }
+      ]
+    },
+    "modificationRecords": 1,
+    "rounds": 2
+  },
+  "formalDuringTrial": [
+    {
+      "codeVersion": 1,
+      "dataVersion": 5,
+      "state": {
+        "books": [
+          {
+            "id": "验收书 A",
+            "name": "验收书 A",
+            "status": "finished"
+          }
+        ]
+      }
+    }
+  ],
+  "uiObservations": {
+    "trialRating": 4,
+    "adoptedRating": 0,
+    "filteredEmpty": "没有符合筛选的记录。",
+    "restoredFromIndependentBrowser": true,
+    "modelTasksOnRestore": 0
+  },
+  "limits": "UI actions used ordinary email-authenticated sessions; exact synthetic PG snapshots only corroborate their effects. No cross-account JWT denial was executed."
+}

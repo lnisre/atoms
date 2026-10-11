@@ -1,0 +1,3 @@
+{"environment":"atoms-d9gdf8r2036664366","region":"ap-shanghai","migration":"001_account_projects","checksum":"337a7e9b42fe2646c6793644794a27f11be470be3b561220d64aec6b9141085e","apply":false}
+{"requestId":"fb0b7c78-de0a-404a-891b-aeabb8f536bc","status":200,"installed":"true"}
+{"requestId":"01cc91e8-5d00-4940-9016-45c8cb6b0273","status":200,"migrations":[{"id":"001_account_projects","checksum":"337a7e9b42fe2646c6793644794a27f11be470be3b561220d64aec6b9141085e"},{"id":"002_trusted_artifacts","checksum":"397541f6bac1e0a877cf694918e42c53ae9c877240b0d467030612fc00e01542"},{"id":"003_artifact_receipt","checksum":"80ea4280f1f825a179df5fe5be0e57b3d8501e56884217535fd463cdaf23ba01"}]}

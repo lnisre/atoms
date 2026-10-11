@@ -6,6 +6,7 @@ import type { RecordStep } from "@/lib/execution";
 import type { TrialData } from "@/lib/trial-data";
 import { previewDocument } from "@/lib/preview-document";
 import { loadApplicationData, saveApplicationData } from "@/lib/project-store";
+import type { CloudDataSession } from "@/lib/cloud-projects/client";
 
 export function AppPreview({
   html,
@@ -14,6 +15,9 @@ export function AppPreview({
   onRetry,
   trial,
   recordStep,
+  readOnly = false,
+  readOnlyState = null,
+  cloud,
 }: {
   html: string;
   projectId: string;
@@ -21,6 +25,9 @@ export function AppPreview({
   onRetry: () => void;
   trial?: TrialData;
   recordStep?: RecordStep;
+  readOnly?: boolean;
+  readOnlyState?: unknown;
+  cloud?: CloudDataSession;
 }) {
   // Keep event callbacks fresh without remounting the document on log updates.
   const recorder = useRef(recordStep);
@@ -32,6 +39,8 @@ export function AppPreview({
   const [failed, setFailed] = useState(false);
   const [storage, setStorage] = useState("等待应用读取数据");
   const [storageError, setStorageError] = useState(false);
+  const [cloudPending, setCloudPending] = useState(false);
+  useEffect(() => cloud?.subscribe(status => setCloudPending(!!status.pending)), [cloud]);
 
   useEffect(() => {
     const channel = crypto.randomUUID();
@@ -82,36 +91,42 @@ export function AppPreview({
         const label = trial ? (message.method === "load" ? "读取试用数据" : "更新试用数据") : (message.method === "load" ? "读取应用数据" : "保存应用数据");
         recordOperation?.(stepId, label, "started", trial ? "访问本轮会话的试用副本，不写入正式数据。" : "通过平台接口访问本项目的正式业务数据。");
         try {
+          if (cloud && cloud.projectId !== projectId) throw new Error("云端会话与项目不匹配，已阻止读写。");
           if (trial && trial.projectId !== projectId)
             throw new Error("试用数据与项目不匹配，已阻止读写。");
-          if (!projectSaved)
+          if (readOnly && message.method === "save") throw new Error("示例为只读，请先保存个人副本。");
+          if (!readOnly && !trial && !projectSaved)
             throw new Error(
-              "项目尚未保存，应用数据无法保存。请保留页面并检查浏览器存储权限或空间。",
+              "项目尚未保存，应用数据无法保存。请保留页面并重试项目保存。",
             );
           let state: unknown;
           let hasData = false;
           if (message.method === "load") {
-            const record = trial
+            const record = readOnly ? { state: structuredClone(readOnlyState) } : trial
               ? (trial.hasData ? { state: structuredClone(trial.state) } : undefined)
-              : await loadApplicationData(projectId);
+              : cloud ? await cloud.load() : await loadApplicationData(projectId);
             state = record?.state ?? null;
             hasData = !!record;
             readSucceeded = true;
           } else {
             if (!readSucceeded)
               throw new Error(
-                "应用尚未成功读取数据，已阻止覆盖保存。请保留页面并检查浏览器存储。",
+                "应用尚未成功读取数据，已阻止覆盖保存。请保留页面并重试读取。",
               );
-            const json = JSON.stringify(message.state);
-            if (json === undefined || json.length > 1_000_000)
-              throw new Error(
-                "应用数据保存失败：仅支持不超过 1 MB 的 JSON 状态，请减少数据量。",
-              );
-            if (trial) {
-              trial.state = JSON.parse(json);
-              trial.hasData = true;
+            if (cloud && !trial) {
+              await cloud.save(message.state);
             } else {
-              await saveApplicationData(projectId, JSON.parse(json));
+              const json = JSON.stringify(message.state);
+              if (json === undefined || json.length > 1_000_000)
+                throw new Error(
+                  "应用数据保存失败：仅支持不超过 1 MB 的 JSON 状态，请减少数据量。",
+                );
+              if (trial) {
+                trial.state = JSON.parse(json);
+                trial.hasData = true;
+              } else {
+                await saveApplicationData(projectId, JSON.parse(json));
+              }
             }
             hasData = true;
           }
@@ -131,7 +146,7 @@ export function AppPreview({
           if (!pending) {
             setStorageError(false);
             setStorage(
-              trial
+              readOnly ? "只读示例 · 未创建个人项目" : trial
                 ? "试用数据已更新 · 仅本轮会话有效，未写入正式数据"
                 : hasData ? "应用数据已保存" : "应用数据已读取 · 尚无已保存数据",
             );
@@ -159,7 +174,7 @@ export function AppPreview({
       });
     };
     const beforeUnload = (event: BeforeUnloadEvent) => {
-      if (pending) {
+      if (pending || cloud?.status.pending) {
         event.preventDefault();
         event.returnValue = "";
       }
@@ -169,7 +184,7 @@ export function AppPreview({
     // Mount only after the listener exists: a generated script may load state immediately.
     recorder.current?.("preview-assemble", "装配隔离预览", "started", "向结构合格的完整 HTML 注入平台数据接口与隔离策略。");
     try {
-      setDocument(previewDocument(html, channel, window.location.origin));
+      setDocument(previewDocument(html, channel, window.location.origin, readOnly));
       recorder.current?.("preview-assemble", "装配隔离预览", "completed", "完整预览文档已装配；未验证业务功能。");
       recorder.current?.("preview-load", "载入隔离预览", "started", "将完整文档载入 sandbox iframe。");
       loadTimer.current = setTimeout(() => {
@@ -189,7 +204,7 @@ export function AppPreview({
       window.removeEventListener("message", receive);
       window.removeEventListener("beforeunload", beforeUnload);
     };
-  }, [html, projectId, projectSaved, trial]);
+  }, [html, projectId, projectSaved, trial, readOnly, readOnlyState, cloud]);
 
   return (
     <section className="preview-panel" aria-label="应用预览">
@@ -197,25 +212,27 @@ export function AppPreview({
       <div className="preview-toolbar">
         <span>
           <span className="status-dot" />
-          {trial ? "候选试用 · 未采用" : "运行预览 · 已采用应用"}
+          {readOnly ? "示例预览 · 只读" : trial ? "候选试用 · 未采用" : "运行预览 · 已采用应用"}
         </span>
-        <span>{loaded ? "预览已加载 · 请实际操作检查" : "正在加载预览"}</span>
+        <span>{loaded ? readOnly ? "预览已加载" : "预览已加载 · 请实际操作检查" : "正在加载预览"}</span>
       </div>
-      <p
+      {(!cloud || (storageError && cloud.status.phase !== "failed")) && <p
         className={`data-status ${storageError ? "save-error" : ""}`}
         role={storageError ? "alert" : "status"}
       >
         {storage}
-      </p>
+      </p>}
       {failed && (
         <div className="preview-error" role="alert">
           预览出现运行错误，部分功能可能不可用。
-          <button onClick={onRetry}>{trial ? "修改需求后重新发起" : "重新生成"}</button>
+          <button onClick={onRetry}>{readOnly ? "重新读取示例" : cloud ? "重新载入云端版本" : trial ? "修改需求后重新发起" : "重新生成"}</button>
         </div>
       )}
       {document && (
         <iframe
           ref={frame}
+          inert={cloudPending}
+          tabIndex={readOnly ? -1 : undefined}
           title="生成的应用"
           sandbox="allow-scripts"
           referrerPolicy="no-referrer"

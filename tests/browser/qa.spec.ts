@@ -1,4 +1,4 @@
-import { fulfillGeneration } from "./team-fixture";
+import { fixture, generate, ready } from "../helpers/cloud-browser-fixture";
 import { expect, test, type Page } from "@playwright/test";
 import { mkdirSync, writeFileSync } from "node:fs";
 // Deployment access stays in the test process and is attached only to this
@@ -115,10 +115,8 @@ test("QA synthetic data never enters active formal or trial data", async ({ page
   test.setTimeout(60000);
   const { qualificationFixture } = await import("../../src/lib/qa/fixtures");
   const html = qualificationFixture("todo", "normal").html;
-  await page.route("**/api/generate", r => fulfillGeneration(r, { json: { html, model: "handwritten-fixture", durationMs: 1, generatedAt: "test" } }));
-  await page.goto("/");
-  await page.getByLabel("你想做什么？").fill("三类数据隔离");
-  await page.getByRole("button", { name: "开始生成" }).click();
+  const store=await fixture();await store.connect(context);store.render(()=>html);
+  await generate(page);await expect(ready(page)).toBeVisible();
   const f = page.frameLocator("iframe");
   await f.locator("#task-title").fill("formal-sentinel");
   await f.locator("#add-task").press("Enter");

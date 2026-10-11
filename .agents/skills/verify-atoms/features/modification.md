@@ -1,5 +1,17 @@
 # Modification, trial and adoption
 
+## Current account verification (#65/#69)
+
+Authority: #65, ADR 0015/0016, plus the candidate/data protections recorded below. Open an account project, fill “追加修改需求”, generate candidates, trial, then explicitly adopt or discard. The request carries a trusted `parent` proof; the server obtains base HTML/context. Do not assert browser-supplied `baseHtml` or seed IndexedDB as cloud data.
+
+Reuse `cloud-generation.spec.ts` for two rounds, trial exclusion, lost adoption response and stale-device conflict. `cloud-regressions.spec.ts` checks failed/stopped rounds retain prior candidate/input, discard/refresh discard unadopted work, and reading state survives candidate changes. `cloud-projects.spec.ts` checks commit acknowledgment, data conflict, download/reload and failed-read protection. Ordinary-user real-PG and real-model chains remain separate from these Auth/BFF/provider fixtures.
+
+Wait for code commit and for “正在追加云端提交步骤日志…” / “重试记录保存” to clear when claiming complete log persistence. A log error is distinct from code/data save. The old candidate/modification/cross-app/native UI drivers below are historical; the new `cloud-cross-app.spec.ts` drives reading rating/filter/two-round adoption with the cloud adapter and independent QA plans (including unknown fields). This remains handwritten-provider evidence, not actual model acceptance.
+
+## Historical local-workbench reference (not executable cloud acceptance)
+
+Current account/cloud entry and selectors: [account-cloud.md](account-cloud.md), accepted by #65/#68 and ADR 0015. The local workbench/IndexedDB recipes below describe the historical surface and are not current cloud acceptance.
+
 ## Sub-features
 
 | Expected observable result | Source |

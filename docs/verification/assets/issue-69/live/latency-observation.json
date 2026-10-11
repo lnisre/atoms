@@ -1,0 +1,11 @@
+{
+  "deploymentId": "dpl_46tFPwSL48c6nqvQsXGQCSYAeLKg",
+  "projectId": "22322cfb-f3bf-42ce-aab3-0c50e373bd4c",
+  "operation": "Delete synthetic 验收书 B using generated UI",
+  "path": "/api/projects/22322cfb-f3bf-42ce-aab3-0c50e373bd4c/data",
+  "status": 200,
+  "chromeNetworkTimeSeconds": 6,
+  "samples": 1,
+  "source": "Native Chrome DevTools Network Time column observed in CUA AX and screenshot",
+  "includes": "Browser network, Vercel gateway/BFF, authentication check and Shanghai PostgreSQL round trip; not a per-hop measurement or percentile."
+}

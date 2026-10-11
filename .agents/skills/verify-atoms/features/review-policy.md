@@ -1,5 +1,15 @@
 # Review, repairs and preview policy
 
+## Current account verification (#65/#69)
+
+Authority: ADR 0011 plus #65 and ADR 0015/0016. A trusted terminal proof is required for saving code; transport-retained code without it is page-only/downloadable and cannot be adopted. A trusted unreviewed terminal can save as draftResult with an inert legacy result. Reopening preserves restrictions, not trial state.
+
+`cloud-generation.spec.ts` covers trusted restricted/blocked UI and explicit activation; the shared fixture now models draftResult/inert result. `cloud-regressions.spec.ts` covers no-proof retention. `preview-document.spec.ts` covers actual iframe/CSP assembly and invalid HTML through cloud fixtures. `pnpm test` covers policy/hash/risk inheritance and actual supervised scripted proofs. `runtime/team/test_runner.py` covers native routing and shared repair/budget limits with an offline provider.
+
+These UI fixtures override policy; they do not prove Reviewer judgment, ordinary-user PG authorization, or the entire native UI risk→resolution chain. The reviewer/cross-app-draft/native browser drivers below still assume anonymous/IndexedDB and require migration. Current controls are “停止生成”, “补充生成需求”, “重新生成”. Keep real model judgments and remaining native UI coverage unverified until actually executed.
+
+## Historical local-workbench reference (not executable cloud acceptance)
+
 ## Sub-features
 
 Current authority: [ADR 0011](../../../../docs/adr/0011-review-findings-and-preview.md) / [#35](https://github.com/lnisre/atoms/issues/35), replacing old approval-to-deliver and one-repair gates.

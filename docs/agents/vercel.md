@@ -135,3 +135,13 @@ pnpm release:vercel verify /tmp/atoms-release-NEW
 `pnpm test` 中的发布回归会拒绝这次 Dockerfile 遗漏、Python 输入遗漏、篡改清单、错误远端源码和普通 Node 函数产物。容器构建继续运行 `pip check` 与原生 Python 测试；构建日志和真实业务验收分别提供安装/启动证据。
 
 容器识别依据：[Vercel Docker 部署说明](https://vercel.com/kb/guide/does-vercel-support-docker-deployments)。
+
+## 隔离完整构建验收（#69）
+
+`stage DIR` 使用与 production 相同的完整容器构建，但设置 `autoAssignCustomDomains:false`，采用官方 `--prod --skip-domain` 对应机制。其返回 `target=production`，**不是 Preview，也不表示已发布到生产入口**。验收必须核对固定生产 alias 仍指向 `attempt.json` 中的旧部署；`verify` 同时验证该约束和远端文件/容器身份，在唯一部署 URL 做匿名入口探针。不要调用 promote。
+
+先提交源码并运行 `plan NEW_DIR COMMIT`；通过可信启动进程在内存提供 `CLOUDBASE_ENV_ID`、独立 `ATOMS_AUTH_SECRET`、与数据库同值的 `ATOMS_ARTIFACT_SECRET`、`QA_TOOL_SIGNING_KEY`，再运行 `stage DIR`。这些只进入该部署运行环境，不写源码清单。项目已有模型配置沿用；模型调用仍需要当前任务授权。网关在未显式配置 `ATOMS_APP_ORIGIN` 时使用平台可信 `VERCEL_URL`，并传给内部 Next。正式生产域名发布仍应显式绑定 `ATOMS_APP_ORIGIN` 为现有入口。
+
+`stage` 不安装或修改项目级环境变量、不绑定域名、不改变 production alias。无论结果如何均保留原有 automation bypass。调用意图和部署 READY 不能替代实际 alias、公网Cookie、普通账号、WebSocket及业务验收。
+
+依据：[Vercel 官方部署工作流](https://github.com/vercel/vercel/blob/main/skills/vercel-cli/references/deployment.md)、[CLI skip-domain 实现](https://github.com/vercel/vercel/blob/main/packages/cli/src/commands/deploy/index.ts)。

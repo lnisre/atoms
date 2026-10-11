@@ -87,3 +87,11 @@ test('ENTRYPOINT, ADD and unknown multiline COPY semantics fail closed', () => {
     assert.throws(() => validateFiles(manifest.files, file => file === 'Dockerfile.vercel' ? `${read(file)}\n${extra}` : read(file)), /Unsupported Docker/);
   }
 });
+
+test('isolated production-class build cannot claim publication or change the existing production alias', () => {
+  const value=remote();value.deployment.autoAssignCustomDomains=false;value.alias.id='dpl_prior';
+  assert.equal(verifyDeployment(manifest,value.deployment,value.alias,value.tree,value.builds,'dpl_prior').isolated,true);
+  for(const mutate of [v=>{v.alias.id=v.deployment.id;},v=>{delete v.deployment.autoAssignCustomDomains;},v=>{v.deployment.id='dpl_prior';}]){
+    const changed=structuredClone(value);mutate(changed);assert.throws(()=>verifyDeployment(manifest,changed.deployment,changed.alias,changed.tree,changed.builds,'dpl_prior'));
+  }
+});

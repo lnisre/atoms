@@ -1,0 +1,25 @@
+{
+  "deploymentId": "dpl_2dkrjWVRmrR1ZLyGr6q94347HomT",
+  "deploymentURL": "https://v0-test0-pw8x5u2f9-lnisres-projects.vercel.app",
+  "target": "production",
+  "readyState": "READY",
+  "sourceCommit": "8840a2ae05e486f2224b5af87ba2a96da75cb6e5",
+  "sourceDigest": "70a4dca4d830e1a8078dda941c4faae589f600a124028031e6900e0d6b30fbe9",
+  "sourceFiles": 89,
+  "productionOrigin": "https://v0-test0-nine.vercel.app",
+  "isolated": true,
+  "aliasDeploymentId": "dpl_VK3bPMP6QkTj66NJKm51yQfPoiYA",
+  "container": {
+    "path": "container",
+    "runtime": "container",
+    "digest": "prj_eErnQuAz4P719xKTyuT6XT2Qu5ab/7bd6c14dcb08ae31ea2915765328e8f41780b0f749253bcab805ee42d0cb12fa"
+  },
+  "checkedAt": "2026-10-11T05:19:37.749Z",
+  "anonymousTeamEntry": {
+    "status": 401,
+    "code": "unauthenticated",
+    "modelRequests": 0
+  },
+  "authenticatedTeamEntry": "pending-authorized-user-check",
+  "businessAcceptance": "pending-independent-real-model-check"
+}

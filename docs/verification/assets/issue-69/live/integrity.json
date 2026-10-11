@@ -1,0 +1,54 @@
+[
+  {
+    "file": "adopted-real-independent.json",
+    "sha256": "70baf0c3e968193d1303809a0be00329a0b090ba0dbf0adbf88b70b19baf207f"
+  },
+  {
+    "file": "alias-send-rejection.json",
+    "sha256": "234d267f0402387883e71e1052195e4fe16a7f535f85ca0ca41de477af5cf7f1"
+  },
+  {
+    "file": "cleanup.json",
+    "sha256": "5796063309a2cb3b85b84fae93d08bb6b7da3ff5553dace38150320a562c703f"
+  },
+  {
+    "file": "client-session-enabled.jsonl",
+    "sha256": "9d08232e293e3ea44d35a8602cecaa5ad6a42ae7e6caca95529b6ea198d4214d"
+  },
+  {
+    "file": "conflict-download-check.json",
+    "sha256": "0214b73a18ad33b66265c03761cec8cd7419ab2974171a71fe610484b8e7657d"
+  },
+  {
+    "file": "email-auth-enabled.jsonl",
+    "sha256": "b58154a0a749540f842e0d542db78139e8cf4d467e4bc783a5077d62d256b519"
+  },
+  {
+    "file": "initial-real-independent.json",
+    "sha256": "f36fe1ee38ea421cef95424f89a7afe50022251f132b5139002da0e17d3f8a31"
+  },
+  {
+    "file": "latency-observation.json",
+    "sha256": "bf21308b85f9ed08e58a7fa4a4ace69f08663c04a64092a7f015072921009249"
+  },
+  {
+    "file": "merge-checks.json",
+    "sha256": "cae1224bc98f29b655cc508904ac0ec5ad8201409c3c9c35b3a529f99ae9d903"
+  },
+  {
+    "file": "real-model-summary.json",
+    "sha256": "d4e0d18057a5f5357b4beb461e751bcb9ba4d28b23b314e6e53a967bcf71dbcd"
+  },
+  {
+    "file": "secret-scan.json",
+    "sha256": "f5adbd7757f5fc3b799eb58fe2d9a14c9a4058cd97e00ae86748fdf389000888"
+  },
+  {
+    "file": "vercel-final.json",
+    "sha256": "758af5b56df0d85d89451eab521ba0b8f89da55bd03d2caa23ed3c76f88c9a58"
+  },
+  {
+    "file": "vercel-stage.json",
+    "sha256": "c185234eed87e82497f325282246df0bb4dc21fca623500105dcf6a940b5bfac"
+  }
+]

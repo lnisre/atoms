@@ -1,0 +1,18 @@
+{
+  "requirement": "做一个中文阅读记录应用，支持添加名称、切换在读/已读和删除。数据为 {books:[{id:string,name:string,status:\"reading\"|\"finished\"}]}，只在 null 时初始化。旧记录缺少status默认\"reading\"。保留根对象和每条记录未知字段；加载时不自动保存。输入 id=name，添加按钮 id=add，列表 id=records，每行 li 的 data-id 等于记录 id，名称用 .title 显示，切换和删除按钮 class=toggle/remove。同浏览器保存恢复，读取失败禁编辑，保存失败完整回退。样式自行决定。 使用平台账号云端保存，另一设备登录同一账号可恢复；不直接读写浏览器存储。",
+  "changes": [
+    "保留阅读记录全部功能和字段，为每条书增加 rating 整数评分0到5，旧记录缺失默认0。每行 select.score 提供0到5选项，改评分立即保存。新增状态筛选 select#filter，值 all/active/complete 分别显示全部/在读/已读，筛选仅影响显示，不持久化也不删除数据。保留未知字段。",
+    "在最新候选基础上，把筛选框移到列表上方。保留评分、筛选、添加、状态切换、删除、原数据字段和缺省值行为，继续使用相同控件标识。"
+  ],
+  "taskCount": 3,
+  "perTask": {
+    "deadlineMs": 240000,
+    "modelRequests": 20
+  },
+  "data": "only new synthetic test project; no existing user business data",
+  "identity": "two independently authenticated browser profiles of the same normal account",
+  "planHashes": [
+    "23be4737d820fb47a99e3ef3bf84d619621e8d4795e02e666476f096a975c652",
+    "4da4798dcdc49673351922a435806e211969dfd9593f9f4a77ee10d6f30b188a"
+  ]
+}

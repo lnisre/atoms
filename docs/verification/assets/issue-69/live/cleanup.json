@@ -1,0 +1,23 @@
+{
+  "at": "2026-10-11T06:35:44.507Z",
+  "ownedWorktree": "/Users/gaowenlong/.codex/worktrees/cloud-projects-69/atoms",
+  "launcherPid": 96876,
+  "gatewayPid": 97693,
+  "signal": "SIGTERM",
+  "portRelease": "confirmed",
+  "ports": [
+    3179,
+    3180
+  ],
+  "portChecks": [
+    {
+      "port": 3179,
+      "released": true
+    },
+    {
+      "port": 3180,
+      "released": true
+    }
+  ],
+  "retained": "Only synthetic projects, existing protected deployments, ignored local configuration and durable sanitized evidence; no credential revocation or business-data deletion."
+}

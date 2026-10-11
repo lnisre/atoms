@@ -1,0 +1,560 @@
+[
+  {
+    "run": "browser-initial",
+    "stats": {
+      "startTime": "2026-10-10T18:32:59.057Z",
+      "duration": 67191.146,
+      "expected": 21,
+      "skipped": 0,
+      "unexpected": 4,
+      "flaky": 0
+    },
+    "cases": [
+      {
+        "title": "游客只读示例阻断鼠标、键盘、API与原始数据桥；不创建或读取本地库",
+        "status": "expected",
+        "errors": []
+      },
+      {
+        "title": "登录错误保留需求，取消不续接；成功只验证一次并续接一次生成",
+        "status": "expected",
+        "errors": []
+      },
+      {
+        "title": "普通登录和有效会话恢复无生成/复制副作用；退出清除账号和输入，旧本地数据保留",
+        "status": "expected",
+        "errors": []
+      },
+      {
+        "title": "guest intent runs once; first save response loss and separate log failure retry without generation; second browser restores",
+        "status": "expected",
+        "errors": []
+      },
+      {
+        "title": "multi-round trial never writes official data; atomic adoption replays and other device candidate conflicts",
+        "status": "expected",
+        "errors": []
+      },
+      {
+        "title": "natural expiry retains started result; same-account reauthentication saves without another model task",
+        "status": "expected",
+        "errors": []
+      },
+      {
+        "title": "cancelled exit keeps task; confirmed logout unmounts and ignores late result before another account signs in",
+        "status": "expected",
+        "errors": []
+      },
+      {
+        "title": "restored restricted code remains trial; explicit permitted activation never copies trial data",
+        "status": "expected",
+        "errors": []
+      },
+      {
+        "title": "logout during uncertain commit clears old page; late commit remains private to the original account",
+        "status": "expected",
+        "errors": []
+      },
+      {
+        "title": "execution-blocked draft remains blocked after reopening and cannot be activated by the page",
+        "status": "expected",
+        "errors": []
+      },
+      {
+        "title": "first generation failure preserves editable requirement and explicitly starts a fresh task",
+        "status": "expected",
+        "errors": []
+      },
+      {
+        "title": "restored restricted trial changes trigger exit protection and download includes the session copy",
+        "status": "expected",
+        "errors": []
+      },
+      {
+        "title": "explicit guest copy continues once; lost response retries same operation; independent browser restores and another owner is denied",
+        "status": "expected",
+        "errors": []
+      },
+      {
+        "title": "saving waits for acknowledgment, failed payload downloads from platform, replay restores submitted values",
+        "status": "expected",
+        "errors": []
+      },
+      {
+        "title": "two stale pages conflict; download/cancel/reload protect failed content, read failure never triggers a write",
+        "status": "expected",
+        "errors": []
+      },
+      {
+        "title": "a new unsaved edit while reload is reading cannot be silently discarded",
+        "status": "expected",
+        "errors": []
+      },
+      {
+        "title": "真实 head 装配、数据保存恢复和运行异常反馈：普通完整 HTML",
+        "status": "unexpected",
+        "errors": [
+          "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m200\u001b[39m\nReceived: \u001b[31m401\u001b[39m\n\n  24 |         method: \"POST\", headers: { \"content-type\": \"application/json\" }, body: JSON.stringify({ requirement: \"装配回归\" }),\n  25 |       }));\n> 26 |       expect(response.status).toBe(200);\n     |                               ^\n  27 |       result = await response.json();\n  28 |       expect(result.html).toBe(html);\n  29 |     } finally {\n    at /Users/gaowenlong/.codex/worktrees/cloud-projects-69/atoms/tests/browser/preview-document.spec.ts:26:31"
+        ]
+      },
+      {
+        "title": "真实 head 装配、数据保存恢复和运行异常反馈：<!-- example <head> -->",
+        "status": "unexpected",
+        "errors": [
+          "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m200\u001b[39m\nReceived: \u001b[31m401\u001b[39m\n\n  24 |         method: \"POST\", headers: { \"content-type\": \"application/json\" }, body: JSON.stringify({ requirement: \"装配回归\" }),\n  25 |       }));\n> 26 |       expect(response.status).toBe(200);\n     |                               ^\n  27 |       result = await response.json();\n  28 |       expect(result.html).toBe(html);\n  29 |     } finally {\n    at /Users/gaowenlong/.codex/worktrees/cloud-projects-69/atoms/tests/browser/preview-document.spec.ts:26:31"
+        ]
+      },
+      {
+        "title": "真实 head 装配、数据保存恢复和运行异常反馈：<!-- <head> --><!----><!-- <body> -->",
+        "status": "unexpected",
+        "errors": [
+          "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m200\u001b[39m\nReceived: \u001b[31m401\u001b[39m\n\n  24 |         method: \"POST\", headers: { \"content-type\": \"application/json\" }, body: JSON.stringify({ requirement: \"装配回归\" }),\n  25 |       }));\n> 26 |       expect(response.status).toBe(200);\n     |                               ^\n  27 |       result = await response.json();\n  28 |       expect(result.html).toBe(html);\n  29 |     } finally {\n    at /Users/gaowenlong/.codex/worktrees/cloud-projects-69/atoms/tests/browser/preview-document.spec.ts:26:31"
+        ]
+      },
+      {
+        "title": "恢复旧的不完整 HTML 时明确显示装配失败且不运行 iframe",
+        "status": "unexpected",
+        "errors": [
+          "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveCount\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  getByRole('region', { name: '已有项目' }).getByRole('button', { name: /打开项目/ })\nExpected: \u001b[32m1\u001b[39m\nReceived: \u001b[31m0\u001b[39m\nTimeout:  5000ms\n\n"
+        ]
+      },
+      {
+        "title": "snapshot survives the actual node --import tsx browser entry",
+        "status": "expected",
+        "errors": []
+      },
+      {
+        "title": "当前文件搜索、键盘前后定位、长行滚动与同名文件切换",
+        "status": "expected",
+        "errors": []
+      },
+      {
+        "title": "实际剪贴板逐字符复制原文、未知语言及空文件，阅读保留同版本预览与输入",
+        "status": "expected",
+        "errors": []
+      },
+      {
+        "title": "剪贴板拒绝或不可用如实反馈，源码仍可手动选择",
+        "status": "expected",
+        "errors": []
+      },
+      {
+        "title": "未完成的剪贴板写入不会提前成功或污染另一个同名文件",
+        "status": "expected",
+        "errors": []
+      }
+    ]
+  },
+  {
+    "run": "browser-regression-baseline",
+    "stats": {
+      "startTime": "2026-10-10T18:37:46.965Z",
+      "duration": 35787.096000000005,
+      "expected": 4,
+      "skipped": 0,
+      "unexpected": 2,
+      "flaky": 0
+    },
+    "cases": [
+      {
+        "title": "first pointer activation reaches a freshly restored opaque iframe",
+        "status": "expected",
+        "errors": []
+      },
+      {
+        "title": "cloud candidate preserves code reading and same-version iframe across view changes",
+        "status": "unexpected",
+        "errors": [
+          "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('region', { name: '源码 index.html', exact: true })\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\n"
+        ]
+      },
+      {
+        "title": "真实 head 装配、数据保存恢复和运行异常反馈：普通完整 HTML",
+        "status": "expected",
+        "errors": []
+      },
+      {
+        "title": "真实 head 装配、数据保存恢复和运行异常反馈：<!-- example <head> -->",
+        "status": "expected",
+        "errors": []
+      },
+      {
+        "title": "真实 head 装配、数据保存恢复和运行异常反馈：<!-- <head> --><!----><!-- <body> -->",
+        "status": "expected",
+        "errors": []
+      },
+      {
+        "title": "云端读取不完整 HTML 时明确显示装配失败且不运行 iframe",
+        "status": "unexpected",
+        "errors": [
+          "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveCount\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  getByRole('region', { name: '首次生成记录' })\nExpected: \u001b[32m0\u001b[39m\nReceived: \u001b[31m1\u001b[39m\nTimeout:  5000ms\n\n"
+        ]
+      }
+    ]
+  },
+  {
+    "run": "browser-layout",
+    "stats": {
+      "startTime": "2026-10-10T18:41:41.176Z",
+      "duration": 68638.295,
+      "expected": 22,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    },
+    "cases": [
+      {
+        "title": "游客只读示例阻断鼠标、键盘、API与原始数据桥；不创建或读取本地库",
+        "status": "expected",
+        "errors": []
+      },
+      {
+        "title": "登录错误保留需求，取消不续接；成功只验证一次并续接一次生成",
+        "status": "expected",
+        "errors": []
+      },
+      {
+        "title": "普通登录和有效会话恢复无生成/复制副作用；退出清除账号和输入，旧本地数据保留",
+        "status": "expected",
+        "errors": []
+      },
+      {
+        "title": "guest intent runs once; first save response loss and separate log failure retry without generation; second browser restores",
+        "status": "expected",
+        "errors": []
+      },
+      {
+        "title": "multi-round trial never writes official data; atomic adoption replays and other device candidate conflicts",
+        "status": "expected",
+        "errors": []
+      },
+      {
+        "title": "natural expiry retains started result; same-account reauthentication saves without another model task",
+        "status": "expected",
+        "errors": []
+      },
+      {
+        "title": "cancelled exit keeps task; confirmed logout unmounts and ignores late result before another account signs in",
+        "status": "expected",
+        "errors": []
+      },
+      {
+        "title": "restored restricted code remains trial; explicit permitted activation never copies trial data",
+        "status": "expected",
+        "errors": []
+      },
+      {
+        "title": "logout during uncertain commit clears old page; late commit remains private to the original account",
+        "status": "expected",
+        "errors": []
+      },
+      {
+        "title": "execution-blocked draft remains blocked after reopening and cannot be activated by the page",
+        "status": "expected",
+        "errors": []
+      },
+      {
+        "title": "first generation failure preserves editable requirement and explicitly starts a fresh task",
+        "status": "expected",
+        "errors": []
+      },
+      {
+        "title": "restored restricted trial changes trigger exit protection and download includes the session copy",
+        "status": "expected",
+        "errors": []
+      },
+      {
+        "title": "explicit guest copy continues once; lost response retries same operation; independent browser restores and another owner is denied",
+        "status": "expected",
+        "errors": []
+      },
+      {
+        "title": "saving waits for acknowledgment, failed payload downloads from platform, replay restores submitted values",
+        "status": "expected",
+        "errors": []
+      },
+      {
+        "title": "two stale pages conflict; download/cancel/reload protect failed content, read failure never triggers a write",
+        "status": "expected",
+        "errors": []
+      },
+      {
+        "title": "a new unsaved edit while reload is reading cannot be silently discarded",
+        "status": "expected",
+        "errors": []
+      },
+      {
+        "title": "first pointer activation reaches a freshly restored opaque iframe",
+        "status": "expected",
+        "errors": []
+      },
+      {
+        "title": "cloud candidate preserves code reading and same-version iframe across view changes",
+        "status": "expected",
+        "errors": []
+      },
+      {
+        "title": "真实 head 装配、数据保存恢复和运行异常反馈：普通完整 HTML",
+        "status": "expected",
+        "errors": []
+      },
+      {
+        "title": "真实 head 装配、数据保存恢复和运行异常反馈：<!-- example <head> -->",
+        "status": "expected",
+        "errors": []
+      },
+      {
+        "title": "真实 head 装配、数据保存恢复和运行异常反馈：<!-- <head> --><!----><!-- <body> -->",
+        "status": "expected",
+        "errors": []
+      },
+      {
+        "title": "云端读取不完整 HTML 时明确显示装配失败且不运行 iframe",
+        "status": "expected",
+        "errors": []
+      }
+    ]
+  },
+  {
+    "run": "browser-additional",
+    "stats": {
+      "startTime": "2026-10-10T18:44:41.709Z",
+      "duration": 64932.329000000005,
+      "expected": 21,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    },
+    "cases": [
+      {
+        "title": "游客只读示例阻断鼠标、键盘、API与原始数据桥；不创建或读取本地库",
+        "status": "expected",
+        "errors": []
+      },
+      {
+        "title": "登录错误保留需求，取消不续接；成功只验证一次并续接一次生成",
+        "status": "expected",
+        "errors": []
+      },
+      {
+        "title": "普通登录和有效会话恢复无生成/复制副作用；退出清除账号和输入，旧本地数据保留",
+        "status": "expected",
+        "errors": []
+      },
+      {
+        "title": "guest intent runs once; first save response loss and separate log failure retry without generation; second browser restores",
+        "status": "expected",
+        "errors": []
+      },
+      {
+        "title": "multi-round trial never writes official data; atomic adoption replays and other device candidate conflicts",
+        "status": "expected",
+        "errors": []
+      },
+      {
+        "title": "natural expiry retains started result; same-account reauthentication saves without another model task",
+        "status": "expected",
+        "errors": []
+      },
+      {
+        "title": "cancelled exit keeps task; confirmed logout unmounts and ignores late result before another account signs in",
+        "status": "expected",
+        "errors": []
+      },
+      {
+        "title": "restored restricted code remains trial; explicit permitted activation never copies trial data",
+        "status": "expected",
+        "errors": []
+      },
+      {
+        "title": "logout during uncertain commit clears old page; late commit remains private to the original account",
+        "status": "expected",
+        "errors": []
+      },
+      {
+        "title": "execution-blocked draft remains blocked after reopening and cannot be activated by the page",
+        "status": "expected",
+        "errors": []
+      },
+      {
+        "title": "first generation failure preserves editable requirement and explicitly starts a fresh task",
+        "status": "expected",
+        "errors": []
+      },
+      {
+        "title": "restored restricted trial changes trigger exit protection and download includes the session copy",
+        "status": "expected",
+        "errors": []
+      },
+      {
+        "title": "explicit guest copy continues once; lost response retries same operation; independent browser restores and another owner is denied",
+        "status": "expected",
+        "errors": []
+      },
+      {
+        "title": "saving waits for acknowledgment, failed payload downloads from platform, replay restores submitted values",
+        "status": "expected",
+        "errors": []
+      },
+      {
+        "title": "two stale pages conflict; download/cancel/reload protect failed content, read failure never triggers a write",
+        "status": "expected",
+        "errors": []
+      },
+      {
+        "title": "a new unsaved edit while reload is reading cannot be silently discarded",
+        "status": "expected",
+        "errors": []
+      },
+      {
+        "title": "first pointer activation reaches a freshly restored opaque iframe",
+        "status": "expected",
+        "errors": []
+      },
+      {
+        "title": "cloud candidate preserves code reading and same-version iframe across view changes",
+        "status": "expected",
+        "errors": []
+      },
+      {
+        "title": "failed and stopped modifications retain the candidate; discard and refresh keep only saved state",
+        "status": "expected",
+        "errors": []
+      },
+      {
+        "title": "a result without a trusted terminal proof stays downloadable and cannot be saved",
+        "status": "expected",
+        "errors": []
+      },
+      {
+        "title": "long saved history scrolls independently and leaves modification controls and preview reachable",
+        "status": "expected",
+        "errors": []
+      }
+    ]
+  },
+  {
+    "run": "browser-cross-app",
+    "stats": {
+      "startTime": "2026-10-10T18:48:53.555Z",
+      "duration": 60062.451,
+      "expected": 10,
+      "skipped": 0,
+      "unexpected": 1,
+      "flaky": 0
+    },
+    "cases": [
+      {
+        "title": "current account cloud cross-app workflow and independent generated-app contract checks",
+        "status": "unexpected",
+        "errors": [
+          "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m200\u001b[39m\nReceived: \u001b[31m401\u001b[39m\n\n   at ../team/cloud-cross-app-workflow.ts:17\n\n  15 |  const first=await a.newPage(),second=await b.newPage();\n  16 |  let requests=0;const count=(r:{url:()=>string})=>{if(new URL(r.url()).pathname==='/api/generate')requests++;};a.on('request',count);b.on('request',count);\n> 17 |  const own=async(page:Page)=>{await page.goto(base);const r=await page.request.get('/api/auth/session');expect(r.status()).toBe(200);return (await r.json()).account.id as string;};\n     |                                                                                                                            ^\n  18 |  const owner=await own(first);expect(await own(second)).toBe(owner);\n  19 |  const app=(page:Page)=>page.frameLocator('iframe[title=\"生成的应用\"]');\n  20 |  const saved=(page:Page)=>expect(page.getByText('应用数据已保存到云端',{exact:true})).toBeVisible();\n    at own (/Users/gaowenlong/.codex/worktrees/cloud-projects-69/atoms/tests/team/cloud-cross-app-workflow.ts:17:124)\n    at cloudCrossAppWorkflow (/Users/gaowenlong/.codex/worktrees/cloud-projects-69/atoms/tests/team/cloud-cross-app-workflow.ts:18:14)\n    at /Users/gaowenlong/.codex/worktrees/cloud-projects-69/atoms/tests/browser/cloud-cross-app.spec.ts:10:6"
+        ]
+      },
+      {
+        "title": "QA todo: real browser and HTTP round trip",
+        "status": "expected",
+        "errors": []
+      },
+      {
+        "title": "QA reading: real browser and HTTP round trip",
+        "status": "expected",
+        "errors": []
+      },
+      {
+        "title": "QA detects read-bug",
+        "status": "expected",
+        "errors": []
+      },
+      {
+        "title": "QA detects save-bug",
+        "status": "expected",
+        "errors": []
+      },
+      {
+        "title": "QA detects tamper",
+        "status": "expected",
+        "errors": []
+      },
+      {
+        "title": "QA detects no-result",
+        "status": "expected",
+        "errors": []
+      },
+      {
+        "title": "QA detects timeout",
+        "status": "expected",
+        "errors": []
+      },
+      {
+        "title": "QA stops in flight and a new task never receives its results",
+        "status": "expected",
+        "errors": []
+      },
+      {
+        "title": "QA rejects wrong code/task/plan, missing and late results at the HTTP boundary",
+        "status": "expected",
+        "errors": []
+      },
+      {
+        "title": "QA synthetic data never enters active formal or trial data",
+        "status": "expected",
+        "errors": []
+      }
+    ]
+  },
+  {
+    "run": "browser-cross-app-retry",
+    "stats": {
+      "startTime": "2026-10-10T18:50:32.007Z",
+      "duration": 18363.305999999997,
+      "expected": 1,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    },
+    "cases": [
+      {
+        "title": "current account cloud cross-app workflow and independent generated-app contract checks",
+        "status": "expected",
+        "errors": []
+      }
+    ]
+  },
+  {
+    "run": "browser-restart",
+    "stats": {
+      "startTime": "2026-10-10T18:52:39.067Z",
+      "duration": 7284.716,
+      "expected": 1,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    },
+    "cases": [
+      {
+        "title": "a complete Chrome restart restores the cloud project without another generation request",
+        "status": "expected",
+        "errors": []
+      }
+    ]
+  },
+  {
+    "run": "browser-production-qa",
+    "stats": {
+      "startTime": "2026-10-10T18:57:11.694Z",
+      "duration": 6508.059,
+      "expected": 1,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    },
+    "cases": [
+      {
+        "title": "QA todo: real browser and HTTP round trip",
+        "status": "expected",
+        "errors": []
+      }
+    ]
+  }
+]
