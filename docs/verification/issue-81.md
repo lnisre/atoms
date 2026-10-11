@@ -43,3 +43,11 @@ Node 24、pnpm 10.12.1、本地 Chrome / webpack dev 3216，Doctor 核对工作�
 [逐项浏览器记录](assets/issue-81/browser-summary.json) · [服务端测试](assets/issue-81/unit-tests.log) · [允许采用](assets/issue-81/minor-adoption-after-restore.png) · [真正风险的具体原因](assets/issue-81/major-risk-blocked.png)
 
 浏览器验收使用既有合成 Auth/BFF/生成产物接缝，零真实模型调用。审查分类来自测试接缝，策略使用真实 previewPolicy；SQL 用真实 attestArtifact 签名进行独立最终保存资格验证。用户当前未采用候选现场保持原样，旧签名不会因部署被前端自动解锁。
+
+## Production delivery (2026-10-12 00:38, Asia/Shanghai)
+
+Deployed frozen source 72b4d5e1237bf0c2595264192aec39f2cf98d6cb, including the current production base 136c549 (#78), to https://v0-test0-nine.vercel.app/. Deployment dpl_GaYtWFWX98mNeazH8LFAsC41LS63 is READY / production and owns the fixed alias. All 93 source files, source digest and container image verified. Homepage returned 200 with the new adoption styles; anonymous generation returned 401 / unauthenticated with zero model calls. No database migration or user-project mutation.
+
+The create response timed out, but read-only lookup by exact sourceCommit/sourceDigest recovered one existing deployment. No second create was sent. The previous #78 deployment remains available. Verification metadata is retained in assets/issue-81/deployment/. Source is committed locally and deployed; it has not been pushed to GitHub. Issue #81 awaits user production confirmation.
+
+The user's Chrome candidate remains intact under its previously signed policy. Deploying does not rewrite that proof or refresh the page. The same open page can continue generating a new candidate through the updated server policy; refreshing first would discard the unadopted candidate.
