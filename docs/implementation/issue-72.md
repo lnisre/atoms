@@ -1,6 +1,6 @@
 # #72 历史保存、查看与副本试用
 
-状态：#72 代码与局部验证已完成，待审查交接；#73/#74 尚未执行，汇总 PR 不能合并。#65/#69 已关闭，生产 `8f511bf` 的登录、项目恢复和零模型冒烟已由 #69 完成并写入 Issue；本任务未操作生产配置。
+状态：#72 代码、局部验证和两轴审查已完成，交接 #73；#73/#74 尚未执行，汇总 PR 不能合并。#65/#69 已关闭，生产 `8f511bf` 的登录、项目恢复和零模型冒烟已由 #69 完成并写入 Issue；本任务未操作生产配置。
 
 来源：[#71](https://github.com/lnisre/atoms/issues/71)、[#72](https://github.com/lnisre/atoms/issues/72)、ADR 0014/0015/0016。起始主分支 `8f511bf684c4b24c8f3da693b719141291ad60e5`，统一集成分支 `codex/history-restore`。
 
@@ -33,3 +33,24 @@
 - 新的 `tests/browser/cloud-history.spec.ts` 已编写，尚未执行，留给 #74 通过 verify-atoms 集中验收。其 Auth/BFF 是合成夹具；不冒充真实云端证据。
 - 本阶段未安装 004 到 CloudBase，未部署新站点、未调用真实模型、未访问邮箱/Chrome。PGlite 不是 CloudBase，单连接测试不证明真正的多会话锁竞争，受控异常不证明真实容量耗尽。#74 必须补齐新版本普通用户历史主链路及必要真实云端事务/竞争证据。
 - 首轮会话测试因未设置合成产物签名密钥失败，修正测试配置后通过；类型检查另发现测试断言跨异步状态过度收窄，改为重新读取会话快照。
+
+
+## 已执行检查（2026-10-11）
+
+| 预期及来源 | 观察结果 | 证据入口 | 状态 |
+| --- | --- | --- | --- |
+| #72 配对、可信提交、权限、失败保全与会话隔离 | 定向测试 25/25 通过（含 7 个 SQL 子场景及其父测试计数） | `node --import tsx --test tests/cloud-projects.test.ts tests/cloud-history.test.ts tests/cloud-history-sql.test.ts` | 通过，本地/合成身份 |
+| 新响应形状不能破坏既有产物提交和执行策略 | 11/11 通过 | `node --import tsx --test tests/generate.test.ts tests/preview-policy.test.ts` | 通过，受控执行器 |
+| 类型和静态规则 | typecheck、lint、diff --check 通过 | `pnpm typecheck`、`pnpm lint`、`git diff --check` | 通过 |
+| 旧迁移完整性 | 001–003 与基线无差异 | `git diff 8f511bf -- db/migrations/001_account_projects.sql db/migrations/002_trusted_artifacts.sql db/migrations/003_artifact_receipt.sql` | 通过 |
+| #74 用户主链路和真实云端竞争 | 本阶段未执行 | 新增 `tests/browser/cloud-history.spec.ts`；沿用 verify-atoms 账号云端配方 | 未验证，后续集中执行 |
+
+## Standards
+
+独立审查 `8f511bf...bb12545` 未发现明确规范违反或实质性代码异味。普通用户 RPC、可信产物边界、独立迁移、领域术语及证据区分符合现有文档。数据库资格检查与 BFF 当前执行限制分属不同信任边界，无需为消除重复而合并。
+
+## Spec
+
+独立审查同一差异并核对 #71/#72 正文与评论、#73/#74 范围，未发现可定位的 #72 缺失、错误实现或越界。恢复、撤销、清理与完整验收仍未交付。本次为只读审查，不提供浏览器或真实 CloudBase 的额外通过证据。
+
+审查合计：Standards 0 项；Spec 0 项。没有未解决的本阶段代码问题；整项合并仍等待 #73/#74。
