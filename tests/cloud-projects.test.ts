@@ -6,6 +6,7 @@ import { GET as read } from "../src/app/api/projects/[id]/route";
 import { GET as readData, PUT as save } from "../src/app/api/projects/[id]/data/route";
 import { CloudDataSession, unsavedCopy } from "../src/lib/cloud-projects/client";
 import { authenticatedCookie, authProfile, authConfig } from "./helpers/auth";
+import { ProjectError } from "../src/lib/cloud-projects/contract";
 import type { SavedProject } from "../src/lib/project-store";
 
 const oldFetch = globalThis.fetch, oldEnv = { ...process.env };
@@ -134,4 +135,15 @@ test("oversized JSON remains downloadable in platform memory, without sending an
   const state = { text: "x".repeat(1_000_001) };
   await assert.rejects(session.save(state), /超过 1 MB/); assert.deepEqual(session.status.pending?.state, state);
   assert.equal(writes, 0); session.dispose();
+});
+
+test('gateway-wrapped SQLSTATE keeps a conflict distinct without exposing provider text',async()=>{
+ const cookie=await authenticatedCookie();
+ globalThis.fetch=async url=>String(url).endsWith('/user/me')?Response.json(authProfile):Response.json({code:'DATABASE_PT409',message:'private database detail',requestId:'synthetic'},{status:409});
+ const {listCloudProjects}=await import('../src/lib/cloud-projects/server');
+ const {requireIdentity}=await import('../src/lib/auth/server');
+ const identity=await requireIdentity(new Request('http://localhost/api/projects',{headers:{cookie}}));
+ await assert.rejects(listCloudProjects(identity),error=>{assert.ok(error instanceof ProjectError);assert.equal(error.code,'conflict');assert.equal(error.status,409);assert.doesNotMatch(error.message,/private/);return true;});
+ globalThis.fetch=async()=>Response.json({message:'PT409: unrelated provider failure'},{status:503});
+ await assert.rejects(listCloudProjects(identity),error=>{assert.ok(error instanceof ProjectError);assert.equal(error.code,'unavailable');return true;});
 });

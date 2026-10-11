@@ -25,8 +25,11 @@ export async function projectRpc<T>(identity: Identity, name: string, args: obje
   } catch { throw new ProjectError("unavailable", "无法确认云端保存结果，请保留页面并重试原保存。"); }
   const body = await response.json().catch(() => null);
   if (!response.ok || body === null || body?.code) {
-    const known = messages[body?.code];
-    if (known) throw new ProjectError(body.code === "PT409" ? "conflict" : body.code === "PT422" ? "operation_mismatch" : body.code, known[1], known[0]);
+    // CloudBase wraps Postgres SQLSTATEs as DATABASE_PT409 etc. Accept only
+    // the fixed vocabulary with its matching HTTP status; never show raw text.
+    const code = typeof body?.code === "string" ? body.code.replace(/^DATABASE_/, "") : undefined;
+    const known = code ? messages[code] : undefined;
+    if (known && known[0] === response.status) throw new ProjectError(code === "PT409" ? "conflict" : code === "PT422" ? "operation_mismatch" : code, known[1], known[0]);
     if (response.status === 401) throw new AuthError("unauthenticated", messages.PT401[1]);
     // Do not expose SQL, provider error details, or token-bearing responses.
     throw new ProjectError("unavailable", "云端读写暂时失败，请保留页面后重试。");
