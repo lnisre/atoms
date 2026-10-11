@@ -1,0 +1,255 @@
+{
+  "baseline": {
+    "stats": {
+      "startTime": "2026-10-11T14:14:41.768Z",
+      "duration": 21392.884,
+      "expected": 0,
+      "skipped": 0,
+      "unexpected": 2,
+      "flaky": 0
+    },
+    "results": [
+      {
+        "title": "secondary actions have visible button boundaries and spaced history targets",
+        "status": "failed",
+        "errors": [
+          "Error: expect(locator).toHaveCSS(expected) failed\n\nLocator:  getByRole('button', { name: '我的项目', exact: true })\nExpected: \"1px\"\nReceived: \"0px\"\nTimeout:  5000ms\n\nCall log:\n  - Expect \"toHaveCSS\" getByRole('button', { name: '我的项目', exact: true }) with timeout 5000ms\n  - waiting for getByRole('button', { name: '我的项目', exact: true })\n    14 × locator resolved to <button class=\"secondary-button\">我的项目</button>\n       - unexpected value \"0px\""
+        ]
+      },
+      {
+        "title": "restore confirmation stays reachable at 1280x720 and restores paired V1",
+        "status": "failed",
+        "errors": [
+          "Error: expect(locator).toBeInViewport() failed\n\nLocator:  getByRole('dialog', { name: '确认恢复到 V1', exact: true }).getByRole('button', { name: '确认恢复', exact: true })\nExpected: in viewport\nReceived: viewport ratio 0\nTimeout:  5000ms\n\nCall log:\n  - Expect \"toBeInViewport\" getByRole('dialog', { name: '确认恢复到 V1', exact: true }).getByRole('button', { name: '确认恢复', exact: true }) with timeout 5000ms\n  - waiting for getByRole('dialog', { name: '确认恢复到 V1', exact: true }).getByRole('button', { name: '确认恢复', exact: true })\n    14 × locator resolved to <button class=\"primary-button\">确认恢复</button>\n       - unexpected value \"viewport ratio 0\""
+        ]
+      }
+    ]
+  },
+  "initial-fix": {
+    "stats": {
+      "startTime": "2026-10-11T14:16:41.147Z",
+      "duration": 61877.82000000001,
+      "expected": 7,
+      "skipped": 0,
+      "unexpected": 3,
+      "flaky": 0
+    },
+    "results": [
+      {
+        "title": "secondary actions have visible button boundaries and spaced history targets",
+        "status": "passed",
+        "errors": []
+      },
+      {
+        "title": "restore confirmation stays reachable at 1280x720 and restores paired V1",
+        "status": "failed",
+        "errors": [
+          "Error: expect(locator).toBeFocused() failed\n\nLocator:  getByRole('dialog', { name: '确认恢复到 V1', exact: true }).getByRole('button', { name: '取消', exact: true })\nExpected: focused\nReceived: inactive\nTimeout:  5000ms\n\nCall log:\n  - Expect \"toBeFocused\" getByRole('dialog', { name: '确认恢复到 V1', exact: true }).getByRole('button', { name: '取消', exact: true }) with timeout 5000ms\n  - waiting for getByRole('dialog', { name: '确认恢复到 V1', exact: true }).getByRole('button', { name: '取消', exact: true })\n    14 × locator resolved to <button class=\"secondary-button\">取消</button>\n       - unexpected value \"inactive\""
+        ]
+      },
+      {
+        "title": "restore confirmation stays reachable at 1024x480 and restores paired V1",
+        "status": "failed",
+        "errors": [
+          "Error: expect(locator).toBeFocused() failed\n\nLocator:  getByRole('dialog', { name: '确认恢复到 V1', exact: true }).getByRole('button', { name: '取消', exact: true })\nExpected: focused\nReceived: inactive\nTimeout:  5000ms\n\nCall log:\n  - Expect \"toBeFocused\" getByRole('dialog', { name: '确认恢复到 V1', exact: true }).getByRole('button', { name: '取消', exact: true }) with timeout 5000ms\n  - waiting for getByRole('dialog', { name: '确认恢复到 V1', exact: true }).getByRole('button', { name: '取消', exact: true })\n    14 × locator resolved to <button class=\"secondary-button\">取消</button>\n       - unexpected value \"inactive\""
+        ]
+      },
+      {
+        "title": "restore confirmation stays reachable at 390x640 and restores paired V1",
+        "status": "failed",
+        "errors": [
+          "Error: expect(locator).toBeFocused() failed\n\nLocator:  getByRole('dialog', { name: '确认恢复到 V1', exact: true }).getByRole('button', { name: '取消', exact: true })\nExpected: focused\nReceived: inactive\nTimeout:  5000ms\n\nCall log:\n  - Expect \"toBeFocused\" getByRole('dialog', { name: '确认恢复到 V1', exact: true }).getByRole('button', { name: '取消', exact: true }) with timeout 5000ms\n  - waiting for getByRole('dialog', { name: '确认恢复到 V1', exact: true }).getByRole('button', { name: '取消', exact: true })\n    14 × locator resolved to <button class=\"secondary-button\">取消</button>\n       - unexpected value \"inactive\""
+        ]
+      },
+      {
+        "title": "historical source, label and preview agree; returning preserves the candidate trial and original point",
+        "status": "passed",
+        "errors": []
+      },
+      {
+        "title": "failed history read reports failure without mounting an empty history preview",
+        "status": "passed",
+        "errors": []
+      },
+      {
+        "title": "direct restore, cancel, paired original, source and persistent full undo agree across independent sessions",
+        "status": "passed",
+        "errors": []
+      },
+      {
+        "title": "lost restore response and failed undo readback retain original operation; cleanup protection ends only on adoption",
+        "status": "passed",
+        "errors": []
+      },
+      {
+        "title": "capacity failure leads to actual manual cleanup and keeps the candidate; stale confirmation reports conflict",
+        "status": "passed",
+        "errors": []
+      },
+      {
+        "title": "undo has no clock expiry, busy generation blocks it, discard retains it and failed cleanup does not claim success",
+        "status": "passed",
+        "errors": []
+      }
+    ]
+  },
+  "final": {
+    "stats": {
+      "startTime": "2026-10-11T14:19:42.185Z",
+      "duration": 111606.053,
+      "expected": 28,
+      "skipped": 0,
+      "unexpected": 1,
+      "flaky": 0
+    },
+    "results": [
+      {
+        "title": "guest intent runs once; first save response loss and separate log failure retry without generation; second browser restores",
+        "status": "passed",
+        "errors": []
+      },
+      {
+        "title": "multi-round trial never writes official data; atomic adoption replays and other device candidate conflicts",
+        "status": "passed",
+        "errors": []
+      },
+      {
+        "title": "natural expiry retains started result; same-account reauthentication saves without another model task",
+        "status": "passed",
+        "errors": []
+      },
+      {
+        "title": "cancelled exit keeps task; confirmed logout unmounts and ignores late result before another account signs in",
+        "status": "passed",
+        "errors": []
+      },
+      {
+        "title": "restored restricted code remains trial; explicit permitted activation never copies trial data",
+        "status": "passed",
+        "errors": []
+      },
+      {
+        "title": "logout during uncertain commit clears old page; late commit remains private to the original account",
+        "status": "passed",
+        "errors": []
+      },
+      {
+        "title": "execution-blocked draft remains blocked after reopening and cannot be activated by the page",
+        "status": "passed",
+        "errors": []
+      },
+      {
+        "title": "first generation failure preserves editable requirement and explicitly starts a fresh task",
+        "status": "passed",
+        "errors": []
+      },
+      {
+        "title": "restored restricted trial changes trigger exit protection and download includes the session copy",
+        "status": "passed",
+        "errors": []
+      },
+      {
+        "title": "secondary actions have visible button boundaries and spaced history targets",
+        "status": "passed",
+        "errors": []
+      },
+      {
+        "title": "restore confirmation stays reachable at 1280x720 and restores paired V1",
+        "status": "passed",
+        "errors": []
+      },
+      {
+        "title": "restore confirmation stays reachable at 1024x480 and restores paired V1",
+        "status": "passed",
+        "errors": []
+      },
+      {
+        "title": "restore confirmation stays reachable at 390x640 and restores paired V1",
+        "status": "passed",
+        "errors": []
+      },
+      {
+        "title": "historical source, label and preview agree; returning preserves the candidate trial and original point",
+        "status": "passed",
+        "errors": []
+      },
+      {
+        "title": "failed history read reports failure without mounting an empty history preview",
+        "status": "passed",
+        "errors": []
+      },
+      {
+        "title": "direct restore, cancel, paired original, source and persistent full undo agree across independent sessions",
+        "status": "passed",
+        "errors": []
+      },
+      {
+        "title": "lost restore response and failed undo readback retain original operation; cleanup protection ends only on adoption",
+        "status": "passed",
+        "errors": []
+      },
+      {
+        "title": "capacity failure leads to actual manual cleanup and keeps the candidate; stale confirmation reports conflict",
+        "status": "passed",
+        "errors": []
+      },
+      {
+        "title": "undo has no clock expiry, busy generation blocks it, discard retains it and failed cleanup does not claim success",
+        "status": "passed",
+        "errors": []
+      },
+      {
+        "title": "explicit guest copy continues once; lost response retries same operation; independent browser restores and another owner is denied",
+        "status": "passed",
+        "errors": []
+      },
+      {
+        "title": "saving waits for acknowledgment, failed payload downloads from platform, replay restores submitted values",
+        "status": "passed",
+        "errors": []
+      },
+      {
+        "title": "two stale pages conflict; download/cancel/reload protect failed content, read failure never triggers a write",
+        "status": "passed",
+        "errors": []
+      },
+      {
+        "title": "a new unsaved edit while reload is reading cannot be silently discarded",
+        "status": "passed",
+        "errors": []
+      },
+      {
+        "title": "first pointer activation reaches a freshly restored opaque iframe",
+        "status": "failed",
+        "errors": [
+          "Error: expect(locator).toHaveText(expected) failed\n\nLocator:  locator('iframe[title=\"生成的应用\"]').contentFrame().locator('#count')\nExpected: \"1\"\nReceived: \"0\"\nTimeout:  2000ms\n\nCall log:\n  - Expect \"toHaveText\" locator('iframe[title=\"生成的应用\"]').contentFrame().locator('#count') with timeout 2000ms\n  - waiting for locator('iframe[title=\"生成的应用\"]').contentFrame().locator('#count')\n    20 × locator resolved to <output id=\"count\">0</output>\n       - unexpected value \"0\""
+        ]
+      },
+      {
+        "title": "cloud candidate preserves code reading and same-version iframe across view changes",
+        "status": "passed",
+        "errors": []
+      },
+      {
+        "title": "failed and stopped modifications retain the candidate; discard and refresh keep only saved state",
+        "status": "passed",
+        "errors": []
+      },
+      {
+        "title": "a result without a trusted terminal proof stays downloadable and cannot be saved",
+        "status": "passed",
+        "errors": []
+      },
+      {
+        "title": "long saved history scrolls independently and leaves modification controls and preview reachable",
+        "status": "passed",
+        "errors": []
+      },
+      {
+        "title": "a complete Chrome restart restores the cloud project without another generation request",
+        "status": "passed",
+        "errors": []
+      }
+    ]
+  }
+}

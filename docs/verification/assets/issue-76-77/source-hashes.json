@@ -1,0 +1,6 @@
+{
+  "src/app/globals.css": "e192e0e8dba54ffb679e67e5d655fef90033569246af40a4ed2163760224213d",
+  "src/components/cloud-history.tsx": "746446e60776c0d2b55f7d54a77d1503f108885a54662642c8f9f61fb0f5d1cf",
+  "src/components/cloud-workbench.tsx": "888898c08a887c6b2d571d6b5d80af53f4fe6d7fda6ce5b53e12da80a8c2d968",
+  "tests/browser/cloud-history-controls.spec.ts": "8e9aa03d2cc04cbc75394627db8c1b6563e94917c0927733440a2ae7cdd40301"
+}

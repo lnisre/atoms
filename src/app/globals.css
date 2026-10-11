@@ -15,6 +15,11 @@ summary:focus-visible, .conversation-scroll:focus-visible { outline: 2px solid v
 details p { white-space: pre-wrap; overflow-wrap: anywhere; line-height: 1.8; }
 .primary-button { display: inline-flex; align-items: center; justify-content: center; border: 0; border-radius: var(--ui-radius-control); background: var(--ui-accent); color: white; min-height: 32px; padding: 7px 14px; font-size: 12px; font-weight: 550; }
 .primary-button:hover:not(:disabled) { background: #3457ce; }
+.secondary-button { display: inline-flex; align-items: center; justify-content: center; gap: 6px; min-height: 36px; padding: 7px 12px; border: 1px solid #aab8b0; border-radius: var(--ui-radius-control); background: var(--ui-surface); color: var(--ui-text); font-size: 12px; font-weight: 550; line-height: 1.5; text-align: center; }
+.secondary-button:hover:not(:disabled) { border-color: #778c80; background: #f1f5f2; }
+.secondary-button:active:not(:disabled), .secondary-button[aria-pressed="true"] { border-color: var(--ui-accent); background: #edf1ff; color: #3154bd; }
+.danger-button { border-color: #d3a5a0; color: #a03328; }
+.danger-button:hover:not(:disabled) { border-color: #a03328; background: #fff2ef; }
 .text-button { background: none; border: 0; color: var(--ui-secondary); padding: 6px; font-size: 12px; }
 .workbench { --conversation-width: clamp(270px, 35.3vw, 540px); height: 100dvh; display: flex; flex-direction: column; overflow: hidden; }
 .topbar { height: 44px; display: grid; grid-template-columns: var(--conversation-width) minmax(0, 1fr); flex-shrink: 0; }
@@ -174,3 +179,15 @@ details p { white-space: pre-wrap; overflow-wrap: anywhere; line-height: 1.8; }
 
 .cloud-project-history > .history-panel { max-height: 65%; }
 .history-panel > div:not(.history-heading) { display: block; }
+
+.history-toggle { align-self: flex-start; margin: 8px 16px 12px; }
+.history-entry-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin: 12px 0 8px; }
+.history-confirmation { width: min(560px, calc(100vw - 32px)); max-height: calc(100dvh - 32px); margin: auto; padding: 0; border: 1px solid #cbd7cf; border-radius: 16px; background: var(--ui-surface); color: var(--ui-text); box-shadow: 0 16px 64px #0003; overflow: hidden; font-size: 14px; line-height: 1.7; }
+.history-confirmation[open] { display: flex; flex-direction: column; }
+.history-confirmation::backdrop { background: #17251d66; }
+.history-confirmation > h2 { flex-shrink: 0; padding: 20px 24px 12px; margin: 0; font-size: 20px; font-weight: 600; }
+.history-confirmation-body { min-height: 0; overflow: auto; overscroll-behavior: contain; padding: 0 24px 8px; overflow-wrap: anywhere; }
+.history-confirmation-body:focus-visible { outline: 2px solid var(--ui-focus); outline-offset: -3px; }
+.history-confirmation-body p { margin: 0 0 12px; }
+.history-confirmation-actions { display: flex; flex-wrap: wrap; justify-content: flex-end; align-items: center; gap: 8px; flex-shrink: 0; border-top: 1px solid var(--ui-border); padding: 16px 24px; background: #f7faf8; }
+.history-confirmation-actions button { min-height: 40px; padding: 8px 16px; font-size: 14px; }
