@@ -39,4 +39,4 @@
 
 首次发布构建期间，生产被另一个已授权会话更新为 `0eef95a`（#76/#77）。发现时立即请求取消，但构建已经完成；随后恢复固定域名到同期修复版本，并将 `0eef95a` 原提交整合到 #78 主线。唯一冲突为 CSS 文件末尾双方追加规则，保留两者；没有回退按钮样式或历史模态确认。
 
-集成后重新通过 typecheck、lint、build；本地生产构建运行 cloud-projects、cloud-history-controls、cloud-history 共 22/22 项通过。最终同视口截图已替换为集成版本，完整结果见 [integrated-browser-summary.json](assets/issue-78/integrated-browser-summary.json)。本次后续部署改为先构建并验证，再校验生产身份并 promote，以避免构建期间自动覆盖同期发布。旧部署保留。
+集成后重新通过 typecheck、lint、build；本地生产构建运行 cloud-projects、cloud-history-controls、cloud-history 共 18/18 项通过。最终同视口截图已替换为集成版本，完整结果见 [integrated-browser-summary.json](assets/issue-78/integrated-browser-summary.json)。本次后续部署改为先构建并验证，再校验生产身份并 promote，以避免构建期间自动覆盖同期发布。旧部署保留。
