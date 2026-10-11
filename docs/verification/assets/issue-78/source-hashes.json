@@ -1,0 +1,9 @@
+{
+  "src/app/page.tsx": "87fd728ce580a2cf1edd6524337f00323dc6ac678d64b2fdac83dfc3bbbd3940",
+  "src/app/globals.css": "3e7266ba6ea70f0e3e9ab10f9403eab1ef3054aba895568ea11877f878b31e6a",
+  "src/components/cloud-workbench.tsx": "789445d78c9c9b4b8d6107782c1cf6ebc7283c6529a3b11d64c9822ed64fa39d",
+  "src/components/project-workbench-layout.tsx": "1a81366ac872ab34601ad7d200edfa590cd4a194106467e5c3d9f59af4e97761",
+  "src/components/home-entry.tsx": "88e77eacf10cc69d49a12faa8be80c43413ccbfc9e759150e3660cfef867a2af",
+  "src/components/home-entry.module.css": "361a480a8604c3002d781806f368f57f19c2892f22ceb272abe11f084df4d006",
+  "tests/browser/cloud-projects.spec.ts": "fcce759086b042a69cdf93b4ab31bf432a3a0fd1f30309977f5e573fa5e2c9c8"
+}

@@ -1,0 +1,84 @@
+{
+  "stats": {
+    "startTime": "2026-10-11T15:16:34.272Z",
+    "duration": 33740.366,
+    "expected": 18,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  },
+  "results": [
+    {
+      "title": "secondary actions have visible button boundaries and spaced history targets",
+      "status": "passed"
+    },
+    {
+      "title": "restore confirmation stays reachable at 1280x720 and restores paired V1",
+      "status": "passed"
+    },
+    {
+      "title": "restore confirmation stays reachable at 1024x480 and restores paired V1",
+      "status": "passed"
+    },
+    {
+      "title": "restore confirmation stays reachable at 390x640 and restores paired V1",
+      "status": "passed"
+    },
+    {
+      "title": "historical source, label and preview agree; returning preserves the candidate trial and original point",
+      "status": "passed"
+    },
+    {
+      "title": "failed history read reports failure without mounting an empty history preview",
+      "status": "passed"
+    },
+    {
+      "title": "direct restore, cancel, paired original, source and persistent full undo agree across independent sessions",
+      "status": "passed"
+    },
+    {
+      "title": "lost restore response and failed undo readback retain original operation; cleanup protection ends only on adoption",
+      "status": "passed"
+    },
+    {
+      "title": "capacity failure leads to actual manual cleanup and keeps the candidate; stale confirmation reports conflict",
+      "status": "passed"
+    },
+    {
+      "title": "undo has no clock expiry, busy generation blocks it, discard retains it and failed cleanup does not claim success",
+      "status": "passed"
+    },
+    {
+      "title": "explicit guest copy continues once; lost response retries same operation; independent browser restores and another owner is denied",
+      "status": "passed"
+    },
+    {
+      "title": "saving waits for acknowledgment, failed payload downloads from platform, replay restores submitted values",
+      "status": "passed"
+    },
+    {
+      "title": "two stale pages conflict; download/cancel/reload protect failed content, read failure never triggers a write",
+      "status": "passed"
+    },
+    {
+      "title": "a new unsaved edit while reload is reading cannot be silently discarded",
+      "status": "passed"
+    },
+    {
+      "title": "guest example shares account conversation layout at 1440x900",
+      "status": "passed"
+    },
+    {
+      "title": "guest example shares account conversation layout at 1280x720",
+      "status": "passed"
+    },
+    {
+      "title": "guest example shares account conversation layout at 390x844",
+      "status": "passed"
+    },
+    {
+      "title": "ordinary login while browsing the example never creates a personal copy",
+      "status": "passed"
+    }
+  ]
+}
