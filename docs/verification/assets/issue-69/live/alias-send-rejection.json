@@ -1,0 +1,6 @@
+{
+  "status": 400,
+  "error": "invalid_argument",
+  "description": "invalid [identifier].Email: value does not match regex pattern \"^$|^[.0-9A-Za-z_-]{1,40}@[.0-9A-Za-z_-]{1,40}\\\\.[A-Za-z]{1,10}$\"",
+  "requestId": "9a51fb13-c3a2-485e-b6c7-b47944491e72"
+}

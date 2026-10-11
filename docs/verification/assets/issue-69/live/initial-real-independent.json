@@ -1,0 +1,289 @@
+{
+  "status": "passed",
+  "codeHash": "be402a8f68235fa67ed6f79835d0f4afd4bd93af25b30ba424439f0620aab8b5",
+  "planHash": "23be4737d820fb47a99e3ef3bf84d619621e8d4795e02e666476f096a975c652",
+  "checks": 55,
+  "scenarios": [
+    "core-defaults-preservation-timing",
+    "read-failure",
+    "save-failure"
+  ],
+  "results": [
+    {
+      "scenarioId": "core-defaults-preservation-timing",
+      "checkId": "core-defaults-preservation-timing-0",
+      "status": "passed"
+    },
+    {
+      "scenarioId": "core-defaults-preservation-timing",
+      "checkId": "core-defaults-preservation-timing-1",
+      "status": "passed"
+    },
+    {
+      "scenarioId": "core-defaults-preservation-timing",
+      "checkId": "core-defaults-preservation-timing-2",
+      "status": "passed"
+    },
+    {
+      "scenarioId": "core-defaults-preservation-timing",
+      "checkId": "core-defaults-preservation-timing-3",
+      "status": "passed"
+    },
+    {
+      "scenarioId": "core-defaults-preservation-timing",
+      "checkId": "core-defaults-preservation-timing-4",
+      "status": "passed"
+    },
+    {
+      "scenarioId": "core-defaults-preservation-timing",
+      "checkId": "core-defaults-preservation-timing-5",
+      "status": "passed"
+    },
+    {
+      "scenarioId": "core-defaults-preservation-timing",
+      "checkId": "core-defaults-preservation-timing-6",
+      "status": "passed"
+    },
+    {
+      "scenarioId": "core-defaults-preservation-timing",
+      "checkId": "core-defaults-preservation-timing-7",
+      "status": "passed"
+    },
+    {
+      "scenarioId": "core-defaults-preservation-timing",
+      "checkId": "core-defaults-preservation-timing-8",
+      "status": "passed"
+    },
+    {
+      "scenarioId": "core-defaults-preservation-timing",
+      "checkId": "core-defaults-preservation-timing-9",
+      "status": "passed"
+    },
+    {
+      "scenarioId": "core-defaults-preservation-timing",
+      "checkId": "core-defaults-preservation-timing-10",
+      "status": "passed"
+    },
+    {
+      "scenarioId": "core-defaults-preservation-timing",
+      "checkId": "core-defaults-preservation-timing-11",
+      "status": "passed"
+    },
+    {
+      "scenarioId": "core-defaults-preservation-timing",
+      "checkId": "core-defaults-preservation-timing-12",
+      "status": "passed"
+    },
+    {
+      "scenarioId": "core-defaults-preservation-timing",
+      "checkId": "core-defaults-preservation-timing-13",
+      "status": "passed"
+    },
+    {
+      "scenarioId": "core-defaults-preservation-timing",
+      "checkId": "core-defaults-preservation-timing-14",
+      "status": "passed"
+    },
+    {
+      "scenarioId": "core-defaults-preservation-timing",
+      "checkId": "core-defaults-preservation-timing-15",
+      "status": "passed"
+    },
+    {
+      "scenarioId": "core-defaults-preservation-timing",
+      "checkId": "core-defaults-preservation-timing-16",
+      "status": "passed"
+    },
+    {
+      "scenarioId": "core-defaults-preservation-timing",
+      "checkId": "core-defaults-preservation-timing-17",
+      "status": "passed"
+    },
+    {
+      "scenarioId": "core-defaults-preservation-timing",
+      "checkId": "core-defaults-preservation-timing-18",
+      "status": "passed"
+    },
+    {
+      "scenarioId": "core-defaults-preservation-timing",
+      "checkId": "core-defaults-preservation-timing-19",
+      "status": "passed"
+    },
+    {
+      "scenarioId": "core-defaults-preservation-timing",
+      "checkId": "core-defaults-preservation-timing-20",
+      "status": "passed"
+    },
+    {
+      "scenarioId": "core-defaults-preservation-timing",
+      "checkId": "core-defaults-preservation-timing-21",
+      "status": "passed"
+    },
+    {
+      "scenarioId": "core-defaults-preservation-timing",
+      "checkId": "core-defaults-preservation-timing-22",
+      "status": "passed"
+    },
+    {
+      "scenarioId": "core-defaults-preservation-timing",
+      "checkId": "core-defaults-preservation-timing-23",
+      "status": "passed"
+    },
+    {
+      "scenarioId": "core-defaults-preservation-timing",
+      "checkId": "core-defaults-preservation-timing-24",
+      "status": "passed"
+    },
+    {
+      "scenarioId": "core-defaults-preservation-timing",
+      "checkId": "core-defaults-preservation-timing-25",
+      "status": "passed"
+    },
+    {
+      "scenarioId": "core-defaults-preservation-timing",
+      "checkId": "core-defaults-preservation-timing-26",
+      "status": "passed"
+    },
+    {
+      "scenarioId": "core-defaults-preservation-timing",
+      "checkId": "core-defaults-preservation-timing-27",
+      "status": "passed"
+    },
+    {
+      "scenarioId": "core-defaults-preservation-timing",
+      "checkId": "core-defaults-preservation-timing-28",
+      "status": "passed"
+    },
+    {
+      "scenarioId": "core-defaults-preservation-timing",
+      "checkId": "core-defaults-preservation-timing-29",
+      "status": "passed"
+    },
+    {
+      "scenarioId": "core-defaults-preservation-timing",
+      "checkId": "core-defaults-preservation-timing-30",
+      "status": "passed"
+    },
+    {
+      "scenarioId": "core-defaults-preservation-timing",
+      "checkId": "core-defaults-preservation-timing-31",
+      "status": "passed"
+    },
+    {
+      "scenarioId": "core-defaults-preservation-timing",
+      "checkId": "core-defaults-preservation-timing-32",
+      "status": "passed"
+    },
+    {
+      "scenarioId": "core-defaults-preservation-timing",
+      "checkId": "core-defaults-preservation-timing-33",
+      "status": "passed"
+    },
+    {
+      "scenarioId": "core-defaults-preservation-timing",
+      "checkId": "core-defaults-preservation-timing-34",
+      "status": "passed"
+    },
+    {
+      "scenarioId": "read-failure",
+      "checkId": "read-failure-0",
+      "status": "passed"
+    },
+    {
+      "scenarioId": "read-failure",
+      "checkId": "read-failure-1",
+      "status": "passed"
+    },
+    {
+      "scenarioId": "read-failure",
+      "checkId": "read-failure-2",
+      "status": "passed"
+    },
+    {
+      "scenarioId": "read-failure",
+      "checkId": "read-failure-3",
+      "status": "passed"
+    },
+    {
+      "scenarioId": "read-failure",
+      "checkId": "read-failure-4",
+      "status": "passed"
+    },
+    {
+      "scenarioId": "read-failure",
+      "checkId": "read-failure-5",
+      "status": "passed"
+    },
+    {
+      "scenarioId": "save-failure",
+      "checkId": "save-failure-0",
+      "status": "passed"
+    },
+    {
+      "scenarioId": "save-failure",
+      "checkId": "save-failure-1",
+      "status": "passed"
+    },
+    {
+      "scenarioId": "save-failure",
+      "checkId": "save-failure-2",
+      "status": "passed"
+    },
+    {
+      "scenarioId": "save-failure",
+      "checkId": "save-failure-3",
+      "status": "passed"
+    },
+    {
+      "scenarioId": "save-failure",
+      "checkId": "save-failure-4",
+      "status": "passed"
+    },
+    {
+      "scenarioId": "save-failure",
+      "checkId": "save-failure-5",
+      "status": "passed"
+    },
+    {
+      "scenarioId": "save-failure",
+      "checkId": "save-failure-6",
+      "status": "passed"
+    },
+    {
+      "scenarioId": "save-failure",
+      "checkId": "save-failure-7",
+      "status": "passed"
+    },
+    {
+      "scenarioId": "save-failure",
+      "checkId": "save-failure-8",
+      "status": "passed"
+    },
+    {
+      "scenarioId": "save-failure",
+      "checkId": "save-failure-9",
+      "status": "passed"
+    },
+    {
+      "scenarioId": "save-failure",
+      "checkId": "save-failure-10",
+      "status": "passed"
+    },
+    {
+      "scenarioId": "save-failure",
+      "checkId": "save-failure-11",
+      "status": "passed"
+    },
+    {
+      "scenarioId": "save-failure",
+      "checkId": "save-failure-12",
+      "status": "passed"
+    },
+    {
+      "scenarioId": "save-failure",
+      "checkId": "save-failure-13",
+      "status": "passed"
+    }
+  ],
+  "boundary": "Actual generated HTML; independent browser with synthetic bridge seeds and faults. No new model calls or writes to formal project data."
+}

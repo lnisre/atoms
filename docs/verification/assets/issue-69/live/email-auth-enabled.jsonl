@@ -1,0 +1,9 @@
+{"action":"DescribeLoginConfig","status":200,"requestId":"c908c2e6-1867-40e7-b111-3a942d3fba89"}
+{"action":"GetProviders","status":200,"requestId":"e5988909-bf1c-4a7b-a71f-6df8dcc34f67"}
+{"envId":"atoms-d9gdf8r2036664366","region":"ap-shanghai","emailLogin":false,"usernameLogin":true,"anonymousLogin":false,"phoneLogin":false,"emailProvider":"FALSE","platformEmail":"FALSE"}
+{"plan":"Enable email OTP and platform email delivery only; preserve other login flags. No send, purchase, upgrade, billing, or domain changes."}
+{"action":"ModifyProvider","status":200,"requestId":"6697d48a-5d19-4524-913d-847e136e2ae9"}
+{"action":"ModifyLoginConfig","status":200,"requestId":"f9d24d79-389a-433d-b8f9-171d9da14da6"}
+{"action":"DescribeLoginConfig","status":200,"requestId":"4d6509aa-b4d2-429a-9bec-6f3befb119a2"}
+{"action":"GetProviders","status":200,"requestId":"114da736-2b41-4f52-bd84-b5a4987d83f0"}
+{"envId":"atoms-d9gdf8r2036664366","region":"ap-shanghai","emailLogin":true,"usernameLogin":true,"anonymousLogin":false,"phoneLogin":false,"emailProvider":"TRUE","platformEmail":"TRUE"}

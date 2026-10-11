@@ -1,0 +1,66 @@
+{
+  "sourceCommit": "128eaa3b14eb6b5f8fa5cd66c9e3089cce2a396c",
+  "checkedAt": "2026-10-11T06:45:42.736Z",
+  "node": "v24.18.0",
+  "unit": {
+    "total": 85,
+    "passed": 85,
+    "failed": 0,
+    "skipped": 0
+  },
+  "commands": [
+    {
+      "kind": "unit",
+      "exitCode": 0,
+      "logSha256": "6c033cf9b4b2f18c0513d70920dd137a740de8e423de8add957dbeee61495aa2"
+    },
+    {
+      "kind": "typecheck",
+      "exitCode": 0,
+      "logSha256": "9ab84f604f015b35bee9d6bb6073647422ddd57cc7703a0b72015137040f5d69"
+    },
+    {
+      "kind": "lint",
+      "exitCode": 0,
+      "logSha256": "583007801539d8c4a335bb3f2f5c1c26f4de40778c9e48aa65782d46342847b4"
+    },
+    {
+      "kind": "build",
+      "exitCode": 0,
+      "logSha256": "3a1428e73f94e830f92400f5678e1ee912ba9b21a8da705d1abbca9cd07334de"
+    }
+  ],
+  "previousBrowser": {
+    "distinctCases": 42,
+    "mode": "real DOM/iframe with synthetic Auth/BFF/provider"
+  },
+  "additionalAccountUi": {
+    "passed": 3
+  },
+  "offlineNative": {
+    "passed": 20,
+    "mode": "scripted provider; unchanged Python runtime"
+  },
+  "failuresPreserved": [
+    {
+      "logSha256": "d0a7b430c19f5dc97ba22dad31ca79e12076b0c5893dcb6289754c044a5fbe9a",
+      "passed": 84,
+      "failed": 1,
+      "cause": "Obsolete fixture returned PT409 with HTTP 400; aligned to observed 409 and asserted mismatched status fails safely."
+    },
+    {
+      "logSha256": "ec56e7612cd97e0bed99dec73b2cffad41eea46ecbe121315af11f0b9dc432e5",
+      "passed": 84,
+      "failed": 1,
+      "cause": "Gateway internal port collided with EADDRINUSE; test now checks both consecutive ports."
+    }
+  ],
+  "githubRequiredChecks": "none reported at merge preparation",
+  "production": {
+    "gitLinked": false,
+    "alias": "v0-test0-nine.vercel.app",
+    "deploymentId": "dpl_VK3bPMP6QkTj66NJKm51yQfPoiYA",
+    "sourceCommit": "6f49a6416694b9a770cc0da6784cfb4f9df25e22"
+  },
+  "userAcceptance": "Single-email acceptance accepted; second real account no longer required for this merge."
+}

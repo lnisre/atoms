@@ -1,0 +1,530 @@
+{
+  "status": "passed",
+  "codeHash": "a5655f2e33d2084dbf4e20447dbb65f57a367ff0aa81f2728424d03334a047ed",
+  "planHash": "4da4798dcdc49673351922a435806e211969dfd9593f9f4a77ee10d6f30b188a",
+  "checks": 103,
+  "scenarios": [
+    "core-defaults-preservation-timing",
+    "filter-empty-preserves-records",
+    "read-failure",
+    "save-failure"
+  ],
+  "results": [
+    {
+      "scenarioId": "core-defaults-preservation-timing",
+      "checkId": "core-defaults-preservation-timing-0",
+      "status": "passed"
+    },
+    {
+      "scenarioId": "core-defaults-preservation-timing",
+      "checkId": "core-defaults-preservation-timing-1",
+      "status": "passed"
+    },
+    {
+      "scenarioId": "core-defaults-preservation-timing",
+      "checkId": "core-defaults-preservation-timing-2",
+      "status": "passed"
+    },
+    {
+      "scenarioId": "core-defaults-preservation-timing",
+      "checkId": "core-defaults-preservation-timing-3",
+      "status": "passed"
+    },
+    {
+      "scenarioId": "core-defaults-preservation-timing",
+      "checkId": "core-defaults-preservation-timing-4",
+      "status": "passed"
+    },
+    {
+      "scenarioId": "core-defaults-preservation-timing",
+      "checkId": "core-defaults-preservation-timing-5",
+      "status": "passed"
+    },
+    {
+      "scenarioId": "core-defaults-preservation-timing",
+      "checkId": "core-defaults-preservation-timing-6",
+      "status": "passed"
+    },
+    {
+      "scenarioId": "core-defaults-preservation-timing",
+      "checkId": "core-defaults-preservation-timing-7",
+      "status": "passed"
+    },
+    {
+      "scenarioId": "core-defaults-preservation-timing",
+      "checkId": "core-defaults-preservation-timing-8",
+      "status": "passed"
+    },
+    {
+      "scenarioId": "core-defaults-preservation-timing",
+      "checkId": "core-defaults-preservation-timing-9",
+      "status": "passed"
+    },
+    {
+      "scenarioId": "core-defaults-preservation-timing",
+      "checkId": "core-defaults-preservation-timing-10",
+      "status": "passed"
+    },
+    {
+      "scenarioId": "core-defaults-preservation-timing",
+      "checkId": "core-defaults-preservation-timing-11",
+      "status": "passed"
+    },
+    {
+      "scenarioId": "core-defaults-preservation-timing",
+      "checkId": "core-defaults-preservation-timing-12",
+      "status": "passed"
+    },
+    {
+      "scenarioId": "core-defaults-preservation-timing",
+      "checkId": "core-defaults-preservation-timing-13",
+      "status": "passed"
+    },
+    {
+      "scenarioId": "core-defaults-preservation-timing",
+      "checkId": "core-defaults-preservation-timing-14",
+      "status": "passed"
+    },
+    {
+      "scenarioId": "core-defaults-preservation-timing",
+      "checkId": "core-defaults-preservation-timing-15",
+      "status": "passed"
+    },
+    {
+      "scenarioId": "core-defaults-preservation-timing",
+      "checkId": "core-defaults-preservation-timing-16",
+      "status": "passed"
+    },
+    {
+      "scenarioId": "core-defaults-preservation-timing",
+      "checkId": "core-defaults-preservation-timing-17",
+      "status": "passed"
+    },
+    {
+      "scenarioId": "core-defaults-preservation-timing",
+      "checkId": "core-defaults-preservation-timing-18",
+      "status": "passed"
+    },
+    {
+      "scenarioId": "core-defaults-preservation-timing",
+      "checkId": "core-defaults-preservation-timing-19",
+      "status": "passed"
+    },
+    {
+      "scenarioId": "core-defaults-preservation-timing",
+      "checkId": "core-defaults-preservation-timing-20",
+      "status": "passed"
+    },
+    {
+      "scenarioId": "core-defaults-preservation-timing",
+      "checkId": "core-defaults-preservation-timing-21",
+      "status": "passed"
+    },
+    {
+      "scenarioId": "core-defaults-preservation-timing",
+      "checkId": "core-defaults-preservation-timing-22",
+      "status": "passed"
+    },
+    {
+      "scenarioId": "core-defaults-preservation-timing",
+      "checkId": "core-defaults-preservation-timing-23",
+      "status": "passed"
+    },
+    {
+      "scenarioId": "core-defaults-preservation-timing",
+      "checkId": "core-defaults-preservation-timing-24",
+      "status": "passed"
+    },
+    {
+      "scenarioId": "core-defaults-preservation-timing",
+      "checkId": "core-defaults-preservation-timing-25",
+      "status": "passed"
+    },
+    {
+      "scenarioId": "core-defaults-preservation-timing",
+      "checkId": "core-defaults-preservation-timing-26",
+      "status": "passed"
+    },
+    {
+      "scenarioId": "core-defaults-preservation-timing",
+      "checkId": "core-defaults-preservation-timing-27",
+      "status": "passed"
+    },
+    {
+      "scenarioId": "core-defaults-preservation-timing",
+      "checkId": "core-defaults-preservation-timing-28",
+      "status": "passed"
+    },
+    {
+      "scenarioId": "core-defaults-preservation-timing",
+      "checkId": "core-defaults-preservation-timing-29",
+      "status": "passed"
+    },
+    {
+      "scenarioId": "core-defaults-preservation-timing",
+      "checkId": "core-defaults-preservation-timing-30",
+      "status": "passed"
+    },
+    {
+      "scenarioId": "core-defaults-preservation-timing",
+      "checkId": "core-defaults-preservation-timing-31",
+      "status": "passed"
+    },
+    {
+      "scenarioId": "core-defaults-preservation-timing",
+      "checkId": "core-defaults-preservation-timing-32",
+      "status": "passed"
+    },
+    {
+      "scenarioId": "core-defaults-preservation-timing",
+      "checkId": "core-defaults-preservation-timing-33",
+      "status": "passed"
+    },
+    {
+      "scenarioId": "core-defaults-preservation-timing",
+      "checkId": "core-defaults-preservation-timing-34",
+      "status": "passed"
+    },
+    {
+      "scenarioId": "core-defaults-preservation-timing",
+      "checkId": "core-defaults-preservation-timing-35",
+      "status": "passed"
+    },
+    {
+      "scenarioId": "core-defaults-preservation-timing",
+      "checkId": "core-defaults-preservation-timing-36",
+      "status": "passed"
+    },
+    {
+      "scenarioId": "core-defaults-preservation-timing",
+      "checkId": "core-defaults-preservation-timing-37",
+      "status": "passed"
+    },
+    {
+      "scenarioId": "core-defaults-preservation-timing",
+      "checkId": "core-defaults-preservation-timing-38",
+      "status": "passed"
+    },
+    {
+      "scenarioId": "core-defaults-preservation-timing",
+      "checkId": "core-defaults-preservation-timing-39",
+      "status": "passed"
+    },
+    {
+      "scenarioId": "core-defaults-preservation-timing",
+      "checkId": "core-defaults-preservation-timing-40",
+      "status": "passed"
+    },
+    {
+      "scenarioId": "core-defaults-preservation-timing",
+      "checkId": "core-defaults-preservation-timing-41",
+      "status": "passed"
+    },
+    {
+      "scenarioId": "core-defaults-preservation-timing",
+      "checkId": "core-defaults-preservation-timing-42",
+      "status": "passed"
+    },
+    {
+      "scenarioId": "core-defaults-preservation-timing",
+      "checkId": "core-defaults-preservation-timing-43",
+      "status": "passed"
+    },
+    {
+      "scenarioId": "core-defaults-preservation-timing",
+      "checkId": "core-defaults-preservation-timing-44",
+      "status": "passed"
+    },
+    {
+      "scenarioId": "core-defaults-preservation-timing",
+      "checkId": "core-defaults-preservation-timing-45",
+      "status": "passed"
+    },
+    {
+      "scenarioId": "core-defaults-preservation-timing",
+      "checkId": "core-defaults-preservation-timing-46",
+      "status": "passed"
+    },
+    {
+      "scenarioId": "core-defaults-preservation-timing",
+      "checkId": "core-defaults-preservation-timing-47",
+      "status": "passed"
+    },
+    {
+      "scenarioId": "core-defaults-preservation-timing",
+      "checkId": "core-defaults-preservation-timing-48",
+      "status": "passed"
+    },
+    {
+      "scenarioId": "core-defaults-preservation-timing",
+      "checkId": "core-defaults-preservation-timing-49",
+      "status": "passed"
+    },
+    {
+      "scenarioId": "core-defaults-preservation-timing",
+      "checkId": "core-defaults-preservation-timing-50",
+      "status": "passed"
+    },
+    {
+      "scenarioId": "core-defaults-preservation-timing",
+      "checkId": "core-defaults-preservation-timing-51",
+      "status": "passed"
+    },
+    {
+      "scenarioId": "core-defaults-preservation-timing",
+      "checkId": "core-defaults-preservation-timing-52",
+      "status": "passed"
+    },
+    {
+      "scenarioId": "core-defaults-preservation-timing",
+      "checkId": "core-defaults-preservation-timing-53",
+      "status": "passed"
+    },
+    {
+      "scenarioId": "core-defaults-preservation-timing",
+      "checkId": "core-defaults-preservation-timing-54",
+      "status": "passed"
+    },
+    {
+      "scenarioId": "core-defaults-preservation-timing",
+      "checkId": "core-defaults-preservation-timing-55",
+      "status": "passed"
+    },
+    {
+      "scenarioId": "filter-empty-preserves-records",
+      "checkId": "filter-empty-preserves-records-0",
+      "status": "passed"
+    },
+    {
+      "scenarioId": "filter-empty-preserves-records",
+      "checkId": "filter-empty-preserves-records-1",
+      "status": "passed"
+    },
+    {
+      "scenarioId": "filter-empty-preserves-records",
+      "checkId": "filter-empty-preserves-records-2",
+      "status": "passed"
+    },
+    {
+      "scenarioId": "filter-empty-preserves-records",
+      "checkId": "filter-empty-preserves-records-3",
+      "status": "passed"
+    },
+    {
+      "scenarioId": "filter-empty-preserves-records",
+      "checkId": "filter-empty-preserves-records-4",
+      "status": "passed"
+    },
+    {
+      "scenarioId": "filter-empty-preserves-records",
+      "checkId": "filter-empty-preserves-records-5",
+      "status": "passed"
+    },
+    {
+      "scenarioId": "filter-empty-preserves-records",
+      "checkId": "filter-empty-preserves-records-6",
+      "status": "passed"
+    },
+    {
+      "scenarioId": "filter-empty-preserves-records",
+      "checkId": "filter-empty-preserves-records-7",
+      "status": "passed"
+    },
+    {
+      "scenarioId": "filter-empty-preserves-records",
+      "checkId": "filter-empty-preserves-records-8",
+      "status": "passed"
+    },
+    {
+      "scenarioId": "filter-empty-preserves-records",
+      "checkId": "filter-empty-preserves-records-9",
+      "status": "passed"
+    },
+    {
+      "scenarioId": "filter-empty-preserves-records",
+      "checkId": "filter-empty-preserves-records-10",
+      "status": "passed"
+    },
+    {
+      "scenarioId": "filter-empty-preserves-records",
+      "checkId": "filter-empty-preserves-records-11",
+      "status": "passed"
+    },
+    {
+      "scenarioId": "filter-empty-preserves-records",
+      "checkId": "filter-empty-preserves-records-12",
+      "status": "passed"
+    },
+    {
+      "scenarioId": "filter-empty-preserves-records",
+      "checkId": "filter-empty-preserves-records-13",
+      "status": "passed"
+    },
+    {
+      "scenarioId": "filter-empty-preserves-records",
+      "checkId": "filter-empty-preserves-records-14",
+      "status": "passed"
+    },
+    {
+      "scenarioId": "filter-empty-preserves-records",
+      "checkId": "filter-empty-preserves-records-15",
+      "status": "passed"
+    },
+    {
+      "scenarioId": "filter-empty-preserves-records",
+      "checkId": "filter-empty-preserves-records-16",
+      "status": "passed"
+    },
+    {
+      "scenarioId": "filter-empty-preserves-records",
+      "checkId": "filter-empty-preserves-records-17",
+      "status": "passed"
+    },
+    {
+      "scenarioId": "filter-empty-preserves-records",
+      "checkId": "filter-empty-preserves-records-18",
+      "status": "passed"
+    },
+    {
+      "scenarioId": "filter-empty-preserves-records",
+      "checkId": "filter-empty-preserves-records-19",
+      "status": "passed"
+    },
+    {
+      "scenarioId": "filter-empty-preserves-records",
+      "checkId": "filter-empty-preserves-records-20",
+      "status": "passed"
+    },
+    {
+      "scenarioId": "filter-empty-preserves-records",
+      "checkId": "filter-empty-preserves-records-21",
+      "status": "passed"
+    },
+    {
+      "scenarioId": "filter-empty-preserves-records",
+      "checkId": "filter-empty-preserves-records-22",
+      "status": "passed"
+    },
+    {
+      "scenarioId": "filter-empty-preserves-records",
+      "checkId": "filter-empty-preserves-records-23",
+      "status": "passed"
+    },
+    {
+      "scenarioId": "filter-empty-preserves-records",
+      "checkId": "filter-empty-preserves-records-24",
+      "status": "passed"
+    },
+    {
+      "scenarioId": "filter-empty-preserves-records",
+      "checkId": "filter-empty-preserves-records-25",
+      "status": "passed"
+    },
+    {
+      "scenarioId": "filter-empty-preserves-records",
+      "checkId": "filter-empty-preserves-records-26",
+      "status": "passed"
+    },
+    {
+      "scenarioId": "read-failure",
+      "checkId": "read-failure-0",
+      "status": "passed"
+    },
+    {
+      "scenarioId": "read-failure",
+      "checkId": "read-failure-1",
+      "status": "passed"
+    },
+    {
+      "scenarioId": "read-failure",
+      "checkId": "read-failure-2",
+      "status": "passed"
+    },
+    {
+      "scenarioId": "read-failure",
+      "checkId": "read-failure-3",
+      "status": "passed"
+    },
+    {
+      "scenarioId": "read-failure",
+      "checkId": "read-failure-4",
+      "status": "passed"
+    },
+    {
+      "scenarioId": "read-failure",
+      "checkId": "read-failure-5",
+      "status": "passed"
+    },
+    {
+      "scenarioId": "save-failure",
+      "checkId": "save-failure-0",
+      "status": "passed"
+    },
+    {
+      "scenarioId": "save-failure",
+      "checkId": "save-failure-1",
+      "status": "passed"
+    },
+    {
+      "scenarioId": "save-failure",
+      "checkId": "save-failure-2",
+      "status": "passed"
+    },
+    {
+      "scenarioId": "save-failure",
+      "checkId": "save-failure-3",
+      "status": "passed"
+    },
+    {
+      "scenarioId": "save-failure",
+      "checkId": "save-failure-4",
+      "status": "passed"
+    },
+    {
+      "scenarioId": "save-failure",
+      "checkId": "save-failure-5",
+      "status": "passed"
+    },
+    {
+      "scenarioId": "save-failure",
+      "checkId": "save-failure-6",
+      "status": "passed"
+    },
+    {
+      "scenarioId": "save-failure",
+      "checkId": "save-failure-7",
+      "status": "passed"
+    },
+    {
+      "scenarioId": "save-failure",
+      "checkId": "save-failure-8",
+      "status": "passed"
+    },
+    {
+      "scenarioId": "save-failure",
+      "checkId": "save-failure-9",
+      "status": "passed"
+    },
+    {
+      "scenarioId": "save-failure",
+      "checkId": "save-failure-10",
+      "status": "passed"
+    },
+    {
+      "scenarioId": "save-failure",
+      "checkId": "save-failure-11",
+      "status": "passed"
+    },
+    {
+      "scenarioId": "save-failure",
+      "checkId": "save-failure-12",
+      "status": "passed"
+    },
+    {
+      "scenarioId": "save-failure",
+      "checkId": "save-failure-13",
+      "status": "passed"
+    }
+  ],
+  "boundary": "Actual generated HTML; independent browser with synthetic bridge seeds and faults. No new model calls or writes to formal project data."
+}

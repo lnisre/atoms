@@ -1,0 +1,6 @@
+{"action":"DescribeClient","status":200,"requestId":"101b2eeb-f8ea-4cad-a4d2-37a3278d29cc"}
+{"before":{"clientId":"atoms-d9gdf8r2036664366","accessTokenExpiresIn":7200,"refreshTokenExpiresIn":2592000,"maxDevice":1}}
+{"plan":{"clientId":"atoms-d9gdf8r2036664366","MaxDevice":10,"otherFields":"unchanged"}}
+{"action":"ModifyClient","status":200,"requestId":"4b7feae8-e2db-4ea2-9a2b-77e4ab327d79"}
+{"action":"DescribeClient","status":200,"requestId":"8b0bf8e9-9076-4cb5-b844-9cd1583afc20"}
+{"after":{"clientId":"atoms-d9gdf8r2036664366","accessTokenExpiresIn":7200,"refreshTokenExpiresIn":2592000,"maxDevice":10}}
