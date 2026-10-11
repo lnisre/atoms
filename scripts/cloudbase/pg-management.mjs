@@ -36,5 +36,7 @@ export function managementArgs() {
   const credentials = args.includes('--credentials') ? args[args.indexOf('--credentials') + 1] : undefined;
   const envId = args.includes('--env') ? args[args.indexOf('--env') + 1] : undefined;
   if (!credentials || !envId) throw new Error('Requires --credentials DOTENV --env ENV_ID');
-  return { credentials, envId, apply: args.includes('--apply') };
+  const namespace = args.includes('--namespace') ? args[args.indexOf('--namespace') + 1] : 'atoms';
+  if (!/^atoms(?:_[a-z0-9]{1,24})?$/.test(namespace)) throw new Error('Invalid project namespace');
+  return { credentials, envId, namespace, apply: args.includes('--apply') };
 }

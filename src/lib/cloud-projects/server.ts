@@ -21,9 +21,11 @@ const messages: Record<string, [number, string]> = {
 export async function projectRpc<T>(identity: Identity, name: string, args: object): Promise<T> {
   const env = process.env.CLOUDBASE_ENV_ID;
   if (!env || !/^[a-z\d-]+$/.test(env)) throw new ProjectError("not_configured", "云端存储尚未配置，请联系维护者。");
+  const namespace = process.env.ATOMS_PROJECT_NAMESPACE ?? "atoms";
+  if (!/^atoms(?:_[a-z0-9]{1,24})?$/.test(namespace)) throw new ProjectError("not_configured", "项目存储命名空间配置无效。");
   let response: Response;
   try {
-    response = await fetch(`https://${env}.api.tcloudbasegateway.com/v1/rdb/rest/rpc/atoms_${name}`, {
+    response = await fetch(`https://${env}.api.tcloudbasegateway.com/v1/rdb/rest/rpc/${namespace}_${name}`, {
       method: "POST", cache: "no-store", signal: AbortSignal.timeout(18_000),
       headers: { "Content-Type": "application/json", Authorization: `Bearer ${identity.accessToken}` },
       body: JSON.stringify(args),
@@ -65,7 +67,10 @@ export async function changeCloudHistory(identity: Identity, id: string, change:
   const args = { p_history_revision: change.expectedHistory, p_project_id: validId(id), p_operation_id: validId(change.operationId), p_action: change.action,
     p_target_id: validId(change.targetId), p_code_version: validVersion(change.expected?.code), p_data_version: validVersion(change.expected?.data) };
   const check = await projectRpc<HistoryCheck>(identity, "change_history", { ...args, p_apply: false });
-  if (check.receipt) return check.receipt;
+  if (check.receipt) {
+    if (check.receipt.projectId !== id) throw new ProjectError("invalid_response", "操作回执与项目不一致，请重试原操作。");
+    return check.receipt;
+  }
   if (change.action !== "clear" && executionBlockers(check.project.result.html).length) {
     throw new ProjectError("PT403", "目标代码不满足当前执行规则，项目保持原样。", 403);
   }

@@ -10,7 +10,7 @@ import { previewPolicy } from "../team/preview-policy";
 import { unresolvedDataIssues } from "../team/review";
 
 export type HistoryConfirmation = { action: HistoryAction; targetId: string; expected: ProjectVersion; expectedHistory: number; entry?: HistoryEntry };
-type Pending = { operationId: string; path: string; body: object };
+type Pending = { acknowledged?: boolean; uncertain?: boolean; operationId: string; path: string; body: object };
 export type WorkbenchState = {
   initialRequirement?: string; cloud?: CloudProject; artifact?: Artifact; proof?: ArtifactProof; trial?: TrialData;
   task?: InitialGeneration; generating: boolean; saving: boolean; error: string;
@@ -72,15 +72,17 @@ export class CloudWorkbenchSession {
     if (!confirmation || this.historyBusy || (confirmation.action === "restore" && this.state.artifact)) return Promise.resolve();
     return this.save({operationId:crypto.randomUUID(),path:`/${this.projectId}/history`,body:{action:confirmation.action,targetId:confirmation.targetId,expected:confirmation.expected,expectedHistory:confirmation.expectedHistory}});
   }
+  get canCleanupAfterFailure() { return !this.state.saving && !this.state.pending?.acknowledged && !this.state.pending?.uncertain && ["storage_full","PT507"].includes(this.state.errorCode ?? ""); }
+  get canRecheckHistory() { return !this.state.saving && !this.state.pending?.acknowledged && ["conflict","PT410","PT412","PT423","PT403"].includes(this.state.errorCode ?? ""); }
   cleanupAfterFailure() {
-    if (this.state.saving || !["storage_full","PT507"].includes(this.state.errorCode ?? "")) return;
+    if (!this.canCleanupAfterFailure) return;
     // A definite transaction rejection has no receipt to recover; retain the
     // candidate/proof while releasing this rejected operation for manual cleanup.
     this.publish({pending:undefined,confirmation:undefined,error:"清理后可重新执行原操作；可清理空间不保证足够。",errorCode:undefined});
     void this.openHistory();
   }
   recheckHistory() {
-    if (this.state.saving || !["conflict","PT410","PT412","PT423","PT403"].includes(this.state.errorCode ?? "")) return;
+    if (!this.canRecheckHistory) return;
     this.publish({pending:undefined,confirmation:undefined,error:"请重新载入云端版本后核对；原确认未执行。",errorCode:undefined});
     void this.openHistory();
   }
@@ -179,6 +181,7 @@ export class CloudWorkbenchSession {
         const receipt=await cloudRequest<CommitReceipt & {logProof?:ArtifactProof}>(this.owner,pending.path,{method:"POST",body:{...pending.body,operationId:pending.operationId},signal:this.lifetime.signal});
         if (this.lifetime.signal.aborted) return;
         if (receipt.projectId !== this.projectId) throw new Error("保存回执与当前项目不符。");
+        pending = {...pending,acknowledged:true}; this.publish({pending});
         this.data?.dispose();
         if (receipt.logProof && !this.logQueue.some(p=>JSON.stringify(p.body)===JSON.stringify({proof:receipt.logProof}))) this.logQueue.push({operationId:crypto.randomUUID(),path:"/events",body:{proof:receipt.logProof}});
         // Keep the exact save pending through a failed readback; retry is still
@@ -193,7 +196,11 @@ export class CloudWorkbenchSession {
         this.publish({cloud,artifact:clearing ? this.state.artifact : undefined,proof:clearing ? this.state.proof : undefined,trial:clearing ? this.state.trial : cloud.project.previewPolicy?.dataMode === "trial" ? {projectId:this.projectId,state:null,hasData:false} : undefined,task:clearing ? this.state.task : undefined,input:clearing ? this.state.input : "",pending:undefined,logsPending:this.logQueue.length>0});
         window.history.replaceState(null,"",`/?project=${this.projectId}`);
         if (this.logQueue.length) void this.retryLogs();
-      } catch(error) {this.publish({error:error instanceof Error ? error.message : "保存未确认，内容已保留。",errorCode:error instanceof ProjectError ? error.code : "unavailable"});}
+      } catch(error) {
+        const errorCode=error instanceof ProjectError ? error.code : "unavailable";
+        if (["unavailable","invalid_response"].includes(errorCode)) pending={...pending,uncertain:true};
+        this.publish({pending,error:error instanceof Error ? error.message : "保存未确认，内容已保留。",errorCode});
+      }
       finally {this.saveFlight=undefined;this.publish({saving:false});}
     })();return this.saveFlight;
   }

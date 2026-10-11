@@ -35,8 +35,8 @@ export function CloudWorkbench({ session, accountSlot, onBack, onReload, onLogin
       <button className="secondary-button" onClick={()=>session.download()}>下载未保存副本</button>
     </>}
     {state.error && <p role="alert">{state.error}</p>}
-    {state.errorCode === "storage_full" || state.errorCode === "PT507" ? <button className="secondary-button" onClick={() => session.cleanupAfterFailure()}>查看可清理保存点</button> : null}
-    {state.pending && ["conflict","PT410","PT412","PT423","PT403"].includes(state.errorCode ?? "") && <button className="secondary-button" onClick={() => { session.recheckHistory(); onReload(); }}>重新载入并核对</button>}
+    {session.canCleanupAfterFailure ? <button className="secondary-button" onClick={() => session.cleanupAfterFailure()}>查看可清理保存点</button> : null}
+    {state.pending && session.canRecheckHistory && <button className="secondary-button" onClick={() => { session.recheckHistory(); onReload(); }}>重新载入并核对</button>}
     {state.pending && <><button className="primary-button" disabled={state.saving} onClick={()=>void session.retry()}>重试原保存</button><button className="secondary-button" onClick={()=>session.download()}>下载未保存副本</button></>}
     {(state.error || state.logError) && <button className="secondary-button" onClick={onLogin}>重新登录原账号</button>}
     {state.cloud && !artifact && state.cloud.project.previewPolicy?.dataMode === "trial" && <><p>待验证项目：启用前仅使用会话试用数据。</p><button className="primary-button" disabled={state.generating || state.saving || state.cloud.project.previewPolicy.adoption !== "allowed"} onClick={()=>void session.activate()}>使用此版本</button></>}

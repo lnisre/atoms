@@ -123,11 +123,12 @@ test("restore confirmation uses snapshot identity, preserves same operation thro
  globalThis.fetch=async(url,options)=>{
   if(options?.method==='POST'){bodies.push(String(options.body));return Response.json({projectId:id,version:restored.version,updatedAt:time});}
   if(String(url).includes('/data?'))return Response.json({version:cloud.version,state:cloud.state,hasData:true});
-  if(++readback===1)return Response.json({code:'unavailable',error:'readback failed'},{status:503});return Response.json(restored);
+  if(++readback===1)return Response.json({code:'storage_full',error:'readback failed'},{status:507});return Response.json(restored);
  };
  try {
   await data.load();session.prepareHistory('restore',entry);assert.ok(session.state.confirmation);session.cancelConfirmation();assert.equal(bodies.length,0);
   session.prepareHistory('restore',entry);await session.confirmHistory();assert.ok(session.state.pending);assert.equal(session.state.cloud?.version.code,2);
+  const pending=session.state.pending;session.cleanupAfterFailure();assert.equal(session.state.pending,pending);assert.equal(session.canCleanupAfterFailure,false);
   await assert.rejects(data.save({count:888}),/页面已离开/);await session.retry();assert.equal(bodies[0],bodies[1]);
   const sent=JSON.parse(bodies[0]);assert.equal(sent.targetId,sid);assert.equal(sent.state,undefined);assert.equal(sent.project,undefined);
   assert.equal(session.state.pending,undefined);assert.equal(session.state.cloud?.version.code,3);assert.notEqual(session.data,data);assert.ok(session.state.cloud?.restore);
@@ -149,4 +150,12 @@ test("undo accepts a candidate only after explicit confirmation, while busy and 
   session.recheckHistory();assert.equal(session.state.pending,undefined);conflict=false;session.prepareHistory('undo');await session.confirmHistory();
   assert.equal(session.state.artifact,undefined);assert.equal(session.state.trial,undefined);assert.equal(session.state.cloud?.restore,null);
  }finally{session.dispose();if(previousWindow===undefined)Reflect.deleteProperty(globalThis,'window');else Object.defineProperty(globalThis,'window',{configurable:true,value:previousWindow});}
+});
+
+test("an explicit acceptance namespace routes only server-selected RPCs and rejects unsafe configuration",async()=>{
+ const previous=process.env.ATOMS_PROJECT_NAMESPACE;let observed='';
+ globalThis.fetch=async url=>{if(String(url).endsWith('/user/me'))return Response.json(authProfile);observed=String(url);return Response.json(history);};
+ try{const cookie=await authenticatedCookie();process.env.ATOMS_PROJECT_NAMESPACE='atoms_h74';assert.equal((await list(request(cookie),ctx)).status,200);assert.ok(observed.endsWith('/rpc/atoms_h74_list_history'));
+  process.env.ATOMS_PROJECT_NAMESPACE='atoms/unsafe';observed='';assert.equal((await list(request(cookie),ctx)).status,503);assert.equal(observed,'');
+ }finally{if(previous===undefined)delete process.env.ATOMS_PROJECT_NAMESPACE;else process.env.ATOMS_PROJECT_NAMESPACE=previous;}
 });

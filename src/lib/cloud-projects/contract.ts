@@ -40,6 +40,7 @@ function validSummary(value: unknown) {
 }
 const date = (value: unknown) => typeof value === "string" && Number.isFinite(Date.parse(value));
 const positive = (value: unknown) => typeof value === "number" && Number.isSafeInteger(value) && value > 0;
+const revision = (value: unknown) => value === undefined || (typeof value === "number" && Number.isSafeInteger(value) && value >= 0);
 const uuid = (value: unknown) => typeof value === "string" && UUID.test(value);
 function validRestore(value: unknown) {
   return value === undefined || value === null || (object(value) && uuid(value.id) && uuid(value.targetId) && positive(value.sequence) && date(value.restoredAt));
@@ -61,7 +62,7 @@ export function validateCloudValue(kind: "list" | "project" | "data" | "receipt"
     if (kind === "historyCheck") {
       if (value.receipt === null) valid = validProject(value.project);
       else { validateCloudValue("receipt", value.receipt); valid = true; }
-    } else if (kind === "history") valid = uuid(value.projectId) && validVersion(value.version) && (value.currentId === null || uuid(value.currentId))
+    } else if (kind === "history") valid = revision(value.revision) && uuid(value.projectId) && validVersion(value.version) && (value.currentId === null || uuid(value.currentId))
       && Array.isArray(value.entries) && value.entries.every(validHistoryEntry)
       && new Set(value.entries.map(e => e.id)).size === value.entries.length
       && value.entries.filter(e => e.status === "current").length === (value.currentId === null ? 0 : 1)
@@ -74,7 +75,7 @@ export function validateCloudValue(kind: "list" | "project" | "data" | "receipt"
       valid = validVersion(value.version) && typeof value.hasData === "boolean" && Object.hasOwn(value, "state");
       if (kind === "project") {
         const project = value.project;
-        valid = valid && validProject(project) && validRestore(value.restore);
+        valid = valid && validProject(project) && validRestore(value.restore) && revision(value.historyRevision);
       }
     }
   }
