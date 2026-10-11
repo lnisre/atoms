@@ -27,7 +27,7 @@ for(const [category,severity] of [['persistence','major'],['data-loss','minor']]
   await page.getByLabel('追加修改需求').fill('change');await page.getByRole('button',{name:'生成候选',exact:true}).click();
   const button=page.getByRole('button',{name:'采用修改',exact:true});await expect(button).toBeDisabled();
   await expect(page.getByRole('status').filter({hasText:'数据丢失或重大保存风险'})).toContainText('保存后可能丢失已有字段');
-  await button.scrollIntoViewIfNeeded();await page.screenshot({path:info.outputPath('risk-blocked.png')});
+  await button.scrollIntoViewIfNeeded();await expect(page.getByRole('status').filter({hasText:'数据丢失或重大保存风险'})).toBeInViewport();await page.screenshot({path:info.outputPath('risk-blocked.png')});
   expect([...store.rows.values()][0].cloud.version.code).toBe(1);
  });
 }

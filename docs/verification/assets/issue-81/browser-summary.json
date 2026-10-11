@@ -198,5 +198,15 @@
   "latestDistinct": {
     "count": 28,
     "passed": 28
+  },
+  "visualFinal": {
+    "stats": {
+      "startTime": "2026-10-11T16:14:48.453Z",
+      "duration": 18809.653000000002,
+      "expected": 5,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    }
   }
 }

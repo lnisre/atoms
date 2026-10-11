@@ -37,7 +37,8 @@ Node 24、pnpm 10.12.1、本地 Chrome / webpack dev 3216，Doctor 核对工作�
 - 最终定向 7/7。按用例去重后 28 个场景均有通过结果；不据此宣称已根治浏览器首击竞态。
 - 新增真实页面链路：V3 → 恢复 V2 → minor persistence 候选 → 在试用副本修改数据 → 采用 → 原正式数据不被副本覆盖 → 刷新保留新代码 → 后续仍可继续修改；撤销资格在成功采用后结束。
 - 界面覆盖重大风险具体原因、缺证明、生成中、执行阻断。既有历史失败重试、源代码/预览、候选、账号及 #78 游客布局场景通过。
-- `pnpm typecheck`、`pnpm lint`、`git diff --check` 通过。
+- 最终视觉修正：将原因置于采用按钮上方，追加原因在视口内的断言，5/5 通过。
+- `pnpm typecheck`、`pnpm lint`、`pnpm build`、`git diff --check` 通过。
 
 [逐项浏览器记录](assets/issue-81/browser-summary.json) · [服务端测试](assets/issue-81/unit-tests.log) · [允许采用](assets/issue-81/minor-adoption-after-restore.png) · [真正风险的具体原因](assets/issue-81/major-risk-blocked.png)
 
