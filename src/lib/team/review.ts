@@ -71,12 +71,18 @@ export function artifactTeam(team: TeamRecord, codeHash: string, terminal = fals
     return ["Mike","Requirements","Engineer","Reviewer"].every(role=>team.calls.filter(c=>c.actor===role && c.status === "completed").length >= team.deliveries.filter(d=>d.role===role).length);
   } catch { return false; }
 }
+export const blocksOfficialData = (issue: ReviewIssue) =>
+  issue.category === "data-loss" || (issue.category === "persistence" && issue.severity === "major");
 export function unresolvedDataIssues(team: TeamRecord): ReviewIssue[] {
   const pending = new Map((team.baseDataIssues ?? []).map(i=>[i.id,i]));
   for (const d of team.deliveries) if (d.role === "Reviewer") {
     const r = JSON.parse(d.content) as CodeReview;
     if (isClassified(r)) {
-      for (const i of r.issues) if (i.category === "data-loss" || i.category === "persistence") pending.set(i.id,i);
+      for (const i of r.issues) if (i.category === "data-loss" || i.category === "persistence") {
+        const prior = pending.get(i.id);
+        // A softer label is not current-code resolution evidence for a prior risk.
+        if (!prior || !blocksOfficialData(prior) || blocksOfficialData(i)) pending.set(i.id,i);
+      }
     }
   }
   // A resolution is evidence for one artifact, never a transferable approval.
@@ -85,3 +91,6 @@ export function unresolvedDataIssues(team: TeamRecord): ReviewIssue[] {
   }
   return [...pending.values()];
 }
+
+// Keep all unresolved findings in reviewer context; only real data risks gate adoption.
+export const unresolvedDataRisks = (team: TeamRecord) => unresolvedDataIssues(team).filter(blocksOfficialData);

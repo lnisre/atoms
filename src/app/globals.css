@@ -189,3 +189,6 @@ details p { white-space: pre-wrap; overflow-wrap: anywhere; line-height: 1.8; }
 .history-confirmation-body p { margin: 0 0 12px; }
 .history-confirmation-actions { display: flex; flex-wrap: wrap; justify-content: flex-end; align-items: center; gap: 8px; flex-shrink: 0; border-top: 1px solid var(--ui-border); padding: 16px 24px; background: #f7faf8; }
 .history-confirmation-actions button { min-height: 40px; padding: 8px 16px; font-size: 14px; }
+
+.cloud-save-panel > .adoption-block { display: block; margin-bottom: 12px; }
+.adoption-block ul { margin: 0; padding-left: 20px; list-style: disc; overflow-wrap: anywhere; }

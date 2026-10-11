@@ -2,7 +2,7 @@ import { parse as parseHtml, type DefaultTreeAdapterTypes } from "parse5";
 import { parse as parseScript, type Node } from "acorn";
 import { previewHeadOffset } from "../html-document";
 import type { TeamRecord } from "./contract";
-import { unresolvedDataIssues } from "./review";
+import { unresolvedDataRisks } from "./review";
 export type PreviewPolicy = { status: "allowed" | "blocked"; reasons: string[]; dataMode: "formal" | "trial"; adoption: "allowed" | "blocked"; review: "clean" | "issues" | "unavailable" };
 // A deliberately narrow, deterministic execution rule, not a general JS safety proof.
 // Only a first executable, unconditional top-level empty loop is rejected. Text/comments/functions
@@ -33,7 +33,7 @@ export function executionBlockers(html: string): string[] {
   return reasons;
 }
 export function previewPolicy(team: TeamRecord, html: string): PreviewPolicy {
-  const reasons = executionBlockers(html), dataIssues = unresolvedDataIssues(team);
+  const reasons = executionBlockers(html), dataIssues = unresolvedDataRisks(team);
   const review = team.review ? team.review.issues.length ? "issues" : "clean" : "unavailable";
   return {status:reasons.length ? "blocked" : "allowed", reasons, review, dataMode:review === "unavailable" || dataIssues.length ? "trial" : "formal", adoption:reasons.length || dataIssues.length ? "blocked" : "allowed"};
 }

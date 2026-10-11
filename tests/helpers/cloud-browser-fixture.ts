@@ -1,5 +1,6 @@
 import { expect, type BrowserContext, type Page } from "@playwright/test";
 import { syntheticArtifact } from "./artifact";
+import { unresolvedDataIssues, type ReviewIssue } from "../../src/lib/team/review";
 import { signProof } from "../../src/lib/cloud-projects/artifacts";
 import type { Artifact } from "../../src/lib/cloud-projects/artifact-contract";
 import type { CloudProject, CommitReceipt, HistorySnapshot } from "../../src/lib/cloud-projects/contract";
@@ -19,6 +20,7 @@ export async function fixture() {
    entry:{id:crypto.randomUUID(),sequence,origin:sequence===1?'initial':'adopted',recordId:cloud.project.modificationRecords?.at(-1)?.id??null,summary:sequence===1?'首次计数器':`修改 ${sequence}`,pairedAt:new Date().toISOString(),dataSavedAt:cloud.hasData?new Date().toISOString():null,hasData:cloud.hasData,nextSequence:null,status:'current',protectedReason:'current'}};
  }
  let render=html, includeProof=true;
+ let reviewIssues:ReviewIssue[]=[];
  let calls=0, lost=false, logsFail=false, generationFail=false, policy:Artifact['policy']|undefined;
  let generationGate:Promise<void>|undefined,releaseGeneration=()=>{},saveGate:Promise<void>|undefined,releaseSave=()=>{};
  const bodies:unknown[]=[];
@@ -38,7 +40,8 @@ export async function fixture() {
    const previous=body.parent?JSON.parse(body.parent.payload) as Artifact:undefined;
    const official=rows.get(body.projectId)?.cloud.project;
    const base=previous?.result.html??official?.draftResult?.html??official?.result.html;
-   const f=syntheticArtifact(account,body.projectId,taskId,render(calls),base,body.expected,previous?.generations);
+   const baseTeam=previous?.generations.at(-1)?.team??official?.modificationRecords?.at(-1)?.generations?.at(-1)?.team??official?.initialGeneration?.team;
+   const f=syntheticArtifact(account,body.projectId,taskId,render(calls),base,body.expected,previous?.generations,reviewIssues,baseTeam ? unresolvedDataIssues(baseTeam) : []);
    if(previous)f.artifact.baseHash=previous.baseHash;
    if(policy)f.artifact.policy=policy;
    // Explicitly synthetic BFF/transport proof; production qualification tested
@@ -120,7 +123,7 @@ export async function fixture() {
   });
   return {expire:()=>{authenticated=false;},switchTo:(id:string)=>{account=id;authenticated=false;}};
  }
- return {rows,connect,bodies,histories,failHistory:(status=503)=>{historyFailure=status;},loseHistory:()=>{historyLost=true;},failReadback:()=>{readbackFailure=true;},withoutProof:()=>{includeProof=false;},render:(value:typeof html)=>{render=value;},failGeneration:()=>{generationFail=true;},calls:()=>calls,loseSave:()=>{lost=true;},failLogs:(b:boolean)=>{logsFail=b;},restrict:(value:Artifact['policy'])=>{policy=value;},
+ return {rows,connect,bodies,histories,reviewIssues:(issues:ReviewIssue[])=>{reviewIssues=issues;},failHistory:(status=503)=>{historyFailure=status;},loseHistory:()=>{historyLost=true;},failReadback:()=>{readbackFailure=true;},withoutProof:()=>{includeProof=false;},render:(value:typeof html)=>{render=value;},failGeneration:()=>{generationFail=true;},calls:()=>calls,loseSave:()=>{lost=true;},failLogs:(b:boolean)=>{logsFail=b;},restrict:(value:Artifact['policy'])=>{policy=value;},
   holdGeneration:()=>{generationGate=new Promise<void>(r=>{releaseGeneration=r;});},releaseGeneration:()=>{releaseGeneration();generationGate=undefined;},
   holdSave:()=>{saveGate=new Promise<void>(r=>{releaseSave=r;});},releaseSave:()=>{releaseSave();saveGate=undefined;}};
 }

@@ -1,0 +1,73 @@
+✔ three implementations (two repairs) may finish with major nonfatal findings; fourth is rejected (7.268708ms)
+✔ review evidence is bound to current code; unsupported fatal labels cannot block preview (0.289625ms)
+✔ minor does not authorize repair; data risk permits trial but not adoption (2.213625ms)
+✔ changing code without a resolution cannot erase data risk; current-code resolution can (2.194458ms)
+✔ a third artifact with unavailable review cannot inherit second-artifact data resolution (1.613542ms)
+✔ only platform structural and proven empty-loop rules block; normal errors, strings, finite loops do not (4.112917ms)
+✔ client keeps a complete artifact on local deadline but not on explicit stop or malformed terminal (132.428583ms)
+✖ minor persistence findings warn without blocking formal data or adoption (1.9255ms)
+✖ data loss at either severity and major persistence remain blockers (0.935167ms)
+✔ minor reclassification cannot erase an inherited major risk without current-code resolution (0.39625ms)
+ℹ tests 10
+ℹ suites 0
+ℹ pass 8
+ℹ fail 2
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1294.418083
+
+✖ failing tests:
+
+test at tests/preview-policy.test.ts:2:8960
+✖ minor persistence findings warn without blocking formal data or adoption (1.9255ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
+  + actual - expected
+  
+    {
+  +   adoption: 'blocked',
+  +   dataMode: 'trial',
+  -   adoption: 'allowed',
+  -   dataMode: 'formal',
+      reasons: [],
+      review: 'issues',
+      status: 'allowed'
+    }
+  
+      at TestContext.<anonymous> (/Users/gaowenlong/.codex/worktrees/button-restore-fix/atoms/tests/preview-policy.test.ts:93:10)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1325:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:911:18)
+      at Test.postRun (node:internal/test_runner/test:1465:19)
+      at Test.run (node:internal/test_runner/test:1390:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:911:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: { status: 'allowed', reasons: [], review: 'issues', dataMode: 'trial', adoption: 'blocked' },
+    expected: { status: 'allowed', reasons: [], review: 'issues', dataMode: 'formal', adoption: 'allowed' },
+    operator: 'deepStrictEqual',
+    diff: 'simple'
+  }
+
+test at tests/preview-policy.test.ts:2:9556
+✖ data loss at either severity and major persistence remain blockers (0.935167ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  + actual - expected
+  
+  + 'blocked'
+  - 'allowed'
+  
+      at TestContext.<anonymous> (/Users/gaowenlong/.codex/worktrees/button-restore-fix/atoms/tests/preview-policy.test.ts:100:12)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1325:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:911:18)
+      at Test.postRun (node:internal/test_runner/test:1465:19)
+      at Test.run (node:internal/test_runner/test:1390:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:911:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 'blocked',
+    expected: 'allowed',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }

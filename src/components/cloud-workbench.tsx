@@ -14,6 +14,7 @@ export function CloudWorkbench({ session, accountSlot, onBack, onReload, onLogin
 }) {
   const state=useSyncExternalStore(session.subscribe,session.snapshot,session.snapshot);
   const artifact=state.artifact;
+  const adoptionBlock=session.adoptionBlock;
   const [frameVersion, setFrameVersion] = useState(0);
   const controls=<section className="cloud-save-panel" aria-label="修改项目">
     {state.cloud && <>
@@ -24,8 +25,9 @@ export function CloudWorkbench({ session, accountSlot, onBack, onReload, onLogin
     {state.generating && <><p role="status">团队正在生成，最多 4 分钟、20 次模型请求。请保持页面打开。</p><button className="secondary-button" onClick={()=>session.stop()}>停止生成</button></>}
     {artifact && <><p>{state.cloud ? "候选仅在当前会话中试用；采用只更新代码与记录，试用数据不会写回。" : state.saving ? "首次成果正在保存，云端提交后才会确认。" : "首次成果尚未确认云端保存。"}</p>
       {state.cloud?.restore && <p>采用后将结束本次恢复的撤销机会；只有采用成功才会结束。</p>}
-      {state.cloud && !state.pending && <button className="primary-button" disabled={state.generating || state.saving || !state.proof || artifact.policy.adoption !== "allowed"} onClick={()=>void session.commit()}>采用修改</button>}
-      {artifact.policy.adoption === "blocked" && <p>存在执行或数据风险，当前不能采用。可以继续修改。</p>}
+      {state.cloud && !state.pending && <button className="primary-button" disabled={!!adoptionBlock} aria-describedby={adoptionBlock ? "adoption-block-reason" : artifact.policy.review === "issues" ? "adoption-review-note" : undefined} onClick={()=>void session.commit()}>采用修改</button>}
+      {adoptionBlock && <div className="adoption-block" id="adoption-block-reason" role="status"><p>{adoptionBlock.message}</p>{adoptionBlock.details.length > 0 && <ul>{adoptionBlock.details.map((detail,index)=><li key={index}>{detail}</li>)}</ul>}</div>}
+      {!adoptionBlock && artifact.policy.review === "issues" && <p id="adoption-review-note">审查仍有待修复问题，可试用后采用；问题记录会随版本保留。</p>}
       {!state.pending && state.cloud && <button className="secondary-button" disabled={state.generating || state.saving} onClick={()=>session.discard()}>放弃本轮修改</button>}
       {!state.pending && <button className="secondary-button" onClick={()=>session.download()}>下载未保存副本</button>}
     </>}
