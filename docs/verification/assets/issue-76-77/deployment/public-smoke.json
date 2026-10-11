@@ -1,0 +1,13 @@
+{
+  "checkedAt": "2026-10-11T14:51:00.536Z",
+  "origin": "https://v0-test0-nine.vercel.app",
+  "status": 200,
+  "atomsContent": true,
+  "styles": {
+    ".secondary-button": true,
+    ".history-entry-actions": true,
+    ".history-confirmation[open]": true,
+    ".history-confirmation-actions": true
+  },
+  "modelRequests": 0
+}

@@ -1,0 +1,20 @@
+{
+  "deployment": {
+    "id": "dpl_53Zz8XBjrxQwxz3TGQAaCi8afdEg",
+    "url": "v0-test0-dthqwabfx-lnisres-projects.vercel.app",
+    "target": "production",
+    "readyState": "READY",
+    "projectId": "prj_eErnQuAz4P719xKTyuT6XT2Qu5ab",
+    "sourceCommit": "0eef95aacef551698d09e1ca881f510b9a30637a",
+    "sourceDigest": "59f8c19b831b1575e895525131cacefbd8f43ea727bedebe8553bee571d54ee4"
+  },
+  "alias": {
+    "id": "dpl_53Zz8XBjrxQwxz3TGQAaCi8afdEg",
+    "url": "v0-test0-dthqwabfx-lnisres-projects.vercel.app",
+    "target": "production",
+    "readyState": "READY",
+    "projectId": "prj_eErnQuAz4P719xKTyuT6XT2Qu5ab",
+    "sourceCommit": "0eef95aacef551698d09e1ca881f510b9a30637a",
+    "sourceDigest": "59f8c19b831b1575e895525131cacefbd8f43ea727bedebe8553bee571d54ee4"
+  }
+}
