@@ -1,0 +1,13 @@
+{
+  "portsReleased": {
+    "3217": true,
+    "3179": true,
+    "3180": true
+  },
+  "temporaryBrowserTabsClosed": true,
+  "originalUserChromeTabsPreserved": true,
+  "syntheticSqlOwnersRemovedByRunner": true,
+  "isolatedUiProjectRetained": true,
+  "productionSchemaAndDomainUnchanged": true,
+  "credentialsRetained": true
+}

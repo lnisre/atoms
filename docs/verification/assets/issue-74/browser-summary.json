@@ -1,0 +1,1173 @@
+{
+  "mode": "real DOM and iframe; synthetic Auth/BFF/provider",
+  "uniqueCases": 37,
+  "latestPass": 37,
+  "latestFail": 0,
+  "attempts": [
+    {
+      "evidencePath": "/tmp/atoms-74-ui/playwright.json",
+      "sha256": "e96c80dfdd6db54d8b7198a7386384e8f2d6ac008c85099be191678c4ffaf322",
+      "stats": {
+        "startTime": "2026-10-11T08:26:09.358Z",
+        "duration": 107874.57100000001,
+        "expected": 32,
+        "skipped": 0,
+        "unexpected": 3,
+        "flaky": 0
+      },
+      "cases": [
+        {
+          "file": "account-access.spec.ts",
+          "title": "游客只读示例阻断鼠标、键盘、API与原始数据桥；不创建或读取本地库",
+          "outcome": "expected",
+          "results": [
+            {
+              "status": "passed",
+              "duration": 2790,
+              "error": ""
+            }
+          ]
+        },
+        {
+          "file": "account-access.spec.ts",
+          "title": "登录错误保留需求，取消不续接；成功只验证一次并续接一次生成",
+          "outcome": "expected",
+          "results": [
+            {
+              "status": "passed",
+              "duration": 1908,
+              "error": ""
+            }
+          ]
+        },
+        {
+          "file": "account-access.spec.ts",
+          "title": "普通登录和有效会话恢复无生成/复制副作用；退出清除账号和输入，旧本地数据保留",
+          "outcome": "expected",
+          "results": [
+            {
+              "status": "passed",
+              "duration": 2774,
+              "error": ""
+            }
+          ]
+        },
+        {
+          "file": "cloud-generation.spec.ts",
+          "title": "guest intent runs once; first save response loss and separate log failure retry without generation; second browser restores",
+          "outcome": "expected",
+          "results": [
+            {
+              "status": "passed",
+              "duration": 3318,
+              "error": ""
+            }
+          ]
+        },
+        {
+          "file": "cloud-generation.spec.ts",
+          "title": "multi-round trial never writes official data; atomic adoption replays and other device candidate conflicts",
+          "outcome": "expected",
+          "results": [
+            {
+              "status": "passed",
+              "duration": 3909,
+              "error": ""
+            }
+          ]
+        },
+        {
+          "file": "cloud-generation.spec.ts",
+          "title": "natural expiry retains started result; same-account reauthentication saves without another model task",
+          "outcome": "expected",
+          "results": [
+            {
+              "status": "passed",
+              "duration": 1668,
+              "error": ""
+            }
+          ]
+        },
+        {
+          "file": "cloud-generation.spec.ts",
+          "title": "cancelled exit keeps task; confirmed logout unmounts and ignores late result before another account signs in",
+          "outcome": "expected",
+          "results": [
+            {
+              "status": "passed",
+              "duration": 1735,
+              "error": ""
+            }
+          ]
+        },
+        {
+          "file": "cloud-generation.spec.ts",
+          "title": "restored restricted code remains trial; explicit permitted activation never copies trial data",
+          "outcome": "expected",
+          "results": [
+            {
+              "status": "passed",
+              "duration": 2927,
+              "error": ""
+            }
+          ]
+        },
+        {
+          "file": "cloud-generation.spec.ts",
+          "title": "logout during uncertain commit clears old page; late commit remains private to the original account",
+          "outcome": "expected",
+          "results": [
+            {
+              "status": "passed",
+              "duration": 1741,
+              "error": ""
+            }
+          ]
+        },
+        {
+          "file": "cloud-generation.spec.ts",
+          "title": "execution-blocked draft remains blocked after reopening and cannot be activated by the page",
+          "outcome": "expected",
+          "results": [
+            {
+              "status": "passed",
+              "duration": 2612,
+              "error": ""
+            }
+          ]
+        },
+        {
+          "file": "cloud-generation.spec.ts",
+          "title": "first generation failure preserves editable requirement and explicitly starts a fresh task",
+          "outcome": "expected",
+          "results": [
+            {
+              "status": "passed",
+              "duration": 1614,
+              "error": ""
+            }
+          ]
+        },
+        {
+          "file": "cloud-generation.spec.ts",
+          "title": "restored restricted trial changes trigger exit protection and download includes the session copy",
+          "outcome": "expected",
+          "results": [
+            {
+              "status": "passed",
+              "duration": 3007,
+              "error": ""
+            }
+          ]
+        },
+        {
+          "file": "cloud-history.spec.ts",
+          "title": "historical source, label and preview agree; returning preserves the candidate trial and original point",
+          "outcome": "unexpected",
+          "results": [
+            {
+              "status": "failed",
+              "duration": 2411,
+              "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoContainText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: locator('pre')\nExpected substring: \u001b[32m\"Counter 1\"\u001b[39m\nError: strict mode violation: locator('pre') resolved to 25 elements:\n    1) <pre>{\"command\":\"assign\",\"to\":\"Requirements\"}</pre> aka getByRole('region', { name: '首次生成记录' }).getByText('{\"command\":\"assign\",\"to\":\"Requirements\"}')\n    2) <pre>{\"requirements\":[{\"id\":\"synthetic\""
+            }
+          ]
+        },
+        {
+          "file": "cloud-history.spec.ts",
+          "title": "failed history read reports failure without mounting an empty history preview",
+          "outcome": "expected",
+          "results": [
+            {
+              "status": "passed",
+              "duration": 2005,
+              "error": ""
+            }
+          ]
+        },
+        {
+          "file": "cloud-history.spec.ts",
+          "title": "direct restore, cancel, paired original, source and persistent full undo agree across independent sessions",
+          "outcome": "unexpected",
+          "results": [
+            {
+              "status": "failed",
+              "duration": 3026,
+              "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoContainText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: locator('pre')\nExpected substring: \u001b[32m\"Counter 1\"\u001b[39m\nError: strict mode violation: locator('pre') resolved to 9 elements:\n    1) <pre>{\"command\":\"assign\",\"to\":\"Requirements\"}</pre> aka getByText('{\"command\":\"assign\",\"to\":\"Requirements\"}')\n    2) <pre>{\"requirements\":[{\"id\":\"synthetic\",\"description\":…</pre> aka getByText('{\"r"
+            }
+          ]
+        },
+        {
+          "file": "cloud-history.spec.ts",
+          "title": "lost restore response and failed undo readback retain original operation; cleanup protection ends only on adoption",
+          "outcome": "expected",
+          "results": [
+            {
+              "status": "passed",
+              "duration": 4740,
+              "error": ""
+            }
+          ]
+        },
+        {
+          "file": "cloud-history.spec.ts",
+          "title": "capacity failure leads to actual manual cleanup and keeps the candidate; stale confirmation reports conflict",
+          "outcome": "expected",
+          "results": [
+            {
+              "status": "passed",
+              "duration": 2583,
+              "error": ""
+            }
+          ]
+        },
+        {
+          "file": "cloud-projects.spec.ts",
+          "title": "explicit guest copy continues once; lost response retries same operation; independent browser restores and another owner is denied",
+          "outcome": "expected",
+          "results": [
+            {
+              "status": "passed",
+              "duration": 5219,
+              "error": ""
+            }
+          ]
+        },
+        {
+          "file": "cloud-projects.spec.ts",
+          "title": "saving waits for acknowledgment, failed payload downloads from platform, replay restores submitted values",
+          "outcome": "expected",
+          "results": [
+            {
+              "status": "passed",
+              "duration": 1945,
+              "error": ""
+            }
+          ]
+        },
+        {
+          "file": "cloud-projects.spec.ts",
+          "title": "two stale pages conflict; download/cancel/reload protect failed content, read failure never triggers a write",
+          "outcome": "expected",
+          "results": [
+            {
+              "status": "passed",
+              "duration": 5155,
+              "error": ""
+            }
+          ]
+        },
+        {
+          "file": "cloud-projects.spec.ts",
+          "title": "a new unsaved edit while reload is reading cannot be silently discarded",
+          "outcome": "expected",
+          "results": [
+            {
+              "status": "passed",
+              "duration": 1784,
+              "error": ""
+            }
+          ]
+        },
+        {
+          "file": "cloud-regressions.spec.ts",
+          "title": "first pointer activation reaches a freshly restored opaque iframe",
+          "outcome": "unexpected",
+          "results": [
+            {
+              "status": "failed",
+              "duration": 3949,
+              "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('iframe[title=\"生成的应用\"]').contentFrame().locator('#count')\nExpected: \u001b[32m\"1\"\u001b[39m\nReceived: \u001b[31m\"0\"\u001b[39m\nTimeout:  2000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveText\" locator('iframe[title=\"生成的应用\"]').contentFrame().locator('#count') with timeout 2000ms\u001b[22m\n\u001b[2m  - waiting for locator('iframe[title=\"生成的应用\"]').contentFrame().loc"
+            }
+          ]
+        },
+        {
+          "file": "cloud-regressions.spec.ts",
+          "title": "cloud candidate preserves code reading and same-version iframe across view changes",
+          "outcome": "expected",
+          "results": [
+            {
+              "status": "passed",
+              "duration": 3289,
+              "error": ""
+            }
+          ]
+        },
+        {
+          "file": "cloud-regressions.spec.ts",
+          "title": "failed and stopped modifications retain the candidate; discard and refresh keep only saved state",
+          "outcome": "expected",
+          "results": [
+            {
+              "status": "passed",
+              "duration": 3798,
+              "error": ""
+            }
+          ]
+        },
+        {
+          "file": "cloud-regressions.spec.ts",
+          "title": "a result without a trusted terminal proof stays downloadable and cannot be saved",
+          "outcome": "expected",
+          "results": [
+            {
+              "status": "passed",
+              "duration": 1903,
+              "error": ""
+            }
+          ]
+        },
+        {
+          "file": "cloud-regressions.spec.ts",
+          "title": "long saved history scrolls independently and leaves modification controls and preview reachable",
+          "outcome": "expected",
+          "results": [
+            {
+              "status": "passed",
+              "duration": 4805,
+              "error": ""
+            }
+          ]
+        },
+        {
+          "file": "cloud-regressions.spec.ts",
+          "title": "a complete Chrome restart restores the cloud project without another generation request",
+          "outcome": "expected",
+          "results": [
+            {
+              "status": "passed",
+              "duration": 5037,
+              "error": ""
+            }
+          ]
+        },
+        {
+          "file": "preview-document.spec.ts",
+          "title": "真实 head 装配、数据保存恢复和运行异常反馈：普通完整 HTML",
+          "outcome": "expected",
+          "results": [
+            {
+              "status": "passed",
+              "duration": 2875,
+              "error": ""
+            }
+          ]
+        },
+        {
+          "file": "preview-document.spec.ts",
+          "title": "真实 head 装配、数据保存恢复和运行异常反馈：<!-- example <head> -->",
+          "outcome": "expected",
+          "results": [
+            {
+              "status": "passed",
+              "duration": 2992,
+              "error": ""
+            }
+          ]
+        },
+        {
+          "file": "preview-document.spec.ts",
+          "title": "真实 head 装配、数据保存恢复和运行异常反馈：<!-- <head> --><!----><!-- <body> -->",
+          "outcome": "expected",
+          "results": [
+            {
+              "status": "passed",
+              "duration": 2841,
+              "error": ""
+            }
+          ]
+        },
+        {
+          "file": "preview-document.spec.ts",
+          "title": "云端读取不完整 HTML 时明确显示装配失败且不运行 iframe",
+          "outcome": "expected",
+          "results": [
+            {
+              "status": "passed",
+              "duration": 3909,
+              "error": ""
+            }
+          ]
+        },
+        {
+          "file": "source-reading.spec.ts",
+          "title": "当前文件搜索、键盘前后定位、长行滚动与同名文件切换",
+          "outcome": "expected",
+          "results": [
+            {
+              "status": "passed",
+              "duration": 914,
+              "error": ""
+            }
+          ]
+        },
+        {
+          "file": "source-reading.spec.ts",
+          "title": "实际剪贴板逐字符复制原文、未知语言及空文件，阅读保留同版本预览与输入",
+          "outcome": "expected",
+          "results": [
+            {
+              "status": "passed",
+              "duration": 1349,
+              "error": ""
+            }
+          ]
+        },
+        {
+          "file": "source-reading.spec.ts",
+          "title": "剪贴板拒绝或不可用如实反馈，源码仍可手动选择",
+          "outcome": "expected",
+          "results": [
+            {
+              "status": "passed",
+              "duration": 594,
+              "error": ""
+            }
+          ]
+        },
+        {
+          "file": "source-reading.spec.ts",
+          "title": "未完成的剪贴板写入不会提前成功或污染另一个同名文件",
+          "outcome": "expected",
+          "results": [
+            {
+              "status": "passed",
+              "duration": 722,
+              "error": ""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "evidencePath": "/tmp/atoms-74-ui/playwright-retry.json",
+      "sha256": "b5b5a184ed4ab28d02804b18cc14524182d3ea9e28c8ee40e363aa458dd42c9c",
+      "stats": {
+        "startTime": "2026-10-11T08:30:47.815Z",
+        "duration": 26371.605,
+        "expected": 2,
+        "skipped": 0,
+        "unexpected": 1,
+        "flaky": 0
+      },
+      "cases": [
+        {
+          "file": "cloud-history.spec.ts",
+          "title": "historical source, label and preview agree; returning preserves the candidate trial and original point",
+          "outcome": "unexpected",
+          "results": [
+            {
+              "status": "failed",
+              "duration": 7249,
+              "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByText('应用数据已保存到云端', { exact: true })\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" getByText('应用数据已保存到云端', { exact: true }) with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByText('应用数据已保存到云端', { exact: true })\u001b[22m\n"
+            }
+          ]
+        },
+        {
+          "file": "cloud-history.spec.ts",
+          "title": "direct restore, cancel, paired original, source and persistent full undo agree across independent sessions",
+          "outcome": "expected",
+          "results": [
+            {
+              "status": "passed",
+              "duration": 7673,
+              "error": ""
+            }
+          ]
+        },
+        {
+          "file": "cloud-regressions.spec.ts",
+          "title": "first pointer activation reaches a freshly restored opaque iframe",
+          "outcome": "expected",
+          "results": [
+            {
+              "status": "passed",
+              "duration": 7839,
+              "error": ""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "evidencePath": "/tmp/atoms-74-ui/playwright-history-final.json",
+      "sha256": "cbcc52931e785468f921adfbc12dd4e47b23dd841139713c4768dbd6fad3310e",
+      "stats": {
+        "startTime": "2026-10-11T09:00:18.332Z",
+        "duration": 24262.985999999997,
+        "expected": 5,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      },
+      "cases": [
+        {
+          "file": "cloud-history.spec.ts",
+          "title": "historical source, label and preview agree; returning preserves the candidate trial and original point",
+          "outcome": "expected",
+          "results": [
+            {
+              "status": "passed",
+              "duration": 3840,
+              "error": ""
+            }
+          ]
+        },
+        {
+          "file": "cloud-history.spec.ts",
+          "title": "failed history read reports failure without mounting an empty history preview",
+          "outcome": "expected",
+          "results": [
+            {
+              "status": "passed",
+              "duration": 1876,
+              "error": ""
+            }
+          ]
+        },
+        {
+          "file": "cloud-history.spec.ts",
+          "title": "direct restore, cancel, paired original, source and persistent full undo agree across independent sessions",
+          "outcome": "expected",
+          "results": [
+            {
+              "status": "passed",
+              "duration": 8253,
+              "error": ""
+            }
+          ]
+        },
+        {
+          "file": "cloud-history.spec.ts",
+          "title": "lost restore response and failed undo readback retain original operation; cleanup protection ends only on adoption",
+          "outcome": "expected",
+          "results": [
+            {
+              "status": "passed",
+              "duration": 4829,
+              "error": ""
+            }
+          ]
+        },
+        {
+          "file": "cloud-history.spec.ts",
+          "title": "capacity failure leads to actual manual cleanup and keeps the candidate; stale confirmation reports conflict",
+          "outcome": "expected",
+          "results": [
+            {
+              "status": "passed",
+              "duration": 2666,
+              "error": ""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "evidencePath": "/tmp/atoms-74-cloud/playwright-extra.json",
+      "sha256": "15aa51726e358fa1b335e7d1d568106d8dcb940366eff63e063be0c044ec4723",
+      "stats": {
+        "startTime": "2026-10-11T09:20:38.991Z",
+        "duration": 31765.953,
+        "expected": 6,
+        "skipped": 0,
+        "unexpected": 1,
+        "flaky": 0
+      },
+      "cases": [
+        {
+          "file": "cloud-cross-app.spec.ts",
+          "title": "current account cloud cross-app workflow and independent generated-app contract checks",
+          "outcome": "expected",
+          "results": [
+            {
+              "status": "passed",
+              "duration": 9969,
+              "error": ""
+            }
+          ]
+        },
+        {
+          "file": "cloud-history.spec.ts",
+          "title": "historical source, label and preview agree; returning preserves the candidate trial and original point",
+          "outcome": "unexpected",
+          "results": [
+            {
+              "status": "failed",
+              "duration": 5602,
+              "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32mtrue\u001b[39m\nReceived: \u001b[31mfalse\u001b[39m\n\nCall Log:\n- Timeout 5000ms exceeded while waiting on the predicate"
+            }
+          ]
+        },
+        {
+          "file": "cloud-history.spec.ts",
+          "title": "failed history read reports failure without mounting an empty history preview",
+          "outcome": "expected",
+          "results": [
+            {
+              "status": "passed",
+              "duration": 842,
+              "error": ""
+            }
+          ]
+        },
+        {
+          "file": "cloud-history.spec.ts",
+          "title": "direct restore, cancel, paired original, source and persistent full undo agree across independent sessions",
+          "outcome": "expected",
+          "results": [
+            {
+              "status": "passed",
+              "duration": 3740,
+              "error": ""
+            }
+          ]
+        },
+        {
+          "file": "cloud-history.spec.ts",
+          "title": "lost restore response and failed undo readback retain original operation; cleanup protection ends only on adoption",
+          "outcome": "expected",
+          "results": [
+            {
+              "status": "passed",
+              "duration": 2756,
+              "error": ""
+            }
+          ]
+        },
+        {
+          "file": "cloud-history.spec.ts",
+          "title": "capacity failure leads to actual manual cleanup and keeps the candidate; stale confirmation reports conflict",
+          "outcome": "expected",
+          "results": [
+            {
+              "status": "passed",
+              "duration": 1940,
+              "error": ""
+            }
+          ]
+        },
+        {
+          "file": "cloud-history.spec.ts",
+          "title": "undo has no clock expiry, busy generation blocks it, discard retains it and failed cleanup does not claim success",
+          "outcome": "expected",
+          "results": [
+            {
+              "status": "passed",
+              "duration": 2270,
+              "error": ""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "evidencePath": "/tmp/atoms-74-cloud/playwright-pointer.json",
+      "sha256": "e88a5e949e31ffe45f81cbcff11847fd94b3f639138136aa7afd0722de45d3d7",
+      "stats": {
+        "startTime": "2026-10-11T09:31:24.423Z",
+        "duration": 4989.075,
+        "expected": 1,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      },
+      "cases": [
+        {
+          "file": "cloud-history.spec.ts",
+          "title": "historical source, label and preview agree; returning preserves the candidate trial and original point",
+          "outcome": "expected",
+          "results": [
+            {
+              "status": "passed",
+              "duration": 2429,
+              "error": ""
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "latest": [
+    {
+      "file": "account-access.spec.ts",
+      "title": "游客只读示例阻断鼠标、键盘、API与原始数据桥；不创建或读取本地库",
+      "outcome": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "duration": 2790,
+          "error": ""
+        }
+      ],
+      "run": "/tmp/atoms-74-ui/playwright.json"
+    },
+    {
+      "file": "account-access.spec.ts",
+      "title": "登录错误保留需求，取消不续接；成功只验证一次并续接一次生成",
+      "outcome": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "duration": 1908,
+          "error": ""
+        }
+      ],
+      "run": "/tmp/atoms-74-ui/playwright.json"
+    },
+    {
+      "file": "account-access.spec.ts",
+      "title": "普通登录和有效会话恢复无生成/复制副作用；退出清除账号和输入，旧本地数据保留",
+      "outcome": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "duration": 2774,
+          "error": ""
+        }
+      ],
+      "run": "/tmp/atoms-74-ui/playwright.json"
+    },
+    {
+      "file": "cloud-generation.spec.ts",
+      "title": "guest intent runs once; first save response loss and separate log failure retry without generation; second browser restores",
+      "outcome": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "duration": 3318,
+          "error": ""
+        }
+      ],
+      "run": "/tmp/atoms-74-ui/playwright.json"
+    },
+    {
+      "file": "cloud-generation.spec.ts",
+      "title": "multi-round trial never writes official data; atomic adoption replays and other device candidate conflicts",
+      "outcome": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "duration": 3909,
+          "error": ""
+        }
+      ],
+      "run": "/tmp/atoms-74-ui/playwright.json"
+    },
+    {
+      "file": "cloud-generation.spec.ts",
+      "title": "natural expiry retains started result; same-account reauthentication saves without another model task",
+      "outcome": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "duration": 1668,
+          "error": ""
+        }
+      ],
+      "run": "/tmp/atoms-74-ui/playwright.json"
+    },
+    {
+      "file": "cloud-generation.spec.ts",
+      "title": "cancelled exit keeps task; confirmed logout unmounts and ignores late result before another account signs in",
+      "outcome": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "duration": 1735,
+          "error": ""
+        }
+      ],
+      "run": "/tmp/atoms-74-ui/playwright.json"
+    },
+    {
+      "file": "cloud-generation.spec.ts",
+      "title": "restored restricted code remains trial; explicit permitted activation never copies trial data",
+      "outcome": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "duration": 2927,
+          "error": ""
+        }
+      ],
+      "run": "/tmp/atoms-74-ui/playwright.json"
+    },
+    {
+      "file": "cloud-generation.spec.ts",
+      "title": "logout during uncertain commit clears old page; late commit remains private to the original account",
+      "outcome": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "duration": 1741,
+          "error": ""
+        }
+      ],
+      "run": "/tmp/atoms-74-ui/playwright.json"
+    },
+    {
+      "file": "cloud-generation.spec.ts",
+      "title": "execution-blocked draft remains blocked after reopening and cannot be activated by the page",
+      "outcome": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "duration": 2612,
+          "error": ""
+        }
+      ],
+      "run": "/tmp/atoms-74-ui/playwright.json"
+    },
+    {
+      "file": "cloud-generation.spec.ts",
+      "title": "first generation failure preserves editable requirement and explicitly starts a fresh task",
+      "outcome": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "duration": 1614,
+          "error": ""
+        }
+      ],
+      "run": "/tmp/atoms-74-ui/playwright.json"
+    },
+    {
+      "file": "cloud-generation.spec.ts",
+      "title": "restored restricted trial changes trigger exit protection and download includes the session copy",
+      "outcome": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "duration": 3007,
+          "error": ""
+        }
+      ],
+      "run": "/tmp/atoms-74-ui/playwright.json"
+    },
+    {
+      "file": "cloud-history.spec.ts",
+      "title": "historical source, label and preview agree; returning preserves the candidate trial and original point",
+      "outcome": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "duration": 2429,
+          "error": ""
+        }
+      ],
+      "run": "/tmp/atoms-74-cloud/playwright-pointer.json"
+    },
+    {
+      "file": "cloud-history.spec.ts",
+      "title": "failed history read reports failure without mounting an empty history preview",
+      "outcome": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "duration": 842,
+          "error": ""
+        }
+      ],
+      "run": "/tmp/atoms-74-cloud/playwright-extra.json"
+    },
+    {
+      "file": "cloud-history.spec.ts",
+      "title": "direct restore, cancel, paired original, source and persistent full undo agree across independent sessions",
+      "outcome": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "duration": 3740,
+          "error": ""
+        }
+      ],
+      "run": "/tmp/atoms-74-cloud/playwright-extra.json"
+    },
+    {
+      "file": "cloud-history.spec.ts",
+      "title": "lost restore response and failed undo readback retain original operation; cleanup protection ends only on adoption",
+      "outcome": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "duration": 2756,
+          "error": ""
+        }
+      ],
+      "run": "/tmp/atoms-74-cloud/playwright-extra.json"
+    },
+    {
+      "file": "cloud-history.spec.ts",
+      "title": "capacity failure leads to actual manual cleanup and keeps the candidate; stale confirmation reports conflict",
+      "outcome": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "duration": 1940,
+          "error": ""
+        }
+      ],
+      "run": "/tmp/atoms-74-cloud/playwright-extra.json"
+    },
+    {
+      "file": "cloud-projects.spec.ts",
+      "title": "explicit guest copy continues once; lost response retries same operation; independent browser restores and another owner is denied",
+      "outcome": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "duration": 5219,
+          "error": ""
+        }
+      ],
+      "run": "/tmp/atoms-74-ui/playwright.json"
+    },
+    {
+      "file": "cloud-projects.spec.ts",
+      "title": "saving waits for acknowledgment, failed payload downloads from platform, replay restores submitted values",
+      "outcome": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "duration": 1945,
+          "error": ""
+        }
+      ],
+      "run": "/tmp/atoms-74-ui/playwright.json"
+    },
+    {
+      "file": "cloud-projects.spec.ts",
+      "title": "two stale pages conflict; download/cancel/reload protect failed content, read failure never triggers a write",
+      "outcome": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "duration": 5155,
+          "error": ""
+        }
+      ],
+      "run": "/tmp/atoms-74-ui/playwright.json"
+    },
+    {
+      "file": "cloud-projects.spec.ts",
+      "title": "a new unsaved edit while reload is reading cannot be silently discarded",
+      "outcome": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "duration": 1784,
+          "error": ""
+        }
+      ],
+      "run": "/tmp/atoms-74-ui/playwright.json"
+    },
+    {
+      "file": "cloud-regressions.spec.ts",
+      "title": "first pointer activation reaches a freshly restored opaque iframe",
+      "outcome": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "duration": 7839,
+          "error": ""
+        }
+      ],
+      "run": "/tmp/atoms-74-ui/playwright-retry.json"
+    },
+    {
+      "file": "cloud-regressions.spec.ts",
+      "title": "cloud candidate preserves code reading and same-version iframe across view changes",
+      "outcome": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "duration": 3289,
+          "error": ""
+        }
+      ],
+      "run": "/tmp/atoms-74-ui/playwright.json"
+    },
+    {
+      "file": "cloud-regressions.spec.ts",
+      "title": "failed and stopped modifications retain the candidate; discard and refresh keep only saved state",
+      "outcome": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "duration": 3798,
+          "error": ""
+        }
+      ],
+      "run": "/tmp/atoms-74-ui/playwright.json"
+    },
+    {
+      "file": "cloud-regressions.spec.ts",
+      "title": "a result without a trusted terminal proof stays downloadable and cannot be saved",
+      "outcome": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "duration": 1903,
+          "error": ""
+        }
+      ],
+      "run": "/tmp/atoms-74-ui/playwright.json"
+    },
+    {
+      "file": "cloud-regressions.spec.ts",
+      "title": "long saved history scrolls independently and leaves modification controls and preview reachable",
+      "outcome": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "duration": 4805,
+          "error": ""
+        }
+      ],
+      "run": "/tmp/atoms-74-ui/playwright.json"
+    },
+    {
+      "file": "cloud-regressions.spec.ts",
+      "title": "a complete Chrome restart restores the cloud project without another generation request",
+      "outcome": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "duration": 5037,
+          "error": ""
+        }
+      ],
+      "run": "/tmp/atoms-74-ui/playwright.json"
+    },
+    {
+      "file": "preview-document.spec.ts",
+      "title": "真实 head 装配、数据保存恢复和运行异常反馈：普通完整 HTML",
+      "outcome": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "duration": 2875,
+          "error": ""
+        }
+      ],
+      "run": "/tmp/atoms-74-ui/playwright.json"
+    },
+    {
+      "file": "preview-document.spec.ts",
+      "title": "真实 head 装配、数据保存恢复和运行异常反馈：<!-- example <head> -->",
+      "outcome": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "duration": 2992,
+          "error": ""
+        }
+      ],
+      "run": "/tmp/atoms-74-ui/playwright.json"
+    },
+    {
+      "file": "preview-document.spec.ts",
+      "title": "真实 head 装配、数据保存恢复和运行异常反馈：<!-- <head> --><!----><!-- <body> -->",
+      "outcome": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "duration": 2841,
+          "error": ""
+        }
+      ],
+      "run": "/tmp/atoms-74-ui/playwright.json"
+    },
+    {
+      "file": "preview-document.spec.ts",
+      "title": "云端读取不完整 HTML 时明确显示装配失败且不运行 iframe",
+      "outcome": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "duration": 3909,
+          "error": ""
+        }
+      ],
+      "run": "/tmp/atoms-74-ui/playwright.json"
+    },
+    {
+      "file": "source-reading.spec.ts",
+      "title": "当前文件搜索、键盘前后定位、长行滚动与同名文件切换",
+      "outcome": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "duration": 914,
+          "error": ""
+        }
+      ],
+      "run": "/tmp/atoms-74-ui/playwright.json"
+    },
+    {
+      "file": "source-reading.spec.ts",
+      "title": "实际剪贴板逐字符复制原文、未知语言及空文件，阅读保留同版本预览与输入",
+      "outcome": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "duration": 1349,
+          "error": ""
+        }
+      ],
+      "run": "/tmp/atoms-74-ui/playwright.json"
+    },
+    {
+      "file": "source-reading.spec.ts",
+      "title": "剪贴板拒绝或不可用如实反馈，源码仍可手动选择",
+      "outcome": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "duration": 594,
+          "error": ""
+        }
+      ],
+      "run": "/tmp/atoms-74-ui/playwright.json"
+    },
+    {
+      "file": "source-reading.spec.ts",
+      "title": "未完成的剪贴板写入不会提前成功或污染另一个同名文件",
+      "outcome": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "duration": 722,
+          "error": ""
+        }
+      ],
+      "run": "/tmp/atoms-74-ui/playwright.json"
+    },
+    {
+      "file": "cloud-cross-app.spec.ts",
+      "title": "current account cloud cross-app workflow and independent generated-app contract checks",
+      "outcome": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "duration": 9969,
+          "error": ""
+        }
+      ],
+      "run": "/tmp/atoms-74-cloud/playwright-extra.json"
+    },
+    {
+      "file": "cloud-history.spec.ts",
+      "title": "undo has no clock expiry, busy generation blocks it, discard retains it and failed cleanup does not claim success",
+      "outcome": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "duration": 2270,
+          "error": ""
+        }
+      ],
+      "run": "/tmp/atoms-74-cloud/playwright-extra.json"
+    }
+  ]
+}

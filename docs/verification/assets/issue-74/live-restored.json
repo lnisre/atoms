@@ -1,0 +1,36 @@
+{
+  "phase": "restored",
+  "observedAt": "2026-10-11T09:25:46.807Z",
+  "identity": "read-only management corroboration of UI-created synthetic project, not JWT proof",
+  "requestId": "a44fcf30-b3f8-407f-959e-c006065664a2",
+  "status": 200,
+  "isV2": false,
+  "state": {
+    "bill": 100,
+    "total": 105,
+    "people": 4,
+    "perPerson": 26.25,
+    "tipAmount": 5,
+    "tipPercent": 5
+  },
+  "tasks": 2,
+  "history": [
+    {
+      "id": "bcd0c97b-9554-432f-9d02-bb8c6e02e129",
+      "bill": 100,
+      "pairedAt": "2026-10-11T17:21:38.981335+08:00",
+      "sequence": 1,
+      "available": true,
+      "dataSavedAt": "2026-10-11T17:13:46.010149+08:00"
+    }
+  ],
+  "records": 0,
+  "version": {
+    "code": 3,
+    "data": 4
+  },
+  "codeHash": "da317d0deedfa543013f4ae85decb80d59ce50a923d4c82b7ef3df20dd199b8e",
+  "projectId": "4ea02b7b-cd1c-4cd2-88ce-2030640d8a72",
+  "undoExists": true,
+  "historyRevision": 1
+}

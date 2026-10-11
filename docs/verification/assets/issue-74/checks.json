@@ -1,0 +1,30 @@
+{
+  "productCommit": "0e8469c",
+  "fullUnit": {
+    "passed": 106,
+    "failed": 0
+  },
+  "finalTargetedBff": {
+    "passed": 11,
+    "failed": 0
+  },
+  "typecheck": "passed",
+  "lint": "passed",
+  "diffCheck": "passed",
+  "productionBuild": "passed",
+  "originalMigrations001to004": "unchanged",
+  "review": {
+    "standards": 0,
+    "spec": 0,
+    "resolved": "acknowledged or uncertain commit retains operation through readback failure"
+  },
+  "finalOrdinaryUserRead": {
+    "source": "0e8469c",
+    "cleared": true,
+    "bill": 120,
+    "code": "V2",
+    "undo": false,
+    "modelConfigured": false
+  },
+  "productionChanged": false
+}

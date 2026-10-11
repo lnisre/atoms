@@ -1,0 +1,96 @@
+{
+  "namespace": "atoms_h74",
+  "identity": "synthetic claims with SET LOCAL ROLE authenticated; not real JWT",
+  "faults": "transaction sub-block abort with controlled SQLSTATE 53100, independent concurrent ExecutePGSql requests",
+  "modelCalls": 0,
+  "results": [
+    {
+      "label": "read isolated migration checksums",
+      "requestId": "77d8605b-d6f8-44f2-9c2c-bffe30bc4332",
+      "status": 200,
+      "outcome": "pass"
+    },
+    {
+      "label": "trusted V1 10→100, V2 120, V3 with formal history",
+      "requestId": "56bf98f9-68b6-474c-ace8-b648ec88c518",
+      "status": 200,
+      "outcome": "pass"
+    },
+    {
+      "label": "claim pre-restore candidate for later replay rejection",
+      "requestId": "198d3d1a-e69e-410e-8c25-bdf335af217e",
+      "status": 200,
+      "outcome": "pass"
+    },
+    {
+      "label": "transaction abort after necessary restore writes keeps code data history undo and operation receipt unchanged",
+      "requestId": "ed8dfd17-53c7-44f8-aeb5-247b7cd29469",
+      "status": 200,
+      "outcome": "pass"
+    },
+    {
+      "label": "restore commits paired100 and truncated source context, duplicate response returns original receipt",
+      "requestId": "200c671b-e12c-4dcc-a8bc-7479f5cbe29c",
+      "status": 200,
+      "outcome": "pass"
+    },
+    {
+      "label": "independent request sees entire restored state and protection, old save and proof fail",
+      "requestId": "4d7b8b8f-9b0f-4019-b1ad-ec7e3e045ca6",
+      "status": 200,
+      "outcome": "pass"
+    },
+    {
+      "label": "other ordinary SQL role cannot read restore undo or clean another owner",
+      "requestId": "84e147a8-faa1-42f6-9d7d-e32db01707d6",
+      "status": 200,
+      "outcome": "pass"
+    },
+    {
+      "label": "saving data retains undo; full undo restores original future while counters advance; retry deduplicates",
+      "requestId": "4afc18f4-962d-4821-8595-39fb6e9bc2b3",
+      "status": 200,
+      "outcome": "pass"
+    },
+    {
+      "label": "restore V2 protects retained V1 dependency and keeps backup on failed second restore",
+      "requestId": "c7b58d0c-f25a-45b0-93ae-59a82c3f1a43",
+      "status": 200,
+      "outcome": "pass"
+    },
+    {
+      "label": "actual independent SQL requests racing restore and data save: exactly one winner",
+      "status": "pass",
+      "results": [
+        {
+          "requestId": "ee11f08b-d4dd-4fde-ba9f-fd2bae7f1a07",
+          "status": 200
+        },
+        {
+          "requestId": "97843737-b617-4fb8-91a2-6d4fe986289c",
+          "status": 200,
+          "errorCode": "FailedOperation.PGExecuteSqlError",
+          "sqlState": "PT409"
+        }
+      ]
+    },
+    {
+      "label": "separate session observes complete race winner; undo remains usable",
+      "requestId": "e71380a4-8f70-4541-8405-83c76907d6ee",
+      "status": 200,
+      "outcome": "pass"
+    },
+    {
+      "label": "cleanup transaction failure retains snapshot; successful cleanup preserves document and duplicate operation is stable",
+      "requestId": "378b3ba4-b29a-44cb-9b13-90e691c6a4d6",
+      "status": 200,
+      "outcome": "pass"
+    },
+    {
+      "label": "remove only this synthetic SQL owner and its ledgers",
+      "requestId": "606f0e1b-6d18-414c-8269-2d2139820c67",
+      "status": 200,
+      "outcome": "pass"
+    }
+  ]
+}

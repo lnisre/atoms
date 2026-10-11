@@ -1,0 +1,38 @@
+{
+  "runtime": "local production build of Next + native team gateway, ports 3179/3180; actual CloudBase ap-shanghai",
+  "namespace": "atoms_h74",
+  "projectId": "4ea02b7b-cd1c-4cd2-88ce-2030640d8a72",
+  "identity": "authorized single email; independent Chrome and IAB via normal OTP; no cookie/token export",
+  "modelTasks": 2,
+  "modelRequests": [
+    15,
+    12
+  ],
+  "failedFirstCandidate": "adoption blocked by original review; explicitly discarded; no override",
+  "acceptedSecondCandidate": "normal trusted adoption, formal100 excludes trial999",
+  "path": [
+    "example personal copy",
+    "formal bill100",
+    "candidate trial999",
+    "adopt V2 retains formal100",
+    "formal bill120",
+    "history trial777 with original V1 source",
+    "cancel restore retains V2/120",
+    "direct restore uses V1 original100 and removes later modification record",
+    "Chrome independently reopens V1/100 with durable undo",
+    "IAB reload encounters transient Auth connectivity error; user-path reopen succeeds",
+    "save restored bill150 retains undo",
+    "cancel undo retains150",
+    "undo returns V2/120 and its modification record",
+    "Chrome old iframe tries110; ordinary API rejects with conflict",
+    "explicitly clear synthetic V1; V2 source/data and record unchanged",
+    "close/reopen IAB: V1 cleared marker, V2/120, no redo/undo stack"
+  ],
+  "noGenerationDuringHistory": true,
+  "unverified": [
+    "second real account (accepted #69 single-email boundary)",
+    "actual physical capacity exhaustion",
+    "new Vercel deployment / production migration installation"
+  ],
+  "screenshot": "live-cleared.png"
+}
