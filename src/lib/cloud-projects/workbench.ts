@@ -1,5 +1,5 @@
-import { cloudRequest, CloudDataSession, readProject, unsavedCopy } from "./client";
-import type { CloudProject, CommitReceipt } from "./contract";
+import { cloudRequest, CloudDataSession, readProject, readHistory, readSnapshot, unsavedCopy } from "./client";
+import type { CloudProject, CommitReceipt, ProjectHistory, HistorySnapshot } from "./contract";
 import type { Artifact, ArtifactProof } from "./artifact-contract";
 import type { InitialGeneration } from "../execution";
 import type { TrialData } from "../trial-data";
@@ -13,6 +13,9 @@ type Pending = { operationId: string; path: string; body: object };
 export type WorkbenchState = {
   initialRequirement?: string; cloud?: CloudProject; artifact?: Artifact; proof?: ArtifactProof; trial?: TrialData;
   task?: InitialGeneration; generating: boolean; saving: boolean; error: string;
+  historyOpen?: boolean; history?: ProjectHistory; historyLoading?: boolean; historyError?: string;
+  historySnapshotLoading?: boolean;
+  historyTrial?: { snapshot: HistorySnapshot; trial: TrialData; instanceId: string };
   logError: string; logsPending: boolean; input: string; pending?: Pending;
 };
 export function projectOf(artifact: Artifact): SavedProject {
@@ -32,6 +35,8 @@ export class CloudWorkbenchSession {
   private logQueue: Pending[] = [];
   private logFlight?: Promise<void>;
   private saveFlight?: Promise<void>;
+  private historyRead?: AbortController;
+  private snapshotRead?: AbortController;
   private attempts = new Set<string>();
   constructor(readonly owner: string, readonly projectId: string, cloud?: CloudProject, data?: CloudDataSession) {
     this.state = {cloud, trial:cloud?.project.previewPolicy?.dataMode === "trial" ? {projectId,state:null,hasData:false} : undefined, generating:false,saving:false,error:"",logError:"",logsPending:false,input:""};
@@ -46,9 +51,42 @@ export class CloudWorkbenchSession {
   get dirty() { return !!(this.state.generating || this.state.task || this.state.artifact || this.state.pending || this.state.logsPending || this.state.trial?.hasData || this.state.input || this.data?.status.pending); }
   setInitialRequirement(initialRequirement: string) { this.publish({initialRequirement}); }
   setInput(input: string) { this.publish({input}); }
-  dispose() { this.lifetime.abort(); this.active?.abort(); this.data?.dispose(); this.listeners.clear(); }
+  dispose() { this.lifetime.abort(); this.active?.abort(); this.data?.dispose(); this.historyRead?.abort(); this.snapshotRead?.abort(); this.listeners.clear(); }
   stop() { this.active?.abort(new TeamError("stopped","本次任务已停止。")); }
   discard() { if (!this.state.generating && !this.state.saving && !this.state.pending) this.publish({artifact:undefined,proof:undefined,trial:this.state.cloud?.project.previewPolicy?.dataMode === "trial" ? {projectId:this.projectId,state:null,hasData:false} : undefined,task:undefined,input:"",error:""}); }
+  async openHistory() {
+    if (!this.state.cloud || this.lifetime.signal.aborted) return;
+    this.historyRead?.abort();
+    const read = new AbortController(); this.historyRead = read;
+    this.publish({historyOpen:true,historyLoading:true,historyError:""});
+    try {
+      const history = await readHistory(this.owner,this.projectId,AbortSignal.any([read.signal,this.lifetime.signal]));
+      if (read.signal.aborted || this.lifetime.signal.aborted) return;
+      if (history.projectId !== this.projectId) throw new Error("历史列表与当前项目不一致，请重新读取。");
+      this.publish({history,historyLoading:false});
+    } catch (error) {
+      if (!read.signal.aborted) this.publish({historyLoading:false,historyError:error instanceof Error ? error.message : "历史读取失败，请重试。"});
+    }
+  }
+  closeHistory() {
+    this.historyRead?.abort(); this.snapshotRead?.abort();
+    this.publish({historyOpen:false,historyLoading:false,historySnapshotLoading:false,historyTrial:undefined,historyError:""});
+  }
+  async tryHistory(snapshotId: string) {
+    if (!this.state.cloud || this.lifetime.signal.aborted) return;
+    this.snapshotRead?.abort();
+    const read = new AbortController(); this.snapshotRead = read;
+    this.publish({historyOpen:true,historySnapshotLoading:true,historyTrial:undefined,historyError:""});
+    try {
+      const snapshot = await readSnapshot(this.owner,this.projectId,snapshotId,AbortSignal.any([read.signal,this.lifetime.signal]));
+      if (read.signal.aborted || this.lifetime.signal.aborted) return;
+      if (snapshot.projectId !== this.projectId || snapshot.entry.id !== snapshotId) throw new Error("保存点与所选版本不一致，请重新读取。");
+      this.publish({historySnapshotLoading:false,historyTrial:{snapshot,instanceId:crypto.randomUUID(),
+        trial:{projectId:this.projectId,state:structuredClone(snapshot.state),hasData:snapshot.hasData}}});
+    } catch (error) {
+      if (!read.signal.aborted) this.publish({historySnapshotLoading:false,historyError:error instanceof Error ? error.message : "保存点读取失败，请重试。"});
+    }
+  }
   async generate(taskId: string, requirement?: string) {
     if (this.lifetime.signal.aborted || this.state.generating || this.state.saving || this.state.pending || this.data?.status.pending || this.attempts.has(taskId)) return;
     const cloud = this.state.cloud, parent = this.state.artifact, parentProof = this.state.proof;
@@ -116,6 +154,8 @@ export class CloudWorkbenchSession {
         // idempotent and never invokes the model again.
         const cloud=await readProject(this.owner,this.projectId);
         if (this.lifetime.signal.aborted) return;
+        this.closeHistory();
+        this.publish({history:undefined});
         this.data?.dispose(); this.data=new CloudDataSession(this.owner,this.projectId,cloud.version.code);
         this.publish({cloud,artifact:undefined,proof:undefined,trial:cloud.project.previewPolicy?.dataMode === "trial" ? {projectId:this.projectId,state:null,hasData:false} : undefined,task:undefined,pending:undefined,logsPending:this.logQueue.length>0});
         window.history.replaceState(null,"",`/?project=${this.projectId}`);

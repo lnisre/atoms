@@ -1,4 +1,4 @@
-import { MAX_STATE_BYTES, ProjectError, validateCloudValue, type CloudProject, type CommitReceipt, type DataSave, type DataSnapshot, type ProjectSummary } from "./contract";
+import { MAX_STATE_BYTES, ProjectError, validateCloudValue, type CloudProject, type CommitReceipt, type DataSave, type DataSnapshot, type ProjectSummary, type ProjectHistory, type HistorySnapshot } from "./contract";
 
 export async function cloudRequest<T>(owner: string, path: string, options: { method?: string; body?: unknown; signal?: AbortSignal } = {}): Promise<T> {
   let response: Response;
@@ -12,9 +12,11 @@ export async function cloudRequest<T>(owner: string, path: string, options: { me
   } catch { throw new ProjectError("unavailable", "无法确认云端保存结果。请保留页面，重试原保存或下载未保存副本。"); }
   const value = await response.json().catch(() => null);
   if (!response.ok || value === null) throw new ProjectError(value?.code ?? "unavailable", value?.error ?? "云端读取失败，请重试；尚未覆盖任何内容。", response.status);
-  validateCloudValue(path === "" ? "list" : options.method === "POST" || options.method === "PUT" ? "receipt" : path.includes("/data?") ? "data" : "project", value);
+  validateCloudValue(/\/history\/[^/]+$/.test(path) ? "snapshot" : path.endsWith("/history") ? "history" : path === "" ? "list" : options.method === "POST" || options.method === "PUT" ? "receipt" : path.includes("/data?") ? "data" : "project", value);
   return value as T;
 }
+export const readHistory = (owner: string, id: string, signal?: AbortSignal) => cloudRequest<ProjectHistory>(owner, `/${encodeURIComponent(id)}/history`, { signal });
+export const readSnapshot = (owner: string, id: string, snapshotId: string, signal?: AbortSignal) => cloudRequest<HistorySnapshot>(owner, `/${encodeURIComponent(id)}/history/${encodeURIComponent(snapshotId)}`, { signal });
 export const listProjects = (owner: string) => cloudRequest<ProjectSummary[]>(owner, "");
 export const readProject = (owner: string, id: string) => cloudRequest<CloudProject>(owner, `/${encodeURIComponent(id)}`);
 export const copyExample = (owner: string, operationId: string) => cloudRequest<CommitReceipt>(owner, "/example", { method: "POST", body: { operationId } });

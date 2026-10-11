@@ -1,7 +1,9 @@
 // Runtime uses only the verified ordinary user's access token. Management keys
 // are never application configuration. Every RPC repeats role/owner validation.
 import { AuthError, authFailure, requireIdentity } from "../auth/server";
-import { MAX_STATE_BYTES, ProjectError, UUID, validateCloudValue, type CloudProject, type CommitReceipt, type DataSave, type DataSnapshot, type ProjectSummary } from "./contract";
+import { MAX_STATE_BYTES, ProjectError, UUID, validateCloudValue, type CloudProject, type CommitReceipt, type DataSave, type DataSnapshot, type ProjectSummary, type ProjectHistory, type HistorySnapshot } from "./contract";
+
+import { executionBlockers } from "../team/preview-policy";
 
 type Identity = Awaited<ReturnType<typeof requireIdentity>>;
 const messages: Record<string, [number, string]> = {
@@ -10,6 +12,8 @@ const messages: Record<string, [number, string]> = {
   PT409: [409, "云端已有更新，已拒绝覆盖。当前内容仍保留，可下载副本或重新载入。"],
   PT422: [422, "同一保存操作的内容不一致，请保留页面并下载副本。"],
   PT403: [403, "此代码不能连接正式数据，请先处理项目限制。"],
+  PT410: [410, "该保存点不存在或已清理，请刷新历史列表。"],
+  PT507: [507, "云端空间不足，本次操作未完成。请保留页面，处理存储空间后重试。"],
   PT400: [400, "保存请求格式不正确。"],
 };
 export async function projectRpc<T>(identity: Identity, name: string, args: object): Promise<T> {
@@ -29,13 +33,29 @@ export async function projectRpc<T>(identity: Identity, name: string, args: obje
     // the fixed vocabulary with its matching HTTP status; never show raw text.
     const code = typeof body?.code === "string" ? body.code.replace(/^DATABASE_/, "") : undefined;
     const known = code ? messages[code] : undefined;
+    if (code && ["53100", "53200", "53400"].includes(code) && [500, 507].includes(response.status)) {
+      throw new ProjectError("storage_full", messages.PT507[1], 507);
+    }
     if (known && known[0] === response.status) throw new ProjectError(code === "PT409" ? "conflict" : code === "PT422" ? "operation_mismatch" : code, known[1], known[0]);
     if (response.status === 401) throw new AuthError("unauthenticated", messages.PT401[1]);
     // Do not expose SQL, provider error details, or token-bearing responses.
     throw new ProjectError("unavailable", "云端读写暂时失败，请保留页面后重试。");
   }
-  validateCloudValue(name === "list_projects" ? "list" : name === "get_project" ? "project" : name === "get_data" ? "data" : "receipt", body);
+  validateCloudValue(name === "list_history" ? "history" : name === "get_snapshot" ? "snapshot" : name === "list_projects" ? "list" : name === "get_project" ? "project" : name === "get_data" ? "data" : "receipt", body);
   return body as T;
+}
+export const listCloudHistory = (identity: Identity, id: string) => projectRpc<ProjectHistory>(identity, "list_history", { p_project_id: validId(id) });
+export async function getCloudSnapshot(identity: Identity, id: string, snapshotId: string) {
+  const snapshot = await projectRpc<HistorySnapshot>(identity, "get_snapshot", { p_project_id: validId(id), p_snapshot_id: validId(snapshotId) });
+  if (snapshot.projectId !== id || snapshot.entry.id !== snapshotId) throw new ProjectError("invalid_response", "保存点与请求不一致，请重新读取。");
+  // Reapply today's deterministic execution boundary, without a model call or
+  // changing the original review. Formal qualification is also checked by SQL.
+  if (executionBlockers(snapshot.project.result.html).length || snapshot.project.draftResult
+    || (snapshot.project.previewPolicy && (snapshot.project.previewPolicy.status !== "allowed" || snapshot.project.previewPolicy.dataMode !== "formal" || snapshot.project.previewPolicy.adoption !== "allowed"))
+    || (!snapshot.project.previewPolicy && snapshot.project.exampleSource?.kind !== "builtin-example")) {
+    throw new ProjectError("PT403", "此保存点不满足当前执行与数据使用规则，不能试用。", 403);
+  }
+  return snapshot;
 }
 export const listCloudProjects = (identity: Identity) => projectRpc<ProjectSummary[]>(identity, "list_projects", {});
 export const getCloudProject = (identity: Identity, id: string) => projectRpc<CloudProject>(identity, "get_project", { p_project_id: validId(id) });
