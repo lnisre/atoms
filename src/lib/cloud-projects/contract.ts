@@ -2,18 +2,25 @@ import type { SavedProject } from "../project-store";
 
 export type ProjectSummary = Pick<SavedProject, "id" | "title" | "updatedAt" | "exampleSource">;
 export type ProjectVersion = { code: number; data: number };
+export type RestoreStatus = { id: string; targetId: string; sequence: number; restoredAt: string };
+export type HistoryAction = "restore" | "undo" | "clear";
+export type HistoryChange = { operationId: string; action: HistoryAction; targetId: string; expected: ProjectVersion; expectedHistory: number };
+export type HistoryCheck = { receipt: CommitReceipt } | { receipt: null; project: SavedProject };
 export type CloudProject = {
+  restore?: RestoreStatus | null;
+  historyRevision?: number;
   project: SavedProject;
   version: ProjectVersion;
   state: unknown;
   hasData: boolean;
 };
 export type HistoryEntry = {
+  protectedReason?: "current" | "undo" | null;
   id: string; sequence: number; origin: "baseline" | "initial" | "example" | "activated" | "adopted";
   recordId: string | null; summary: string; pairedAt: string; dataSavedAt: string | null;
   hasData: boolean; nextSequence: number | null; status: "current" | "available" | "cleared";
 };
-export type ProjectHistory = { projectId: string; version: ProjectVersion; currentId: string | null; entries: HistoryEntry[] };
+export type ProjectHistory = { revision?: number; projectId: string; version: ProjectVersion; currentId: string | null; entries: HistoryEntry[] };
 export type HistorySnapshot = { projectId: string; entry: HistoryEntry; project: SavedProject; state: unknown; hasData: boolean };
 export type DataSnapshot = { state: unknown; hasData: boolean; version: ProjectVersion };
 export type CommitReceipt = { projectId: string; version: ProjectVersion; updatedAt: string };
@@ -34,8 +41,11 @@ function validSummary(value: unknown) {
 const date = (value: unknown) => typeof value === "string" && Number.isFinite(Date.parse(value));
 const positive = (value: unknown) => typeof value === "number" && Number.isSafeInteger(value) && value > 0;
 const uuid = (value: unknown) => typeof value === "string" && UUID.test(value);
+function validRestore(value: unknown) {
+  return value === undefined || value === null || (object(value) && uuid(value.id) && uuid(value.targetId) && positive(value.sequence) && date(value.restoredAt));
+}
 function validHistoryEntry(value: unknown) {
-  return object(value) && uuid(value.id) && positive(value.sequence)
+  return object(value) && [undefined, null, "current", "undo"].includes(value.protectedReason as string | null | undefined) && uuid(value.id) && positive(value.sequence)
     && ["baseline", "initial", "example", "activated", "adopted"].includes(String(value.origin))
     && (value.recordId === null || typeof value.recordId === "string") && typeof value.summary === "string"
     && date(value.pairedAt) && (value.dataSavedAt === null || date(value.dataSavedAt)) && typeof value.hasData === "boolean"
@@ -44,11 +54,14 @@ function validHistoryEntry(value: unknown) {
 function validProject(value: unknown) {
   return validSummary(value) && object(value) && typeof value.requirement === "string" && object(value.result) && typeof value.result.html === "string";
 }
-export function validateCloudValue(kind: "list" | "project" | "data" | "receipt" | "history" | "snapshot", value: unknown) {
+export function validateCloudValue(kind: "list" | "project" | "data" | "receipt" | "history" | "snapshot" | "historyCheck", value: unknown) {
   let valid = false;
   if (kind === "list") valid = Array.isArray(value) && value.every(validSummary);
   else if (object(value)) {
-    if (kind === "history") valid = uuid(value.projectId) && validVersion(value.version) && (value.currentId === null || uuid(value.currentId))
+    if (kind === "historyCheck") {
+      if (value.receipt === null) valid = validProject(value.project);
+      else { validateCloudValue("receipt", value.receipt); valid = true; }
+    } else if (kind === "history") valid = uuid(value.projectId) && validVersion(value.version) && (value.currentId === null || uuid(value.currentId))
       && Array.isArray(value.entries) && value.entries.every(validHistoryEntry)
       && new Set(value.entries.map(e => e.id)).size === value.entries.length
       && value.entries.filter(e => e.status === "current").length === (value.currentId === null ? 0 : 1)
@@ -61,7 +74,7 @@ export function validateCloudValue(kind: "list" | "project" | "data" | "receipt"
       valid = validVersion(value.version) && typeof value.hasData === "boolean" && Object.hasOwn(value, "state");
       if (kind === "project") {
         const project = value.project;
-        valid = valid && validProject(project);
+        valid = valid && validProject(project) && validRestore(value.restore);
       }
     }
   }

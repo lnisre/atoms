@@ -42,7 +42,7 @@ test("installed history SQL preserves paired snapshots, trusted adoption and tra
  const adopt=(a:object,op=randomUUID())=>rpc<CommitReceipt>(commit(a,op));
  const existing=first();await rpc(claim(existing));await adopt(existing);await data(existing.projectId,1,1,41);
  const restricted=first({policy:{...policy,dataMode:'trial',review:'unavailable'}});await rpc(claim(restricted));await adopt(restricted);
- await migrate('004_project_history');
+ await migrate('004_project_history');await migrate('005_history_restore');
  try {
  await t.test('pre-feature formal baseline is real and timestamp is explicitly unknown; restricted artifacts have no history',async()=>{
   const h=await list(existing.projectId);assert.equal(h.entries.length,1);assert.equal(h.entries[0].origin,'baseline');assert.equal(h.entries[0].dataSavedAt,null);
@@ -95,6 +95,78 @@ test("installed history SQL preserves paired snapshots, trusted adoption and tra
   const before=await list(a.projectId),sid=before.entries[2].id,point=await snap(a.projectId,sid);
   await rpc(signed('append_events',{v:1,kind:'events',ownerId:owner,projectId:a.projectId,taskId:a.taskId,events:[{source:'server',sequence:12,at:new Date().toISOString(),taskId:a.taskId,stepId:'late',label:'late',status:'completed',detail:'fixture'}]},randomUUID()));
   assert.deepEqual(await list(a.projectId),before);assert.deepEqual(await snap(a.projectId,sid),point);
+ });
+ const change=async(id:string,action:string,target:string,op=randomUUID(),expected?:CloudProject,user=owner,apply=true)=>{
+  const current=expected ?? await get(id);
+  return rpc<{receipt:CommitReceipt|null;project?:CloudProject['project']}>(`public.atoms_change_history('${id}','${op}','${action}','${target}',${current.version.code},${current.version.data},${current.historyRevision ?? 0},${apply})`,user);
+ };
+ await t.test('restore and undo retain complete history while write versions and ledgers only advance',async()=>{
+  const before=await get(a.projectId),historyBefore=await list(a.projectId),target=historyBefore.entries.at(-1)!;
+  const tid=randomUUID(),stale={...b,taskId:tid,expected:before.version,baseHash:hash(before.project.result.html),generations:[{...record(tid),projectId:a.projectId,requirement:'must never reappear',outcome:'complete'}]};
+  await rpc(signed('claim_task',{...stale,kind:'start'}));
+  const oldDataOp=randomUUID();await data(a.projectId,before.version.code,before.version.data,122,oldDataOp);
+  const saved=await get(a.projectId),op=randomUUID();
+  const prepared=await change(a.projectId,'restore',target.id,op,saved,owner,false);assert.equal(prepared.project?.result.html,html);assert.equal(prepared.receipt,null);
+  assert.deepEqual(await get(a.projectId),saved);
+  const receipt=await change(a.projectId,'restore',target.id,op,saved);
+  assert.deepEqual(await change(a.projectId,'restore',target.id,op,saved),receipt);
+  const restored=await get(a.projectId);assert.deepEqual(restored.state,{count:100});assert.equal(restored.project.result.html,html);
+  assert.equal(restored.project.modificationRecords?.length,0);assert.equal(restored.restore?.id,op);assert.equal(restored.restore?.sequence,1);
+  assert.deepEqual(restored.version,{code:saved.version.code+1,data:saved.version.data+1});
+  assert.equal((await list(a.projectId)).entries.length,1);
+  await assert.rejects(snap(a.projectId,historyBefore.entries[0].id),(e:unknown)=>(e as {code:string}).code==='PT410');
+  await assert.rejects(change(a.projectId,'clear',target.id),(e:unknown)=>(e as {code:string}).code==='PT423');
+  await assert.rejects(change(a.projectId,'undo',op,randomUUID(),restored,other),(e:unknown)=>(e as {code:string}).code==='PT404');
+  await assert.rejects(rpc(signed('append_events',{v:1,kind:'events',ownerId:owner,projectId:a.projectId,taskId:b.taskId,events:[]},randomUUID())),(e:unknown)=>(e as {code:string}).code==='PT404');
+  await data(a.projectId,restored.version.code,restored.version.data,999);assert.equal((await get(a.projectId)).restore?.id,op);
+  const toUndo=await get(a.projectId),undoOp=randomUUID();const undoReceipt=await change(a.projectId,'undo',op,undoOp,toUndo);
+  assert.deepEqual(await change(a.projectId,'undo',op,undoOp,toUndo),undoReceipt);
+  const undone=await get(a.projectId);assert.deepEqual(undone.state,saved.state);assert.deepEqual(undone.project,{...saved.project,updatedAt:undone.project.updatedAt});assert.equal(undone.restore,null);
+  assert.deepEqual((await list(a.projectId)).entries,historyBefore.entries);
+  assert.deepEqual(undone.version,{code:toUndo.version.code+1,data:toUndo.version.data+1});
+  await assert.rejects(adopt(stale),(e:unknown)=>(e as {code:string}).code==='PT409');
+  await assert.rejects(data(a.projectId,saved.version.code,saved.version.data,888),(e:unknown)=>(e as {code:string}).code==='PT409');
+  await data(a.projectId,before.version.code,before.version.data,122,oldDataOp);await adopt(b);
+  assert.deepEqual(await get(a.projectId),undone); // old receipts are acknowledgement only
+  await assert.rejects(change(a.projectId,'undo',op),(e:unknown)=>(e as {code:string}).code==='PT412');
+ });
+ await t.test('controlled storage abort rolls back backup replacement, restore and undo; retries keep the same operation',async()=>{
+  const before=await get(a.projectId),historyBefore=await list(a.projectId),target=historyBefore.entries[1];const op=randomUUID();
+  await db.exec(`CREATE FUNCTION atoms_private.reject_restore_fixture() RETURNS trigger LANGUAGE plpgsql AS $$ BEGIN RAISE SQLSTATE '53100' USING MESSAGE='controlled capacity rejection'; END $$;
+  CREATE TRIGGER fixture_restore AFTER UPDATE ON public.atoms_projects FOR EACH ROW EXECUTE FUNCTION atoms_private.reject_restore_fixture();`);
+  await assert.rejects(change(a.projectId,'restore',target.id,op,before),(e:unknown)=>(e as {code:string}).code==='53100');
+  assert.deepEqual(await get(a.projectId),before);assert.deepEqual(await list(a.projectId),historyBefore);
+  await db.exec('DROP TRIGGER fixture_restore ON public.atoms_projects;');
+  await change(a.projectId,'restore',target.id,op,before);
+  const restored=await get(a.projectId),h=await list(a.projectId);assert.equal(h.entries[1].protectedReason,'undo');
+  await assert.rejects(change(a.projectId,'clear',h.entries[1].id),(e:unknown)=>(e as {code:string}).code==='PT423');
+  await db.exec('CREATE TRIGGER fixture_restore AFTER UPDATE ON public.atoms_projects FOR EACH ROW EXECUTE FUNCTION atoms_private.reject_restore_fixture();');
+  await assert.rejects(change(a.projectId,'restore',h.entries[1].id),(e:unknown)=>(e as {code:string}).code==='53100');
+  await assert.rejects(change(a.projectId,'undo',op),(e:unknown)=>(e as {code:string}).code==='53100');
+  assert.deepEqual(await get(a.projectId),restored);assert.deepEqual(await list(a.projectId),h);
+  await db.exec('DROP TRIGGER fixture_restore ON public.atoms_projects; DROP FUNCTION atoms_private.reject_restore_fixture();');
+  const nextOp=randomUUID();await change(a.projectId,'restore',h.entries[1].id,nextOp);
+  assert.equal((await get(a.projectId)).restore?.id,nextOp);
+  await assert.rejects(change(a.projectId,'undo',op),(e:unknown)=>(e as {code:string}).code==='PT412');
+  await change(a.projectId,'undo',nextOp);assert.equal((await get(a.projectId)).project.result.html,restored.project.result.html);assert.equal((await get(a.projectId)).restore,null);
+ });
+ await t.test('adoption ends undo only on success; manual cleanup preserves conversation and is idempotent/private',async()=>{
+  const points=await list(a.projectId);await change(a.projectId,'restore',points.entries.at(-1)!.id);
+  let current=await get(a.projectId);const tid=randomUUID();const next={...b,taskId:tid,expected:current.version,baseHash:hash(current.project.result.html),generations:[{...record(tid),projectId:a.projectId,requirement:'new future',outcome:'complete'}]};
+  await rpc(signed('claim_task',{...next,kind:'start'}));
+  await db.exec(`CREATE FUNCTION atoms_private.fail_adopt_fixture() RETURNS trigger LANGUAGE plpgsql AS $$ BEGIN RAISE SQLSTATE '53100' USING MESSAGE='controlled reject'; END $$;
+  CREATE TRIGGER fixture_adopt AFTER INSERT ON atoms_private.history FOR EACH ROW EXECUTE FUNCTION atoms_private.fail_adopt_fixture();`);
+  await assert.rejects(adopt(next),(e:unknown)=>(e as {code:string}).code==='53100');assert.deepEqual(await get(a.projectId),current);
+  await db.exec('DROP TRIGGER fixture_adopt ON atoms_private.history; DROP FUNCTION atoms_private.fail_adopt_fixture();');
+  await adopt(next);current=await get(a.projectId);assert.equal(current.restore,null);
+  const history=await list(a.projectId),target=history.entries[1];assert.equal(target.protectedReason,null);
+  for(const action of ['restore','clear'])await assert.rejects(change(a.projectId,action,target.id,randomUUID(),current,other),(e:unknown)=>(e as {code:string}).code==='PT404');
+  const op=randomUUID();const receipt=await change(a.projectId,'clear',target.id,op,current);assert.deepEqual(await change(a.projectId,'clear',target.id,op,current),receipt);
+  const after=await get(a.projectId);assert.deepEqual(after.project.modificationRecords,current.project.modificationRecords);assert.deepEqual(after.version,current.version);assert.equal(after.historyRevision,current.historyRevision!+1);
+  assert.equal((await list(a.projectId)).entries[1].status,'cleared');
+  await assert.rejects(snap(a.projectId,target.id),(e:unknown)=>(e as {code:string}).code==='PT410');
+  await assert.rejects(change(a.projectId,'restore',target.id),(e:unknown)=>(e as {code:string}).code==='PT410');
+  await assert.rejects(change(a.projectId,'restore',target.id,randomUUID(),current),(e:unknown)=>(e as {code:string}).code==='PT409');
  });
  } finally {await db.close();}
 });

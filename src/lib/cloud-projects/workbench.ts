@@ -1,5 +1,5 @@
 import { cloudRequest, CloudDataSession, readProject, readHistory, readSnapshot, unsavedCopy } from "./client";
-import type { CloudProject, CommitReceipt, ProjectHistory, HistorySnapshot } from "./contract";
+import { ProjectError, type CloudProject, type CommitReceipt, type ProjectHistory, type HistorySnapshot, type HistoryAction, type HistoryEntry, type ProjectVersion } from "./contract";
 import type { Artifact, ArtifactProof } from "./artifact-contract";
 import type { InitialGeneration } from "../execution";
 import type { TrialData } from "../trial-data";
@@ -9,12 +9,14 @@ import { TEAM_TIMEOUT_MS, TeamError } from "../team/contract";
 import { previewPolicy } from "../team/preview-policy";
 import { unresolvedDataIssues } from "../team/review";
 
+export type HistoryConfirmation = { action: HistoryAction; targetId: string; expected: ProjectVersion; expectedHistory: number; entry?: HistoryEntry };
 type Pending = { operationId: string; path: string; body: object };
 export type WorkbenchState = {
   initialRequirement?: string; cloud?: CloudProject; artifact?: Artifact; proof?: ArtifactProof; trial?: TrialData;
   task?: InitialGeneration; generating: boolean; saving: boolean; error: string;
   historyOpen?: boolean; history?: ProjectHistory; historyLoading?: boolean; historyError?: string;
   historySnapshotLoading?: boolean;
+  confirmation?: HistoryConfirmation; errorCode?: string;
   historyTrial?: { snapshot: HistorySnapshot; trial: TrialData; instanceId: string };
   logError: string; logsPending: boolean; input: string; pending?: Pending;
 };
@@ -41,6 +43,7 @@ export class CloudWorkbenchSession {
   constructor(readonly owner: string, readonly projectId: string, cloud?: CloudProject, data?: CloudDataSession) {
     this.state = {cloud, trial:cloud?.project.previewPolicy?.dataMode === "trial" ? {projectId,state:null,hasData:false} : undefined, generating:false,saving:false,error:"",logError:"",logsPending:false,input:""};
     this.data = data;
+    this.data?.subscribe(() => this.publish({}));
   }
   subscribe = (listener: () => void) => { this.listeners.add(listener); return () => { this.listeners.delete(listener); }; };
   snapshot = () => this.state;
@@ -54,6 +57,33 @@ export class CloudWorkbenchSession {
   dispose() { this.lifetime.abort(); this.active?.abort(); this.data?.dispose(); this.historyRead?.abort(); this.snapshotRead?.abort(); this.listeners.clear(); }
   stop() { this.active?.abort(new TeamError("stopped","本次任务已停止。")); }
   discard() { if (!this.state.generating && !this.state.saving && !this.state.pending) this.publish({artifact:undefined,proof:undefined,trial:this.state.cloud?.project.previewPolicy?.dataMode === "trial" ? {projectId:this.projectId,state:null,hasData:false} : undefined,task:undefined,input:"",error:""}); }
+  get historyBusy() { return this.state.generating || this.state.saving || !!this.state.pending || !!this.data?.status.pending || this.data?.status.phase === "loading"; }
+  prepareHistory(action: HistoryAction, entry?: HistoryEntry) {
+    const cloud = this.state.cloud;
+    if (!cloud || this.historyBusy) return;
+    if (action === "restore" && this.state.artifact) { this.publish({historyError:"请先明确采用或放弃当前候选，再执行恢复。"}); return; }
+    const targetId = action === "undo" ? cloud.restore?.id : entry?.id;
+    if (!targetId) return;
+    this.publish({confirmation:{action,targetId,entry,expectedHistory:(action === "undo" ? cloud.historyRevision : this.state.history?.revision) ?? cloud.historyRevision ?? 0,expected:{...(this.data?.version ?? cloud.version)}},error:"",errorCode:undefined});
+  }
+  cancelConfirmation() { if (!this.state.saving) this.publish({confirmation:undefined}); }
+  confirmHistory() {
+    const confirmation = this.state.confirmation;
+    if (!confirmation || this.historyBusy || (confirmation.action === "restore" && this.state.artifact)) return Promise.resolve();
+    return this.save({operationId:crypto.randomUUID(),path:`/${this.projectId}/history`,body:{action:confirmation.action,targetId:confirmation.targetId,expected:confirmation.expected,expectedHistory:confirmation.expectedHistory}});
+  }
+  cleanupAfterFailure() {
+    if (this.state.saving || !["storage_full","PT507"].includes(this.state.errorCode ?? "")) return;
+    // A definite transaction rejection has no receipt to recover; retain the
+    // candidate/proof while releasing this rejected operation for manual cleanup.
+    this.publish({pending:undefined,confirmation:undefined,error:"清理后可重新执行原操作；可清理空间不保证足够。",errorCode:undefined});
+    void this.openHistory();
+  }
+  recheckHistory() {
+    if (this.state.saving || !["conflict","PT410","PT412","PT423","PT403"].includes(this.state.errorCode ?? "")) return;
+    this.publish({pending:undefined,confirmation:undefined,error:"请重新载入云端版本后核对；原确认未执行。",errorCode:undefined});
+    void this.openHistory();
+  }
   async openHistory() {
     if (!this.state.cloud || this.lifetime.signal.aborted) return;
     this.historyRead?.abort();
@@ -70,7 +100,7 @@ export class CloudWorkbenchSession {
   }
   closeHistory() {
     this.historyRead?.abort(); this.snapshotRead?.abort();
-    this.publish({historyOpen:false,historyLoading:false,historySnapshotLoading:false,historyTrial:undefined,historyError:""});
+    this.publish({historyOpen:false,historyLoading:false,historySnapshotLoading:false,historyTrial:undefined,historyError:"",confirmation:undefined});
   }
   async tryHistory(snapshotId: string) {
     if (!this.state.cloud || this.lifetime.signal.aborted) return;
@@ -143,12 +173,13 @@ export class CloudWorkbenchSession {
   retry() { return this.state.pending ? this.save(this.state.pending) : this.commit(); }
   private save(pending: Pending): Promise<void> {
     if (this.saveFlight || this.lifetime.signal.aborted) return this.saveFlight ?? Promise.resolve();
-    this.publish({saving:true,pending,error:""});
+    this.publish({saving:true,pending,error:"",errorCode:undefined});
     this.saveFlight=(async()=>{
       try {
         const receipt=await cloudRequest<CommitReceipt & {logProof?:ArtifactProof}>(this.owner,pending.path,{method:"POST",body:{...pending.body,operationId:pending.operationId},signal:this.lifetime.signal});
         if (this.lifetime.signal.aborted) return;
         if (receipt.projectId !== this.projectId) throw new Error("保存回执与当前项目不符。");
+        this.data?.dispose();
         if (receipt.logProof && !this.logQueue.some(p=>JSON.stringify(p.body)===JSON.stringify({proof:receipt.logProof}))) this.logQueue.push({operationId:crypto.randomUUID(),path:"/events",body:{proof:receipt.logProof}});
         // Keep the exact save pending through a failed readback; retry is still
         // idempotent and never invokes the model again.
@@ -157,10 +188,12 @@ export class CloudWorkbenchSession {
         this.closeHistory();
         this.publish({history:undefined});
         this.data?.dispose(); this.data=new CloudDataSession(this.owner,this.projectId,cloud.version.code);
-        this.publish({cloud,artifact:undefined,proof:undefined,trial:cloud.project.previewPolicy?.dataMode === "trial" ? {projectId:this.projectId,state:null,hasData:false} : undefined,task:undefined,pending:undefined,logsPending:this.logQueue.length>0});
+        this.data.subscribe(() => this.publish({}));
+        const clearing = "action" in pending.body && pending.body.action === "clear";
+        this.publish({cloud,artifact:clearing ? this.state.artifact : undefined,proof:clearing ? this.state.proof : undefined,trial:clearing ? this.state.trial : cloud.project.previewPolicy?.dataMode === "trial" ? {projectId:this.projectId,state:null,hasData:false} : undefined,task:clearing ? this.state.task : undefined,input:clearing ? this.state.input : "",pending:undefined,logsPending:this.logQueue.length>0});
         window.history.replaceState(null,"",`/?project=${this.projectId}`);
         if (this.logQueue.length) void this.retryLogs();
-      } catch(error) {this.publish({error:error instanceof Error ? error.message : "保存未确认，内容已保留。"});}
+      } catch(error) {this.publish({error:error instanceof Error ? error.message : "保存未确认，内容已保留。",errorCode:error instanceof ProjectError ? error.code : "unavailable"});}
       finally {this.saveFlight=undefined;this.publish({saving:false});}
     })();return this.saveFlight;
   }

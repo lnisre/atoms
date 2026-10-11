@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { afterEach, beforeEach, test } from "node:test";
-import { GET as list } from "../src/app/api/projects/[id]/history/route";
+import { GET as list, POST as change } from "../src/app/api/projects/[id]/history/route";
 import { GET as read } from "../src/app/api/projects/[id]/history/[snapshotId]/route";
 import { CloudWorkbenchSession } from "../src/lib/cloud-projects/workbench";
 import { validateCloudValue, type CloudProject, type HistoryEntry, type HistorySnapshot } from "../src/lib/cloud-projects/contract";
@@ -95,4 +95,58 @@ test("adoption committed but failed readback keeps the exact operation and candi
   await session.commit();assert.equal(session.state.error,'readback failed');assert.ok(session.state.pending);assert.equal(session.state.artifact,candidate.artifact);
   await session.retry();assert.equal(bodies[0],bodies[1]);assert.equal(session.state.pending,undefined);assert.equal(session.state.artifact,undefined);assert.equal(session.state.cloud?.version.code,3);
  } finally {session.dispose();if(previousWindow===undefined)Reflect.deleteProperty(globalThis,'window');else Object.defineProperty(globalThis,'window',{configurable:true,value:previousWindow});}
+});
+
+test("history mutations preflight a trusted target, reject current blockers, and recover receipts before a vanished target lookup",async()=>{
+ const cookie=await authenticatedCookie();const calls:{p_apply:boolean;p_target_id:string;p_action:string}[]=[];
+ const receipt={projectId:id,version:{code:3,data:5},updatedAt:time};let blocked=false,committed=false;
+ globalThis.fetch=async(url,options)=>{
+  if(String(url).endsWith('/user/me'))return Response.json(authProfile);
+  const body=JSON.parse(String(options?.body));calls.push(body);
+  if(committed || body.p_apply){committed=true;return Response.json({receipt});}
+  return Response.json({receipt:null,project:blocked?{...project,result:{...project.result,html:'<!doctype html><html><head></head><body><script>while(true){}</script></body></html>'}}:project});
+ };
+ const body={operationId:crypto.randomUUID(),action:'restore',targetId:sid,expected:cloud.version,expectedHistory:0};
+ const req=()=>new Request(`http://localhost/api/projects/${id}/history`,{method:'POST',headers:{cookie,'content-type':'application/json',origin:'http://localhost'},body:JSON.stringify({...body,project:{injected:true},state:{injected:true}})});
+ blocked=true;assert.equal((await change(req(),ctx)).status,403);assert.equal(calls.length,1);
+ blocked=false;assert.deepEqual(await (await change(req(),ctx)).json(),receipt);assert.equal(calls.length,3);
+ assert.deepEqual(Object.keys(calls[1]).sort(),['p_action','p_apply','p_code_version','p_data_version','p_history_revision','p_operation_id','p_project_id','p_target_id'].sort());
+ assert.deepEqual(await (await change(req(),ctx)).json(),receipt);assert.equal(calls.length,4);assert.equal(calls.at(-1)?.p_apply,false);
+});
+
+test("restore confirmation uses snapshot identity, preserves same operation through failed readback and disposes old writers",async()=>{
+ const previousWindow=globalThis.window;Object.defineProperty(globalThis,'window',{configurable:true,value:{history:{replaceState(){}}}});
+ const {CloudDataSession}=await import('../src/lib/cloud-projects/client');
+ const data=new CloudDataSession('owner',id,2),session=new CloudWorkbenchSession('owner',id,structuredClone(cloud),data);
+ const restored={...cloud,project:{...project,result:{...project.result,html:'restored'}},version:{code:3,data:5},restore:{id:crypto.randomUUID(),targetId:sid,sequence:1,restoredAt:time}};
+ let readback=0;const bodies:string[]=[];
+ globalThis.fetch=async(url,options)=>{
+  if(options?.method==='POST'){bodies.push(String(options.body));return Response.json({projectId:id,version:restored.version,updatedAt:time});}
+  if(String(url).includes('/data?'))return Response.json({version:cloud.version,state:cloud.state,hasData:true});
+  if(++readback===1)return Response.json({code:'unavailable',error:'readback failed'},{status:503});return Response.json(restored);
+ };
+ try {
+  await data.load();session.prepareHistory('restore',entry);assert.ok(session.state.confirmation);session.cancelConfirmation();assert.equal(bodies.length,0);
+  session.prepareHistory('restore',entry);await session.confirmHistory();assert.ok(session.state.pending);assert.equal(session.state.cloud?.version.code,2);
+  await assert.rejects(data.save({count:888}),/页面已离开/);await session.retry();assert.equal(bodies[0],bodies[1]);
+  const sent=JSON.parse(bodies[0]);assert.equal(sent.targetId,sid);assert.equal(sent.state,undefined);assert.equal(sent.project,undefined);
+  assert.equal(session.state.pending,undefined);assert.equal(session.state.cloud?.version.code,3);assert.notEqual(session.data,data);assert.ok(session.state.cloud?.restore);
+ }finally{session.dispose();if(previousWindow===undefined)Reflect.deleteProperty(globalThis,'window');else Object.defineProperty(globalThis,'window',{configurable:true,value:previousWindow});}
+});
+
+test("undo accepts a candidate only after explicit confirmation, while busy and stale confirmation cannot silently overwrite",async()=>{
+ const previousWindow=globalThis.window;Object.defineProperty(globalThis,'window',{configurable:true,value:{history:{replaceState(){}}}});
+ const restored={...cloud,restore:{id:crypto.randomUUID(),targetId:sid,sequence:1,restoredAt:time}};
+ const session=new CloudWorkbenchSession('owner',id,restored);const candidate=syntheticArtifact('owner',id,crypto.randomUUID(),html+' ',html,cloud.version);
+ session.state={...session.state,artifact:candidate.artifact,proof:candidate.proof,trial:{projectId:id,state:{count:999},hasData:true}};
+ session.prepareHistory('restore',entry);assert.equal(session.state.confirmation,undefined);
+ session.prepareHistory('undo');assert.ok(session.state.confirmation);session.cancelConfirmation();assert.equal(session.state.artifact,candidate.artifact);
+ session.state.generating=true;session.prepareHistory('undo');assert.equal(session.state.confirmation,undefined);session.state.generating=false;
+ let conflict=true;globalThis.fetch=async(_url,options)=>options?.method==='POST'?(conflict?Response.json({code:'conflict',error:'reconfirm'},{status:409}):Response.json({projectId:id,version:{code:3,data:5},updatedAt:time})):Response.json({...cloud,version:{code:3,data:5},restore:null});
+ try {
+  session.prepareHistory('undo');await session.confirmHistory();assert.equal(session.state.errorCode,'conflict');assert.equal(session.state.artifact,candidate.artifact);assert.ok(session.state.cloud?.restore);
+  // A new confirmation is only possible after a definitive rejection is acknowledged.
+  session.recheckHistory();assert.equal(session.state.pending,undefined);conflict=false;session.prepareHistory('undo');await session.confirmHistory();
+  assert.equal(session.state.artifact,undefined);assert.equal(session.state.trial,undefined);assert.equal(session.state.cloud?.restore,null);
+ }finally{session.dispose();if(previousWindow===undefined)Reflect.deleteProperty(globalThis,'window');else Object.defineProperty(globalThis,'window',{configurable:true,value:previousWindow});}
 });

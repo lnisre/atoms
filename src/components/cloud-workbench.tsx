@@ -6,7 +6,7 @@ import { ConversationScroll } from "./conversation-scroll";
 import { GenerationRecord } from "./generation-record";
 import { AppPreview } from "./app-preview";
 import { ResultViewer } from "./result-viewer";
-import { CloudHistory, historyTime } from "./cloud-history";
+import { CloudHistory, HistoryConfirmation, historyTime } from "./cloud-history";
 import { MAX_REQUIREMENT_LENGTH } from "@/lib/generation";
 
 export function CloudWorkbench({ session, accountSlot, onBack, onReload, onLogin, onRestart }: {
@@ -23,6 +23,7 @@ export function CloudWorkbench({ session, accountSlot, onBack, onReload, onLogin
     </>}
     {state.generating && <><p role="status">团队正在生成，最多 4 分钟、20 次模型请求。请保持页面打开。</p><button className="secondary-button" onClick={()=>session.stop()}>停止生成</button></>}
     {artifact && <><p>{state.cloud ? "候选仅在当前会话中试用；采用只更新代码与记录，试用数据不会写回。" : state.saving ? "首次成果正在保存，云端提交后才会确认。" : "首次成果尚未确认云端保存。"}</p>
+      {state.cloud?.restore && <p>采用后将结束本次恢复的撤销机会；只有采用成功才会结束。</p>}
       {state.cloud && !state.pending && <button className="primary-button" disabled={state.generating || state.saving || !state.proof || artifact.policy.adoption !== "allowed"} onClick={()=>void session.commit()}>采用修改</button>}
       {artifact.policy.adoption === "blocked" && <p>存在执行或数据风险，当前不能采用。可以继续修改。</p>}
       {!state.pending && state.cloud && <button className="secondary-button" disabled={state.generating || state.saving} onClick={()=>session.discard()}>放弃本轮修改</button>}
@@ -34,6 +35,8 @@ export function CloudWorkbench({ session, accountSlot, onBack, onReload, onLogin
       <button className="secondary-button" onClick={()=>session.download()}>下载未保存副本</button>
     </>}
     {state.error && <p role="alert">{state.error}</p>}
+    {state.errorCode === "storage_full" || state.errorCode === "PT507" ? <button className="secondary-button" onClick={() => session.cleanupAfterFailure()}>查看可清理保存点</button> : null}
+    {state.pending && ["conflict","PT410","PT412","PT423","PT403"].includes(state.errorCode ?? "") && <button className="secondary-button" onClick={() => { session.recheckHistory(); onReload(); }}>重新载入并核对</button>}
     {state.pending && <><button className="primary-button" disabled={state.saving} onClick={()=>void session.retry()}>重试原保存</button><button className="secondary-button" onClick={()=>session.download()}>下载未保存副本</button></>}
     {(state.error || state.logError) && <button className="secondary-button" onClick={onLogin}>重新登录原账号</button>}
     {state.cloud && !artifact && state.cloud.project.previewPolicy?.dataMode === "trial" && <><p>待验证项目：启用前仅使用会话试用数据。</p><button className="primary-button" disabled={state.generating || state.saving || state.cloud.project.previewPolicy.adoption !== "allowed"} onClick={()=>void session.activate()}>使用此版本</button></>}
@@ -43,7 +46,7 @@ export function CloudWorkbench({ session, accountSlot, onBack, onReload, onLogin
   const cloud=state.cloud, project=cloud?.project;
   const historical=state.historyTrial;
   const result=historical?.snapshot.project.result ?? artifact?.result ?? project?.draftResult ?? project?.result;
-  const policy=historical?.snapshot.project.previewPolicy ?? artifact?.policy ?? project?.previewPolicy;
+  const policy=historical ? historical.snapshot.project.previewPolicy : artifact?.policy ?? project?.previewPolicy;
   const version=result ? {id:historical?.snapshot.entry.id ?? artifact?.taskId ?? `${session.projectId}:${cloud!.version.code}`,entryPath:"index.html",files:[{path:"index.html",text:result.html}]} : undefined;
   return <main className="cloud-project">
     <header><button className="secondary-button" onClick={onBack}>我的项目</button><h1>{project?.title ?? (artifact?.requirement ?? state.initialRequirement)?.slice(0,48) ?? "生成项目"}</h1>{accountSlot}</header>
@@ -55,7 +58,9 @@ export function CloudWorkbench({ session, accountSlot, onBack, onReload, onLogin
           {artifact?.generations.map(record=><GenerationRecord key={record.taskId} title="本轮修改" requirement={record.requirement} live={false} pending={false} saveError={!!state.error} saving={state.saving} record={record}/>)}
           {state.task && (!artifact?.generations.some(g=>g.taskId===state.task!.taskId)) && <GenerationRecord live={state.generating} pending={state.generating} saveError={!!state.error} saving={state.saving} record={state.task} title={cloud ? "本轮修改" : "首次生成"}/>}
         </ConversationScroll>
+        {cloud?.restore && <section className="cloud-save-panel" aria-label="恢复状态"><p>已恢复到 V{cloud.restore.sequence}。撤销机会不会按时间过期，采用新代码成功后结束。</p><button className="secondary-button" disabled={session.historyBusy} onClick={() => session.prepareHistory("undo")}>撤销本次恢复</button></section>}
         <CloudHistory session={session} state={state}/>
+        <HistoryConfirmation session={session} state={state}/>
         {(!state.historyOpen || state.generating || state.pending) && controls}
       </section>
       <ResultViewer version={state.historySnapshotLoading ? undefined : version} notice={historical ? historyTime(historical.snapshot.entry) + " · 历史副本试用，不改变当前项目、候选或保存点。" : undefined} status={historical ? `历史 V${historical.snapshot.entry.sequence} · 副本试用` : artifact ? cloud ? "候选版本 · 会话试用" : "尚未确认保存的成果" : policy?.dataMode === "trial" ? "待验证代码 · 仅副本试用" : "已保存代码"} actions={!historical && !state.historySnapshotLoading && cloud && session.data && (!artifact ? <CloudDataControls key={session.data.instanceId} cloud={cloud} session={session.data} onReload={onReload} onLogin={onLogin} onRetried={()=>setFrameVersion(v=>v+1)}/> : <button className="secondary-button" onClick={onReload}>重新载入云端版本</button>)}>

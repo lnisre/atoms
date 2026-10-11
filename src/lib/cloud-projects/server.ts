@@ -1,7 +1,7 @@
 // Runtime uses only the verified ordinary user's access token. Management keys
 // are never application configuration. Every RPC repeats role/owner validation.
 import { AuthError, authFailure, requireIdentity } from "../auth/server";
-import { MAX_STATE_BYTES, ProjectError, UUID, validateCloudValue, type CloudProject, type CommitReceipt, type DataSave, type DataSnapshot, type ProjectSummary, type ProjectHistory, type HistorySnapshot } from "./contract";
+import { MAX_STATE_BYTES, ProjectError, UUID, validateCloudValue, type CloudProject, type CommitReceipt, type DataSave, type DataSnapshot, type ProjectSummary, type ProjectHistory, type HistorySnapshot, type HistoryChange, type HistoryCheck } from "./contract";
 
 import { executionBlockers } from "../team/preview-policy";
 
@@ -12,6 +12,8 @@ const messages: Record<string, [number, string]> = {
   PT409: [409, "云端已有更新，已拒绝覆盖。当前内容仍保留，可下载副本或重新载入。"],
   PT422: [422, "同一保存操作的内容不一致，请保留页面并下载副本。"],
   PT403: [403, "此代码不能连接正式数据，请先处理项目限制。"],
+  PT412: [412, "本次撤销机会已结束或已被替换，请重新载入项目。"],
+  PT423: [423, "此保存点属于当前项目或有效撤销依赖，不能清理或替换。"],
   PT410: [410, "该保存点不存在或已清理，请刷新历史列表。"],
   PT507: [507, "云端空间不足，本次操作未完成。请保留页面，处理存储空间后重试。"],
   PT400: [400, "保存请求格式不正确。"],
@@ -41,7 +43,7 @@ export async function projectRpc<T>(identity: Identity, name: string, args: obje
     // Do not expose SQL, provider error details, or token-bearing responses.
     throw new ProjectError("unavailable", "云端读写暂时失败，请保留页面后重试。");
   }
-  validateCloudValue(name === "list_history" ? "history" : name === "get_snapshot" ? "snapshot" : name === "list_projects" ? "list" : name === "get_project" ? "project" : name === "get_data" ? "data" : "receipt", body);
+  validateCloudValue(name === "change_history" ? "historyCheck" : name === "list_history" ? "history" : name === "get_snapshot" ? "snapshot" : name === "list_projects" ? "list" : name === "get_project" ? "project" : name === "get_data" ? "data" : "receipt", body);
   return body as T;
 }
 export const listCloudHistory = (identity: Identity, id: string) => projectRpc<ProjectHistory>(identity, "list_history", { p_project_id: validId(id) });
@@ -56,6 +58,20 @@ export async function getCloudSnapshot(identity: Identity, id: string, snapshotI
     throw new ProjectError("PT403", "此保存点不满足当前执行与数据使用规则，不能试用。", 403);
   }
   return snapshot;
+}
+export async function changeCloudHistory(identity: Identity, id: string, change: HistoryChange) {
+  if (!["restore", "undo", "clear"].includes(change.action)) throw new ProjectError("input", "历史操作不正确。", 400);
+  if (!Number.isSafeInteger(change.expectedHistory) || change.expectedHistory < 0) throw new ProjectError("input", "缺少历史读取版本，请重新载入。", 400);
+  const args = { p_history_revision: change.expectedHistory, p_project_id: validId(id), p_operation_id: validId(change.operationId), p_action: change.action,
+    p_target_id: validId(change.targetId), p_code_version: validVersion(change.expected?.code), p_data_version: validVersion(change.expected?.data) };
+  const check = await projectRpc<HistoryCheck>(identity, "change_history", { ...args, p_apply: false });
+  if (check.receipt) return check.receipt;
+  if (change.action !== "clear" && executionBlockers(check.project.result.html).length) {
+    throw new ProjectError("PT403", "目标代码不满足当前执行规则，项目保持原样。", 403);
+  }
+  const applied = await projectRpc<HistoryCheck>(identity, "change_history", { ...args, p_apply: true });
+  if (!applied.receipt || applied.receipt.projectId !== id) throw new ProjectError("invalid_response", "操作结果尚未确认，请重试原操作。");
+  return applied.receipt;
 }
 export const listCloudProjects = (identity: Identity) => projectRpc<ProjectSummary[]>(identity, "list_projects", {});
 export const getCloudProject = (identity: Identity, id: string) => projectRpc<CloudProject>(identity, "get_project", { p_project_id: validId(id) });

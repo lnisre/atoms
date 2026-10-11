@@ -58,7 +58,7 @@ try {
       END IF;
     END $migration$;`);
     console.log(JSON.stringify({...nextResult.summary, migration:'002_trusted_artifacts',checksum:nextChecksum,applied:true}));
-    for (const name of ['003_artifact_receipt', '004_project_history']) {
+    for (const name of ['003_artifact_receipt', '004_project_history', '005_history_restore']) {
       const content=readFileSync(new URL(`../../db/migrations/${name}.sql`,import.meta.url),'utf8');
       const digest=createHash('sha256').update(content).digest('hex');
       const patched=await sql(`DO $migration$ DECLARE previous text; BEGIN
