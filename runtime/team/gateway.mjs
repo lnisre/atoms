@@ -6,6 +6,12 @@ import { randomBytes } from 'node:crypto';
 import { WebSocketServer } from 'ws';
 const port=Number(process.env.PORT||3105), internalPort=port+1;
 const internalKey=randomBytes(32).toString('hex');
+// Isolated deployments use their trusted platform-assigned origin; production
+// aliases still require an explicit ATOMS_APP_ORIGIN. Never derive this from input.
+if (!process.env.ATOMS_APP_ORIGIN && process.env.VERCEL_URL) {
+  if (!/^[a-z0-9][a-z0-9-]*\.vercel\.app$/i.test(process.env.VERCEL_URL)) throw new Error('Invalid deployment origin');
+  process.env.ATOMS_APP_ORIGIN=`https://${process.env.VERCEL_URL}`;
+}
 const origin=`http://localhost:${internalPort}`;
 const transportOrigin=`http://127.0.0.1:${internalPort}`;
 const child=spawn(process.execPath,[process.env.ATOMS_NEXT_ENTRY||'.next/standalone/server.js'],{stdio:'inherit',env:{...process.env,PORT:String(internalPort),HOSTNAME:'127.0.0.1',ATOMS_INTERNAL_KEY:internalKey}});

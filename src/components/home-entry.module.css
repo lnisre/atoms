@@ -106,7 +106,9 @@
   .shell { height: auto; min-height: 100dvh; display: block; overflow: visible; }
   .sidebar { width: 100%; height: auto; padding: 0 14px 8px; }
   .brandRow { height: 48px; }
-  .workspace, .recent, .sidebarBottom, .brandRow > button:last-child { display: none !important; }
+  .workspace, .recent, .sidebarBottom .offer, .brandRow > button:last-child { display: none !important; }
+  .sidebarBottom { padding-top: 0; }
+  .account { padding: 6px 0; justify-content: flex-end; }
   .navigation { flex-direction: row; }
   .navigation button { justify-content: center; font-size: 12px; }
   .navigation small { display: none; }

@@ -7,7 +7,7 @@ import { spawn } from "node:child_process";
 import { WebSocket } from "ws";
 import net from "node:net";
 
-test("real gateway rejects anonymous/invalid socket upgrades and forwards the verified cookie to internal start", async () => {
+for (const deployed of [false,true]) test(`real gateway ${deployed ? "deployment origin" : "local origin"} rejects anonymous/invalid upgrades and forwards the verified cookie`, async () => {
   const port = await new Promise(resolve => { const s=net.createServer();s.listen(0,"127.0.0.1",()=>{const address=s.address();if (!address || typeof address === "string")throw new Error();const p=address.port;s.close(()=>resolve(p));}); });
   const dir=await mkdtemp(join(tmpdir(),"atoms-auth-gateway-"));
   const entry=join(dir,"server.mjs");
@@ -21,9 +21,9 @@ http.createServer((req,res)=>{
  }
  res.end('ready');
 }).listen(Number(process.env.PORT),'127.0.0.1');`);
-  const child=spawn(process.execPath,["runtime/team/gateway.mjs"],{env:{...process.env,PORT:String(port),ATOMS_NEXT_ENTRY:entry},stdio:["ignore","pipe","pipe"]});
+  const child=spawn(process.execPath,["runtime/team/gateway.mjs"],{env:{...process.env,PORT:String(port),ATOMS_NEXT_ENTRY:entry,ATOMS_APP_ORIGIN:"",VERCEL_URL:deployed?"atoms-acceptance.vercel.app":""},stdio:["ignore","pipe","pipe"]});
   let output="";child.stdout.on("data",chunk=>{output+=chunk;});child.stderr.on("data",chunk=>{output+=chunk;});
-  const connect=(cookie,origin=`http://localhost:${port}`)=>new Promise((resolve,reject)=>{
+  const connect=(cookie,origin=deployed?"https://atoms-acceptance.vercel.app":`http://localhost:${port}`)=>new Promise((resolve,reject)=>{
     const ws=new WebSocket(`ws://127.0.0.1:${port}/api/team/socket`,{headers:{host:`localhost:${port}`,origin,cookie}});
     const timer=setTimeout(()=>{ws.terminate();reject(new Error('gateway timeout'));},10000);
     ws.on('unexpected-response',(_req,res)=>{clearTimeout(timer);res.resume();resolve(res.statusCode);});

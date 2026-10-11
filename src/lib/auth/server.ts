@@ -1,10 +1,11 @@
-import { createCipheriv, createDecipheriv, randomBytes } from "node:crypto";
+import { createCipheriv, createDecipheriv, randomBytes, randomUUID } from "node:crypto";
 import type { Account } from "./contract";
 
 const SESSION = "atoms-session";
 const CHALLENGE = "atoms-login";
-type Session = { accessToken: string; expiresAt: number };
-type Challenge = { email: string; verificationId: string; isUser: boolean; expiresAt: number; sentAt: number };
+const DEVICE = "atoms-device";
+type Session = { accessToken: string; expiresAt: number; account: Account; deviceId: string };
+type Challenge = { email: string; verificationId: string; isUser: boolean; expiresAt: number; sentAt: number; deviceId: string };
 export class AuthError extends Error {
   constructor(public code: string, message: string, public status = 401) { super(message); }
 }
@@ -44,14 +45,14 @@ export function checkOrigin(request: Request) {
     throw new AuthError("origin", "请从本网站重新发起操作。", 403);
   if (request.headers.get("sec-fetch-site") === "cross-site") throw new AuthError("origin", "请从本网站重新发起操作。", 403);
 }
-async function provider(path: string, body?: unknown, accessToken?: string): Promise<Record<string, unknown>> {
+async function provider(path: string, body?: unknown, accessToken?: string, deviceId?: string): Promise<Record<string, unknown>> {
   const env = process.env.CLOUDBASE_ENV_ID;
   if (!env || !/^[a-z\d-]+$/.test(env)) throw new AuthError("not_configured", "登录服务尚未配置，请联系维护者。", 503);
   let response: Response;
   try {
     response = await fetch(`https://${env}.api.tcloudbasegateway.com/auth/v1${path}`, {
       method: body === undefined ? "GET" : "POST",
-      headers: { "Content-Type": "application/json", ...(accessToken ? { Authorization: `Bearer ${accessToken}` } : {}) },
+      headers: { "Content-Type": "application/json", ...(accessToken ? { Authorization: `Bearer ${accessToken}` } : {}), ...(deviceId ? {"X-Device-Id": deviceId} : {}) },
       ...(body === undefined ? {} : { body: JSON.stringify(body) }),
       cache: "no-store", signal: AbortSignal.timeout(12_000),
     });
@@ -60,6 +61,8 @@ async function provider(path: string, body?: unknown, accessToken?: string): Pro
   if (!response.ok || data.error) {
     const code = typeof data.error === "string" ? data.error : "unavailable";
     // Never expose provider descriptions, credentials or raw responses.
+    if (path === "/verification/verify" && code === "invalid_argument" && response.status === 400)
+      throw new AuthError("invalid_code", "验证码错误或已失效，请检查后重试，或重新发送。", 400);
     if (code === "invalid_verification_code") throw new AuthError("invalid_code", "验证码错误，请重新输入。", 400);
     if (path.startsWith("/verification") && /expired|verification.*(not_found|invalid)|invalid.*verification/.test(code)) throw new AuthError("expired_code", "验证码已过期或失效，请重新发送。", 400);
     if (code === "captcha_required") throw new AuthError("captcha_required", "邮件服务要求额外验证，暂时无法继续。请稍后重试或联系维护者。", 429);
@@ -69,17 +72,19 @@ async function provider(path: string, body?: unknown, accessToken?: string): Pro
   }
   return data;
 }
-async function verifiedAccount(accessToken: string): Promise<Account> {
-  const data = await provider("/user/me", undefined, accessToken);
-  if (typeof data.sub !== "string" || !data.sub || data.sub === "service_account" || typeof data.email !== "string" || !data.email || data.email_verified !== true)
+async function verifiedAccount(accessToken: string, expected: { email: string; id?: string }, deviceId: string): Promise<Account> {
+  const data = await provider("/user/me", undefined, accessToken, deviceId);
+  if (typeof data.sub !== "string" || !data.sub || data.sub === "service_account" || typeof data.email !== "string" || !data.email || data.email_verified === false || data.email.toLowerCase() !== expected.email.toLowerCase() || (expected.id !== undefined && data.sub !== expected.id))
     throw new AuthError("unauthenticated", "请使用邮箱验证码登录。", 401);
+  // Auth v1 /user/me omits email_verified. Ownership comes from the server-bound
+  // OTP challenge at sign-in, then from the sealed account on every token check.
   return { id: data.sub, email: data.email };
 }
 export async function requireIdentity(request: Request): Promise<{ account: Account; accessToken: string }> {
   checkOrigin(request);
   const session = read<Session>(request, SESSION);
-  if (!session || !session.accessToken || !(session.expiresAt > Date.now())) throw new AuthError("unauthenticated", "请先登录，再继续操作。", 401);
-  return { account: await verifiedAccount(session.accessToken), accessToken: session.accessToken };
+  if (!session || !session.accessToken || typeof session.account?.id !== "string" || typeof session.account.email !== "string" || !session.deviceId || !(session.expiresAt > Date.now())) throw new AuthError("unauthenticated", "请先登录，再继续操作。", 401);
+  return { account: await verifiedAccount(session.accessToken, session.account, session.deviceId), accessToken: session.accessToken };
 }
 export async function requireAccount(request: Request): Promise<Account> {
   return (await requireIdentity(request)).account;
@@ -99,27 +104,30 @@ export async function sendCode(request: Request) {
     if (email.length > 254 || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) throw new AuthError("input", "请输入有效的邮箱地址。", 400);
     const previous = read<Challenge>(request, CHALLENGE);
     if (previous && Date.now() - previous.sentAt < 60_000) throw new AuthError("rate_limited", "验证码刚刚发送，请等待 60 秒后重试。", 429);
-    const data = await provider("/verification", { email, target: "ANY" });
+    const rememberedDevice = read<string>(request, DEVICE);
+    const deviceId = typeof rememberedDevice === "string" && /^[a-f0-9-]{36}$/.test(rememberedDevice) ? rememberedDevice : randomUUID();
+    const data = await provider("/verification", { email, target: "ANY" }, undefined, deviceId);
     if (typeof data.verification_id !== "string" || typeof data.expires_in !== "number" || data.expires_in <= 0) throw new Error("invalid provider response");
     const expiresIn = Math.min(data.expires_in, 600);
     const response = Response.json({ sent: true, expiresIn, retryAfter: 60 }, { headers: { "Cache-Control": "no-store" } });
-    cookie(response, CHALLENGE, { email, verificationId: data.verification_id, isUser: data.is_user === true, sentAt: Date.now(), expiresAt: Date.now() + expiresIn * 1000 } satisfies Challenge, expiresIn);
+    cookie(response, CHALLENGE, { email, verificationId: data.verification_id, isUser: data.is_user === true, sentAt: Date.now(), expiresAt: Date.now() + expiresIn * 1000, deviceId } satisfies Challenge, expiresIn);
+    cookie(response, DEVICE, deviceId, 31536000);
     return response;
   } catch (error) { return authFailure(error); }
 }
 export async function verifyCode(request: Request) {
   try {
     const body = await input(request), challenge = read<Challenge>(request, CHALLENGE);
-    if (!challenge || challenge.expiresAt <= Date.now()) throw new AuthError("expired_code", "验证码已过期，请重新发送。", 400);
+    if (!challenge || !challenge.deviceId || challenge.expiresAt <= Date.now()) throw new AuthError("expired_code", "验证码已过期，请重新发送。", 400);
     if (typeof body.code !== "string" || !/^\d{6}$/.test(body.code)) throw new AuthError("input", "请输入 6 位邮箱验证码。", 400);
-    const verification = await provider("/verification/verify", { verification_id: challenge.verificationId, verification_code: body.code });
+    const verification = await provider("/verification/verify", { verification_id: challenge.verificationId, verification_code: body.code }, undefined, challenge.deviceId);
     if (typeof verification.verification_token !== "string") throw new Error("invalid verification response");
-    const tokens = await provider(challenge.isUser ? "/signin" : "/signup", { verification_token: verification.verification_token, ...(!challenge.isUser ? { email: challenge.email } : {}) });
+    const tokens = await provider(challenge.isUser ? "/signin" : "/signup", { verification_token: verification.verification_token, ...(!challenge.isUser ? { email: challenge.email } : {}) }, undefined, challenge.deviceId);
     if (typeof tokens.access_token !== "string" || typeof tokens.expires_in !== "number" || tokens.expires_in <= 0) throw new Error("invalid token response");
-    const account = await verifiedAccount(tokens.access_token);
+    const account = await verifiedAccount(tokens.access_token, {email: challenge.email}, challenge.deviceId);
     const expiresIn = Math.min(tokens.expires_in, 86400);
     const response = Response.json({ account }, { headers: { "Cache-Control": "no-store" } });
-    cookie(response, SESSION, { accessToken: tokens.access_token, expiresAt: Date.now() + expiresIn * 1000 } satisfies Session, expiresIn);
+    cookie(response, SESSION, { accessToken: tokens.access_token, expiresAt: Date.now() + expiresIn * 1000, account, deviceId: challenge.deviceId } satisfies Session, expiresIn);
     cookie(response, CHALLENGE, null, 0);
     return response;
   } catch (error) { return authFailure(error); }
@@ -133,7 +141,7 @@ export async function logout(request: Request) {
     await input(request);
     const session = read<Session>(request, SESSION);
     if (session) {
-      try { await provider("/user/signout", {}, session.accessToken); }
+      try { await provider("/user/signout", {}, session.accessToken, session.deviceId); }
       catch (error) { if (!(error instanceof AuthError && error.status === 401)) throw error; }
     }
     const response = Response.json({ signedOut: true }, { headers: { "Cache-Control": "no-store" } });

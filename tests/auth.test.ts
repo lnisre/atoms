@@ -41,7 +41,7 @@ test("public signup and existing login use server-bound challenge; restore verif
       if (path.endsWith("/verification")) { assert.equal(body.target,"ANY"); return Response.json({verification_id:"mail-challenge",expires_in:600,is_user:isUser}); }
       if (path.endsWith("/verification/verify")) { assert.equal(body.verification_id,"mail-challenge"); return Response.json({verification_token:"proof"}); }
       if (path.endsWith("/signin") || path.endsWith("/signup")) { assert.equal(body.verification_token,"proof"); assert.equal(body.email,isUser ? undefined : "synthetic@example.invalid"); return Response.json({access_token:"private-access-token",expires_in:7200,refresh_token:"discarded-refresh"}); }
-      if (path.endsWith("/user/me")) { assert.equal(new Headers(init?.headers).get("authorization"),"Bearer private-access-token"); return Response.json(authProfile); }
+      if (path.endsWith("/user/me")) { assert.equal(new Headers(init?.headers).get("authorization"),"Bearer private-access-token"); const {email_verified, ...v1Profile}=authProfile; void email_verified; return Response.json(v1Profile); }
       if (path.endsWith("/user/signout")) return Response.json({});
       throw new Error("unexpected provider request");
     };
@@ -60,7 +60,7 @@ test("wrong/expired codes and send failures give retryable safe feedback; challe
   globalThis.fetch=async()=>Response.json({verification_id:"challenge",expires_in:600});
   const sent=await sendCode(request("auth/code",{email:"a@example.invalid"})), cookie=cookies(sent);
   assert.equal((await sendCode(request("auth/code",{email:"b@example.invalid"},cookie))).status,429);
-  for(const [providerError, code] of [["invalid_verification_code","invalid_code"],["verification_code_expired","expired_code"],["captcha_required","captcha_required"]]) {
+  for(const [providerError, code] of [["invalid_verification_code","invalid_code"],["invalid_argument","invalid_code"],["verification_code_expired","expired_code"],["captcha_required","captcha_required"]]) {
     globalThis.fetch=async()=>Response.json({error:providerError,error_description:"SECRET"},{status:400});
     const response=await verifyCode(request("auth/verify",{code:"123456"},cookie));const data=await response.json();assert.equal(data.code,code);assert.doesNotMatch(data.error,/SECRET/);
   }
@@ -70,7 +70,7 @@ test("wrong/expired codes and send failures give retryable safe feedback; challe
 });
 test("provider rejection, unverified email and management identity fail closed; outage is not anonymous success", async () => {
   const cookie=await authenticatedCookie();
-  for (const profile of [{...authProfile,email_verified:false},{...authProfile,sub:"service_account"}]) {
+  for (const profile of [{...authProfile,email_verified:false},{...authProfile,sub:"service_account"},{...authProfile,email:"foreign@example.invalid"},{...authProfile,sub:"foreign-account"}]) {
     globalThis.fetch=async()=>Response.json(profile);
     assert.equal((await getSession(request("auth/session",{},cookie))).status,401);
   }
@@ -111,8 +111,27 @@ test("task ticket binds verified owner and can be consumed only once, without re
   const negotiated=await teamEntry(req);assert.equal(negotiated.status,200);
   const {ticket}=await negotiated.json();const payload=JSON.parse(ticket.payload);assert.equal(payload.binding.ownerId,authProfile.sub);
   const consume=()=>{const r=request('generate',{ticket},cookie);r.headers.set('x-atoms-internal','fixture-internal-key');return teamEntry(r);};
-  profile={...authProfile,sub:'different-account'};assert.equal((await consume()).status,403);
+  profile={...authProfile,sub:'different-account'};assert.equal((await consume()).status,401); // sealed OTP account cannot silently change
   profile=authProfile;
   const first=await consume();assert.equal(first.status,503); // no Python/model configuration in this test
   assert.equal((await consume()).status,409);
+});
+
+test("independent browser devices keep distinct provider sessions and logout targets its own device", async () => {
+  const active = new Map<string,string>(); const devices: string[] = [];
+  globalThis.fetch=async(url,init)=>{
+    const path=new URL(String(url)).pathname, device=new Headers(init?.headers).get("x-device-id");
+    assert.ok(device);const token=new Headers(init?.headers).get("authorization")?.replace("Bearer ","");
+    if(path.endsWith("/verification"))return Response.json({verification_id:"synthetic",expires_in:600,is_user:true});
+    if(path.endsWith("/verification/verify"))return Response.json({verification_token:"synthetic"});
+    if(path.endsWith("/signin")){devices.push(device);const access=`synthetic-${devices.length}`;active.set(device,access);return Response.json({access_token:access,expires_in:7200});}
+    if(active.get(device)!==token)return Response.json({error:"unauthenticated"},{status:401});
+    if(path.endsWith("/user/me"))return Response.json({sub:authProfile.sub,email:authProfile.email});
+    if(path.endsWith("/user/signout")){active.delete(device);return Response.json({});}
+    throw Error("unexpected endpoint");
+  };
+  const signIn=async()=>{const sent=await sendCode(request("auth/code",{email:authProfile.email}));assert.equal(sent.status,200);const verified=await verifyCode(request("auth/verify",{code:"123456"},cookies(sent)));assert.equal(verified.status,200);return cookies(verified);};
+  const first=await signIn(),second=await signIn();assert.notEqual(devices[0],devices[1]);
+  for(const cookie of [first,second])assert.equal((await getSession(request("auth/session",{},cookie))).status,200);
+  assert.equal((await logout(request("auth/logout",{},first))).status,200);assert.equal((await getSession(request("auth/session",{},first))).status,401);assert.equal((await getSession(request("auth/session",{},second))).status,200);
 });
