@@ -110,8 +110,8 @@ test('修改超时结束等待，保留已采用应用供继续使用', async ({
   await page.route('**/api/generate', () => {});
   await page.clock.install();
   await modify(page);
-  await page.clock.fastForward(241000);
-  await expect(page.getByRole('region', { name: '对话修改' }).getByRole('alert')).toContainText('4 分钟上限');
+  await page.clock.fastForward(481000);
+  await expect(page.getByRole('region', { name: '对话修改' }).getByRole('alert')).toContainText('8 分钟上限');
   await originalIntact(page);
   await expect(page.getByRole('button', { name: '生成候选', exact: true })).toBeEnabled();
 });

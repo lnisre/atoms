@@ -124,10 +124,10 @@ export async function startTeam(request: Request, started = Date.now(), ownerId 
       tasks.set(taskId, session);
       const abort = () => stop("生成连接已断开，停止后续步骤。", "stopped");
       request.signal.addEventListener("abort", abort, { once: true });
-      const watchdog = setInterval(() => { if (Date.now() >= deadline) stop("任务已达到 4 分钟上限。", "limit"); else if (Date.now() - session.lease > 15_000) stop("浏览器已断线，停止后续步骤。", "stopped"); }, 500);
-      const hardTimeout = setTimeout(() => stop("任务已达到 4 分钟上限。", "limit"), Math.max(1, Math.min(TEAM_TIMEOUT_MS, deadline - Date.now())));
+      const watchdog = setInterval(() => { if (Date.now() >= deadline) stop("任务已达到 8 分钟上限。", "limit"); else if (Date.now() - session.lease > 15_000) stop("浏览器已断线，停止后续步骤。", "stopped"); }, 500);
+      const hardTimeout = setTimeout(() => stop("任务已达到 8 分钟上限。", "limit"), Math.max(1, Math.min(TEAM_TIMEOUT_MS, deadline - Date.now())));
       send({ type: "session", protocol: TEAM_PROTOCOL, taskId, projectId: body.projectId, token, deadline });
-      record("team", "启动 MetaGPT 四角色", "started", "原生 Team/MGXEnv 调度；每任务最多 4 分钟、20 次模型请求。请保持页面打开。");
+      record("team", "启动 MetaGPT 四角色", "started", "原生 Team/MGXEnv 调度；每任务最多 8 分钟、20 次模型请求。请保持页面打开。");
       child.stdin.write(JSON.stringify({ ...body, taskId, requirement: body.requirement.trim(), deadline }) + "\n");
       let buffer = "";
       let bytes = 0;
@@ -196,7 +196,7 @@ export async function startTeam(request: Request, started = Date.now(), ownerId 
       child.on("close", code => {
         if (terminal) return;
         buffer += decoder.end();
-        if (Date.now() >= deadline) return stop("任务已达到 4 分钟上限，拒绝迟到结果。", "limit");
+        if (Date.now() >= deadline) return stop("任务已达到 8 分钟上限，拒绝迟到结果。", "limit");
         if (buffer.trim()) return stop("团队输出不完整，未交付新结果。", "failed", false);
         if (code !== 0 || !candidateResult) return stop("团队进程未正常完成，已保留完整代码。");
         team.outcome = team.review?.issues.length ? "issues" : "passed"; team.codeHash = generatedHash; team.durationMs = Date.now() - started;
