@@ -28,7 +28,7 @@ class Controls(unittest.IsolatedAsyncioTestCase):
     async def test_expired_task_never_connects(self):
         task = r.Task({'deadline':time.time()*1000-1})
         with patch.object(r.httpx, 'AsyncClient', side_effect=AssertionError('must not connect')):
-            with self.assertRaisesRegex(RuntimeError, '4'):
+            with self.assertRaisesRegex(RuntimeError, '8 分钟上限'):
                 await task.ask('Mike', '', '', 1)
         self.assertEqual(task.calls, 0)
 
