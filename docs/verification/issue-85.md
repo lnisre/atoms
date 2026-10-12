@@ -28,7 +28,7 @@
 
 ## 实际运行与失败记录
 
-- 本任务最终浏览器 **15/15**，无跳过：[汇总](assets/issue-85/progress-final.json)。测试从公开界面提交需求，用已有云端 Auth/BFF 夹具及受控 WebSocket 事件驱动真实客户端验证、页面与 iframe；不调用真实模型。
+- 本任务首轮最终浏览器 **15/15**，无跳过：[汇总](assets/issue-85/progress-final.json)。测试从公开界面提交需求，用已有云端 Auth/BFF 夹具及受控 WebSocket 事件驱动真实客户端验证、页面与 iframe；不调用真实模型。
 - 合并 #84 后联合场次 **40 项，37 首次通过、3 失败**：[原始汇总](assets/issue-85/browser-merged.json)。两项是已记录的 opaque iframe 首次鼠标点击竞态；原样复跑通过。另一项为 load 故障注入不稳定，改在原生 iframe load 监听边界抑制通知后通过。对应 [3/3 复核](assets/issue-85/browser-followup.json)。没有用 Enter 替代失败鼠标断言，也不宣称已根治浏览器竞态。
 - 更早失败保留在 `/tmp/atoms-85-ui/attempt1..3`；[首次失败摘要](assets/issue-85/browser-first-attempt.json)记录 WebSocket 安装时机/关闭码、文字空白、滚动同步和鼠标竞态，后续修正的是夹具同步，不伪造产品阶段。
 - 原生浏览器 **2/2**，无跳过：[汇总](assets/issue-85/native-stop.json)。模型使用现有 `tests/team/fixture_transport.py`，真实监督进程/取消路径；Auth/PG 用明确的 `offline-cloud-provider.mjs`，真实公开登录与项目接口，不证明 CloudBase 或真实邮件。第一场证据保留 `/tmp/atoms-85-native/browser`，APIRequestContext 未发送本机 Secure Cookie，改用浏览器正常 Cookie 的公开 GET 后通过。
@@ -44,3 +44,9 @@
 生产前核对：固定 alias 为 `dpl_7ozqqenrpi5BtNAyaJs8jK7qDdQQ`，sourceCommit `319d8d46ac06dcac9249961f5945758997f1adbb`。最终 PR、合并提交、发布身份及生产页复核将在 Issue #85 的交付评论补充。
 
 已有 #84 限制：Vercel 项目拒绝超过 300 秒的托管超时设置，应用 8 分钟可能先被宿主终止；本任务仅跟随应用实际配置、不调整套餐或编排。#14/#18 视觉参考验收与真实模型质量不在本次完成声明内。
+
+## 发布前补检：准备试用副本期间停止
+
+云端数据读取由原预览共享，原先停止任务会等该读取返回才退出生成反馈。补检将任务对共享读取的等待绑定现有 AbortSignal，不取消预览自己的读取；停止立即进入终态，迟到读取只供原预览使用，不能继续请求模型。新增浏览器用例先阻塞真实公开数据读取边界，再操作停止、释放读取，验证停止状态、输入与原 iframe 保留且生成请求仍为一次。
+
+补检后进度浏览器 **16/16**，lint、typecheck、生产 build 通过，见 [结果](assets/issue-85/preparation-stop.json)。连同前述25项云端回归，共41项受控浏览器案例，另有2项实际网关/执行器取消案例。此修正仍归 #85，不新增实施任务。

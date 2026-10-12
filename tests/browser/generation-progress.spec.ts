@@ -128,3 +128,16 @@ test('delayed iframe load is not ready; 15 second load failure stays explicit wi
  const time=await summary(page).locator('.generation-progress-heading').textContent();await page.clock.runFor(15001);
  await expect(summary(page)).toContainText('预览加载或运行失败');await expect(summary(page).locator('.generation-progress-heading')).toHaveText(time!);expect(store.calls()).toBe(1);
 });
+
+
+test('stop during trial preparation ends immediately and ignores the late shared read',async({page,context})=>{
+ const store=await fixture();await store.connect(context);
+ let release=()=>{};const gate=new Promise<void>(r=>{release=r;});
+ await page.route('**/api/projects/*/data*',async route=>{if(route.request().method()==='GET')await gate;await route.fallback();});
+ await generate(page);await expect(ready(page)).toBeVisible();const iframe=await page.locator('iframe').elementHandle();
+ await page.getByLabel('追加修改需求').fill('stop before model');await page.getByRole('button',{name:'生成候选',exact:true}).click();
+ await expect(summary(page)).toContainText('正在准备试用副本');await page.getByRole('button',{name:'停止生成',exact:true}).click();
+ await expect(summary(page)).toContainText('任务已停止');await expect(page.getByRole('button',{name:'停止生成'})).toHaveCount(0);await expect(page.getByRole('button',{name:'生成候选',exact:true})).toBeEnabled();
+ expect(store.calls()).toBe(1);release();await expect(frame(page).getByRole('button',{name:'增加',exact:true})).toBeEnabled();
+ await expect(summary(page)).toContainText('任务已停止');await expect(page.getByLabel('追加修改需求')).toHaveValue('stop before model');expect(await iframe!.evaluate(el=>el.isConnected)).toBe(true);expect(store.calls()).toBe(1);
+});
