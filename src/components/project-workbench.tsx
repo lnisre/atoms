@@ -298,7 +298,7 @@ export default function ProjectWorkbench() {
     session.step = createRecorder(taskId, "browser", append);
     setPreviewStep(() => session.step);
     session.step("transport", "接收生成结果", "started", "向服务端提交需求并持续读取实际执行事件。");
-    const timer = setTimeout(() => controller.abort(new TeamError("limit", "任务已达到 4 分钟上限，已结束本次执行。")), TEAM_TIMEOUT_MS);
+    const timer = setTimeout(() => controller.abort(new TeamError("limit", "任务已达到 8 分钟上限，已结束本次执行。")), TEAM_TIMEOUT_MS);
     try {
       const response = await fetch("/api/generate", {
         method: "POST",
@@ -379,7 +379,7 @@ export default function ProjectWorkbench() {
     setModificationError("");
     setAdoptionError("");
     setSeconds(0);
-    const timer = setTimeout(() => controller.abort(new TeamError("limit", "任务已达到 4 分钟上限，已有成果保留。")), TEAM_TIMEOUT_MS);
+    const timer = setTimeout(() => controller.abort(new TeamError("limit", "任务已达到 8 分钟上限，已有成果保留。")), TEAM_TIMEOUT_MS);
     const baseHtml = (candidate?.result ?? task.result).html;
     const baseTeam = candidate?.session.record.team ?? records.at(-1)?.generations?.at(-1)?.team ?? generationRecord?.team;
     const baseDataIssues = baseTeam?.protocol === "atoms-team/3" ? unresolvedDataIssues(baseTeam) : [];
@@ -528,7 +528,7 @@ export default function ProjectWorkbench() {
                   <span className={initialBusy ? "spinner" : "state-symbol"} aria-hidden="true">{initialBusy ? "" : task?.status === "failed" ? "!" : "✓"}</span>
                   <h2>{initialBusy ? "正在生成应用" : task?.status === "failed" ? (task.outcome && task.outcome !== "failed" ? outcomeLabels[task.outcome] : "生成未完成") : restored ? "已恢复保存的应用" : "代码已生成"}</h2>
                 </div>
-                {initialBusy && <><p>正在处理需求，实际进展见平台执行记录。完整结果保存后会展示预览。</p><p className="elapsed">已等待 {seconds} 秒 · 最多 4 分钟</p></>}
+                {initialBusy && <><p>正在处理需求，实际进展见平台执行记录。完整结果保存后会展示预览。</p><p className="elapsed">已等待 {seconds} 秒 · 最多 8 分钟</p></>}
                 {task?.status === "waiting" && <button className="text-button" onClick={stopTask}>停止任务</button>}
                 {task?.status === "failed" && <><p role="alert" style={{whiteSpace:"pre-wrap"}}>{task.error}</p><button className="primary-button" onClick={() => void generate(project)}>重新生成</button></>}
                 {task?.status === "complete" && <p>{restored ? "已读取保存的需求和代码，没有重新调用模型。" : projectSave === "failed" ? "完整源码仅保留在本页，可查看和复制；尚未保存，刷新后无法恢复。" : policy?.status === "blocked" ? "完整源码已保留，可只读查看和复制；当前代码禁止运行。" : "现在可以在预览中操作应用。生成完成不代表所有功能都已验证。"}</p>}
@@ -551,7 +551,7 @@ export default function ProjectWorkbench() {
             {task?.status === "complete" && projectSave === "saved" && <section className="modification-panel" aria-label="对话修改">
               <div className="modification-feedback" aria-live="polite">
                 {modifying && <button className="text-button" onClick={stopTask}>停止任务</button>}
-                {modifying && <p role="status">正在基于{candidate ? "最新候选" : "已采用代码"}修改，已等待 {seconds} 秒，最多 4 分钟。现有预览与完整源码仍可查看。</p>}
+                {modifying && <p role="status">正在基于{candidate ? "最新候选" : "已采用代码"}修改，已等待 {seconds} 秒，最多 8 分钟。现有预览与完整源码仍可查看。</p>}
                 {modificationError && <p className="save-error" role="alert">{modificationError} 原应用与正式数据未被替换，可点击“生成候选”手动重试。</p>}
               </div>
               <form onSubmit={event => { event.preventDefault(); void modify(); }}>
