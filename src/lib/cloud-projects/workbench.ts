@@ -1,6 +1,7 @@
 import { cloudRequest, CloudDataSession, readProject, readHistory, readSnapshot, unsavedCopy } from "./client";
 import { ProjectError, type CloudProject, type CommitReceipt, type ProjectHistory, type HistorySnapshot, type HistoryAction, type HistoryEntry, type ProjectVersion } from "./contract";
 import type { Artifact, ArtifactProof } from "./artifact-contract";
+import type { GenerationProgress } from "../generation-progress";
 import type { InitialGeneration } from "../execution";
 import type { TrialData } from "../trial-data";
 import type { SavedProject } from "../project-store";
@@ -13,7 +14,7 @@ export type HistoryConfirmation = { action: HistoryAction; targetId: string; exp
 type Pending = { acknowledged?: boolean; uncertain?: boolean; operationId: string; path: string; body: object };
 export type WorkbenchState = {
   initialRequirement?: string; cloud?: CloudProject; artifact?: Artifact; proof?: ArtifactProof; trial?: TrialData;
-  task?: InitialGeneration; generating: boolean; saving: boolean; error: string;
+  progress?: GenerationProgress; task?: InitialGeneration; generating: boolean; saving: boolean; error: string;
   historyOpen?: boolean; history?: ProjectHistory; historyLoading?: boolean; historyError?: string;
   historySnapshotLoading?: boolean;
   confirmation?: HistoryConfirmation; errorCode?: string;
@@ -56,7 +57,7 @@ export class CloudWorkbenchSession {
   setInput(input: string) { this.publish({input}); }
   dispose() { this.lifetime.abort(); this.active?.abort(); this.data?.dispose(); this.historyRead?.abort(); this.snapshotRead?.abort(); this.listeners.clear(); }
   stop() { this.active?.abort(new TeamError("stopped","本次任务已停止。")); }
-  discard() { if (!this.state.generating && !this.state.saving && !this.state.pending) this.publish({artifact:undefined,proof:undefined,trial:this.state.cloud?.project.previewPolicy?.dataMode === "trial" ? {projectId:this.projectId,state:null,hasData:false} : undefined,task:undefined,input:"",error:""}); }
+  discard() { if (!this.state.generating && !this.state.saving && !this.state.pending) this.publish({artifact:undefined,proof:undefined,trial:this.state.cloud?.project.previewPolicy?.dataMode === "trial" ? {projectId:this.projectId,state:null,hasData:false} : undefined,task:undefined,progress:undefined,input:"",error:""}); }
   get historyBusy() { return this.state.generating || this.state.saving || !!this.state.pending || !!this.data?.status.pending || this.data?.status.phase === "loading"; }
   prepareHistory(action: HistoryAction, entry?: HistoryEntry) {
     const cloud = this.state.cloud;
@@ -129,9 +130,15 @@ export class CloudWorkbenchSession {
     if (cloud && !modification) return;
     this.attempts.add(taskId);
     const active = new AbortController(); this.active = active;
-    const timeout = setTimeout(()=>active.abort(new TeamError("limit","任务已达到 8 分钟上限。")),TEAM_TIMEOUT_MS);
+    const timeout = setTimeout(()=>active.abort(new TeamError("limit",`任务已达到 ${TEAM_TIMEOUT_MS / 60_000} 分钟执行上限。`)),TEAM_TIMEOUT_MS);
     const record: InitialGeneration = {taskId,startedAt:new Date().toISOString(),assistantReply:null,events:[]};
-    this.publish({generating:true,error:"",task:record,initialRequirement:requirement ?? this.state.initialRequirement});
+    this.publish({generating:true,error:"",task:record,initialRequirement:requirement ?? this.state.initialRequirement,
+      progress:{record,startedAt:Date.now(),lastProgressAt:Date.now(),waiting:cloud && !this.state.trial ? "trial" : "connection",modification:!!cloud}});
+    const progress = (change: Partial<GenerationProgress>) => {
+      if (this.active === active && this.state.progress?.record.taskId === taskId)
+        this.publish({progress:{...this.state.progress,...change}});
+    };
+    const finish = (change: Partial<GenerationProgress> = {}) => progress({endedAt:this.state.progress?.endedAt ?? Date.now(),...change});
     try {
       let trial = this.state.trial;
       if (cloud && !trial) {
@@ -139,12 +146,13 @@ export class CloudWorkbenchSession {
         trial = {projectId:this.projectId,state:structuredClone(loaded?.state ?? null),hasData:loaded !== undefined};
       }
       active.signal.throwIfAborted();
+      progress({waiting:"connection"});
       const expected = parent?.expected ?? this.data?.version ?? cloud?.version;
       const response = await fetch("/api/generate", {method:"POST",cache:"no-store",headers:{"Content-Type":"application/json","X-Atoms-Protocol":"atoms-team/3","X-Atoms-Task-Id":taskId,"X-Atoms-Account":this.owner},
         body:JSON.stringify({projectId:this.projectId,...(cloud ? {modification,expected,...(parentProof ? {parent:parentProof} : {})} : {requirement})}),signal:active.signal});
       const base = parent?.result ?? (cloud && (cloud.project.draftResult ?? cloud.project.result));
       const baseTeam = parent?.generations.at(-1)?.team ?? cloud?.project.modificationRecords?.at(-1)?.generations?.at(-1)?.team ?? cloud?.project.initialGeneration?.team;
-      const result = await readTeam(response,taskId,this.projectId,active.signal,event=>{record.events.push(event);this.publish({task:{...record}});},team=>{record.team=team;this.publish({task:{...record}});},base?.html,baseTeam?.protocol === "atoms-team/3" ? unresolvedDataIssues(baseTeam) : []);
+      const result = await readTeam(response,taskId,this.projectId,active.signal,event=>{record.events.push(event);this.publish({task:{...record}});progress({record:{...record},lastProgressAt:Date.now(),waiting:"team"});},team=>{record.team=team;this.publish({task:{...record}});progress({record:{...record},lastProgressAt:Date.now(),waiting:"team"});if(team.outcome)finish({outcome:team.outcome});},base?.html,baseTeam?.protocol === "atoms-team/3" ? unresolvedDataIssues(baseTeam) : []);
       if (this.lifetime.signal.aborted) return;
       // A transport-retained artifact may be downloadable, but has no trusted
       // terminal proof and cannot be saved/adopted by fabricating a team record.
@@ -155,10 +163,24 @@ export class CloudWorkbenchSession {
         initialGeneration:cloud ? undefined : record,generations:[],
       };
       if (artifact.ownerId !== this.owner || artifact.projectId !== this.projectId || artifact.taskId !== taskId || artifact.result.html !== result.result.html) throw new Error("产物与当前账号任务不符。");
+      finish({record:{...record},outcome:result.team.outcome,reason:result.error,html:artifact.result.html,preview:artifact.policy.status === "blocked" ? "blocked" : "loading"});
+      clearTimeout(timeout);
+      this.publish({generating:false});
       this.publish({artifact,proof:result.proof,trial:trial ?? {projectId:this.projectId,state:null,hasData:false},task:{...record},input:"",error:result.proof ? "" : "连接结束前未取得可信保存证明。代码已保留，可下载副本。"});
       if (!cloud && result.proof) await this.commit();
-    } catch (error) { if (!this.lifetime.signal.aborted) this.publish({error:error instanceof Error ? error.message : "生成失败，请手动重试。"}); }
-    finally { clearTimeout(timeout); if (this.active === active) {this.active=undefined;this.publish({generating:false});} }
+    } catch (error) {
+      const reason=error instanceof Error ? error.message : "生成失败，请手动重试。";
+      finish({outcome:error instanceof TeamError ? error.outcome : "failed",reason});
+      if (!this.lifetime.signal.aborted) this.publish({error:reason});
+    }
+    finally { clearTimeout(timeout); finish(); if (this.active === active) {this.active=undefined;this.publish({generating:false});} }
+  }
+  previewStep(html: string, stepId: string, status: "started" | "completed" | "failed") {
+    const progress=this.state.progress;
+    if (!progress?.html || progress.html !== html || progress.preview === "blocked") return;
+    if (!["preview-assemble","preview-load","preview-runtime"].includes(stepId)) return;
+    const preview=status === "failed" ? "failed" : progress.preview === "failed" ? "failed" : stepId === "preview-load" && status === "completed" ? "loaded" : progress.preview;
+    if (preview !== progress.preview) this.publish({progress:{...progress,preview}});
   }
   get adoptionBlock(): { message: string; details: string[] } | undefined {
     const { artifact, proof, generating, saving, pending } = this.state;
@@ -211,6 +233,9 @@ export class CloudWorkbenchSession {
         this.data?.dispose(); this.data=new CloudDataSession(this.owner,this.projectId,cloud.version.code);
         this.data.subscribe(() => this.publish({}));
         const clearing = "action" in pending.body && pending.body.action === "clear";
+        const progress=this.state.progress;
+        if ("action" in pending.body && !clearing) this.publish({progress:undefined});
+        else if (progress?.html && !clearing) this.publish({progress:{...progress,saved:true,preview:progress.preview === "blocked" ? "blocked" : "loading"}});
         this.publish({cloud,artifact:clearing ? this.state.artifact : undefined,proof:clearing ? this.state.proof : undefined,trial:clearing ? this.state.trial : cloud.project.previewPolicy?.dataMode === "trial" ? {projectId:this.projectId,state:null,hasData:false} : undefined,task:clearing ? this.state.task : undefined,input:clearing ? this.state.input : "",pending:undefined,logsPending:this.logQueue.length>0});
         window.history.replaceState(null,"",`/?project=${this.projectId}`);
         if (this.logQueue.length) void this.retryLogs();

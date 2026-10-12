@@ -1,0 +1,30 @@
+{
+  "stats": {
+    "startTime": "2026-10-12T15:07:28.610Z",
+    "duration": 14934.238,
+    "expected": 3,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  },
+  "tests": [
+    {
+      "title": "restored restricted code remains trial; explicit permitted activation never copies trial data",
+      "status": "passed",
+      "duration": 3657,
+      "errors": []
+    },
+    {
+      "title": "first pointer activation reaches a freshly restored opaque iframe",
+      "status": "passed",
+      "duration": 7823,
+      "errors": []
+    },
+    {
+      "title": "delayed iframe load is not ready; 15 second load failure stays explicit without model retry",
+      "status": "passed",
+      "duration": 1492,
+      "errors": []
+    }
+  ]
+}

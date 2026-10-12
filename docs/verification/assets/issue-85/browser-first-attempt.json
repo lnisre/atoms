@@ -1,0 +1,106 @@
+{
+  "stats": {
+    "startTime": "2026-10-12T14:44:21.939Z",
+    "duration": 79762.189,
+    "expected": 5,
+    "skipped": 0,
+    "unexpected": 8,
+    "flaky": 0
+  },
+  "tests": [
+    {
+      "title": "first generation follows accepted deliveries, both repairs and current-code review; time freezes before saving",
+      "status": "failed",
+      "duration": 8127,
+      "errors": [
+        "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoContainText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('region', { name: '生成进度', exact: true })\nExpected substring: \u001b[32m\"正在保存项目\"\u001b[39m\nReceived string:    \u001b[31m\"生成进度生成耗时 0 分 15 秒执行失败✓ 整理需求已完成✓ 编写应用已完成✓ 代码审查已完成○ 准备预览未完成已进行 2 次整体返工／最多 2 次 · 当前代码已审查团队连接中断，未恢复后台执行。\"\u001b[39m\nTimeout: 5000ms\n\nCall log:\n\u001b[2m  - Expect \"toContainText\" getByRole('region', { name: '生成进度', exact: true }) with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('region', { name: '生成进度', exact: true })\u001b[22m\n\u001b[2m    14 × locator resolved to <section aria-label=\"生成进度\" class=\"generation-progress\">…</section>\u001b[22m\n\u001b[2m       - unexpected value \"生成进度生成耗时 0 分 15 秒执行失败✓ 整理需求已完成✓ 编写应用已完成✓ 代码审查已完成○ 准备预览未完成已进行 2 次整体返工／最多 2 次 · 当前代码已审查团队连接中断，未恢复后台执行。\"\u001b[22m\n\n\n  22 |   await page.clock.runFor(5000);stream.engineerDeliver(repair+1);stream.artifact();await expect(summary(page)).toContainText('新代码仍需复审');\n  23 |  }\n> 24 |  stream.reviewerStart();stream.review();stream.finish();await expect(summary(page)).toContainText('正在保存项目');\n     |                                                                                     ^\n  25 |  const time=await summary(page).locator('.generation-progress-heading').innerText();await page.clock.runFor(5000);await expect(summary(page).locator('.generation-progress-heading')).toHaveText(time);\n  26 |  await expect(page.getByRole('button',{name:'停止生成'})).toHaveCount(0);await expect(summary(page)).not.toContainText('可试用');\n  27 |  store.releaseSave();await expect(ready(page)).toBeVisible();await expect(summary(page)).toContainText('代码已保存 · 预览已加载');\n    at /Users/gaowenlong/.codex/worktrees/issue-85-generation-progress/atoms/tests/browser/generation-progress.spec.ts:24:85"
+      ]
+    },
+    {
+      "title": "30 second threshold excludes heartbeat and data edits; fresh progress clears wait; stop freezes elapsed and next task resets",
+      "status": "failed",
+      "duration": 7068,
+      "errors": [
+        "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32mtrue\u001b[39m\nReceived: \u001b[31mfalse\u001b[39m\n\nCall Log:\n- Timeout 5000ms exceeded while waiting on the predicate\n\n   at ../helpers/progress-browser-fixture.ts:47\n\n  45 |  }\n  46 |  return {\n> 47 |   connected:()=>expect.poll(()=>started).toBe(true), calls:()=>calls, heartbeats:()=>heartbeats, closed:()=>closed,\n     |                                          ^\n  48 |   call,completed,assign,delivery,\n  49 |   requirements(){assign('Requirements');call('Requirements');completed();delivery('Requirements',{requirements:[{id:'counter',description:'Synthetic counter'}]});},\n  50 |   engineerStart(){assign('Engineer');call('Engineer');},\n    at Object.connected (/Users/gaowenlong/.codex/worktrees/issue-85-generation-progress/atoms/tests/helpers/progress-browser-fixture.ts:47:42)\n    at /Users/gaowenlong/.codex/worktrees/issue-85-generation-progress/atoms/tests/browser/generation-progress.spec.ts:34:207"
+      ]
+    },
+    {
+      "title": "modification fixed summary, scroll, details, input and iframe retention at 1440",
+      "status": "failed",
+      "duration": 8730,
+      "errors": [
+        "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32mtrue\u001b[39m\nReceived: \u001b[31mfalse\u001b[39m\n\nCall Log:\n- Timeout 5000ms exceeded while waiting on the predicate\n\n   at ../helpers/progress-browser-fixture.ts:47\n\n  45 |  }\n  46 |  return {\n> 47 |   connected:()=>expect.poll(()=>started).toBe(true), calls:()=>calls, heartbeats:()=>heartbeats, closed:()=>closed,\n     |                                          ^\n  48 |   call,completed,assign,delivery,\n  49 |   requirements(){assign('Requirements');call('Requirements');completed();delivery('Requirements',{requirements:[{id:'counter',description:'Synthetic counter'}]});},\n  50 |   engineerStart(){assign('Engineer');call('Engineer');},\n    at Object.connected (/Users/gaowenlong/.codex/worktrees/issue-85-generation-progress/atoms/tests/helpers/progress-browser-fixture.ts:47:42)\n    at /Users/gaowenlong/.codex/worktrees/issue-85-generation-progress/atoms/tests/browser/generation-progress.spec.ts:53:182"
+      ]
+    },
+    {
+      "title": "modification fixed summary, scroll, details, input and iframe retention at 1280",
+      "status": "failed",
+      "duration": 8895,
+      "errors": [
+        "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32mtrue\u001b[39m\nReceived: \u001b[31mfalse\u001b[39m\n\nCall Log:\n- Timeout 5000ms exceeded while waiting on the predicate\n\n   at ../helpers/progress-browser-fixture.ts:47\n\n  45 |  }\n  46 |  return {\n> 47 |   connected:()=>expect.poll(()=>started).toBe(true), calls:()=>calls, heartbeats:()=>heartbeats, closed:()=>closed,\n     |                                          ^\n  48 |   call,completed,assign,delivery,\n  49 |   requirements(){assign('Requirements');call('Requirements');completed();delivery('Requirements',{requirements:[{id:'counter',description:'Synthetic counter'}]});},\n  50 |   engineerStart(){assign('Engineer');call('Engineer');},\n    at Object.connected (/Users/gaowenlong/.codex/worktrees/issue-85-generation-progress/atoms/tests/helpers/progress-browser-fixture.ts:47:42)\n    at /Users/gaowenlong/.codex/worktrees/issue-85-generation-progress/atoms/tests/browser/generation-progress.spec.ts:53:182"
+      ]
+    },
+    {
+      "title": "terminal without code: limit",
+      "status": "passed",
+      "duration": 1987,
+      "errors": []
+    },
+    {
+      "title": "terminal without code: failed",
+      "status": "passed",
+      "duration": 1614,
+      "errors": []
+    },
+    {
+      "title": "terminal without code: clarification",
+      "status": "passed",
+      "duration": 1655,
+      "errors": []
+    },
+    {
+      "title": "terminal without code: unsupported",
+      "status": "passed",
+      "duration": 1554,
+      "errors": []
+    },
+    {
+      "title": "terminal with complete code retains reason and usable artifact: limit",
+      "status": "failed",
+      "duration": 6611,
+      "errors": [
+        "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoContainText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('region', { name: '生成进度', exact: true })\nExpected substring: \u001b[32m\"Synthetic limit reason\"\u001b[39m\nReceived string:    \u001b[31m\"生成进度生成耗时 0 分 0 秒执行失败✓ 整理需求已完成✓ 编写应用已完成○ 代码审查未完成○ 准备预览未完成团队连接中断，未恢复后台执行。\"\u001b[39m\nTimeout: 5000ms\n\nCall log:\n\u001b[2m  - Expect \"toContainText\" getByRole('region', { name: '生成进度', exact: true }) with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('region', { name: '生成进度', exact: true })\u001b[22m\n\u001b[2m    14 × locator resolved to <section aria-label=\"生成进度\" class=\"generation-progress\">…</section>\u001b[22m\n\u001b[2m       - unexpected value \"生成进度生成耗时 0 分 0 秒执行失败✓ 整理需求已完成✓ 编写应用已完成○ 代码审查未完成○ 准备预览未完成团队连接中断，未恢复后台执行。\"\u001b[22m\n\n\n  66 | for(const outcome of ['limit','failed'] as const)test(`terminal with complete code retains reason and usable artifact: ${outcome}`,async({page,context})=>{\n  67 |  const store=await fixture();await store.connect(context);const stream=await progressFixture(page,store);await generate(page);await stream.connected();stream.requirements();stream.engineerStart();stream.engineerDeliver();stream.artifact();stream.reviewerStart();stream.finish(outcome,`Synthetic ${outcome} reason`);\n> 68 |  await expect(summary(page)).toContainText(`Synthetic ${outcome} reason`);await expect(summary(page)).toContainText('代码已保存');await expect(frame(page).locator('h1')).toHaveText('Progress 1');await expect(page.getByRole('button',{name:'停止生成'})).toHaveCount(0);\n     |                              ^\n  69 | });\n  70 |\n  71 | test('connection failure before and after complete code reports outcome without inventing a save',async({page,context})=>{\n    at /Users/gaowenlong/.codex/worktrees/issue-85-generation-progress/atoms/tests/browser/generation-progress.spec.ts:68:30"
+      ]
+    },
+    {
+      "title": "terminal with complete code retains reason and usable artifact: failed",
+      "status": "failed",
+      "duration": 6866,
+      "errors": [
+        "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoContainText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('region', { name: '生成进度', exact: true })\nExpected substring: \u001b[32m\"Synthetic failed reason\"\u001b[39m\nReceived string:    \u001b[31m\"生成进度生成耗时 0 分 0 秒执行失败✓ 整理需求已完成✓ 编写应用已完成○ 代码审查未完成○ 准备预览未完成团队连接中断，未恢复后台执行。\"\u001b[39m\nTimeout: 5000ms\n\nCall log:\n\u001b[2m  - Expect \"toContainText\" getByRole('region', { name: '生成进度', exact: true }) with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('region', { name: '生成进度', exact: true })\u001b[22m\n\u001b[2m    14 × locator resolved to <section aria-label=\"生成进度\" class=\"generation-progress\">…</section>\u001b[22m\n\u001b[2m       - unexpected value \"生成进度生成耗时 0 分 0 秒执行失败✓ 整理需求已完成✓ 编写应用已完成○ 代码审查未完成○ 准备预览未完成团队连接中断，未恢复后台执行。\"\u001b[22m\n\n\n  66 | for(const outcome of ['limit','failed'] as const)test(`terminal with complete code retains reason and usable artifact: ${outcome}`,async({page,context})=>{\n  67 |  const store=await fixture();await store.connect(context);const stream=await progressFixture(page,store);await generate(page);await stream.connected();stream.requirements();stream.engineerStart();stream.engineerDeliver();stream.artifact();stream.reviewerStart();stream.finish(outcome,`Synthetic ${outcome} reason`);\n> 68 |  await expect(summary(page)).toContainText(`Synthetic ${outcome} reason`);await expect(summary(page)).toContainText('代码已保存');await expect(frame(page).locator('h1')).toHaveText('Progress 1');await expect(page.getByRole('button',{name:'停止生成'})).toHaveCount(0);\n     |                              ^\n  69 | });\n  70 |\n  71 | test('connection failure before and after complete code reports outcome without inventing a save',async({page,context})=>{\n    at /Users/gaowenlong/.codex/worktrees/issue-85-generation-progress/atoms/tests/browser/generation-progress.spec.ts:68:30"
+      ]
+    },
+    {
+      "title": "connection failure before and after complete code reports outcome without inventing a save",
+      "status": "failed",
+      "duration": 6868,
+      "errors": [
+        "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32mtrue\u001b[39m\nReceived: \u001b[31mfalse\u001b[39m\n\nCall Log:\n- Timeout 5000ms exceeded while waiting on the predicate\n\n   at ../helpers/progress-browser-fixture.ts:47\n\n  45 |  }\n  46 |  return {\n> 47 |   connected:()=>expect.poll(()=>started).toBe(true), calls:()=>calls, heartbeats:()=>heartbeats, closed:()=>closed,\n     |                                          ^\n  48 |   call,completed,assign,delivery,\n  49 |   requirements(){assign('Requirements');call('Requirements');completed();delivery('Requirements',{requirements:[{id:'counter',description:'Synthetic counter'}]});},\n  50 |   engineerStart(){assign('Engineer');call('Engineer');},\n    at Object.connected (/Users/gaowenlong/.codex/worktrees/issue-85-generation-progress/atoms/tests/helpers/progress-browser-fixture.ts:47:42)\n    at /Users/gaowenlong/.codex/worktrees/issue-85-generation-progress/atoms/tests/browser/generation-progress.spec.ts:74:139"
+      ]
+    },
+    {
+      "title": "save failure and blocked or failed preview never claim ready",
+      "status": "passed",
+      "duration": 2006,
+      "errors": []
+    },
+    {
+      "title": "candidate ready stays unadopted; accessible stage updates exclude ticking time",
+      "status": "failed",
+      "duration": 6954,
+      "errors": [
+        "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('iframe[title=\"生成的应用\"]').contentFrame().locator('#count')\nExpected: \u001b[32m\"1\"\u001b[39m\nReceived: \u001b[31m\"0\"\u001b[39m\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveText\" locator('iframe[title=\"生成的应用\"]').contentFrame().locator('#count') with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('iframe[title=\"生成的应用\"]').contentFrame().locator('#count')\u001b[22m\n\u001b[2m    14 × locator resolved to <output id=\"count\">0</output>\u001b[22m\n\u001b[2m       - unexpected value \"0\"\u001b[22m\n\n\n  91 |  const store=await fixture();await store.connect(context);await generate(page);await expect(ready(page)).toBeVisible();await modify(page);await expect(summary(page)).toContainText('可试用，未采用');\n  92 |  const live=summary(page).getByRole('status');await expect(live).not.toContainText('秒');expect(await summary(page).locator('[aria-live=\"off\"]').count()).toBe(1);\n> 93 |  await page.getByLabel('追加修改需求').fill('next draft');const iframe=await page.locator('iframe').elementHandle();await frame(page).getByRole('button',{name:'增加',exact:true}).click();await expect(frame(page).locator('#count')).toHaveText('1');\n     |                                                                                                                                                                                                                                ^\n  94 |  await page.getByText('模型调用与用量',{exact:false}).last().click();await expect(page.getByLabel('追加修改需求')).toHaveValue('next draft');expect(await iframe!.evaluate(el=>el.isConnected)).toBe(true);await expect(frame(page).locator('#count')).toHaveText('1');expect(store.calls()).toBe(2);expect([...store.rows.values()][0].cloud.state).toBe(null);\n  95 | });\n  96 |\n    at /Users/gaowenlong/.codex/worktrees/issue-85-generation-progress/atoms/tests/browser/generation-progress.spec.ts:93:224"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,45 @@
+
+> atoms@0.1.0 build /Users/gaowenlong/.codex/worktrees/issue-85-generation-progress/atoms
+> next build --webpack
+
+▲ Next.js 16.3.6 (webpack)
+✓ Running next.config.ts took 87ms
+
+  Creating an optimized production build ...
+✓ Compiled successfully in 2.2s
+  Running TypeScript ...
+  Finished TypeScript in 1517ms ...
+  Collecting page data using 7 workers ...
+  Generating static pages using 7 workers (0/16) ...
+  Generating static pages using 7 workers (4/16) 
+  Generating static pages using 7 workers (8/16) 
+  Generating static pages using 7 workers (12/16) 
+✓ Generating static pages using 7 workers (16/16) in 181ms
+  Finalizing page optimization ...
+  Collecting build traces ...
+
+Route (app)
+┌ ○ /
+├ ○ /_not-found
+├ ƒ /api/auth/code
+├ ƒ /api/auth/logout
+├ ƒ /api/auth/session
+├ ƒ /api/auth/verify
+├ ƒ /api/generate
+├ ƒ /api/projects
+├ ƒ /api/projects/[id]
+├ ƒ /api/projects/[id]/data
+├ ƒ /api/projects/[id]/history
+├ ƒ /api/projects/[id]/history/[snapshotId]
+├ ƒ /api/projects/activate
+├ ƒ /api/projects/artifact
+├ ƒ /api/projects/events
+├ ƒ /api/projects/example
+├ ƒ /api/qa
+├ ƒ /api/team
+└ ○ /qa
+
+
+○  (Static)   prerendered as static content
+ƒ  (Dynamic)  server-rendered on demand
+

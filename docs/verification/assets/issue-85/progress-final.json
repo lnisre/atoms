@@ -1,0 +1,102 @@
+{
+  "stats": {
+    "startTime": "2026-10-12T15:09:42.504Z",
+    "duration": 37316.864,
+    "expected": 15,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  },
+  "tests": [
+    {
+      "title": "first generation follows accepted deliveries, both repairs and current-code review; time freezes before saving",
+      "status": "passed",
+      "duration": 4404,
+      "errors": []
+    },
+    {
+      "title": "30 second threshold excludes heartbeat and data edits; fresh progress clears wait; stop freezes elapsed and next task resets",
+      "status": "passed",
+      "duration": 3119,
+      "errors": []
+    },
+    {
+      "title": "modification fixed summary, scroll, details, input and iframe retention at 1440",
+      "status": "passed",
+      "duration": 3889,
+      "errors": []
+    },
+    {
+      "title": "modification fixed summary, scroll, details, input and iframe retention at 1280",
+      "status": "passed",
+      "duration": 3882,
+      "errors": []
+    },
+    {
+      "title": "terminal without code: limit",
+      "status": "passed",
+      "duration": 1650,
+      "errors": []
+    },
+    {
+      "title": "terminal without code: failed",
+      "status": "passed",
+      "duration": 1733,
+      "errors": []
+    },
+    {
+      "title": "terminal without code: clarification",
+      "status": "passed",
+      "duration": 1822,
+      "errors": []
+    },
+    {
+      "title": "terminal without code: unsupported",
+      "status": "passed",
+      "duration": 1850,
+      "errors": []
+    },
+    {
+      "title": "terminal with complete code retains reason and usable artifact: limit",
+      "status": "passed",
+      "duration": 1753,
+      "errors": []
+    },
+    {
+      "title": "terminal with complete code retains reason and usable artifact: failed",
+      "status": "passed",
+      "duration": 1833,
+      "errors": []
+    },
+    {
+      "title": "connection failure before and after complete code reports outcome without inventing a save",
+      "status": "passed",
+      "duration": 2028,
+      "errors": []
+    },
+    {
+      "title": "save failure and blocked or failed preview never claim ready",
+      "status": "passed",
+      "duration": 1889,
+      "errors": []
+    },
+    {
+      "title": "candidate ready stays unadopted; accessible stage updates exclude ticking time",
+      "status": "passed",
+      "duration": 1861,
+      "errors": []
+    },
+    {
+      "title": "trial preparation names the data wait, then preview load remains pending until an actual load event",
+      "status": "passed",
+      "duration": 1753,
+      "errors": []
+    },
+    {
+      "title": "delayed iframe load is not ready; 15 second load failure stays explicit without model retry",
+      "status": "passed",
+      "duration": 1495,
+      "errors": []
+    }
+  ]
+}

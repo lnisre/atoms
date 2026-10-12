@@ -20,7 +20,7 @@ test("shared record rendering preserves blocked and unsaved result hints and act
 });
 test("ordinary record rendering retains pending and saving states", () => {
   const output = renderToStaticMarkup(<GenerationRecord record={record} live pending saving saveError={false} />);
-  assert.ok(output.includes("等待模型完整说明"));
+  assert.ok(output.includes("本轮执行尚未结束"));
   assert.ok(output.includes("执行记录正在保存"));
   assert.ok(!output.includes("实际助手回复"));
 });

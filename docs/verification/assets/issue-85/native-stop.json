@@ -1,0 +1,24 @@
+{
+  "stats": {
+    "startTime": "2026-10-12T15:08:42.994Z",
+    "duration": 83681.647,
+    "expected": 2,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  },
+  "tests": [
+    {
+      "title": "first generation stop after cached repair rejects late result",
+      "status": "passed",
+      "duration": 38242,
+      "errors": []
+    },
+    {
+      "title": "modification stop after cached repair rejects late result",
+      "status": "passed",
+      "duration": 43919,
+      "errors": []
+    }
+  ]
+}
