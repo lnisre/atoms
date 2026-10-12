@@ -1,7 +1,7 @@
 import type { CodeReview } from "./review";
 import type { ToolRequest, ToolResult, Scenario, Command, Json } from "../qa/contract";
 export const TEAM_PROTOCOL = "atoms-team/3";
-export const TEAM_TIMEOUT_MS = 240_000;
+export const TEAM_TIMEOUT_MS = 480_000;
 export type PlatformProbe = { seed: Json; prepare: Command[]; commitSelector: string; changed: { path: string[]; equals: Json } };
 export type Specification = {
   summary: string;

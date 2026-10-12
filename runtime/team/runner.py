@@ -77,7 +77,7 @@ class Task:
         if self.failure:
             raise RuntimeError(self.failure)
         if time.monotonic() >= self.deadline:
-            raise TaskEnd('limit', '任务已达到 4 分钟上限')
+            raise TaskEnd('limit', '任务已达到 8 分钟上限')
 
     def input_context(self):
         return {k: self.request[k] for k in ("requirement", "modification", "baseHtml", "context", "baseDataIssues") if k in self.request}
@@ -116,7 +116,7 @@ class Task:
         send('call', **call)
         started = time.monotonic()
         try:
-            async with httpx.AsyncClient(timeout=min(80, self.deadline-time.monotonic())) as client:
+            async with httpx.AsyncClient(timeout=max(.01, self.deadline-time.monotonic())) as client:
                 response = await client.post('https://api.deepseek.com/chat/completions',
                     headers={'Authorization': 'Bearer ' + self.key},
                     json=dict(model='deepseek-flash', messages=[dict(role='system', content=system), dict(role='user', content=json.dumps(context, ensure_ascii=False))], thinking={'type':thinking}, reasoning_effort=effort, response_format={'type':'json_object'}, max_tokens=tokens, stream=False))
@@ -219,7 +219,7 @@ class Implement(GuardedAction):
         if not t.spec or t.implementations >= 3 or (t.html and (not t.review or not any(i['severity'] == 'major' for i in t.review['issues']) or t.review['codeHash'] != t.code_hash())):
             raise RuntimeError('没有有效审查意见或已用完两次整体返工')
         prior_html, prior_review = t.html, t.review
-        artifact = await t.ask('Engineer', 'You implement the specification. '+CONTRACT+' Return ONLY JSON {html:string,assistantReply:string}. Complete code and concise Chinese explanation of usage and limitations. When rejectedHtml and review are provided, fix ALL actual blocking findings, preserve frozen requirements, and explain each change. Return the full changed HTML, not a patch. No claims of tests you have not run.', {**t.input_context(),'spec':t.spec,'leaderInstruction':t.instructions.get('Engineer'),'rejectedHtml':prior_html,'review':prior_review}, 9500)
+        artifact = await t.ask('Engineer', 'You implement the specification. '+CONTRACT+' Return ONLY JSON {html:string,assistantReply:string}. Complete code and concise Chinese explanation of usage and limitations. When rejectedHtml and review are provided, fix ALL actual blocking findings, preserve frozen requirements, and explain each change. Return the full changed HTML, not a patch. No claims of tests you have not run.', {**t.input_context(),'spec':t.spec,'leaderInstruction':t.instructions.get('Engineer'),'rejectedHtml':prior_html,'review':prior_review}, 393216)
         html, reply = artifact.get('html'), artifact.get('assistantReply')
         if not isinstance(html,str) or not html.lower().startswith('<!doctype html>') or not html.lower().rstrip().endswith('</html>') or len(html)>500000 or not isinstance(reply,str) or not reply.strip() or len(reply)>32000:
             raise RuntimeError('工程师未提供完整代码与说明')
@@ -312,5 +312,5 @@ if __name__ == '__main__':
     try:
         asyncio.run(main())
     except Exception as error:
-        send('failure', outcome=error.outcome if isinstance(error, TaskEnd) else 'limit' if isinstance(error, TimeoutError) else 'failed', error=str(error) if isinstance(error, RuntimeError) else '任务已达到 4 分钟上限' if isinstance(error, TimeoutError) else '团队运行失败：'+type(error).__name__)
+        send('failure', outcome=error.outcome if isinstance(error, TaskEnd) else 'limit' if isinstance(error, TimeoutError) else 'failed', error=str(error) if isinstance(error, RuntimeError) else '任务已达到 8 分钟上限' if isinstance(error, TimeoutError) else '团队运行失败：'+type(error).__name__)
         sys.exit(1)

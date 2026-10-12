@@ -8,7 +8,7 @@ import {cloudCrossAppWorkflow,cloudReadingRequirement} from './cloud-cross-app-w
 import {readingChanges,acceptanceScenarios} from './cross-app-scenarios';
 import {hash} from './independent-check';
 async function main(){
- const manifest={requirement:cloudReadingRequirement,changes:readingChanges,taskCount:3,perTask:{deadlineMs:240000,modelRequests:20},data:'only new synthetic test project; no existing user business data',identity:'two independently authenticated browser profiles of the same normal account',planHashes:[false,true].map(rated=>hash(JSON.stringify(acceptanceScenarios('reading',rated))))};
+ const manifest={requirement:cloudReadingRequirement,changes:readingChanges,taskCount:3,perTask:{deadlineMs:480000,modelRequests:20},data:'only new synthetic test project; no existing user business data',identity:'two independently authenticated browser profiles of the same normal account',planHashes:[false,true].map(rated=>hash(JSON.stringify(acceptanceScenarios('reading',rated))))};
  if(!process.argv.includes('--execute')){console.log(JSON.stringify(manifest,null,2));return;}
  const {TEST_BASE_URL,TEAM_EVIDENCE_DIR,CLOUD_PROFILE_A,CLOUD_PROFILE_B}=process.env;
  if(!TEST_BASE_URL||!TEAM_EVIDENCE_DIR||!CLOUD_PROFILE_A||!CLOUD_PROFILE_B)throw new Error('Target, fresh evidence directory and two authenticated isolated profiles required');

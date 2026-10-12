@@ -17,7 +17,7 @@ async function main() {
   const manifest = { provider: 'https://api.deepseek.com/chat/completions', model: 'deepseek-flash', kind,
     requirement: syntheticRequirement(kind), changes: kind === 'reading' ? readingChanges : [],
     inputBoundary: 'Only these synthetic requests, generated HTML, role artifacts and platform prompts; no real business records or repository files',
-    initialDraft, controlledModificationDefect: repair, taskCount: repair ? 1 : kind === 'reading' ? 3 : 1, perTask: { deadlineMs: 240000, modelRequests: 20, engineerArtifacts: 3 },
+    initialDraft, controlledModificationDefect: repair, taskCount: repair ? 1 : kind === 'reading' ? 3 : 1, perTask: { deadlineMs: 480000, modelRequests: 20, engineerArtifacts: 3 },
     independentPlanHashes: [false, ...(kind === 'reading' ? [true] : [])].map(rated => hash(JSON.stringify(acceptanceScenarios(kind, rated)))) };
   if (!process.argv.includes('--execute')) { console.log(JSON.stringify(manifest, null, 2)); return; }
   const base = process.env.TEST_BASE_URL, destination = process.env.TEAM_EVIDENCE_DIR;

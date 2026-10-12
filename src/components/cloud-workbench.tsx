@@ -22,7 +22,7 @@ export function CloudWorkbench({ session, accountSlot, onBack, onReload, onLogin
       <textarea rows={3} id="modification" aria-label="追加修改需求" value={state.input} maxLength={MAX_REQUIREMENT_LENGTH} disabled={state.generating || state.saving || !!state.pending} onChange={e=>session.setInput(e.target.value)}/>
       <button className="primary-button" disabled={!state.input.trim() || state.generating || state.saving || !!state.pending || (!!artifact && !state.proof)} onClick={()=>void session.generate(crypto.randomUUID())}>生成候选</button>
     </>}
-    {state.generating && <><p role="status">团队正在生成，最多 4 分钟、20 次模型请求。请保持页面打开。</p><button className="secondary-button" onClick={()=>session.stop()}>停止生成</button></>}
+    {state.generating && <><p role="status">团队正在生成，最多 8 分钟、20 次模型请求。请保持页面打开。</p><button className="secondary-button" onClick={()=>session.stop()}>停止生成</button></>}
     {artifact && <><p>{state.cloud ? "候选仅在当前会话中试用；采用只更新代码与记录，试用数据不会写回。" : state.saving ? "首次成果正在保存，云端提交后才会确认。" : "首次成果尚未确认云端保存。"}</p>
       {state.cloud?.restore && <p>采用后将结束本次恢复的撤销机会；只有采用成功才会结束。</p>}
       {adoptionBlock && <div className="adoption-block" id="adoption-block-reason" role="status"><p>{adoptionBlock.message}</p>{adoptionBlock.details.length > 0 && <ul>{adoptionBlock.details.map((detail,index)=><li key={index}>{detail}</li>)}</ul>}</div>}

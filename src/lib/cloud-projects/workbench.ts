@@ -129,7 +129,7 @@ export class CloudWorkbenchSession {
     if (cloud && !modification) return;
     this.attempts.add(taskId);
     const active = new AbortController(); this.active = active;
-    const timeout = setTimeout(()=>active.abort(new TeamError("limit","任务已达到 4 分钟上限。")),TEAM_TIMEOUT_MS);
+    const timeout = setTimeout(()=>active.abort(new TeamError("limit","任务已达到 8 分钟上限。")),TEAM_TIMEOUT_MS);
     const record: InitialGeneration = {taskId,startedAt:new Date().toISOString(),assistantReply:null,events:[]};
     this.publish({generating:true,error:"",task:record,initialRequirement:requirement ?? this.state.initialRequirement});
     try {
