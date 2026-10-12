@@ -10,6 +10,19 @@ import { TEAM_TIMEOUT_MS, TeamError } from "../team/contract";
 import { previewPolicy } from "../team/preview-policy";
 import { unresolvedDataIssues, unresolvedDataRisks } from "../team/review";
 
+// A preview may share this read. Stop waiting for it without cancelling the
+// preview's data request; its late result cannot restart a stopped generation.
+async function waitForTask<T>(work: Promise<T>, signal: AbortSignal): Promise<T> {
+  let onAbort = () => {};
+  try {
+    return await Promise.race([work, new Promise<never>((_, reject) => {
+      onAbort = () => reject(signal.reason);
+      signal.addEventListener("abort", onAbort, { once: true });
+      if (signal.aborted) onAbort();
+    })]);
+  } finally { signal.removeEventListener("abort", onAbort); }
+}
+
 export type HistoryConfirmation = { action: HistoryAction; targetId: string; expected: ProjectVersion; expectedHistory: number; entry?: HistoryEntry };
 type Pending = { acknowledged?: boolean; uncertain?: boolean; operationId: string; path: string; body: object };
 export type WorkbenchState = {
@@ -142,7 +155,7 @@ export class CloudWorkbenchSession {
     try {
       let trial = this.state.trial;
       if (cloud && !trial) {
-        const loaded = cloud.project.previewPolicy?.dataMode === "trial" ? undefined : await this.data!.load();
+        const loaded = cloud.project.previewPolicy?.dataMode === "trial" ? undefined : await waitForTask(this.data!.load(), active.signal);
         trial = {projectId:this.projectId,state:structuredClone(loaded?.state ?? null),hasData:loaded !== undefined};
       }
       active.signal.throwIfAborted();
