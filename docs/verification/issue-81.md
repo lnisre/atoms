@@ -51,3 +51,7 @@ Deployed frozen source 72b4d5e1237bf0c2595264192aec39f2cf98d6cb, including the c
 The create response timed out, but read-only lookup by exact sourceCommit/sourceDigest recovered one existing deployment. No second create was sent. The previous #78 deployment remains available. Verification metadata is retained in assets/issue-81/deployment/. Source is committed locally and deployed; it has not been pushed to GitHub. Issue #81 awaits user production confirmation.
 
 The user's Chrome candidate remains intact under its previously signed policy. Deploying does not rewrite that proof or refresh the page. The same open page can continue generating a new candidate through the updated server policy; refreshing first would discard the unadopted candidate.
+
+## 用户验收
+
+2026-10-12，用户确认“验证 ok”，并明确要求创建 PR 合入 master。此前“等待用户确认 / 尚未推送”的记录描述部署当时状态；本轮按用户授权完成仓库交付。

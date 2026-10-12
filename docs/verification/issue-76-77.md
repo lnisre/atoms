@@ -54,3 +54,7 @@ All 92 source files, sourceDigest and container image identity match the frozen 
 This verifies deployment identity and public assets. Authenticated restore behavior awaits the user's production check. The source was deployed directly from the frozen local commit and has not been pushed to GitHub. Both issues remain open pending user verification.
 
 [Deployment verification](assets/issue-76-77/deployment/verification.json) | [Public smoke](assets/issue-76-77/deployment/public-smoke.json)
+
+## 用户验收
+
+2026-10-12，用户完成本会话修复的线上验证，确认“验证 ok”并要求 PR 合入 master。#76/#77 的产品代码已由 #80 集成，本次补齐发布证据并随 #81 完成验收收尾。
