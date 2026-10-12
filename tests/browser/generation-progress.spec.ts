@@ -116,7 +116,13 @@ test('trial preparation names the data wait, then preview load remains pending u
 test('delayed iframe load is not ready; 15 second load failure stays explicit without model retry',async({page,context})=>{
  const store=await fixture();await store.connect(context);
  // Browser lifecycle fault seam, no component setters or fabricated ready state.
- await page.addInitScript(()=>window.addEventListener('load',event=>{if(event.target instanceof HTMLIFrameElement)event.stopImmediatePropagation();},true));
+ await page.addInitScript(()=>{
+  const add=EventTarget.prototype.addEventListener;
+  EventTarget.prototype.addEventListener=function(type,listener,options){
+   if(this instanceof HTMLIFrameElement && type==='load')return;
+   return add.call(this,type,listener,options);
+  };
+ });
  await page.clock.install();await generate(page);await expect(ready(page)).toBeVisible();
  await expect(summary(page)).toContainText('准备预览 · 正在加载隔离预览');await expect(summary(page)).not.toContainText('可试用');
  const time=await summary(page).locator('.generation-progress-heading').textContent();await page.clock.runFor(15001);

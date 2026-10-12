@@ -1,0 +1,258 @@
+{
+  "stats": {
+    "startTime": "2026-10-12T15:03:46.104Z",
+    "duration": 129450.179,
+    "expected": 37,
+    "skipped": 0,
+    "unexpected": 3,
+    "flaky": 0
+  },
+  "tests": [
+    {
+      "title": "guest intent runs once; first save response loss and separate log failure retry without generation; second browser restores",
+      "status": "passed",
+      "duration": 4461,
+      "errors": []
+    },
+    {
+      "title": "multi-round trial never writes official data; atomic adoption replays and other device candidate conflicts",
+      "status": "passed",
+      "duration": 4051,
+      "errors": []
+    },
+    {
+      "title": "natural expiry retains started result; same-account reauthentication saves without another model task",
+      "status": "passed",
+      "duration": 1765,
+      "errors": []
+    },
+    {
+      "title": "cancelled exit keeps task; confirmed logout unmounts and ignores late result before another account signs in",
+      "status": "passed",
+      "duration": 1742,
+      "errors": []
+    },
+    {
+      "title": "restored restricted code remains trial; explicit permitted activation never copies trial data",
+      "status": "failed",
+      "duration": 6719,
+      "errors": [
+        "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('iframe[title=\"生成的应用\"]').contentFrame().locator('#count')\nExpected: \u001b[32m\"1\"\u001b[39m\nReceived: \u001b[31m\"0\"\u001b[39m\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveText\" locator('iframe[title=\"生成的应用\"]').contentFrame().locator('#count') with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('iframe[title=\"生成的应用\"]').contentFrame().locator('#count')\u001b[22m\n\u001b[2m    14 × locator resolved to <output id=\"count\">0</output>\u001b[22m\n\u001b[2m       - unexpected value \"0\"\u001b[22m\n\n\n  36 | test('restored restricted code remains trial; explicit permitted activation never copies trial data',async({page,context})=>{\n  37 |  const store=await fixture();await store.connect(context);store.restrict({status:'allowed',reasons:[],dataMode:'trial',adoption:'allowed',review:'unavailable'});await generate(page);await expect(ready(page)).toBeVisible();\n> 38 |  await frame(page).getByRole('button',{name:'增加',exact:true}).click();await expect(frame(page).locator('#count')).toHaveText('1');expect([...store.rows.values()][0].cloud.state).toBe(null);\n     |                                                                                                                   ^\n  39 |  await page.reload();await expect(page.getByRole('button',{name:'使用此版本'})).toBeEnabled();await expect(frame(page).locator('#count')).toHaveText('0');await page.getByRole('button',{name:'使用此版本'}).click();await expect(page.getByRole('button',{name:'使用此版本'})).toHaveCount(0);await expect(frame(page).locator('#count')).toHaveText('0');\n  40 | });\n  41 |\n    at /Users/gaowenlong/.codex/worktrees/issue-85-generation-progress/atoms/tests/browser/cloud-generation.spec.ts:38:115"
+      ]
+    },
+    {
+      "title": "logout during uncertain commit clears old page; late commit remains private to the original account",
+      "status": "passed",
+      "duration": 2024,
+      "errors": []
+    },
+    {
+      "title": "execution-blocked draft remains blocked after reopening and cannot be activated by the page",
+      "status": "passed",
+      "duration": 2621,
+      "errors": []
+    },
+    {
+      "title": "first generation failure preserves editable requirement and explicitly starts a fresh task",
+      "status": "passed",
+      "duration": 1628,
+      "errors": []
+    },
+    {
+      "title": "restored restricted trial changes trigger exit protection and download includes the session copy",
+      "status": "passed",
+      "duration": 2764,
+      "errors": []
+    },
+    {
+      "title": "historical source, label and preview agree; returning preserves the candidate trial and original point",
+      "status": "passed",
+      "duration": 3308,
+      "errors": []
+    },
+    {
+      "title": "failed history read reports failure without mounting an empty history preview",
+      "status": "passed",
+      "duration": 1649,
+      "errors": []
+    },
+    {
+      "title": "direct restore, cancel, paired original, source and persistent full undo agree across independent sessions",
+      "status": "passed",
+      "duration": 7936,
+      "errors": []
+    },
+    {
+      "title": "lost restore response and failed undo readback retain original operation; cleanup protection ends only on adoption",
+      "status": "passed",
+      "duration": 4572,
+      "errors": []
+    },
+    {
+      "title": "capacity failure leads to actual manual cleanup and keeps the candidate; stale confirmation reports conflict",
+      "status": "passed",
+      "duration": 2969,
+      "errors": []
+    },
+    {
+      "title": "undo has no clock expiry, busy generation blocks it, discard retains it and failed cleanup does not claim success",
+      "status": "passed",
+      "duration": 4071,
+      "errors": []
+    },
+    {
+      "title": "first pointer activation reaches a freshly restored opaque iframe",
+      "status": "failed",
+      "duration": 3611,
+      "errors": [
+        "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('iframe[title=\"生成的应用\"]').contentFrame().locator('#count')\nExpected: \u001b[32m\"1\"\u001b[39m\nReceived: \u001b[31m\"0\"\u001b[39m\nTimeout:  2000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveText\" locator('iframe[title=\"生成的应用\"]').contentFrame().locator('#count') with timeout 2000ms\u001b[22m\n\u001b[2m  - waiting for locator('iframe[title=\"生成的应用\"]').contentFrame().locator('#count')\u001b[22m\n\u001b[2m    20 × locator resolved to <output id=\"count\">0</output>\u001b[22m\n\u001b[2m       - unexpected value \"0\"\u001b[22m\n\n\n  12 |   await page.evaluate(()=>{(window as unknown as {pointerLog:unknown[]}).pointerLog=[];for(const type of ['pointerdown','pointerup','click'])addEventListener(type,e=>(window as unknown as {pointerLog:unknown[]}).pointerLog.push({type,target:(e.target as Element).tagName}),true);});\n  13 |   await button.click();\n> 14 |   try{await expect(frame(page).locator('#count')).toHaveText(String(attempt+1),{timeout:2000});}\n     |                                                   ^\n  15 |   finally{await info.attach(`pointer-${attempt}`,{body:JSON.stringify(await page.evaluate(()=>(window as unknown as {pointerLog:unknown[]}).pointerLog)),contentType:'application/json'});}\n  16 |   await expect(page.getByText('应用数据已保存到云端',{exact:true})).toBeVisible();\n  17 |  }\n    at /Users/gaowenlong/.codex/worktrees/issue-85-generation-progress/atoms/tests/browser/cloud-regressions.spec.ts:14:51"
+      ]
+    },
+    {
+      "title": "cloud candidate preserves code reading and same-version iframe across view changes",
+      "status": "passed",
+      "duration": 2268,
+      "errors": []
+    },
+    {
+      "title": "failed and stopped modifications retain the candidate; discard and refresh keep only saved state",
+      "status": "passed",
+      "duration": 3323,
+      "errors": []
+    },
+    {
+      "title": "a result without a trusted terminal proof stays downloadable and cannot be saved",
+      "status": "passed",
+      "duration": 1478,
+      "errors": []
+    },
+    {
+      "title": "long saved history scrolls independently and leaves modification controls and preview reachable",
+      "status": "passed",
+      "duration": 3140,
+      "errors": []
+    },
+    {
+      "title": "a complete Chrome restart restores the cloud project without another generation request",
+      "status": "passed",
+      "duration": 5644,
+      "errors": []
+    },
+    {
+      "title": "first generation follows accepted deliveries, both repairs and current-code review; time freezes before saving",
+      "status": "passed",
+      "duration": 3490,
+      "errors": []
+    },
+    {
+      "title": "30 second threshold excludes heartbeat and data edits; fresh progress clears wait; stop freezes elapsed and next task resets",
+      "status": "passed",
+      "duration": 3095,
+      "errors": []
+    },
+    {
+      "title": "modification fixed summary, scroll, details, input and iframe retention at 1440",
+      "status": "passed",
+      "duration": 3535,
+      "errors": []
+    },
+    {
+      "title": "modification fixed summary, scroll, details, input and iframe retention at 1280",
+      "status": "passed",
+      "duration": 3517,
+      "errors": []
+    },
+    {
+      "title": "terminal without code: limit",
+      "status": "passed",
+      "duration": 1587,
+      "errors": []
+    },
+    {
+      "title": "terminal without code: failed",
+      "status": "passed",
+      "duration": 1562,
+      "errors": []
+    },
+    {
+      "title": "terminal without code: clarification",
+      "status": "passed",
+      "duration": 1554,
+      "errors": []
+    },
+    {
+      "title": "terminal without code: unsupported",
+      "status": "passed",
+      "duration": 1593,
+      "errors": []
+    },
+    {
+      "title": "terminal with complete code retains reason and usable artifact: limit",
+      "status": "passed",
+      "duration": 1763,
+      "errors": []
+    },
+    {
+      "title": "terminal with complete code retains reason and usable artifact: failed",
+      "status": "passed",
+      "duration": 1815,
+      "errors": []
+    },
+    {
+      "title": "connection failure before and after complete code reports outcome without inventing a save",
+      "status": "passed",
+      "duration": 2022,
+      "errors": []
+    },
+    {
+      "title": "save failure and blocked or failed preview never claim ready",
+      "status": "passed",
+      "duration": 1838,
+      "errors": []
+    },
+    {
+      "title": "candidate ready stays unadopted; accessible stage updates exclude ticking time",
+      "status": "passed",
+      "duration": 1811,
+      "errors": []
+    },
+    {
+      "title": "trial preparation names the data wait, then preview load remains pending until an actual load event",
+      "status": "passed",
+      "duration": 1677,
+      "errors": []
+    },
+    {
+      "title": "delayed iframe load is not ready; 15 second load failure stays explicit without model retry",
+      "status": "failed",
+      "duration": 6579,
+      "errors": [
+        "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoContainText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('region', { name: '生成进度', exact: true })\nExpected substring: \u001b[32m\"预览加载\u001b[7m或运行失败\u001b[27m\"\u001b[39m\nReceived string:    \u001b[31m\"\u001b[7m生成进度生成耗时 0 分 0 秒代码已保存 · \u001b[27m预览\u001b[7m已\u001b[27m加载\u001b[7m✓ 整理需求已完成✓ 编写应用已完成✓ 代码审查已完成✓ 准备预览已完成预览加载不代表业务验证通过，请实际操作检查。\u001b[27m\"\u001b[39m\nTimeout: 5000ms\n\nCall log:\n\u001b[2m  - Expect \"toContainText\" getByRole('region', { name: '生成进度', exact: true }) with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('region', { name: '生成进度', exact: true })\u001b[22m\n\u001b[2m    14 × locator resolved to <section aria-label=\"生成进度\" class=\"generation-progress\">…</section>\u001b[22m\n\u001b[2m       - unexpected value \"生成进度生成耗时 0 分 0 秒代码已保存 · 预览已加载✓ 整理需求已完成✓ 编写应用已完成✓ 代码审查已完成✓ 准备预览已完成预览加载不代表业务验证通过，请实际操作检查。\"\u001b[22m\n\n\n  121 |  await expect(summary(page)).toContainText('准备预览 · 正在加载隔离预览');await expect(summary(page)).not.toContainText('可试用');\n  122 |  const time=await summary(page).locator('.generation-progress-heading').textContent();await page.clock.runFor(15001);\n> 123 |  await expect(summary(page)).toContainText('预览加载或运行失败');await expect(summary(page).locator('.generation-progress-heading')).toHaveText(time!);expect(store.calls()).toBe(1);\n      |                              ^\n  124 | });\n  125 |\n    at /Users/gaowenlong/.codex/worktrees/issue-85-generation-progress/atoms/tests/browser/generation-progress.spec.ts:123:30"
+      ]
+    },
+    {
+      "title": "真实 head 装配、数据保存恢复和运行异常反馈：普通完整 HTML",
+      "status": "passed",
+      "duration": 3040,
+      "errors": []
+    },
+    {
+      "title": "真实 head 装配、数据保存恢复和运行异常反馈：<!-- example <head> -->",
+      "status": "passed",
+      "duration": 2778,
+      "errors": []
+    },
+    {
+      "title": "真实 head 装配、数据保存恢复和运行异常反馈：<!-- <head> --><!----><!-- <body> -->",
+      "status": "passed",
+      "duration": 2724,
+      "errors": []
+    },
+    {
+      "title": "云端读取不完整 HTML 时明确显示装配失败且不运行 iframe",
+      "status": "passed",
+      "duration": 3861,
+      "errors": []
+    }
+  ]
+}

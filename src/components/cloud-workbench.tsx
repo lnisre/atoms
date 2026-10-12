@@ -59,8 +59,8 @@ export function CloudWorkbench({ session, accountSlot, onBack, onReload, onLogin
     progress={state.progress && <GenerationProgressSummary key={state.progress.record.taskId} state={state}/> }
     conversation={<>
           {cloud && <CloudProjectHistory cloud={cloud}/>}
-          {artifact?.generations.map(record=><GenerationRecord key={record.taskId} title="本轮修改" requirement={record.requirement} live={false} pending={false} saveError={!!state.error} saving={state.saving} record={record}/>)}
-          {state.task && (!artifact?.generations.some(g=>g.taskId===state.task!.taskId)) && <GenerationRecord live={state.generating} pending={state.generating} saveError={!!state.error} saving={state.saving} record={state.task} title={cloud ? "本轮修改" : "首次生成"}/>}
+          {artifact?.generations.map(record=><GenerationRecord key={record.taskId} title="本轮修改" requirement={record.requirement} live={false} pending={false} saveError={!!state.pending && !!state.error} saving={state.saving} record={record}/>)}
+          {state.task && (!artifact?.generations.some(g=>g.taskId===state.task!.taskId)) && <GenerationRecord live={state.generating} pending={state.generating} saveError={!!state.pending && !!state.error} saving={state.saving} record={state.task} title={cloud ? "本轮修改" : "首次生成"}/>}
     </>}
     controls={<>
         {cloud?.restore && <section className="cloud-save-panel" aria-label="恢复状态"><p>已恢复到 V{cloud.restore.sequence}。撤销机会不会按时间过期，采用新代码成功后结束。</p><button className="secondary-button" disabled={session.historyBusy} onClick={() => session.prepareHistory("undo")}>撤销本次恢复</button></section>}

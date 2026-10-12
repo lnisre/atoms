@@ -18,9 +18,13 @@ test.describe('native cloud cancellation with offline provider',()=>{
   });return {errors,sockets};
  }
  async function snapshot(page:Page){
-  const headers={'X-Atoms-Account':'synthetic-account'};
-  const list=await page.request.get('/api/projects',{headers});expect(list.ok()).toBe(true);
-  const projects=await list.json();const rows=[];for(const p of projects){const r=await page.request.get('/api/projects/'+p.id,{headers});expect(r.ok()).toBe(true);rows.push(await r.json());}return rows;
+  return page.evaluate(async()=>{
+   const headers={'X-Atoms-Account':'synthetic-account'};
+   const list=await fetch('/api/projects',{headers});if(!list.ok)throw new Error('Project read status '+list.status);
+   const projects=await list.json(),rows=[];
+   for(const p of projects){const r=await fetch('/api/projects/'+p.id,{headers});if(!r.ok)throw new Error('Project detail status '+r.status);rows.push(await r.json());}
+   return rows;
+  });
  }
  for(const modification of [false,true])test(`${modification?'modification':'first generation'} stop after cached repair rejects late result`,async({page},info)=>{
   await login(page);const observations=observe(page);
