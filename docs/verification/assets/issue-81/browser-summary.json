@@ -1,0 +1,212 @@
+{
+  "initial": {
+    "stats": {
+      "startTime": "2026-10-11T15:56:59.094Z",
+      "duration": 106464.095,
+      "expected": 26,
+      "skipped": 0,
+      "unexpected": 1,
+      "flaky": 0
+    },
+    "cases": [
+      {
+        "title": "after restoring V2 a minor persistence candidate can be adopted with formal data intact",
+        "status": "passed",
+        "errors": []
+      },
+      {
+        "title": "major persistence keeps adoption blocked with specific consequence",
+        "status": "passed",
+        "errors": []
+      },
+      {
+        "title": "minor data-loss keeps adoption blocked with specific consequence",
+        "status": "passed",
+        "errors": []
+      },
+      {
+        "title": "missing proof and generation in progress explain disabled adoption without claiming data risk",
+        "status": "passed",
+        "errors": []
+      },
+      {
+        "title": "guest intent runs once; first save response loss and separate log failure retry without generation; second browser restores",
+        "status": "passed",
+        "errors": []
+      },
+      {
+        "title": "multi-round trial never writes official data; atomic adoption replays and other device candidate conflicts",
+        "status": "passed",
+        "errors": []
+      },
+      {
+        "title": "natural expiry retains started result; same-account reauthentication saves without another model task",
+        "status": "passed",
+        "errors": []
+      },
+      {
+        "title": "cancelled exit keeps task; confirmed logout unmounts and ignores late result before another account signs in",
+        "status": "passed",
+        "errors": []
+      },
+      {
+        "title": "restored restricted code remains trial; explicit permitted activation never copies trial data",
+        "status": "failed",
+        "errors": [
+          "Error: expect(locator).toHaveText(expected) failed\n\nLocator:  locator('iframe[title=\"生成的应用\"]').contentFrame().locator('#count')\nExpected: \"1\"\nReceived: \"0\"\nTimeout:  5000ms\n\nCall log:\n  - Expect \"toHaveText\" locator('iframe[title=\"生成的应用\"]').contentFrame().locator('#count') with timeout 5000ms\n  - waiting for locator('iframe[title=\"生成的应用\"]').contentFrame().locator('#count')\n    14 × locator resolved to <output id=\"count\">0</output>\n       - unexpected value \"0\""
+        ]
+      },
+      {
+        "title": "logout during uncertain commit clears old page; late commit remains private to the original account",
+        "status": "passed",
+        "errors": []
+      },
+      {
+        "title": "execution-blocked draft remains blocked after reopening and cannot be activated by the page",
+        "status": "passed",
+        "errors": []
+      },
+      {
+        "title": "first generation failure preserves editable requirement and explicitly starts a fresh task",
+        "status": "passed",
+        "errors": []
+      },
+      {
+        "title": "restored restricted trial changes trigger exit protection and download includes the session copy",
+        "status": "passed",
+        "errors": []
+      },
+      {
+        "title": "historical source, label and preview agree; returning preserves the candidate trial and original point",
+        "status": "passed",
+        "errors": []
+      },
+      {
+        "title": "failed history read reports failure without mounting an empty history preview",
+        "status": "passed",
+        "errors": []
+      },
+      {
+        "title": "direct restore, cancel, paired original, source and persistent full undo agree across independent sessions",
+        "status": "passed",
+        "errors": []
+      },
+      {
+        "title": "lost restore response and failed undo readback retain original operation; cleanup protection ends only on adoption",
+        "status": "passed",
+        "errors": []
+      },
+      {
+        "title": "capacity failure leads to actual manual cleanup and keeps the candidate; stale confirmation reports conflict",
+        "status": "passed",
+        "errors": []
+      },
+      {
+        "title": "undo has no clock expiry, busy generation blocks it, discard retains it and failed cleanup does not claim success",
+        "status": "passed",
+        "errors": []
+      },
+      {
+        "title": "explicit guest copy continues once; lost response retries same operation; independent browser restores and another owner is denied",
+        "status": "passed",
+        "errors": []
+      },
+      {
+        "title": "saving waits for acknowledgment, failed payload downloads from platform, replay restores submitted values",
+        "status": "passed",
+        "errors": []
+      },
+      {
+        "title": "two stale pages conflict; download/cancel/reload protect failed content, read failure never triggers a write",
+        "status": "passed",
+        "errors": []
+      },
+      {
+        "title": "a new unsaved edit while reload is reading cannot be silently discarded",
+        "status": "passed",
+        "errors": []
+      },
+      {
+        "title": "guest example shares account conversation layout at 1440x900",
+        "status": "passed",
+        "errors": []
+      },
+      {
+        "title": "guest example shares account conversation layout at 1280x720",
+        "status": "passed",
+        "errors": []
+      },
+      {
+        "title": "guest example shares account conversation layout at 390x844",
+        "status": "passed",
+        "errors": []
+      },
+      {
+        "title": "ordinary login while browsing the example never creates a personal copy",
+        "status": "passed",
+        "errors": []
+      }
+    ]
+  },
+  "focused": {
+    "stats": {
+      "startTime": "2026-10-11T16:01:18.798Z",
+      "duration": 21374.839,
+      "expected": 7,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    },
+    "cases": [
+      {
+        "title": "after restoring V2 a minor persistence candidate can be adopted with formal data intact",
+        "status": "passed",
+        "errors": []
+      },
+      {
+        "title": "major persistence keeps adoption blocked with specific consequence",
+        "status": "passed",
+        "errors": []
+      },
+      {
+        "title": "minor data-loss keeps adoption blocked with specific consequence",
+        "status": "passed",
+        "errors": []
+      },
+      {
+        "title": "missing proof and generation in progress explain disabled adoption without claiming data risk",
+        "status": "passed",
+        "errors": []
+      },
+      {
+        "title": "execution blocking gives its exact reason and cannot be adopted",
+        "status": "passed",
+        "errors": []
+      },
+      {
+        "title": "restored restricted code remains trial; explicit permitted activation never copies trial data",
+        "status": "passed",
+        "errors": []
+      },
+      {
+        "title": "restored restricted trial changes trigger exit protection and download includes the session copy",
+        "status": "passed",
+        "errors": []
+      }
+    ]
+  },
+  "latestDistinct": {
+    "count": 28,
+    "passed": 28
+  },
+  "visualFinal": {
+    "stats": {
+      "startTime": "2026-10-11T16:14:48.453Z",
+      "duration": 18809.653000000002,
+      "expected": 5,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    }
+  }
+}

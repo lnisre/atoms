@@ -87,3 +87,23 @@ test('client keeps a complete artifact on local deadline but not on explicit sto
     else {controller.abort(new TeamError(mode as 'limit'|'stopped','fixture'));if(mode==='limit'){const value=await promise;assert.equal(value.result.html,html);assert.equal(value.team.outcome,'limit');}else await assert.rejects(promise);}
   }
 });
+
+test('minor persistence findings warn without blocking formal data or adoption',()=>{
+  const {html,team}=teamFixture(1,{...issue,severity:'minor',category:'persistence'});
+  assert.deepEqual(previewPolicy(team,html),{status:'allowed',reasons:[],review:'issues',dataMode:'formal',adoption:'allowed'});
+  const inherited=teamFixture(1,null);inherited.team.baseDataIssues=[{...issue,severity:'minor',category:'persistence'}];
+  assert.equal(previewPolicy(inherited.team,inherited.html).adoption,'allowed');
+});
+test('data loss at either severity and major persistence remain blockers',()=>{
+  for(const category of ['data-loss','persistence'] as const) for(const severity of ['major','minor'] as const){
+    const {html,team}=teamFixture(1,{...issue,category,severity});
+    assert.equal(previewPolicy(team,html).adoption,category==='persistence'&&severity==='minor'?'allowed':'blocked');
+  }
+});
+test('minor reclassification cannot erase an inherited major risk without current-code resolution',()=>{
+  const {html,team}=teamFixture(1,{...issue,severity:'minor',category:'persistence'});
+  team.baseDataIssues=[{...issue,category:'persistence'}];
+  assert.equal(previewPolicy(team,html).adoption,'blocked');
+  team.review=undefined;
+  assert.equal(previewPolicy(team,html).adoption,'blocked');
+});

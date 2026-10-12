@@ -1,0 +1,20 @@
+✔ history routes require verified identity, bind fixed IDs and forward only the ordinary token (33.470625ms)
+✔ unavailable, restricted or malformed snapshots cannot turn into an executable empty trial (5.314208ms)
+✔ history response validation keeps missing snapshots and malformed timestamps distinct from no business data (0.2655ms)
+✔ history trial is a fresh copy and preserves official data, candidate and its trial across entry/exit (5.381ms)
+✔ close, selection changes and account disposal suppress stale history reads, even when transport ignores abort (0.566ms)
+✔ a failed historical read leaves candidate available and publishes no fabricated copy (0.187916ms)
+✔ adoption committed but failed readback keeps the exact operation and candidate through retry (1.25025ms)
+✔ history mutations preflight a trusted target, reject current blockers, and recover receipts before a vanished target lookup (2.150667ms)
+✔ restore confirmation uses snapshot identity, preserves same operation through failed readback and disposes old writers (3.144125ms)
+✔ undo accepts a candidate only after explicit confirmation, while busy and stale confirmation cannot silently overwrite (0.861333ms)
+✔ an explicit acceptance namespace routes only server-selected RPCs and rejects unsafe configuration (0.865166ms)
+✔ adoption controller explains and enforces busy, pending, proof and execution restrictions (0.476417ms)
+ℹ tests 12
+ℹ suites 0
+ℹ pass 12
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 386.127209

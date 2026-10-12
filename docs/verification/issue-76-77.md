@@ -44,3 +44,17 @@ TEST_BASE_URL=http://127.0.0.1:3216 pnpm exec playwright test \
 - [桌面确认](assets/issue-76-77/confirmation-desktop.png) · [短视口确认](assets/issue-76-77/confirmation-short.png) · [窄屏确认](assets/issue-76-77/confirmation-mobile.png)
 
 本次是合成 Auth/BFF/生成内容接缝下的真实 DOM、鼠标、iframe 与刷新验收，模型调用为零。没有操作用户真实项目、重新验收生产数据库或发布到生产。原始截图、trace、Doctor 与构建日志暂存 `/tmp/atoms-controls-before`、`/tmp/atoms-controls-after`、`/tmp/atoms-controls-final`；以上精选证据已持久保存。测试进程结束，所属开发服务已停止。
+
+## Production deployment (2026-10-11 22:51, Asia/Shanghai)
+
+At the user's explicit request, deployed commit 0eef95aacef551698d09e1ca881f510b9a30637a to [the existing production origin](https://v0-test0-nine.vercel.app/). Deployment dpl_53Zz8XBjrxQwxz3TGQAaCi8afdEg is READY / production; the fixed alias resolves to it.
+
+All 92 source files, sourceDigest and container image identity match the frozen manifest. Release tooling tests passed 11/11. Public homepage returned HTTP 200 and its served CSS contains the new secondary buttons, history action groups and confirmation dialog. Anonymous generation returned 401 / unauthenticated, with zero model requests. Existing production configuration and database were unchanged; the previous deployment remains available.
+
+This verifies deployment identity and public assets. Authenticated restore behavior awaits the user's production check. The source was deployed directly from the frozen local commit and has not been pushed to GitHub. Both issues remain open pending user verification.
+
+[Deployment verification](assets/issue-76-77/deployment/verification.json) | [Public smoke](assets/issue-76-77/deployment/public-smoke.json)
+
+## 用户验收
+
+2026-10-12，用户完成本会话修复的线上验证，确认“验证 ok”并要求 PR 合入 master。#76/#77 的产品代码已由 #80 集成，本次补齐发布证据并随 #81 完成验收收尾。

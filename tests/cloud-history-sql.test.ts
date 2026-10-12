@@ -6,6 +6,9 @@ import { readFileSync } from "node:fs";
 import { createHash, createHmac, randomUUID } from "node:crypto";
 import { PGlite } from "@electric-sql/pglite";
 import type { CloudProject, CommitReceipt, ProjectHistory, HistorySnapshot } from "../src/lib/cloud-projects/contract";
+import { syntheticArtifact } from "./helpers/artifact";
+import { attestArtifact, verifyArtifact } from "../src/lib/cloud-projects/artifacts";
+import type { ReviewIssue } from "../src/lib/team/review";
 const lit=(s:string)=>"'"+s.replaceAll("'","''")+"'";
 const hash=(s:string)=>createHash('sha256').update(s).digest('hex');
 const key='a'.repeat(64),owner='history-owner',other='history-other';
@@ -44,6 +47,28 @@ test("installed history SQL preserves paired snapshots, trusted adoption and tra
  const restricted=first({policy:{...policy,dataMode:'trial',review:'unavailable'}});await rpc(claim(restricted));await adopt(restricted);
  await migrate('004_project_history');await migrate('005_history_restore');
  try {
+ await t.test('server-attested minor persistence adopts through SQL; real data risks and altered proofs do not',async()=>{
+  const previousKey=process.env.ATOMS_ARTIFACT_SECRET;process.env.ATOMS_ARTIFACT_SECRET=key;
+  try {
+   for(const [category,severity,allowed] of [['persistence','minor',true],['persistence','major',false],['data-loss','minor',false],['data-loss','major',false]] as const){
+    const initial=first();await rpc(claim(initial));await adopt(initial);const before=await get(initial.projectId);
+    const finding:ReviewIssue={id:'save-feedback',category,severity,codeQuote:'V1',trigger:'edit',consequence:allowed?'redundant write without data loss':'saved input may be lost'};
+    const f=syntheticArtifact(owner,initial.projectId,randomUUID(),html+' ',html,before.version,[],[finding]);
+    const binding={ownerId:owner,taskId:f.artifact.taskId,input:{projectId:initial.projectId,requirement:initial.requirement,modification:'change',baseHtml:html},expected:before.version,baseHash:hash(html),generations:[]};
+    const proof=attestArtifact(binding,f.artifact.result,'fixture',f.team,[],Date.now());
+    const signedArtifact=verifyArtifact(proof,owner);assert.equal(signedArtifact.policy.adoption,allowed?'allowed':'blocked');
+    await rpc(signed('claim_task',{...signedArtifact,kind:'start'}));
+    const expr=`public.atoms_commit_artifact('${randomUUID()}',${lit(proof.payload)},${lit(proof.signature)})`;
+    if(allowed){await rpc(expr);assert.equal((await get(initial.projectId)).version.code,2);}
+    else {
+     await assert.rejects(rpc(expr),(error:unknown)=>(error as {code:string}).code==='PT403');
+     assert.deepEqual(await get(initial.projectId),before);
+     const forged=JSON.stringify({...signedArtifact,policy:{...signedArtifact.policy,adoption:'allowed'}});
+     await assert.rejects(rpc(`public.atoms_commit_artifact('${randomUUID()}',${lit(forged)},${lit(proof.signature)})`));
+    }
+   }
+  } finally {if(previousKey===undefined)delete process.env.ATOMS_ARTIFACT_SECRET;else process.env.ATOMS_ARTIFACT_SECRET=previousKey;}
+ });
  await t.test('pre-feature formal baseline is real and timestamp is explicitly unknown; restricted artifacts have no history',async()=>{
   const h=await list(existing.projectId);assert.equal(h.entries.length,1);assert.equal(h.entries[0].origin,'baseline');assert.equal(h.entries[0].dataSavedAt,null);
   assert.notEqual(h.entries[0].pairedAt,result.generatedAt);assert.deepEqual((await snap(existing.projectId,h.currentId!)).state,{count:41});

@@ -1,0 +1,15 @@
+{
+  "isolated": false,
+  "startedAt": "2026-10-11T16:23:47.257Z",
+  "previous": {
+    "id": "dpl_38pm1tjMtRw9ZaGhdKNu4f552jiU",
+    "url": "v0-test0-bk3l6qfyb-lnisres-projects.vercel.app",
+    "target": "production",
+    "readyState": "READY",
+    "projectId": "prj_eErnQuAz4P719xKTyuT6XT2Qu5ab",
+    "sourceCommit": "136c549ed56bce915f6707254ffa2da1c534cd2d",
+    "sourceDigest": "a1c5664483f7e52008e95a3a5cf4a50201a5f08a2b5f488feb9c47b4749766d3"
+  },
+  "sourceCommit": "72b4d5e1237bf0c2595264192aec39f2cf98d6cb",
+  "sourceDigest": "e5fcc636d04763808ff1f39d5aeb1b5595f5f78b76306f00126d8ef4a331f65b"
+}

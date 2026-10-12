@@ -1,0 +1,19 @@
+✔ release includes the container, Python dependencies, all application source and fixed examples (7.234167ms)
+✔ the exact historical omission is blocked before any upload (0.314791ms)
+✔ Python runner, pinned dependencies, patch, config and schema cannot be omitted (0.386583ms)
+✔ new Docker COPY inputs and unsupported syntax fail closed (29.121875ms)
+✔ ordinary Next entry or missing Python build gates cannot masquerade as a team container (17.373959ms)
+✔ credentials and workspace caches are never valid upload inputs (0.347333ms)
+✔ frozen Git content is reproducible and rejects tampering, extra files and partial directory uploads (3900.011625ms)
+✔ READY and matching metadata are insufficient without container output and exact remote source (13.155958ms)
+✔ working Docker recipe still meets the same gate before commit (0.528583ms)
+✔ ENTRYPOINT, ADD and unknown multiline COPY semantics fail closed (23.811458ms)
+✔ isolated production-class build cannot claim publication or change the existing production alias (0.579833ms)
+ℹ tests 11
+ℹ suites 0
+ℹ pass 11
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 4722.61575

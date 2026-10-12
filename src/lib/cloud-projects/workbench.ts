@@ -7,7 +7,7 @@ import type { SavedProject } from "../project-store";
 import { readTeam } from "../team/client";
 import { TEAM_TIMEOUT_MS, TeamError } from "../team/contract";
 import { previewPolicy } from "../team/preview-policy";
-import { unresolvedDataIssues } from "../team/review";
+import { unresolvedDataIssues, unresolvedDataRisks } from "../team/review";
 
 export type HistoryConfirmation = { action: HistoryAction; targetId: string; expected: ProjectVersion; expectedHistory: number; entry?: HistoryEntry };
 type Pending = { acknowledged?: boolean; uncertain?: boolean; operationId: string; path: string; body: object };
@@ -160,10 +160,28 @@ export class CloudWorkbenchSession {
     } catch (error) { if (!this.lifetime.signal.aborted) this.publish({error:error instanceof Error ? error.message : "生成失败，请手动重试。"}); }
     finally { clearTimeout(timeout); if (this.active === active) {this.active=undefined;this.publish({generating:false});} }
   }
+  get adoptionBlock(): { message: string; details: string[] } | undefined {
+    const { artifact, proof, generating, saving, pending } = this.state;
+    const block = (message: string, details: string[] = []) => ({ message, details });
+    if (!artifact) return block("请先生成候选版本。");
+    if (generating) return block("正在生成新的候选，请等待生成结束后再采用。");
+    if (saving) return block("正在保存，请等待云端确认后再采用。");
+    if (pending || this.data?.status.pending) return block("上一次保存尚未确认，请先处理原保存，再采用修改。");
+    if (this.data?.status.phase === "loading") return block("正在读取正式数据，请等待读取完成后再采用。");
+    if (!proof) return block("当前候选缺少可信保存证明，不能采用。请先下载副本，再放弃本轮修改并重新生成。");
+    if (artifact.policy.status === "blocked") return block("当前候选存在执行阻断，修复后才能采用。", artifact.policy.reasons);
+    if (artifact.policy.adoption !== "allowed") {
+      const team = artifact.generations.at(-1)?.team ?? artifact.initialGeneration?.team;
+      const issues = team ? unresolvedDataRisks(team) : [];
+      if (issues.length) return block("当前候选仍有数据丢失或重大保存风险，修复后才能采用。", issues.map(i => i.consequence + "（触发条件：" + i.trigger + "）"));
+      // A previously signed policy stays authoritative; the client cannot upgrade it.
+      return block("当前候选的保存证明不允许采用。请保留副本，继续修改并生成新候选。");
+    }
+  }
   commit() {
     if (this.saveFlight) return this.saveFlight;
     const {artifact,proof,cloud} = this.state;
-    if (!artifact || !proof || (cloud && artifact.policy.adoption !== "allowed")) return Promise.resolve();
+    if (!artifact || !proof || (cloud && this.adoptionBlock)) return Promise.resolve();
     const pending = this.state.pending ?? {operationId:crypto.randomUUID(),path:"/artifact",body:{proof}};
     return this.save(pending);
   }

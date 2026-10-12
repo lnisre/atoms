@@ -1,0 +1,9 @@
+{
+  "src/lib/team/review.ts": "8b995d2ec28b5f361010931f3bcc850ba73dea0340180b398a064c089fcb9c9f",
+  "src/lib/team/preview-policy.ts": "eaecc5bdc985657a9d1ac88165f68992550ef5bcdedd4a1609f089db162d3df4",
+  "src/lib/cloud-projects/workbench.ts": "35e4caa7290714692fc3bc70ecada1830e28af97b3217838762392852b2e2dab",
+  "src/components/cloud-workbench.tsx": "b00a02905e24124fb3ffbfc104b0bcd81ca801fcf52a688afd274cdd74b78f2d",
+  "src/app/globals.css": "50ca486f03fceccc2fcfde199436759fece34e37873d24a323dbf8c39a06c594",
+  "runtime/team/runner.py": "651bf33224bbd7d0fcc1e070f8d8a4773cb1fcb35f742f5f86bfa1b39af3aba5",
+  "tests/browser/cloud-adoption-policy.spec.ts": "c237ca28cea951fdb5c13d4eb4ccfacef6b4a83562cc036a9efeb34785375c82"
+}

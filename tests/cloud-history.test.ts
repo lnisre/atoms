@@ -2,7 +2,8 @@ import assert from "node:assert/strict";
 import { afterEach, beforeEach, test } from "node:test";
 import { GET as list, POST as change } from "../src/app/api/projects/[id]/history/route";
 import { GET as read } from "../src/app/api/projects/[id]/history/[snapshotId]/route";
-import { CloudWorkbenchSession } from "../src/lib/cloud-projects/workbench";
+import { CloudDataSession } from "../src/lib/cloud-projects/client";
+import { CloudWorkbenchSession, type WorkbenchState } from "../src/lib/cloud-projects/workbench";
 import { validateCloudValue, type CloudProject, type HistoryEntry, type HistorySnapshot } from "../src/lib/cloud-projects/contract";
 import { authenticatedCookie, authProfile, authConfig } from "./helpers/auth";
 import { syntheticArtifact } from "./helpers/artifact";
@@ -158,4 +159,25 @@ test("an explicit acceptance namespace routes only server-selected RPCs and reje
  try{const cookie=await authenticatedCookie();process.env.ATOMS_PROJECT_NAMESPACE='atoms_h74';assert.equal((await list(request(cookie),ctx)).status,200);assert.ok(observed.endsWith('/rpc/atoms_h74_list_history'));
   process.env.ATOMS_PROJECT_NAMESPACE='atoms/unsafe';observed='';assert.equal((await list(request(cookie),ctx)).status,503);assert.equal(observed,'');
  }finally{if(previous===undefined)delete process.env.ATOMS_PROJECT_NAMESPACE;else process.env.ATOMS_PROJECT_NAMESPACE=previous;}
+});
+
+test('adoption controller explains and enforces busy, pending, proof and execution restrictions',async()=>{
+ const f=syntheticArtifact('owner',id,crypto.randomUUID(),html+' ',html,cloud.version);
+ let writes=0;globalThis.fetch=async()=>{writes++;throw new Error('unexpected write');};
+ const session=new CloudWorkbenchSession('owner',id,cloud);
+ const initial={...session.state,artifact:f.artifact,proof:f.proof};
+ for(const [patch,message] of [
+  [{generating:true},'正在生成'],[{saving:true},'正在保存'],
+  [{pending:{operationId:crypto.randomUUID(),path:'/artifact',body:{proof:f.proof}}},'上一次保存尚未确认'],
+  [{proof:undefined},'缺少可信保存证明'],
+  [{artifact:{...f.artifact,policy:{...f.artifact.policy,status:'blocked',adoption:'blocked',reasons:['加载时无条件空循环']}}},'执行阻断'],
+  [{artifact:{...f.artifact,policy:{...f.artifact.policy,adoption:'blocked'}}},'保存证明不允许采用'],
+ ] satisfies [Partial<WorkbenchState>,string][]){
+  session.state={...initial,...patch};assert.ok(session.adoptionBlock?.message.includes(message));await session.commit();
+ }
+ assert.equal(writes,0);session.state=initial;assert.equal(session.adoptionBlock,undefined);
+ const data=new CloudDataSession('owner',id,cloud.version.code);session.data=data;
+ data.status={phase:'loading'};assert.match(session.adoptionBlock!.message,/读取正式数据/);await session.commit();
+ data.status={phase:'failed',pending:{operationId:crypto.randomUUID(),expected:cloud.version,state:{count:999}}};
+ assert.match(session.adoptionBlock!.message,/原保存/);await session.commit();assert.equal(writes,0);session.dispose();
 });
