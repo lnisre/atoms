@@ -18,7 +18,7 @@ export async function readTeam(response: Response, taskId: string, projectId: st
   if (!response.body || !response.headers.get("content-type")?.includes("application/x-ndjson")) throw new ProtocolError("缺少团队交付协议。");
   let token = "", sequence = 0, buffer = "", total = 0, heartbeat: ReturnType<typeof setInterval> | undefined;
   let team: TeamRecord = { protocol: TEAM_PROTOCOL, taskId, projectId, baseCodeHash, ...(baseHtml ? {baseDataIssues} : {}), deliveries: [], calls: [] };
-  type Received = { proof?: import("../cloud-projects/artifact-contract").ArtifactProof; result: GenerationResult; assistantReply: string | null; team: TeamRecord };
+  type Received = { error?: string; proof?: import("../cloud-projects/artifact-contract").ArtifactProof; result: GenerationResult; assistantReply: string | null; team: TeamRecord };
   let cached: Received | undefined, outcome: Received | undefined;
   let receivedTerminal = false, transportFailed = false;
   const control = async () => {
@@ -73,11 +73,11 @@ export async function readTeam(response: Response, taskId: string, projectId: st
           if (review && (!cached || !validClassifiedReview(review,cached.team.codeHash!,cached.result.html))) throw new ProtocolError("审查与已收代码不符");
           team = { ...team, deliveries, ...(m.delivery.role === "Engineer" ? {review:undefined} : {}), ...(review ? {review} : {}) }; onTeam(team);
         } else if (m.type === "call") { team = { ...team, calls: [...team.calls.filter(c => c.call !== m.call.call), m.call].sort((a,b)=>a.call-b.call) }; onTeam(team); }
-        else if (m.type === "artifact") { cached = await accept(m,false); team = cached.team; }
+        else if (m.type === "artifact") { cached = await accept(m,false); team = cached.team; onTeam(team); }
         else if (m.type === "error") {
           receivedTerminal = true; clearInterval(heartbeat);
           const end = isTeamOutcome(m.outcome) && !["passed","issues"].includes(m.outcome) ? m.outcome : "failed";
-          if (m.result) { outcome = await accept(m,true); if (outcome.team.outcome !== end) throw new ProtocolError("结束状态不一致"); team=outcome.team; onTeam(team); }
+          if (m.result) { outcome = {...await accept(m,true),error:typeof m.error === "string" ? m.error : undefined}; if (outcome.team.outcome !== end) throw new ProtocolError("结束状态不一致"); team=outcome.team; onTeam(team); }
           else { team={...team,outcome:end}; onTeam(team); throw new TeamError(end,m.error || "团队执行失败"); }
         } else if (m.type === "result") {
           receivedTerminal = true; clearInterval(heartbeat);
@@ -93,7 +93,7 @@ export async function readTeam(response: Response, taskId: string, projectId: st
     const timedOut = signal.aborted && signal.reason instanceof TeamError && signal.reason.outcome === "limit";
     if (cached && !receivedTerminal && (timedOut || (!signal.aborted && transportFailed && !(error instanceof ProtocolError)))) {
       const savedTeam: TeamRecord = {...team,codeHash:cached.team.codeHash,outcome:timedOut ? "limit" : "failed"};
-      if (artifactTeam(savedTeam,cached.team.codeHash!,true)) { onTeam(savedTeam); return {...cached,team:savedTeam}; }
+      if (artifactTeam(savedTeam,cached.team.codeHash!,true)) { onTeam(savedTeam); return {...cached,team:savedTeam,error:timedOut ? signal.reason.message : "团队连接中断，保留已验证的完整代码。"}; }
     }
     throw error;
   } finally {

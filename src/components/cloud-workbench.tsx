@@ -3,6 +3,7 @@ import { useState, useSyncExternalStore, type ReactNode } from "react";
 import { CloudWorkbenchSession } from "@/lib/cloud-projects/workbench";
 import { CloudDataControls, CloudProjectHistory } from "./cloud-project-view";
 import { ProjectWorkbenchLayout } from "./project-workbench-layout";
+import { GenerationProgressSummary } from "./generation-progress";
 import { GenerationRecord } from "./generation-record";
 import { AppPreview } from "./app-preview";
 import { ResultViewer } from "./result-viewer";
@@ -22,7 +23,7 @@ export function CloudWorkbench({ session, accountSlot, onBack, onReload, onLogin
       <textarea rows={3} id="modification" aria-label="追加修改需求" value={state.input} maxLength={MAX_REQUIREMENT_LENGTH} disabled={state.generating || state.saving || !!state.pending} onChange={e=>session.setInput(e.target.value)}/>
       <button className="primary-button" disabled={!state.input.trim() || state.generating || state.saving || !!state.pending || (!!artifact && !state.proof)} onClick={()=>void session.generate(crypto.randomUUID())}>生成候选</button>
     </>}
-    {state.generating && <><p role="status">团队正在生成，最多 4 分钟、20 次模型请求。请保持页面打开。</p><button className="secondary-button" onClick={()=>session.stop()}>停止生成</button></>}
+    {state.generating && <><button className="secondary-button" onClick={()=>session.stop()}>停止生成</button></>}
     {artifact && <><p>{state.cloud ? "候选仅在当前会话中试用；采用只更新代码与记录，试用数据不会写回。" : state.saving ? "首次成果正在保存，云端提交后才会确认。" : "首次成果尚未确认云端保存。"}</p>
       {state.cloud?.restore && <p>采用后将结束本次恢复的撤销机会；只有采用成功才会结束。</p>}
       {adoptionBlock && <div className="adoption-block" id="adoption-block-reason" role="status"><p>{adoptionBlock.message}</p>{adoptionBlock.details.length > 0 && <ul>{adoptionBlock.details.map((detail,index)=><li key={index}>{detail}</li>)}</ul>}</div>}
@@ -55,6 +56,7 @@ export function CloudWorkbench({ session, accountSlot, onBack, onReload, onLogin
     navigation={<button className="secondary-button" onClick={onBack}>我的项目</button>}
     account={accountSlot}
     scope={<>{cloud ? "账号私有项目 · 云端已保存代码 · " : "生成成果在云端提交后才会确认保存 · "}未保存内容与试用数据仅在当前页面保留</>}
+    progress={state.progress && <GenerationProgressSummary key={state.progress.record.taskId} state={state}/> }
     conversation={<>
           {cloud && <CloudProjectHistory cloud={cloud}/>}
           {artifact?.generations.map(record=><GenerationRecord key={record.taskId} title="本轮修改" requirement={record.requirement} live={false} pending={false} saveError={!!state.error} saving={state.saving} record={record}/>)}
@@ -68,7 +70,7 @@ export function CloudWorkbench({ session, accountSlot, onBack, onReload, onLogin
     </>}
   >
       <ResultViewer version={state.historySnapshotLoading ? undefined : version} notice={historical ? historyTime(historical.snapshot.entry) + " · 历史副本试用，不改变当前项目、候选或保存点。" : undefined} status={historical ? `历史 V${historical.snapshot.entry.sequence} · 副本试用` : artifact ? cloud ? "候选版本 · 会话试用" : "尚未确认保存的成果" : policy?.dataMode === "trial" ? "待验证代码 · 仅副本试用" : "已保存代码"} actions={!historical && !state.historySnapshotLoading && cloud && session.data && (!artifact ? <CloudDataControls key={session.data.instanceId} cloud={cloud} session={session.data} onReload={onReload} onLogin={onLogin} onRetried={()=>setFrameVersion(v=>v+1)}/> : <button className="secondary-button" onClick={onReload}>重新载入云端版本</button>)}>
-        {state.historySnapshotLoading ? <div className="preview-placeholder" role="status">正在读取历史代码和配对数据…</div> : historical ? <AppPreview key={historical.instanceId} html={historical.snapshot.project.result.html} projectId={session.projectId} projectSaved={false} trial={historical.trial} trialKind="history" onRetry={()=>void session.tryHistory(historical.snapshot.entry.id)}/> : !result ? <div className="preview-placeholder"><p>任务完成后在此查看代码与预览。</p></div> : policy?.status === "blocked" ? <div className="preview-placeholder"><h2>此代码暂不执行</h2><p>{policy.reasons.join("；")}</p></div> : <AppPreview key={artifact?.taskId ?? `${session.data?.instanceId}:${frameVersion}`} html={result.html} projectId={session.projectId} projectSaved={!!cloud && !artifact} trial={state.trial} cloud={artifact || state.trial ? undefined : session.data} onRetry={onReload}/>}
+        {state.historySnapshotLoading ? <div className="preview-placeholder" role="status">正在读取历史代码和配对数据…</div> : historical ? <AppPreview key={historical.instanceId} html={historical.snapshot.project.result.html} projectId={session.projectId} projectSaved={false} trial={historical.trial} trialKind="history" onRetry={()=>void session.tryHistory(historical.snapshot.entry.id)}/> : !result ? <div className="preview-placeholder"><p>任务完成后在此查看代码与预览。</p></div> : policy?.status === "blocked" ? <div className="preview-placeholder"><h2>此代码暂不执行</h2><p>{policy.reasons.join("；")}</p></div> : <AppPreview key={artifact?.taskId ?? `${session.data?.instanceId}:${frameVersion}`} html={result.html} projectId={session.projectId} projectSaved={!!cloud && !artifact} trial={state.trial} cloud={artifact || state.trial ? undefined : session.data} recordStep={(stepId,_label,status)=>session.previewStep(result.html,stepId,status)} onRetry={onReload}/>}
       </ResultViewer>
   </ProjectWorkbenchLayout>;
 }

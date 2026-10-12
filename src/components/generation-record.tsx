@@ -26,7 +26,7 @@ export function GenerationRecord({ record, live, pending, saveError, saving, tit
   if (team?.check) details.push({label: "完整运行检查结果", content: JSON.stringify(team.check, null, 2)});
   if (team) details.push({label: `模型调用与用量 · ${team.calls.length} 次`, content: JSON.stringify(team.calls, null, 2)});
   const statuses = team ? [
-    ...(team.outcome ? [outcomeLabels[team.outcome]] : []),
+    ...(team.outcome ? [team.outcome === "issues" ? "生成已结束 · 有待修复问题" : outcomeLabels[team.outcome]] : []),
     team.review ? `代码审查：${team.review.approved ? "通过" : team.protocol === "atoms-team/3" ? "有待修复问题" : "未通过"} · 业务运行尚未验证` : team.check ? `浏览器检查：${team.check.status} · ${team.check.results.filter(r => r.status === "passed").length}/${team.check.results.length}` : pending ? "团队正在分派、实现或审查" : "本次未取得完整审查结果",
   ] : [];
   return <AssistantMessage title={title} requirement={requirement}>

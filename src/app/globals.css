@@ -192,3 +192,17 @@ details p { white-space: pre-wrap; overflow-wrap: anywhere; line-height: 1.8; }
 
 .cloud-save-panel > .adoption-block { display: block; margin-bottom: 12px; }
 .adoption-block ul { margin: 0; padding-left: 20px; list-style: disc; overflow-wrap: anywhere; }
+
+.generation-progress { flex: 0 0 auto; margin: 0 12px 10px; padding: 12px; border: 1px solid #c9d9d0; border-radius: 10px; background: #f4f8f5; line-height: 1.5; max-height: 42%; overflow-y: auto; }
+.generation-progress-heading { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; }
+.generation-progress-heading h2 { margin: 0; font-size: 13px; }
+.generation-progress-heading > span { font-size: 12px; white-space: nowrap; color: #52665a; }
+.generation-progress p { margin: 6px 0 0; overflow-wrap: anywhere; font-size: 12px; }
+.generation-progress p.generation-progress-status { font-size: 13px; font-weight: 600; }
+.generation-progress ol { padding: 0; margin: 10px 0; list-style: none; display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+.generation-progress li { font-size: 12px; color: #53645a; }
+.generation-progress li small { margin-left: 6px; font-size: 10px; }
+.generation-progress li[data-state="active"] { font-weight: 700; color: #124d35; }
+.generation-progress li[data-state="done"] { color: #285d43; }
+.generation-long-wait { border-left: 2px solid #8e702e; padding-left: 7px; }
+.generation-progress-limit { color: #52665a; }
