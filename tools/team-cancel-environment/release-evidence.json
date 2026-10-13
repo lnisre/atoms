@@ -1,0 +1,154 @@
+{
+  "date": "2026-10-08",
+  "fixedProductBase": "1d4d81791b3b48c51e0311f1af7e842a13d9cd1f",
+  "toolFileHashes": {
+    "tools/team-cancel-environment/env.mjs": "673d44511243536e76f8b4536aa97cf5210e7f97b963720ee1e6cf542a674a8d",
+    "tools/team-cancel-environment/runtime.mjs": "612803c0b704a54134eb69a2d7704138d62d2945c839fe243a1745b82bb48912"
+  },
+  "mode": "macOS/APFS, Node 24, pnpm 10.12.1, Python 3.11, explicit offline provider",
+  "calibrations": {
+    "A": {
+      "classification": "seed-calibrated",
+      "passed": true,
+      "exitCode": 1,
+      "heartbeatCount": 1,
+      "outcome": {
+        "status": "rejected",
+        "name": "AbortError",
+        "message": "This operation was aborted"
+      },
+      "cleanup": {
+        "intervals": 0,
+        "timeouts": 0,
+        "abortListeners": 0,
+        "pagehideListeners": 0,
+        "socketListeners": 4,
+        "sentAfterEnd": 0
+      },
+      "unhandledRejections": [],
+      "uncaughtExceptions": [
+        "TypeError [ERR_INVALID_STATE]: Invalid state: Controller is already closed"
+      ],
+      "providerCalls": 0
+    },
+    "B": {
+      "classification": "seed-calibrated",
+      "passed": true,
+      "exitCode": 1,
+      "heartbeatCount": 1,
+      "outcome": {
+        "status": "rejected",
+        "name": "AbortError",
+        "message": "This operation was aborted"
+      },
+      "cleanup": {
+        "intervals": 0,
+        "timeouts": 0,
+        "abortListeners": 0,
+        "pagehideListeners": 0,
+        "socketListeners": 0,
+        "sentAfterEnd": 0
+      },
+      "unhandledRejections": [
+        "AbortError: This operation was aborted"
+      ],
+      "uncaughtExceptions": [],
+      "providerCalls": 0
+    },
+    "reference": {
+      "classification": "seed-calibrated",
+      "passed": true,
+      "exitCode": 0,
+      "heartbeatCount": 1,
+      "outcome": {
+        "status": "rejected",
+        "name": "AbortError",
+        "message": "This operation was aborted"
+      },
+      "cleanup": {
+        "intervals": 0,
+        "timeouts": 0,
+        "abortListeners": 0,
+        "pagehideListeners": 0,
+        "socketListeners": 0,
+        "sentAfterEnd": 0
+      },
+      "unhandledRejections": [],
+      "uncaughtExceptions": [],
+      "providerCalls": 0
+    }
+  },
+  "referenceAcceptance": {
+    "passed": true,
+    "unitCounts": {
+      "tests": 54,
+      "pass": 54,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0,
+      "todo": 0
+    }
+  },
+  "nativePage": {
+    "stats": {
+      "startTime": "2026-10-08T02:02:37.334Z",
+      "duration": 91884.02600000001,
+      "expected": 2,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    },
+    "cases": [
+      {
+        "title": "first generation stops after a cached artifact without publishing it",
+        "status": "passed",
+        "durationMs": 39582,
+        "observationMs": 32000,
+        "storageUnchanged": true,
+        "pageErrors": [],
+        "framesAfterClose": [
+          0
+        ]
+      },
+      {
+        "title": "modification stop preserves adopted code, business data and modification records",
+        "status": "passed",
+        "durationMs": 49685,
+        "observationMs": 32000,
+        "storageUnchanged": true,
+        "pageErrors": [],
+        "framesAfterClose": [
+          0,
+          0,
+          0
+        ]
+      }
+    ]
+  },
+  "negativeControls": {
+    "faultARejectedByAccept": true,
+    "faultBRejectedByAccept": true,
+    "changedProbeRejected": true,
+    "missingPrerequisitesCreateNoRoot": true
+  },
+  "repeatability": {
+    "newRunIsolation": true,
+    "evidenceRetained": true,
+    "aliasAndSpacePaths": true
+  },
+  "cleanup": {
+    "remaining": [],
+    "listeners": [],
+    "allCreatedCandidatesRemoved": true
+  },
+  "reviews": {
+    "Standards": "No remaining findings on the final executable source; deletion/Git failure stop regression verified.",
+    "Spec": "Original ownership, missing build-input and stop-gating findings reproduced and corrected; final minimal process recheck passed."
+  },
+  "limits": [
+    "No real-provider requests or deployment.",
+    "MacOS/APFS workflow; dependencies are pre-provisioned, not installed by the tool.",
+    "Native page counts apply to the two fixed stop cases, not all product features.",
+    "Full raw local traces are retained separately and are not included in this source change."
+  ]
+}
