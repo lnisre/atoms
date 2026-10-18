@@ -1,6 +1,14 @@
-import { test, expect } from "@playwright/test";
+import { test, expect, type Page } from "@playwright/test";
 import { readFileSync } from "node:fs";
 import { fixture, login, generate, frame, ready, modify } from "../helpers/cloud-browser-fixture";
+
+// This business scenario waits for real pointer hit testing before its one click.
+// The independent first-pointer regression retains its direct-click requirement.
+async function incrementRestrictedTrial(page:Page) {
+ const button=frame(page).getByRole('button',{name:'增加',exact:true});let offset=2;
+ await expect.poll(async()=>{await button.hover({position:{x:offset++%6+2,y:5}});return button.evaluate(el=>el.matches(':hover'));}).toBe(true);
+ await button.click();
+}
 test('guest intent runs once; first save response loss and separate log failure retry without generation; second browser restores',async({page,context,browser})=>{
  const store=await fixture();await store.connect(context,'owner-a',false);store.loseSave();await generate(page);await login(page);
  await expect(page.getByRole('button',{name:'重试原保存'})).toBeEnabled();expect(store.calls()).toBe(1);expect(store.rows.size).toBe(1);
@@ -35,7 +43,7 @@ test('cancelled exit keeps task; confirmed logout unmounts and ignores late resu
 });
 test('restored restricted code remains trial; explicit permitted activation never copies trial data',async({page,context})=>{
  const store=await fixture();await store.connect(context);store.restrict({status:'allowed',reasons:[],dataMode:'trial',adoption:'allowed',review:'unavailable'});await generate(page);await expect(ready(page)).toBeVisible();
- await frame(page).getByRole('button',{name:'增加',exact:true}).click();await expect(frame(page).locator('#count')).toHaveText('1');expect([...store.rows.values()][0].cloud.state).toBe(null);
+ await incrementRestrictedTrial(page);await expect(frame(page).locator('#count')).toHaveText('1');expect([...store.rows.values()][0].cloud.state).toBe(null);
  await page.reload();await expect(page.getByRole('button',{name:'使用此版本'})).toBeEnabled();await expect(frame(page).locator('#count')).toHaveText('0');await page.getByRole('button',{name:'使用此版本'}).click();await expect(page.getByRole('button',{name:'使用此版本'})).toHaveCount(0);await expect(frame(page).locator('#count')).toHaveText('0');
 });
 
