@@ -1,0 +1,145 @@
+{
+  "origin": "https://atoms-t1-probe-20261019-326112-8-1254675888.sh.run.tcloudbase.com",
+  "at": "2026-10-18T17:01:06.836Z",
+  "synthetic": true,
+  "responses": [
+    {
+      "path": "/probe",
+      "status": 404,
+      "contentType": "text/html; charset=utf-8",
+      "attachment": false,
+      "setCookieCount": 0
+    },
+    {
+      "path": "/probe",
+      "status": 200,
+      "contentType": "text/html; charset=utf-8",
+      "attachment": false,
+      "setCookieCount": 3
+    },
+    {
+      "path": "/probe/client.mjs",
+      "status": 200,
+      "contentType": "text/javascript; charset=utf-8",
+      "attachment": false,
+      "setCookieCount": 0
+    },
+    {
+      "path": "/probe",
+      "status": 200,
+      "contentType": "text/html; charset=utf-8",
+      "attachment": false,
+      "setCookieCount": 2
+    },
+    {
+      "path": "/probe/client.mjs",
+      "status": 200,
+      "contentType": "text/javascript; charset=utf-8",
+      "attachment": false,
+      "setCookieCount": 0
+    },
+    {
+      "path": "/probe/cookies",
+      "status": 200,
+      "contentType": "application/json",
+      "attachment": false,
+      "setCookieCount": 0
+    }
+  ],
+  "pageErrors": [],
+  "confirmationClicked": true,
+  "navigationStatus": 404,
+  "confirmationSeen": true,
+  "entryTitle": "Atoms synthetic hosting probe",
+  "clientLoaded": "undefined",
+  "confirmationRepeated": false,
+  "long": {
+    "synthetic": true,
+    "origin": "https://atoms-t1-probe-20261019-326112-8-1254675888.sh.run.tcloudbase.com",
+    "startedAt": "2026-10-18T17:01:11.366Z",
+    "requestedDurationMs": 600000,
+    "cookiesPresent": true,
+    "connections": [
+      {
+        "name": "normal-1",
+        "mode": "normal",
+        "version": "v1",
+        "opened": true,
+        "durationMs": 273712,
+        "heartbeatAcks": 55,
+        "echoes": 14,
+        "code": 1006,
+        "error": false,
+        "observationCompleted": false,
+        "connection": "254bb8de-67b9-4bc7-aa01-151e6ecb0721",
+        "lastAckAgeMs": 3644,
+        "lastEchoAgeMs": 13666,
+        "status": "failed"
+      },
+      {
+        "name": "normal-2",
+        "mode": "normal",
+        "version": "v1",
+        "opened": true,
+        "durationMs": 273719,
+        "heartbeatAcks": 55,
+        "echoes": 14,
+        "code": 1006,
+        "error": false,
+        "observationCompleted": false,
+        "connection": "66bd54d3-f5b2-4c82-8a35-7e1e03bd4f17",
+        "lastAckAgeMs": 3651,
+        "lastEchoAgeMs": 13551,
+        "status": "failed"
+      },
+      {
+        "name": "business-silent",
+        "mode": "heartbeat",
+        "version": "v1",
+        "opened": true,
+        "durationMs": 273719,
+        "heartbeatAcks": 55,
+        "echoes": 0,
+        "code": 1006,
+        "error": false,
+        "observationCompleted": false,
+        "connection": "4efcf526-31e9-4c5d-a0f8-eab956ce32f9",
+        "lastAckAgeMs": 3651,
+        "lastEchoAgeMs": null,
+        "status": "failed"
+      },
+      {
+        "name": "fully-idle",
+        "mode": "idle",
+        "version": "v1",
+        "opened": true,
+        "durationMs": 66120,
+        "heartbeatAcks": 0,
+        "echoes": 0,
+        "code": 1006,
+        "error": false,
+        "observationCompleted": false,
+        "connection": "b0682480-2789-40fe-b979-c41d10a98f61",
+        "lastAckAgeMs": null,
+        "lastEchoAgeMs": null,
+        "status": "observed"
+      }
+    ],
+    "active600SecondGate": "failed"
+  },
+  "releaseWatch": {
+    "openedAt": 1792343145429,
+    "events": [
+      {
+        "type": "open",
+        "at": 1792343145684
+      },
+      {
+        "type": "ready",
+        "version": "v1",
+        "connection": "6a503919-80ea-41ac-b411-35f2b8c0f5c7",
+        "at": 1792343145685
+      }
+    ]
+  }
+}
