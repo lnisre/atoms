@@ -1,0 +1,267 @@
+{
+  "kind": "local-synthetic-browser-check",
+  "observedAt": "2026-10-18T16:37:51.621Z",
+  "note": "1100 ms local loopback check only. No CloudBase entry, 600-second, deployment or product acceptance claim.",
+  "normal": {
+    "synthetic": true,
+    "origin": "http://127.0.0.1:18391",
+    "startedAt": "2026-10-18T16:37:50.179Z",
+    "requestedDurationMs": 1100,
+    "cookiesPresent": true,
+    "connections": [
+      {
+        "name": "normal-1",
+        "mode": "normal",
+        "version": "v1",
+        "opened": true,
+        "durationMs": 1104,
+        "heartbeatAcks": 1,
+        "echoes": 1,
+        "code": 1000,
+        "error": false,
+        "observationCompleted": true,
+        "connection": "de8dbe92-e48e-49e8-858a-b2b696f77fd2",
+        "lastAckAgeMs": 1102,
+        "lastEchoAgeMs": 1102,
+        "status": "passed"
+      },
+      {
+        "name": "normal-2",
+        "mode": "normal",
+        "version": "v1",
+        "opened": true,
+        "durationMs": 1101,
+        "heartbeatAcks": 1,
+        "echoes": 1,
+        "code": 1000,
+        "error": false,
+        "observationCompleted": true,
+        "connection": "27278187-a329-4cfc-91e0-5e01b1caced0",
+        "lastAckAgeMs": 1101,
+        "lastEchoAgeMs": 1101,
+        "status": "passed"
+      },
+      {
+        "name": "business-silent",
+        "mode": "heartbeat",
+        "version": "v1",
+        "opened": true,
+        "durationMs": 1102,
+        "heartbeatAcks": 1,
+        "echoes": 0,
+        "code": 1000,
+        "error": false,
+        "observationCompleted": true,
+        "connection": "1a869e88-7ee6-40aa-b0c7-0f76d638dac9",
+        "lastAckAgeMs": 1102,
+        "lastEchoAgeMs": null,
+        "status": "passed"
+      },
+      {
+        "name": "fully-idle",
+        "mode": "idle",
+        "version": "v1",
+        "opened": true,
+        "durationMs": 1102,
+        "heartbeatAcks": 0,
+        "echoes": 0,
+        "code": 1000,
+        "error": false,
+        "observationCompleted": true,
+        "connection": "beed234c-aa44-4733-918f-77bde909152d",
+        "lastAckAgeMs": null,
+        "lastEchoAgeMs": null,
+        "status": "observed"
+      }
+    ],
+    "active600SecondGate": "unverified-short-local-check"
+  },
+  "abnormal": {
+    "synthetic": true,
+    "origin": "http://127.0.0.1:18391",
+    "startedAt": "2026-10-18T16:37:51.366Z",
+    "requestedDurationMs": 1100,
+    "cookiesPresent": true,
+    "connections": [
+      {
+        "name": "normal-1",
+        "mode": "normal",
+        "version": "v1",
+        "opened": true,
+        "durationMs": 242,
+        "heartbeatAcks": 1,
+        "echoes": 1,
+        "code": 1011,
+        "error": false,
+        "observationCompleted": false,
+        "connection": "8d340cfb-f9a1-4161-aa8f-f986d2b2bb0c",
+        "lastAckAgeMs": 241,
+        "lastEchoAgeMs": 241,
+        "status": "failed"
+      },
+      {
+        "name": "normal-2",
+        "mode": "normal",
+        "version": "v1",
+        "opened": true,
+        "durationMs": 230,
+        "heartbeatAcks": 1,
+        "echoes": 1,
+        "code": 1011,
+        "error": false,
+        "observationCompleted": false,
+        "connection": "7a86df07-0fa9-4e39-8abc-855589b0a2f0",
+        "lastAckAgeMs": 229,
+        "lastEchoAgeMs": 229,
+        "status": "failed"
+      },
+      {
+        "name": "business-silent",
+        "mode": "heartbeat",
+        "version": "v1",
+        "opened": true,
+        "durationMs": 216,
+        "heartbeatAcks": 1,
+        "echoes": 0,
+        "code": 1011,
+        "error": false,
+        "observationCompleted": false,
+        "connection": "e6840ad6-67ba-4623-95f7-ebb84ec9a542",
+        "lastAckAgeMs": 216,
+        "lastEchoAgeMs": null,
+        "status": "failed"
+      },
+      {
+        "name": "fully-idle",
+        "mode": "idle",
+        "version": "v1",
+        "opened": true,
+        "durationMs": 205,
+        "heartbeatAcks": 0,
+        "echoes": 0,
+        "code": 1011,
+        "error": false,
+        "observationCompleted": false,
+        "connection": "5ed20a4c-d926-405f-835b-52d61e635702",
+        "lastAckAgeMs": null,
+        "lastEchoAgeMs": null,
+        "status": "observed"
+      }
+    ],
+    "active600SecondGate": "unverified-short-local-check"
+  },
+  "logs": [
+    {
+      "event": "open",
+      "connection": "de8dbe92-e48e-49e8-858a-b2b696f77fd2",
+      "mode": "normal",
+      "version": "v1"
+    },
+    {
+      "event": "open",
+      "connection": "27278187-a329-4cfc-91e0-5e01b1caced0",
+      "mode": "normal",
+      "version": "v1"
+    },
+    {
+      "event": "open",
+      "connection": "1a869e88-7ee6-40aa-b0c7-0f76d638dac9",
+      "mode": "heartbeat",
+      "version": "v1"
+    },
+    {
+      "event": "open",
+      "connection": "beed234c-aa44-4733-918f-77bde909152d",
+      "mode": "idle",
+      "version": "v1"
+    },
+    {
+      "event": "close",
+      "connection": "de8dbe92-e48e-49e8-858a-b2b696f77fd2",
+      "mode": "normal",
+      "version": "v1",
+      "durationMs": 1104,
+      "code": 1000
+    },
+    {
+      "event": "close",
+      "connection": "27278187-a329-4cfc-91e0-5e01b1caced0",
+      "mode": "normal",
+      "version": "v1",
+      "durationMs": 1102,
+      "code": 1000
+    },
+    {
+      "event": "close",
+      "connection": "1a869e88-7ee6-40aa-b0c7-0f76d638dac9",
+      "mode": "heartbeat",
+      "version": "v1",
+      "durationMs": 1103,
+      "code": 1000
+    },
+    {
+      "event": "close",
+      "connection": "beed234c-aa44-4733-918f-77bde909152d",
+      "mode": "idle",
+      "version": "v1",
+      "durationMs": 1103,
+      "code": 1000
+    },
+    {
+      "event": "open",
+      "connection": "8d340cfb-f9a1-4161-aa8f-f986d2b2bb0c",
+      "mode": "normal",
+      "version": "v1"
+    },
+    {
+      "event": "open",
+      "connection": "7a86df07-0fa9-4e39-8abc-855589b0a2f0",
+      "mode": "normal",
+      "version": "v1"
+    },
+    {
+      "event": "open",
+      "connection": "e6840ad6-67ba-4623-95f7-ebb84ec9a542",
+      "mode": "heartbeat",
+      "version": "v1"
+    },
+    {
+      "event": "open",
+      "connection": "5ed20a4c-d926-405f-835b-52d61e635702",
+      "mode": "idle",
+      "version": "v1"
+    },
+    {
+      "event": "close",
+      "connection": "8d340cfb-f9a1-4161-aa8f-f986d2b2bb0c",
+      "mode": "normal",
+      "version": "v1",
+      "durationMs": 243,
+      "code": 1011
+    },
+    {
+      "event": "close",
+      "connection": "5ed20a4c-d926-405f-835b-52d61e635702",
+      "mode": "idle",
+      "version": "v1",
+      "durationMs": 205,
+      "code": 1011
+    },
+    {
+      "event": "close",
+      "connection": "e6840ad6-67ba-4623-95f7-ebb84ec9a542",
+      "mode": "heartbeat",
+      "version": "v1",
+      "durationMs": 218,
+      "code": 1011
+    },
+    {
+      "event": "close",
+      "connection": "7a86df07-0fa9-4e39-8abc-855589b0a2f0",
+      "mode": "normal",
+      "version": "v1",
+      "durationMs": 231,
+      "code": 1011
+    }
+  ]
+}
