@@ -4,7 +4,7 @@ export const runtimeKeys = ['DEEPSEEK_API_KEY', 'CLOUDBASE_ENV_ID', 'ATOMS_PROJE
   'ATOMS_AUTH_SECRET', 'ATOMS_ARTIFACT_SECRET', 'QA_TOOL_SIGNING_KEY', 'ATOMS_APP_ORIGIN'];
 const secretKeys = ['DEEPSEEK_API_KEY', 'ATOMS_AUTH_SECRET', 'ATOMS_ARTIFACT_SECRET', 'QA_TOOL_SIGNING_KEY'];
 const targetKeys = ['envId', 'region', 'serverName', 'productionServerName', 'origin', 'cpu', 'memory',
-  'minInstances', 'maxInstances', 'dataMode', 'namespace', 'expectedVersion', 'sharedDataAuthorized'];
+  'minInstances', 'maxInstances', 'dataMode', 'namespace', 'expectedVersion', 'sharedDataAuthorized', 'maintenance'];
 export function exactOrigin(value) {
   let url; try { url = new URL(value); } catch { throw Error('Invalid exact HTTPS origin'); }
   if (url.protocol !== 'https:' || url.origin !== value || url.username || url.password) throw Error('Invalid exact HTTPS origin');
@@ -17,6 +17,7 @@ export function validateTarget(target) {
     || !/^[a-z][a-z\d-]{2,44}$/.test(target.productionServerName)
     || target.serverName === target.productionServerName) throw Error('Invalid isolated service target');
   exactOrigin(target.origin);
+  if (target.maintenance !== undefined && typeof target.maintenance !== 'boolean') throw Error('Invalid maintenance mode');
   if (![0.5, 1, 2, 4].includes(target.cpu) || target.memory !== target.cpu * 2
     || ![0, 1].includes(target.minInstances) || target.maxInstances !== 1) throw Error('Unsupported bounded resource configuration');
   if (!['isolated', 'existing-account-data'].includes(target.dataMode)
@@ -36,7 +37,7 @@ export function runtimeConfiguration(target, input) {
   for (const key of ['ATOMS_AUTH_SECRET', 'ATOMS_ARTIFACT_SECRET']) if (!/^[a-f\d]{64}$/i.test(input[key])) throw Error(`Runtime secret must be 64 hex characters: ${key}`);
   // Salt each plan's fingerprint; only a digest of the full high-entropy runtime
   // configuration is recorded, never a digest of an individual secret.
-  return { ...input, ATOMS_HOSTING: 'cloudbase' };
+  return { ...input, ATOMS_HOSTING: 'cloudbase', ATOMS_MAINTENANCE: target.maintenance ? '1' : '0' };
 }
 export function configurationFingerprint(runtime, key = randomBytes(32)) {
   return { key: key.toString('hex'), fingerprint: createHmac('sha256', key)

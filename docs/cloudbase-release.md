@@ -50,6 +50,8 @@ node --use-env-proxy scripts/cloudbase/release.mjs verify DIRECTORY --credential
 
 `verify` 同时验证服务身份、唯一 100% 版本、资源/精确运行配置、源构建 ID 对应的镜像推送 manifest digest，以及网关 `/healthz` 返回的冻结源码身份和 Next 就绪。Docker 层 hash、服务 normal 或首页 200 单独均不足。平台默认域名如无法直接取得 JSON，先完成浏览器正常确认，再保存该浏览器实际健康响应并传 `--health OBSERVATION_JSON`；观察必须是 `{ "origin": "实际服务origin", "observedAt": "实际ISO时间", "body": { "实际健康响应": "..." } }`，有效期十分钟。结果将明确标注为需要独立复核的浏览器观察，不能自行编造响应。若构建日志没有唯一的最终 push manifest digest，核验拒绝继续，需要先确认 registry digest，不能拿基础镜像或任意层的 sha256 代替。
 
+完整 Python 镜像的构建日志可能超过一页；工具按官方 `Delivered` 条数推进 `Offset`，直到 `More=false`，上限 100 页、16 MiB。证据只记录页偏移、条数、内容摘要和 request ID，不落原始构建日志。分页缺失、停滞或出现多个 push digest 均拒绝核验。
+
 ## 同一镜像更新与回退
 
 第二次计划使用 `--image-verification PRIOR_DIRECTORY/verification.json`，只接受同一冻结源码的已核验 digest；无需再构建。新目标包含实际 origin 和 `expectedVersion`。服务配置仍独立注入；镜像中不包含秘密。命令不隐式改 DNS、Vercel 或生产服务。
@@ -64,6 +66,16 @@ node --use-env-proxy scripts/cloudbase/release.mjs rollback SECOND_DIRECTORY --c
 ```
 
 `promote` 仅生成正式发布准备清单，拒绝执行生产修改。`rollback` 默认仅给出精确请求；确认是该内测服务已记录的前版本、当前版本未变且已完成维护/停止操作后，加 `--execute yes` 提交官方 `SubmitServerRollback`。回退提交仍需 `status` 核验。应用回退不回滚数据库、不自动重放请求或付费任务。首个版本没有记录的前版本，工具不会伪造可回退目标。内测服务的第二版本发布/回退与正式切流的排空流程必须分别演练。
+
+## 内测维护与停止
+
+需要暂停生成或做回退演练时，在新目标 JSON 中设置 `maintenance: true`、精确的 `expectedVersion`，以同一已核验镜像创建新计划并发布。工具只从目标生成 `ATOMS_MAINTENANCE=1`，不接受任意新增运行环境项。维护版本仍提供页面、登录、项目读取与保存；生成 HTTP 入口返回有明确提示、`no-store` 和 `Retry-After` 的 503，原生 WSS 拒绝升级。已经打开的页面也经过同一网关，因此不能继续启动新付费任务。`/healthz` 同时报告 `maintenance`，保持 Next 真实就绪与拒绝新任务两种状态分开。
+
+进入维护版本本身是一次平台发布，可能停止已有连接；它不是无损排空。在通知少量内测者暂停提交后，让在途任务按原预算结束；无法等待时明确告知停止并保留当前页面的下载出口，再发布维护版本。网关收到 SIGTERM 会终止所属 Python 进程组。不要用活动连接数推断所有保存都已成功，不要刷新有未保存成果的页面，不自动重新执行模型任务。平台是否保留旧连接、何时发退出信号必须由真实演练记录，不能由本地测试推断。
+
+执行回退还会检查远端当前运行配置确实为维护状态、版本没有变化、管理任务已结束，并仅允许当前发布 attempt 记录的前版本。建议先从已验收版本部署同镜像维护版本，再回退到它记录的已验收前版本；不要把首次引导 origin 版本作为可供用户恢复使用的版本。回退后重新核对 origin、运行配置、健康和真实项目保存，保留数据库最新成功提交。恢复服务也通过一个显式 `maintenance: false` 的新版本完成，不能只改本地记录。
+
+若需要彻底停用内测资源，先停止邀请并让用户保存/下载；随后由负责人在 CloudBase 控制台核对本次独立服务、停止或删除，并只读确认结果。当前发布 CLI 故意不提供批量删除或账户级停用动作。`minInstances: 0` 只允许闲置缩零，不能阻止下一次访问唤醒实例，不代表停止服务或保证零费用。
 
 ## 健康与证据边界
 

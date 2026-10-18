@@ -16,6 +16,28 @@ const recordFields = ['DeployId', 'DeployTime', 'Status', 'RunId', 'BuildId', 'I
 const taskFields = ['Id', 'Status', 'CurrentVersionName', 'VersionName', 'DeployType', 'ReleaseType'];
 const imagePattern = /^sha256:[a-f\d]{64}$/;
 
+// Offset counts log entries, not bytes. Full Python builds routinely exceed
+// one page; retain only a digest of each page, never raw dependency/build logs.
+export async function readBuildManifest(api, scope) {
+  let offset = 0, text = '';
+  const pages = [];
+  for (let page = 0; page < 100; page++) {
+    const result = await api.call('tcbr', 'DescribeCloudRunBuildLog', { ...scope, Offset: offset });
+    const log = result.Log;
+    if (!log || typeof log.Text !== 'string' || !Number.isInteger(log.Delivered) || log.Delivered < 0
+      || !Number.isInteger(log.Total) || log.Total < 0 || typeof log.More !== 'boolean'
+      || (log.More && log.Delivered === 0)) throw Error('Build log pagination unavailable');
+    if (log.FailType || log.FailReason) throw Error('Build log reports failure');
+    text += log.Text + '\n';
+    if (Buffer.byteLength(text) > 16 * 1024 * 1024) throw Error('Build log evidence limit exceeded');
+    pages.push({ offset, delivered: log.Delivered, total: log.Total, more: log.More,
+      sha256: digest(log.Text), requestId: result.RequestId });
+    offset += log.Delivered;
+    if (!log.More) return { digest: pushedImageDigest(text), pages };
+  }
+  throw Error('Build log pagination limit exceeded');
+}
+
 export async function inspectRelease(api, target, attempt) {
   const scope = { EnvId: target.envId, ServerName: target.serverName };
   const [detail, records, task] = await Promise.all([
@@ -45,6 +67,21 @@ export function checkServiceConfiguration(detail, target, runtime) {
     || actual.MaxNum !== 1 || actual.Port !== 3000 || JSON.stringify(actual.OpenAccessTypes) !== '["PUBLIC"]') throw Error('Remote resource or access configuration mismatch');
   let variables; try { variables = JSON.parse(actual.EnvParams); } catch { throw Error('Remote runtime configuration unavailable'); }
   if (JSON.stringify(Object.entries(variables).sort()) !== JSON.stringify(Object.entries(runtime).sort())) throw Error('Remote runtime configuration mismatch');
+}
+
+export function prepareRollback(snapshot, recorded, currentVersion, rollbackVersion, execute) {
+  if (!recorded || !currentVersion || !rollbackVersion) throw Error('Rollback requires owned attempt and exact current/target versions');
+  if (snapshot.safe.unambiguousCurrentVersion !== currentVersion) throw Error('Current version changed');
+  const previous = recorded.previous?.unambiguousCurrentVersion;
+  if (previous !== rollbackVersion || previous === currentVersion) throw Error('Rollback target is not the recorded prior version');
+  if (snapshot.raw.task.IsExist && snapshot.raw.task.Task?.Status !== 'finished') throw Error('Another deployment may be running');
+  if (execute) {
+    let variables; try { variables = JSON.parse(snapshot.raw.detail.ServerConfig.EnvParams); } catch { throw Error('Remote runtime configuration unavailable'); }
+    if (variables.ATOMS_MAINTENANCE !== '1') throw Error('Rollback execution requires the current service maintenance version');
+  }
+  return { EnvId: recorded.target.envId, ServerName: recorded.target.serverName,
+    CurrentVersionName: currentVersion, RollbackVersionName: previous,
+    OperatorRemark: `atoms-owned-beta-rollback:${recorded.id}` };
 }
 
 export async function stageRelease({ api, target, runtime, manifest, source, readArchive, save, attemptExists }) {
@@ -108,16 +145,16 @@ export async function verifyRelease({ api, target, runtime, manifest, attempt, h
   const observedOrigin = bootstrap ? origins[0] : target.origin;
   const matching = snapshot.safe.records.filter(record => record.ImageUrl === current[0].ImageUrl
     && ['running', 'normal'].includes(record.Status) && record.BuildId > 0);
-  let imageDigest, buildId;
+  let imageDigest, buildId, buildEvidence;
   if (source.image) {
     imageDigest = source.image.split('@')[1];
     if (current[0].ImageUrl !== source.image) throw Error('Running immutable image identity unavailable or mismatched');
   } else {
     if (matching.length !== 1 || !Number.isInteger(matching[0].BuildId)) throw Error('Unique source build identity unavailable');
     buildId = matching[0].BuildId;
-    const logs = await api.call('tcbr', 'DescribeCloudRunBuildLog', { EnvId: target.envId,
-      ServerName: target.serverName, BuildId: buildId, ServerVersion: current[0].VersionName, Offset: 0 });
-    imageDigest = pushedImageDigest(logs.Log?.Text);
+    buildEvidence = await readBuildManifest(api, { EnvId: target.envId,
+      ServerName: target.serverName, BuildId: buildId, ServerVersion: current[0].VersionName });
+    imageDigest = buildEvidence.digest;
   }
   if (!imagePattern.test(imageDigest)) throw Error('Image manifest digest unavailable');
   // Default-domain confirmation is a normal browser action. A supplied health
@@ -137,19 +174,20 @@ export async function verifyRelease({ api, target, runtime, manifest, attempt, h
   }
   if (observation.status !== 'ready' || observation.nextReady !== true || observation.stopping !== false
     || observation.sourceCommit !== manifest.commit || observation.sourceDigest !== manifest.sourceDigest
-    || observation.protocol !== 'atoms-team/3' || !Number.isInteger(observation.activeConnections)) throw Error('Frozen application health mismatch');
+    || observation.protocol !== 'atoms-team/3' || observation.maintenance !== Boolean(target.maintenance)
+    || !Number.isInteger(observation.activeConnections)) throw Error('Frozen application health mismatch');
   // Re-read after the probe; concurrent traffic/version changes must fail closed.
   const final = await inspectRelease(api, target, attempt);
   if (JSON.stringify(final.safe.versions) !== JSON.stringify(snapshot.safe.versions)) throw Error('Version changed during verification');
   checkServiceConfiguration(final.raw.detail, target, runtime);
   return { kind: 'cloudbase-application-deployment', checkedAt: new Date().toISOString(), target,
     sourceCommit: manifest.commit, sourceDigest: manifest.sourceDigest, version: current[0].VersionName,
-    image: immutableImage(current[0].ImageUrl, imageDigest), buildId,
+    image: immutableImage(current[0].ImageUrl, imageDigest), buildId, buildEvidence,
     healthEvidence: health ? 'supplied-browser-observation-requires-independent-review' : 'direct-https-response',
     configFingerprint: configurationFingerprint(runtime, Buffer.from(attempt.fingerprintKey, 'hex')).fingerprint,
     artifactVerified: true, deploymentVerified: !bootstrap, observedOrigin,
     originStatus: bootstrap ? 'bootstrap-business-origin-disabled' : 'bound-to-service',
-    health: pick(observation, ['status', 'nextReady', 'protocol', 'sourceCommit', 'sourceDigest', 'activeConnections']),
+    health: pick(observation, ['status', 'nextReady', 'protocol', 'sourceCommit', 'sourceDigest', 'activeConnections', 'maintenance']),
     productAcceptance: 'pending-verify-atoms', wss600Seconds: 'pending-platform-evidence',
     realEmail: 'pending', realModel: 'pending', productionCutover: 'not-performed' };
 }
@@ -211,14 +249,8 @@ async function main(args) {
     save(`status-${Date.now()}.json`, result); return result;
   }
   if (command === 'rollback') {
-    if (!recorded || !options['--current-version'] || !options['--rollback-version']) throw Error('Rollback requires owned attempt and exact current/target versions');
     const snapshot = await inspectRelease(api, target);
-    if (snapshot.safe.unambiguousCurrentVersion !== options['--current-version']) throw Error('Current version changed');
-    const previous = recorded.previous?.unambiguousCurrentVersion;
-    if (previous !== options['--rollback-version'] || previous === options['--current-version']) throw Error('Rollback target is not the recorded prior version');
-    const request = { EnvId: target.envId, ServerName: target.serverName,
-      CurrentVersionName: options['--current-version'], RollbackVersionName: previous,
-      OperatorRemark: `atoms-owned-beta-rollback:${recorded.id}` };
+    const request = prepareRollback(snapshot, recorded, options['--current-version'], options['--rollback-version'], options['--execute'] === 'yes');
     if (options['--execute'] !== 'yes') return { request, outcome: 'prepared-not-rolled-back' };
     save('rollback-attempt.json', { ...request, startedAt: new Date().toISOString() });
     const result = await api.call('tcbr', 'SubmitServerRollback', request);

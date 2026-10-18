@@ -6,7 +6,7 @@ import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { releaseApi } from '../scripts/cloudbase/release-api.mjs';
 import { runtimeConfiguration, configurationFingerprint, configurationItems, validateTarget } from '../scripts/cloudbase/release-config.mjs';
-import { stageRelease, verifyRelease } from '../scripts/cloudbase/release.mjs';
+import { stageRelease, verifyRelease, readBuildManifest, prepareRollback } from '../scripts/cloudbase/release.mjs';
 import { buildManifest } from '../scripts/release-manifest.mjs';
 import { createSourcePackage, pushedImageDigest, immutableImage, digest } from '../scripts/cloudbase/release-source.mjs';
 
@@ -22,16 +22,18 @@ const imageDigest = 'sha256:' + 'c'.repeat(64), image = 'ccr.ccs.tencentyun.com/
 const fingerprint = configurationFingerprint(runtime);
 const attempt = { fingerprintKey: fingerprint.key };
 const health = { status: 'ready', nextReady: true, protocol: 'atoms-team/3', sourceCommit: manifest.commit,
-  sourceDigest: manifest.sourceDigest, activeConnections: 0, stopping: false };
+  sourceDigest: manifest.sourceDigest, activeConnections: 0, stopping: false, maintenance: false };
 const source = { archiveSha256: digest(Buffer.from('synthetic archive')) };
 
 test('target and runtime reject management/test credentials, implicit shared data, loose origins and unbounded resources', () => {
   for (const change of [{ serverName: target.productionServerName }, { origin: target.origin + '/anything' }, { maxInstances: 99 },
     { dataMode: 'existing-account-data' }, { namespace: 'atoms' }, { typo: true }]) assert.throws(() => validateTarget({ ...target, ...change }));
-  const input = Object.fromEntries(Object.entries(runtime).filter(([key]) => key !== 'ATOMS_HOSTING'));
+  const input = Object.fromEntries(Object.entries(runtime).filter(([key]) => !['ATOMS_HOSTING', 'ATOMS_MAINTENANCE'].includes(key)));
   for (const change of [{ TENCENTCLOUD_SECRETKEY: secret }, { ATOMS_AUTH_TEST_TRANSPORT: 'yes' },
     { ATOMS_APP_ORIGIN: 'https://other.invalid' }, { ATOMS_AUTH_SECRET: 'short' }]) assert.throws(() => runtimeConfiguration(target, { ...input, ...change }));
   assert.equal(configurationItems(target, runtime).find(item => item.Key === 'Port').IntValue, 3000);
+  assert.equal(runtimeConfiguration({ ...target, maintenance: true }, input).ATOMS_MAINTENANCE, '1');
+  assert.throws(() => validateTarget({ ...target, maintenance: 'yes' }), /maintenance/);
   assert.doesNotMatch(JSON.stringify(fingerprint), /SYNTHETIC_ONLY/);
 });
 
@@ -65,7 +67,7 @@ function fakeApi({ existing = false, mutationTimeout = false, altered = false, m
     if (action === 'DescribeCloudRunServerDetail') return detail();
     if (action === 'DescribeCloudRunDeployRecord') return { DeployRecords: [{ ImageUrl: image, Status: 'normal', BuildId: 123, FlowRatio: 100 }] };
     if (action === 'DescribeServerManageTask') return { IsExist: true, Task: { Id: 42, Status: 'finished' } };
-    if (action === 'DescribeCloudRunBuildLog') return { Log: { Text: `v1: digest: ${imageDigest} size: 1234` } };
+    if (action === 'DescribeCloudRunBuildLog') return { Log: { Text: `v1: digest: ${imageDigest} size: 1234`, Total: 1, Delivered: 1, More: false } };
     if (action === 'DescribeCloudBaseBuildService') return { PackageName: 'synthetic-package', PackageVersion: 'v1', UploadUrl: 'secret-not-recorded' };
     if (action === 'CreateCloudRunServer' || action === 'UpdateCloudRunServer') {
       if (mutationTimeout) throw Error('transport timeout');
@@ -89,6 +91,35 @@ test('stage writes an owned attempt before official mutation, preserves secret-f
   await assert.rejects(stageRelease(options), /already recorded/);
   assert.equal(api.calls.filter(value => value.action === 'CreateCloudRunServer').length, 1);
   await assert.rejects(stageRelease({ ...options, api: fakeApi({ existing: true }), attemptExists: () => false }), /expectedVersion/);
+});
+
+test('build manifest evidence reads bounded official log pages and rejects stalled or ambiguous pagination', async () => {
+  const offsets = [];
+  const api = { call: async (_service, _action, params) => {
+    offsets.push(params.Offset);
+    return { RequestId: 'page-' + params.Offset, Log: { Total: 3, Delivered: params.Offset === 0 ? 2 : 1,
+      More: params.Offset === 0, Text: params.Offset === 0 ? 'dependency install\nlayer sha256:' + 'e'.repeat(64) : `v1: digest: ${imageDigest} size: 1234` } };
+  } };
+  const result = await readBuildManifest(api, { EnvId: target.envId, ServerName: target.serverName, BuildId: 123 });
+  assert.deepEqual(offsets, [0, 2]); assert.equal(result.digest, imageDigest);
+  assert.equal(result.pages.length, 2); assert.doesNotMatch(JSON.stringify(result), /dependency install/);
+  await assert.rejects(readBuildManifest({ call: async () => ({ Log: { Total: 3, Delivered: 0, More: true, Text: '' } }) }, {}), /pagination/);
+  await assert.rejects(readBuildManifest({ call: async () => ({ Log: { Total: 1, Delivered: 1, More: false, Text: 'no digest' } }) }, {}), /manifest digest/);
+});
+
+test('rollback executes only against the recorded prior version after maintenance rejects new work', () => {
+  const record = { id: 'owned-attempt', target, previous: { unambiguousCurrentVersion: 'atoms-beta-001' } };
+  const snapshot = { safe: { unambiguousCurrentVersion: 'atoms-beta-002' },
+    raw: { task: { IsExist: true, Task: { Status: 'finished' } }, detail: { ServerConfig: { EnvParams: JSON.stringify(runtime) } } } };
+  assert.equal(prepareRollback(snapshot, record, 'atoms-beta-002', 'atoms-beta-001', false).RollbackVersionName, 'atoms-beta-001');
+  assert.throws(() => prepareRollback(snapshot, record, 'atoms-beta-002', 'atoms-beta-001', true), /maintenance/);
+  assert.throws(() => prepareRollback(snapshot, record, 'atoms-beta-003', 'atoms-beta-001', false), /changed/);
+  assert.throws(() => prepareRollback(snapshot, record, 'atoms-beta-002', 'unrelated-001', false), /recorded/);
+  snapshot.raw.detail.ServerConfig.EnvParams = JSON.stringify({ ...runtime, ATOMS_MAINTENANCE: '1' });
+  const request = prepareRollback(snapshot, record, 'atoms-beta-002', 'atoms-beta-001', true);
+  assert.equal(request.ServerName, target.serverName); assert.doesNotMatch(JSON.stringify(request), /SYNTHETIC_ONLY/);
+  snapshot.raw.task.Task.Status = 'running';
+  assert.throws(() => prepareRollback(snapshot, record, 'atoms-beta-002', 'atoms-beta-001', true), /deployment/);
 });
 
 test('verify binds actual resource config, source health, version and build manifest digest; unknown or moving state fails closed', async () => {

@@ -26,6 +26,8 @@ try {
   release={protocol:value.protocol,sourceCommit:value.sourceCommit,sourceDigest:value.sourceDigest};
 }catch{if(process.env.ATOMS_HOSTING==='cloudbase')throw new Error('Missing frozen release identity')}
 let ready=false,stopping=false;
+if(process.env.ATOMS_MAINTENANCE!==undefined&&!['0','1'].includes(process.env.ATOMS_MAINTENANCE))throw new Error('Invalid maintenance mode');
+const maintenance=process.env.ATOMS_MAINTENANCE==='1';
 const started=Date.now();
 const log=(event,details={})=>console.log(JSON.stringify({component:'atoms-gateway',event,...release,...details}));
 const origin=`http://localhost:${internalPort}`;
@@ -39,11 +41,15 @@ const server=http.createServer(async(req,res)=>{
     let nextReady=false;
     if(ready&&!stopping&&child.exitCode===null){try{const r=await fetch(transportOrigin+'/',{method:'HEAD',signal:AbortSignal.timeout(1000)});await r.body?.cancel();nextReady=r.status<500}catch{}}
     res.writeHead(nextReady?200:503,{'Content-Type':'application/json','Cache-Control':'no-store'});
-    res.end(JSON.stringify({status:nextReady?'ready':'unavailable',nextReady,...release,activeConnections:sockets.clients.size,uptimeMs:Date.now()-started,stopping}));return;
+    res.end(JSON.stringify({status:nextReady?'ready':'unavailable',nextReady,...release,activeConnections:sockets.clients.size,uptimeMs:Date.now()-started,stopping,maintenance}));return;
   }
   if(!ready||stopping){res.writeHead(503,{'Cache-Control':'no-store'});res.end('Application unavailable');return}
   const expectedOrigin=process.env.ATOMS_APP_ORIGIN||`${req.headers['x-forwarded-proto']||'http'}://${req.headers.host}`;
   if(req.headers.origin && req.headers.origin!==expectedOrigin){res.writeHead(403);res.end('Forbidden origin');return}
+  if(maintenance&&req.method==='POST'&&new URL(req.url,'http://localhost').pathname==='/api/generate'){
+    res.writeHead(503,{'Content-Type':'application/json','Cache-Control':'no-store','Retry-After':'60'});
+    res.end(JSON.stringify({code:'maintenance',error:'服务维护中，暂时无法开始生成。已保存项目仍可读取和保存，请保留当前页面中的未保存内容。'}));return;
+  }
   const headers={...req.headers,host:`localhost:${internalPort}`,'x-forwarded-host':`localhost:${internalPort}`,'x-forwarded-proto':'http'};
   if(headers.origin && !process.env.ATOMS_APP_ORIGIN)headers.origin=origin;
   delete headers['x-atoms-internal'];
@@ -57,6 +63,7 @@ server.on('upgrade',async(req,socket,head)=>{
   const url=new URL(req.url,'http://localhost');
   const expectedOrigin=process.env.ATOMS_APP_ORIGIN||`${req.headers['x-forwarded-proto']||'http'}://${req.headers.host}`;
   if(url.pathname!=='/api/team/socket'||req.headers.origin!==expectedOrigin){socket.end('HTTP/1.1 403 Forbidden\r\n\r\n');return}
+  if(maintenance){socket.end('HTTP/1.1 503 Service Unavailable\r\nRetry-After: 60\r\n\r\n');return}
   try {
     const session = await fetch(transportOrigin+'/api/auth/session',{headers:{cookie:req.headers.cookie||''},signal:AbortSignal.timeout(15000)});
     await session.body?.cancel();
@@ -115,4 +122,4 @@ while(Date.now()<readinessDeadline){
   if(!stopping)await new Promise(resolve=>setTimeout(resolve,Math.max(0,Math.min(250,readinessDeadline-Date.now()))));
 }
 if(!ready){shutdown('next-readiness-timeout',1)}
-else if(!stopping)server.listen(port,'0.0.0.0',()=>{log('ready',{startupMs:Date.now()-started});console.log(`Team gateway listening on ${port}`)});
+else if(!stopping)server.listen(port,'0.0.0.0',()=>{log('ready',{startupMs:Date.now()-started,maintenance});console.log(`Team gateway listening on ${port}`)});

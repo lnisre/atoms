@@ -26,7 +26,7 @@ async function freeGatewayPorts() {
   throw new Error("No free gateway/internal-server port pair");
 }
 
-for (const deployed of [false,true]) test(`real gateway ${deployed ? "deployment origin" : "local origin"} rejects anonymous/invalid upgrades and forwards the verified cookie`, async () => {
+for (const [deployed,maintenance] of [[false,false],[true,false],[true,true]]) test(`real gateway ${deployed ? "deployment origin" : "local origin"}${maintenance ? " maintenance" : ""} rejects invalid upgrades and preserves permitted routes`, async () => {
   const port = await freeGatewayPorts();
   const dir=await mkdtemp(join(tmpdir(),"atoms-auth-gateway-"));
   const entry=join(dir,"server.mjs");
@@ -41,7 +41,7 @@ http.createServer((req,res)=>{
  if(req.url==='/cookies'){res.setHeader('Set-Cookie',['synthetic_a=1; HttpOnly','synthetic_b=2; HttpOnly']);res.end('cookies');return}
  res.end('ready');
 }).listen(Number(process.env.PORT),'127.0.0.1');`);
-  const child=spawn(process.execPath,["runtime/team/gateway.mjs"],{env:{...process.env,PORT:String(port),ATOMS_NEXT_ENTRY:entry,ATOMS_APP_ORIGIN:"",VERCEL_URL:deployed?"atoms-acceptance.vercel.app":""},stdio:["ignore","pipe","pipe"]});
+  const child=spawn(process.execPath,["runtime/team/gateway.mjs"],{env:{...process.env,PORT:String(port),ATOMS_NEXT_ENTRY:entry,ATOMS_APP_ORIGIN:"",ATOMS_MAINTENANCE:maintenance?'1':'0',VERCEL_URL:deployed?"atoms-acceptance.vercel.app":""},stdio:["ignore","pipe","pipe"]});
   let output="";child.stdout.on("data",chunk=>{output+=chunk;});child.stderr.on("data",chunk=>{output+=chunk;});
   const connect=(cookie,origin=deployed?"https://atoms-acceptance.vercel.app":`http://localhost:${port}`)=>new Promise((resolve,reject)=>{
     const ws=new WebSocket(`ws://127.0.0.1:${port}/api/team/socket`,{headers:{host:`localhost:${port}`,origin,cookie}});
@@ -57,11 +57,20 @@ http.createServer((req,res)=>{
     const health=await fetch(`http://127.0.0.1:${port}/healthz`);
     assert.equal(health.status,200);assert.equal(health.headers.get('cache-control'),'no-store');
     const status=await health.json();assert.equal(status.nextReady,true);assert.equal(status.activeConnections,0);
+    assert.equal(status.maintenance,maintenance);
     assert.equal((await fetch(`http://127.0.0.1:${port}/cookies`)).headers.getSetCookie().length,2);
-    assert.equal(await connect(''),401);
-    assert.equal(await connect('atoms-session=forged'),401);
     assert.equal(await connect('synthetic=session','https://evil.invalid'),403);
-    assert.deepEqual(await connect('synthetic=session'),{type:'result',synthetic:true});
+    if(maintenance){
+      const start=await fetch(`http://127.0.0.1:${port}/api/generate?existing-page=1`,{method:'POST'});
+      assert.equal(start.status,503);assert.equal(start.headers.get('cache-control'),'no-store');
+      assert.equal((await start.json()).code,'maintenance');
+      assert.equal(await connect('synthetic=session'),503);
+      assert.equal((await fetch(`http://127.0.0.1:${port}/api/projects`,{method:'POST'})).status,200);
+    }else{
+      assert.equal(await connect(''),401);
+      assert.equal(await connect('atoms-session=forged'),401);
+      assert.deepEqual(await connect('synthetic=session'),{type:'result',synthetic:true});
+    }
   } finally { child.kill('SIGTERM');await new Promise(resolve=>child.once('exit',()=>resolve()));await rm(dir,{recursive:true,force:true}); }
 });
 
