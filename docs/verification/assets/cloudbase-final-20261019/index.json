@@ -1,0 +1,80 @@
+{
+  "files": [
+    {
+      "file": "browser-results.json",
+      "sha256": "5bcb5622712f0a9179f72a49352a55596477ee3453ad08c18b092ed82ae57e06",
+      "bytes": 5194
+    },
+    {
+      "file": "direct-first-pointer-events.json",
+      "sha256": "071cbc95036c145033aa3f1b9014e5ffc8ea7b0d54863934157d19260064db8f",
+      "bytes": 172
+    },
+    {
+      "file": "direct-first-pointer-failed.png",
+      "sha256": "3c0f4a801c6dd959f4a7210b556ea71175003f880eb04aaea662d82e1414cf18",
+      "bytes": 87485
+    },
+    {
+      "file": "driver-first-locator-failure.json",
+      "sha256": "712dbfc663d292ad75091a90775d7ee74cc97b25b9e8d902af442a8f26af1bec",
+      "bytes": 1757
+    },
+    {
+      "file": "engineering-checks.json",
+      "sha256": "c74a16979866ada1092c107cba581636b70dffc0b5352b36b577fe5dfe6aebc5",
+      "bytes": 1388
+    },
+    {
+      "file": "local-cleanup.json",
+      "sha256": "f0ae83a04c9b910cd51541bbaa0a6feec9919731fbc36549f02849fae50af779",
+      "bytes": 414
+    },
+    {
+      "file": "maintenance-ui.json",
+      "sha256": "a1b015fdf63a6f8379cd91e6f0d2f99518624173f842c6bd5d58c195dd4b8c08",
+      "bytes": 269
+    },
+    {
+      "file": "maintenance.png",
+      "sha256": "41efdba750bb6c8be708820c52dae7f9abc19983f7377b5a089c98075ea15926",
+      "bytes": 111596
+    },
+    {
+      "file": "native-after-fix-driver-locator-failure.json",
+      "sha256": "9041861f21295e1eca0b5fc84ee9683475cdb8cd50743927e789c6fcb5406d64",
+      "bytes": 2419
+    },
+    {
+      "file": "native-before-fix.json",
+      "sha256": "e8e8be123e939d7cead1df6b0e1420f4d7e997642720f53f1ca68108144030a3",
+      "bytes": 2316
+    },
+    {
+      "file": "native-driver.mjs",
+      "sha256": "c4f8df707230cc168d2db441c5a6c5d8c7e761ed3a3342b657305473d6838c69",
+      "bytes": 8017
+    },
+    {
+      "file": "native-final.json",
+      "sha256": "4186d6e9637ca8d1bba5364b585e3fcc0e828f4db6dabef720e7ec0105526cdf",
+      "bytes": 2385
+    },
+    {
+      "file": "native-long-success.png",
+      "sha256": "6fefbc25da2f56b0567ff54fb58fce174c8502837ec3fbcbe55413b15223e49f",
+      "bytes": 110623
+    },
+    {
+      "file": "native-timeout.png",
+      "sha256": "2d955da01fb74dd5b29ceee2ce2d9b8a6b8b2826ac3d49f75442b54c345fb647",
+      "bytes": 106777
+    },
+    {
+      "file": "offline-delay-transport.py",
+      "sha256": "b2118b6b7555a1d4796622425cd61b204006a0c78b4bd532332ab2cbc758b9d9",
+      "bytes": 1394
+    }
+  ],
+  "scope": "CloudBase migration local final verification. Full CloudBase beta deployment remains blocked on direct authorization to transfer existing runtime configuration."
+}

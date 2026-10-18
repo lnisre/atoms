@@ -1,0 +1,50 @@
+{
+  "status": "failed",
+  "mode": "offline-native-team-real-wall-clock",
+  "actualProviderCalls": 0,
+  "sourceCommit": "e2a48a199819339becb294cb47357d9093d09d0c",
+  "error": "locator.waitFor: Error: strict mode violation: getByText(/生成执行器繁忙/) resolved to 2 elements:\n    1) <p>生成执行器繁忙，请稍后重试。</p> aka getByRole('region', { name: '生成进度' }).getByText('生成执行器繁忙，请稍后重试。')\n    2) <p role=\"alert\">生成执行器繁忙，请稍后重试。</p> aka getByRole('region', { name: '修改项目' }).getByText('生成执行器繁忙，请稍后重试。')\n\nCall log:\n\u001b[2m  - waiting for getByText(/生成执行器繁忙/) to be visible\u001b[22m\n",
+  "records": [
+    {
+      "name": "420-second-success",
+      "modelCalls": 4,
+      "engineerCalls": 1,
+      "artifacts": 0,
+      "terminalOutcome": null,
+      "closed": false,
+      "heartbeats": 1,
+      "acks": 1,
+      "socketAt": 1792349426659,
+      "deadline": 1792349906589,
+      "sessionAt": 1792349426694
+    },
+    {
+      "name": "480-second-timeout",
+      "modelCalls": 4,
+      "engineerCalls": 1,
+      "artifacts": 0,
+      "terminalOutcome": null,
+      "closed": false,
+      "heartbeats": 1,
+      "acks": 1,
+      "socketAt": 1792349426708,
+      "deadline": 1792349906696,
+      "sessionAt": 1792349426720
+    },
+    {
+      "name": "third-task-rejected",
+      "modelCalls": 0,
+      "engineerCalls": 0,
+      "artifacts": 0,
+      "terminalOutcome": null,
+      "closed": true,
+      "heartbeats": 0,
+      "acks": 0,
+      "socketAt": 1792349433913,
+      "socketError": "生成执行器繁忙，请稍后重试。",
+      "closedAt": 1792349433924
+    }
+  ],
+  "errors": [],
+  "durationMs": 11119
+}

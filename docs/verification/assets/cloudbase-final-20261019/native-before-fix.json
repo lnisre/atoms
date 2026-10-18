@@ -1,0 +1,93 @@
+{
+  "status": "failed",
+  "mode": "offline-native-team-real-wall-clock",
+  "actualProviderCalls": 0,
+  "sourceCommit": "e2a48a199819339becb294cb47357d9093d09d0c",
+  "error": "Required public observation did not arrive in time",
+  "records": [
+    {
+      "name": "420-second-success",
+      "modelCalls": 4,
+      "engineerCalls": 1,
+      "artifacts": 0,
+      "terminalOutcome": null,
+      "closed": true,
+      "heartbeats": 76,
+      "acks": 76,
+      "socketAt": 1792349896865,
+      "deadline": 1792350376816,
+      "sessionAt": 1792349896896,
+      "socketError": "团队连接或工具回传失败。",
+      "closedAt": 1792350203369
+    },
+    {
+      "name": "480-second-timeout",
+      "modelCalls": 4,
+      "engineerCalls": 1,
+      "artifacts": 0,
+      "terminalOutcome": null,
+      "closed": true,
+      "heartbeats": 76,
+      "acks": 76,
+      "socketAt": 1792349896933,
+      "deadline": 1792350376924,
+      "sessionAt": 1792349896946,
+      "socketError": "团队连接或工具回传失败。",
+      "closedAt": 1792350203432
+    },
+    {
+      "name": "third-task-rejected",
+      "modelCalls": 0,
+      "engineerCalls": 0,
+      "artifacts": 0,
+      "terminalOutcome": null,
+      "closed": true,
+      "heartbeats": 0,
+      "acks": 0,
+      "socketAt": 1792349903384,
+      "socketError": "生成执行器繁忙，请稍后重试。",
+      "closedAt": 1792349903397
+    }
+  ],
+  "errors": [],
+  "durationMs": 520471,
+  "cleanup": {
+    "browserClosed": true,
+    "remainingOwnedPython": 0
+  },
+  "memory": {
+    "sampleCount": 53,
+    "peakOwnedRssKiB": 659792,
+    "peakSample": {
+      "at": 1792349902290,
+      "rssKiB": 659792,
+      "processes": [
+        {
+          "pid": 1390,
+          "parent": 44556,
+          "rssKiB": 307392,
+          "command": "Python"
+        },
+        {
+          "pid": 1391,
+          "parent": 44556,
+          "rssKiB": 306560,
+          "command": "Python"
+        },
+        {
+          "pid": 44552,
+          "parent": 1,
+          "rssKiB": 21280,
+          "command": "node"
+        },
+        {
+          "pid": 44556,
+          "parent": 44552,
+          "rssKiB": 24560,
+          "command": "next-server (v16.3.6)"
+        }
+      ]
+    },
+    "scope": "Local Darwin process-tree RSS; not CloudBase Linux capacity evidence."
+  }
+}

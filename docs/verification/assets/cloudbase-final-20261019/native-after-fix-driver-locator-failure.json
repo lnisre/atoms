@@ -1,0 +1,93 @@
+{
+  "status": "failed",
+  "mode": "offline-native-team-real-wall-clock",
+  "actualProviderCalls": 0,
+  "sourceCommit": "7113b8e1820ec8802bd64025662f1f6424402c4d",
+  "error": "locator.waitFor: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByRole('region', { name: '生成进度', exact: true }).getByText(/8 分钟上限/) to be visible\u001b[22m\n",
+  "records": [
+    {
+      "name": "420-second-success",
+      "modelCalls": 7,
+      "engineerCalls": 1,
+      "artifacts": 1,
+      "terminalOutcome": "passed",
+      "closed": true,
+      "heartbeats": 106,
+      "acks": 106,
+      "socketAt": 1792353117627,
+      "deadline": 1792353597588,
+      "sessionAt": 1792353117645,
+      "terminalAt": 1792353544507,
+      "closedAt": 1792353544532
+    },
+    {
+      "name": "480-second-timeout",
+      "modelCalls": 4,
+      "engineerCalls": 1,
+      "artifacts": 0,
+      "terminalOutcome": "limit",
+      "closed": true,
+      "heartbeats": 119,
+      "acks": 119,
+      "socketAt": 1792353117671,
+      "deadline": 1792353597657,
+      "sessionAt": 1792353117682,
+      "terminalAt": 1792353597740,
+      "closedAt": 1792353597740
+    },
+    {
+      "name": "third-task-rejected",
+      "modelCalls": 0,
+      "engineerCalls": 0,
+      "artifacts": 0,
+      "terminalOutcome": null,
+      "closed": true,
+      "heartbeats": 0,
+      "acks": 0,
+      "socketAt": 1792353124770,
+      "socketError": "生成执行器繁忙，请稍后重试。",
+      "closedAt": 1792353124779
+    }
+  ],
+  "errors": [],
+  "durationMs": 514437,
+  "cleanup": {
+    "browserClosed": true,
+    "remainingOwnedPython": 0
+  },
+  "memory": {
+    "sampleCount": 53,
+    "peakOwnedRssKiB": 695712,
+    "peakSample": {
+      "at": 1792353123279,
+      "rssKiB": 695712,
+      "processes": [
+        {
+          "pid": 11037,
+          "parent": 94372,
+          "rssKiB": 325392,
+          "command": "Python"
+        },
+        {
+          "pid": 11038,
+          "parent": 94372,
+          "rssKiB": 324976,
+          "command": "Python"
+        },
+        {
+          "pid": 94368,
+          "parent": 1,
+          "rssKiB": 19952,
+          "command": "node"
+        },
+        {
+          "pid": 94372,
+          "parent": 94368,
+          "rssKiB": 25392,
+          "command": "next-server (v16.3.6)"
+        }
+      ]
+    },
+    "scope": "Local Darwin process-tree RSS; not CloudBase Linux capacity evidence."
+  }
+}

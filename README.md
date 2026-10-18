@@ -163,6 +163,8 @@ TEST_BASE_URL=http://localhost:3100 pnpm exec playwright test \
 
 完整团队服务需要同时承载 Next.js、同源 WebSocket 网关和 Python 子进程。仓库提供 [Dockerfile.vercel](Dockerfile.vercel)；仅部署普通 Next.js 页面不足以提供团队生成能力。Vercel 凭据、访问保护和部署操作见 [项目说明](docs/agents/vercel.md)，运行时细节见 [runtime/team](runtime/team/README.md)。
 
+CloudBase 独立临时内测的冻结打包、默认域名配置、维护与回退流程见 [CloudBase 发布说明](docs/cloudbase-release.md)，当前代码与验证边界见 [迁移验证报告](docs/verification/cloudbase-migration-20261019.md)。该流程保留现有 Vercel 正式入口；默认域名只供开发测试，完整云端发布和正式域名迁移分别验收。
+
 部署使用 `pnpm release:vercel plan/create/status/verify`，从冻结 Git 提交生成并核对完整容器源码清单；需要先验收再切流时使用 `stage`，它不会自动绑定固定域名。正式切换后复核 alias、源码、容器和数据库迁移状态。运行配置应包含精确公开 origin、CloudBase 环境和各实例一致的 Auth/产物签名密钥；数据库与应用的产物签名密钥必须匹配。详细操作见 [部署说明](docs/agents/vercel.md)。
 
 `.vercelignore` 排除凭据、环境文件、私人资料及测试产物；管理密钥不进入应用运行时。升级保持已安装迁移校验和，旧本地 IndexedDB 不迁移也不删除。当前固定入口部署来源为 `72b4d5e`，对应已合并的 PR #82，生产 001–005 已安装；不要把较早验收报告中的“生产尚未发布”当作当前状态。
