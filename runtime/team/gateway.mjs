@@ -98,7 +98,13 @@ sockets.on('connection',(ws,cookie)=>{
         const response=await post('/api/team',message);
         const data=await response.json();send({type:'control-ack',id:message.id,ok:response.ok,error:data.error});
       }
-    }catch{send({type:'socket-error',error:'团队连接或工具回传失败。'});ws.close(1011);abort.abort()}
+    }catch(error){
+      log('connection-error',{
+        errorName:['AbortError','TimeoutError','TypeError','SyntaxError','Error'].includes(error?.name)?error.name:'OtherError',
+        causeCode:['UND_ERR_BODY_TIMEOUT','UND_ERR_HEADERS_TIMEOUT','UND_ERR_SOCKET','ECONNRESET','ECONNREFUSED'].includes(error?.cause?.code)?error.cause.code:'other-or-none',
+      });
+      send({type:'socket-error',error:'团队连接或工具回传失败。'});ws.close(1011);abort.abort()
+    }
   });
 });
 const shutdown=(reason,exitCode=0)=>{

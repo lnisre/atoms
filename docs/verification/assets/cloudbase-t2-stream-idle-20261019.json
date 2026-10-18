@@ -1,0 +1,19 @@
+{
+  "mode": "independent-loopback-native-fetch-comparison",
+  "node": "v24.18.0",
+  "undici": "7.28.0",
+  "actualProviderCalls": 0,
+  "silentBody": {
+    "chunks": 1,
+    "durationMs": 301621,
+    "errorName": "TypeError",
+    "causeCode": "UND_ERR_BODY_TIMEOUT"
+  },
+  "blankLineEvery5000Ms": {
+    "chunks": 62,
+    "durationMs": 307005,
+    "errorName": "TimeoutError",
+    "stoppedBy": "explicit-307000ms-observation-deadline"
+  },
+  "scope": "HTTP body idle diagnosis only; not full application or public-entry acceptance"
+}

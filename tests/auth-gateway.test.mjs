@@ -36,7 +36,7 @@ http.createServer((req,res)=>{
  if(req.url==='/api/generate'){
   const valid=req.headers.cookie==='synthetic=session'&&req.headers['x-atoms-internal']===process.env.ATOMS_INTERNAL_KEY;
   res.writeHead(valid?200:401,{'Content-Type':valid?'application/x-ndjson':'application/json'});
-  res.end(valid?JSON.stringify({type:'result',synthetic:true})+'\\n':'{}');return
+  res.end(valid?'\\n \\n'+JSON.stringify({type:'result',synthetic:true})+'\\n\\n':'{}');return
  }
  if(req.url==='/cookies'){res.setHeader('Set-Cookie',['synthetic_a=1; HttpOnly','synthetic_b=2; HttpOnly']);res.end('cookies');return}
  res.end('ready');

@@ -97,11 +97,62 @@ test("cancel and original deadline terminate the actual supervised process", asy
       assert.ok(pid>0, `controlled process did not start before readiness window (${action})`);
       if(action==="cancel") {const cancelled=await teamControl(new Request("http://localhost/api/team",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({action:"cancel",taskId,token:session.token})}));assert.equal(cancelled.status,200);}
       while(true){const chunk=await reader.read();wire+=decoder.decode(chunk.value);if(chunk.done)break;}
-      const messages=wire.trim().split("\n").map(line=>JSON.parse(line));assert.equal(messages.at(-1).outcome,action==="cancel"?"stopped":"limit");assert.equal(messages.some(m=>m.type==="result"),false);
+      const messages=wire.trim().split("\n").filter(line=>line.trim()).map(line=>JSON.parse(line));assert.equal(messages.at(-1).outcome,action==="cancel"?"stopped":"limit");assert.equal(messages.some(m=>m.type==="result"),false);
       await new Promise(resolve=>setTimeout(resolve,30));assert.throws(()=>process.kill(pid,0));
       const late=await teamControl(new Request("http://localhost/api/team",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({action:"heartbeat",taskId,token:session.token})}));assert.equal(late.status,410);
     }
   } finally {if(oldPython===undefined)delete process.env.ATOMS_TEAM_PYTHON;else process.env.ATOMS_TEAM_PYTHON=oldPython;if(oldKey===undefined)delete process.env.DEEPSEEK_API_KEY;else process.env.DEEPSEEK_API_KEY=oldKey;await rm(dir,{recursive:true,force:true});}
+});
+
+for (const end of ["cancel", "abort", "reader-cancel", "lease", "deadline"] as const) test(`quiet execution keeps only its internal body alive and clears it after ${end}`, async t => {
+  const { mkdtemp, writeFile, rm } = await import("node:fs/promises");
+  const { tmpdir } = await import("node:os");
+  const { join } = await import("node:path");
+  const { TEAM_TIMEOUT_MS } = await import("../src/lib/team/contract");
+  const dir = await mkdtemp(join(tmpdir(), "atoms-quiet-body-")), executable = join(dir, "controlled-runtime");
+  await writeFile(executable, `#!${process.execPath}\nprocess.stdin.resume();setInterval(()=>{},1000);`, { mode: 0o700 });
+  const oldPython = process.env.ATOMS_TEAM_PYTHON, oldKey = process.env.DEEPSEEK_API_KEY;
+  process.env.ATOMS_TEAM_PYTHON = executable; process.env.DEEPSEEK_API_KEY = "offline-no-provider";
+  const now = Date.now(), taskId = crypto.randomUUID(), abort = new AbortController();
+  t.mock.timers.enable({ apis: ["Date", "setInterval", "setTimeout"], now });
+  try {
+    const started = end === "deadline" ? now - TEAM_TIMEOUT_MS + 11_000 : now;
+    const response = await startTeam(new Request("http://localhost/api/generate", { method: "POST", signal: abort.signal,
+      headers: { "Content-Type": "application/json", "X-Atoms-Task-Id": taskId },
+      body: JSON.stringify({ projectId: crypto.randomUUID(), requirement: "controlled silent model wait" }) }), started);
+    const reader = response.body!.getReader(), decoder = new TextDecoder();
+    const session = JSON.parse(decoder.decode((await reader.read()).value));
+    assert.equal(session.type, "session"); assert.equal(session.deadline, started + TEAM_TIMEOUT_MS);
+    const firstStep = JSON.parse(decoder.decode((await reader.read()).value)); assert.equal(firstStep.type, "step");
+    // A shortened clock exercises the real startTeam/watchdog/ReadableStream,
+    // without waiting five minutes or relaxing any production timeout.
+    for (let i = 0; i < 2; i++) {
+      const next = reader.read(); t.mock.timers.tick(5_000);
+      assert.equal(decoder.decode((await next).value), "\n", "quiet transport must emit a blank NDJSON line, never fake progress");
+    }
+    const control = (action: string) => teamControl(new Request("http://localhost/api/team", { method: "POST",
+      headers: { "Content-Type": "application/json" }, body: JSON.stringify({ action, taskId, token: session.token }) }));
+    if (end === "cancel") assert.equal((await control("cancel")).status, 200);
+    else if (end === "abort") abort.abort();
+    else if (end === "reader-cancel") await reader.cancel();
+    else t.mock.timers.tick(end === "lease" ? 6_000 : 2_000);
+    let wire = "";
+    while (true) { const chunk = await reader.read(); wire += decoder.decode(chunk.value); if (chunk.done) break; }
+    const events = wire.split("\n").filter(line => line.trim()).map(line => JSON.parse(line));
+    if (end === "reader-cancel") assert.equal(events.length, 0);
+    else {
+      assert.equal(events.at(-1).outcome, end === "deadline" ? "limit" : "stopped");
+      assert.deepEqual(events.map(event => event.type), ["step", "error"], "keepalive must not create model calls or execution records");
+    }
+    assert.equal((await control("heartbeat")).status, 410);
+    t.mock.timers.tick(30_000); // A leaked callback would enqueue after close/cancel.
+    assert.equal((await reader.read()).done, true);
+  } finally {
+    t.mock.timers.reset();
+    if (oldPython === undefined) delete process.env.ATOMS_TEAM_PYTHON; else process.env.ATOMS_TEAM_PYTHON = oldPython;
+    if (oldKey === undefined) delete process.env.DEEPSEEK_API_KEY; else process.env.DEEPSEEK_API_KEY = oldKey;
+    await rm(dir, { recursive: true, force: true });
+  }
 });
 
 
