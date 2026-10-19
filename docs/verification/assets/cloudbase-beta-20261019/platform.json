@@ -1,0 +1,129 @@
+{
+  "observedAt": "2026-10-19T02:58:55.351Z",
+  "kind": "read-only-beta-final-platform-snapshot",
+  "billing": {
+    "EnvId": "atoms-d9gdf8r2036664366",
+    "PackageId": "baas_personal",
+    "Status": "NORMAL",
+    "EnableOverrun": false,
+    "PayMode": "PREPAYMENT",
+    "CreateTime": "2026-10-10 14:35:22",
+    "IsAutoRenew": false
+  },
+  "billingAccounting": "Only returned configuration metadata is recorded; no remaining balance or completed cost settlement is inferred.",
+  "inventory": {
+    "total": 1,
+    "services": [
+      {
+        "name": "atoms-beta-20261019",
+        "status": "normal"
+      }
+    ]
+  },
+  "service": {
+    "checkedAt": "2026-10-19T02:58:55.173Z",
+    "target": {
+      "envId": "atoms-d9gdf8r2036664366",
+      "region": "ap-shanghai",
+      "serverName": "atoms-beta-20261019",
+      "productionServerName": "atoms-production",
+      "origin": "https://atoms-beta-20261019-326112-8-1254675888.sh.run.tcloudbase.com",
+      "cpu": 1,
+      "memory": 2,
+      "minInstances": 0,
+      "maxInstances": 1,
+      "dataMode": "existing-account-data",
+      "namespace": "atoms",
+      "sharedDataAuthorized": true,
+      "maintenance": false,
+      "expectedVersion": "atoms-beta-20261019-001"
+    },
+    "base": {
+      "ServerName": "atoms-beta-20261019",
+      "Status": "normal",
+      "ServerType": "container",
+      "DefaultDomainName": "https://atoms-beta-20261019-326112-8-1254675888.sh.run.tcloudbase.com",
+      "CustomDomainName": "",
+      "CustomDomainNames": []
+    },
+    "resources": {
+      "Cpu": 1,
+      "Mem": 2,
+      "MinNum": 0,
+      "MaxNum": 1,
+      "Port": 3000,
+      "OpenAccessTypes": [
+        "PUBLIC"
+      ]
+    },
+    "versions": [
+      {
+        "VersionName": "atoms-beta-20261019-002",
+        "ImageUrl": "ccr.ccs.tencentyun.com/tcb-100001863836-ciwx/ca-dyaswlgf_atoms-beta-20261019@sha256:7be7fef857fa9677bcf8eb3748708c20c74bab5f29b42c9ed45ea789325b03ff",
+        "FlowRatio": "100"
+      }
+    ],
+    "records": [
+      {
+        "DeployId": "001",
+        "DeployTime": "2026-10-19 09:16:29",
+        "Status": "create_failed",
+        "RunId": "multi_tenant_1xIbzIoVEraTiu",
+        "BuildId": 2608937894,
+        "ImageUrl": "ccr.ccs.tencentyun.com/tcb-100001863836-ciwx/ca-dyaswlgf_atoms-beta-20261019:atoms-beta-20261019-001-20261019091636",
+        "FlowRatio": 0,
+        "HasTraffic": false,
+        "IsReleasing": false
+      },
+      {
+        "DeployId": "002",
+        "DeployTime": "2026-10-19 10:53:36",
+        "Status": "normal",
+        "RunId": "multi_tenant_1xIdVHQ207piK8",
+        "BuildId": 0,
+        "ImageUrl": "ccr.ccs.tencentyun.com/tcb-100001863836-ciwx/ca-dyaswlgf_atoms-beta-20261019@sha256:7be7fef857fa9677bcf8eb3748708c20c74bab5f29b42c9ed45ea789325b03ff",
+        "FlowRatio": 100,
+        "HasTraffic": true,
+        "IsReleasing": false
+      }
+    ],
+    "task": {
+      "exists": true,
+      "Id": 2396338,
+      "Status": "finished",
+      "VersionName": "atoms-beta-20261019-002",
+      "DeployType": "image",
+      "ReleaseType": "FULL"
+    },
+    "unambiguousCurrentVersion": "atoms-beta-20261019-002",
+    "requests": [
+      "d429f0ff-b758-4e8d-b3e2-b24d5cd64c4d",
+      "1d0649d8-1b5f-4444-b772-5c3916038bf3",
+      "cf495309-fc5e-41c8-956c-8437565e66e8"
+    ]
+  },
+  "pods": {
+    "total": 1,
+    "items": [
+      {
+        "id": "atoms-beta-20261019-002-769fc95cd8-pzrj2",
+        "status": "Running",
+        "createdAt": "2026-10-19 10:53:42"
+      }
+    ]
+  },
+  "checks": {
+    "personalNormal": true,
+    "overrunDisabled": true,
+    "onlyOwnedBeta": true,
+    "singleVerifiedVersion": true,
+    "boundedResources": true,
+    "taskFinished": true
+  },
+  "allChecks": true,
+  "requests": {
+    "billing": "205f5db5-48c0-474e-8056-6c09a867ce7d",
+    "inventory": "b0d93e71-3203-47b0-90fd-aad319664fe3",
+    "pods": "51220461-a0f2-4ba0-993c-006b5a298fe3"
+  }
+}

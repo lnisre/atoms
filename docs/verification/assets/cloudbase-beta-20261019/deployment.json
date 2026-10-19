@@ -1,0 +1,43 @@
+{
+  "kind": "cloudbase-application-deployment",
+  "checkedAt": "2026-10-19T02:56:28.151Z",
+  "target": {
+    "envId": "atoms-d9gdf8r2036664366",
+    "region": "ap-shanghai",
+    "serverName": "atoms-beta-20261019",
+    "productionServerName": "atoms-production",
+    "origin": "https://atoms-beta-20261019-326112-8-1254675888.sh.run.tcloudbase.com",
+    "cpu": 1,
+    "memory": 2,
+    "minInstances": 0,
+    "maxInstances": 1,
+    "dataMode": "existing-account-data",
+    "namespace": "atoms",
+    "sharedDataAuthorized": true,
+    "maintenance": false,
+    "expectedVersion": "atoms-beta-20261019-001"
+  },
+  "sourceCommit": "7113b8e1820ec8802bd64025662f1f6424402c4d",
+  "sourceDigest": "7b6dd02991c62594af20b4ada18f4029529e98d45bee8dfa2743c39a39962b8f",
+  "version": "atoms-beta-20261019-002",
+  "image": "ccr.ccs.tencentyun.com/tcb-100001863836-ciwx/ca-dyaswlgf_atoms-beta-20261019@sha256:7be7fef857fa9677bcf8eb3748708c20c74bab5f29b42c9ed45ea789325b03ff",
+  "healthEvidence": "direct-https-response",
+  "artifactVerified": true,
+  "deploymentVerified": true,
+  "observedOrigin": "https://atoms-beta-20261019-326112-8-1254675888.sh.run.tcloudbase.com",
+  "originStatus": "bound-to-service",
+  "health": {
+    "status": "ready",
+    "nextReady": true,
+    "protocol": "atoms-team/3",
+    "sourceCommit": "7113b8e1820ec8802bd64025662f1f6424402c4d",
+    "sourceDigest": "7b6dd02991c62594af20b4ada18f4029529e98d45bee8dfa2743c39a39962b8f",
+    "activeConnections": 0,
+    "maintenance": false
+  },
+  "productAcceptance": "pending-verify-atoms",
+  "wss600Seconds": "pending-platform-evidence",
+  "realEmail": "pending",
+  "realModel": "pending",
+  "productionCutover": "not-performed"
+}

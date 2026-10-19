@@ -19,10 +19,10 @@ T1 清理后，只读比较未建 beta 与已删除探针：服务详情均 `Res
 
 ## 发布边界与待执行项
 
-已准备独立服务 `atoms-beta-20261019`，保留生产名 `atoms-production`；资源为 1 CPU、2 GiB、最小 0 / 最大 1。复用现有 Auth/PG 与 `atoms` namespace，目标显式 `existing-account-data` 和 `sharedDataAuthorized=true`，不迁库、不初始化用户、不改 schema、不轮换密钥。
+当前已部署独立服务 `atoms-beta-20261019`，保留生产名 `atoms-production`；资源为 1 CPU、2 GiB、最小 0 / 最大 1。复用现有 Auth/PG 与 `atoms` namespace，目标显式 `existing-account-data` 和 `sharedDataAuthorized=true`，不迁库、不初始化用户、不改 schema、不轮换密钥。
 
-实际部署尚未执行：自动审批拒绝了“从 Vercel 读取解密运行配置，仅内存注入新 CloudBase 服务并创建云资源”动作，理由是当前直接可见的用户授权不足以覆盖这次敏感密钥转移。拒绝发生在命令启动前，没有执行密钥读取、上传或创建；未通过更换工具或拆分命令绕过。待主线程向用户展示最终冻结计划并取得该具体动作的直接确认。
+此前配置转移命令曾被自动审批拒绝，未执行。用户随后在主线程直接授权该具体动作，授权缺口已解决。实际完整镜像已构建，并在首次版本创建 timeout 后，严格绑定原失败任务/源码包/构建及推送摘要，以同一镜像恢复到可用版本 002；未重复构建、未改规格。用户选择部署后自行登录。当前实际来源、公开入口检查、费用边界和失败恢复见[云端内测报告](cloudbase-beta-20261019.md)。
 
-计划复用的值为 `DEEPSEEK_API_KEY`、`QA_TOOL_SIGNING_KEY`、`CLOUDBASE_ENV_ID`、`ATOMS_AUTH_SECRET`、`ATOMS_ARTIFACT_SECRET`；origin 与 namespace 按目标设置。Vercel Token 和腾讯管理密钥只用于管理 API，不进入应用环境、源码、镜像、构建参数或记录。首次发布使用业务来源禁用的引导 origin；实际域名读回后，应复用同一已核验镜像 digest 更新精确 origin，完成第二轮身份核验才形成可交付入口。
+实际复用的值为 `DEEPSEEK_API_KEY`、`QA_TOOL_SIGNING_KEY`、`CLOUDBASE_ENV_ID`、`ATOMS_AUTH_SECRET`、`ATOMS_ARTIFACT_SECRET`；origin 与 namespace 按目标设置。Vercel Token 和腾讯管理密钥只用于管理 API，不进入应用环境、源码、镜像、构建参数或记录。首次请求使用业务来源禁用的引导 origin；版本创建超时后，恢复发布直接使用 API 读回的实际域名及同一已构建镜像 digest。当前精确 origin、实际镜像和健康已核验。
 
-本记录未调用 verify-atoms，未声称完整镜像构建、真实默认域名健康、邮箱登录、真实模型生成、跨账号/跨设备、八分钟任务、第二版本回退或资源测量通过。上述产品验收由主 agent 在全部实现之后统一执行。原 ticket 和父规格保持未完成，不以代码准备替代正式迁移。
+上述局部代码检查不是产品验收。全部实现后主 agent 已执行 verify-atoms 本地验证，并在实际部署后完成所选公开匿名入口检查；完整镜像和实际健康来源可核对。真实邮箱登录、普通用户数据与模型、跨账号/跨设备、远端八分钟任务、应用回退与资源峰值仍未验证。原 ticket 和父规格保持未完成，不以临时内测替代正式迁移。
