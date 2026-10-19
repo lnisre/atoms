@@ -1,0 +1,72 @@
+{
+  "redaction": "Only explicit provenance fields retained; runtime configuration and fingerprint keys omitted.",
+  "attempts": [
+    {
+      "attempt": {
+        "id": "956cff18-f7ed-41dc-9c5f-27d3f9100c3d",
+        "startedAt": "2026-10-19T01:16:19.605Z",
+        "command": "stage",
+        "target": {
+          "envId": "atoms-d9gdf8r2036664366",
+          "region": "ap-shanghai",
+          "serverName": "atoms-beta-20261019",
+          "productionServerName": "atoms-production",
+          "origin": "https://unconfigured.invalid",
+          "cpu": 1,
+          "memory": 2,
+          "minInstances": 0,
+          "maxInstances": 1,
+          "dataMode": "existing-account-data",
+          "namespace": "atoms",
+          "sharedDataAuthorized": true,
+          "maintenance": false
+        },
+        "sourceCommit": "7113b8e1820ec8802bd64025662f1f6424402c4d",
+        "sourceDigest": "7b6dd02991c62594af20b4ada18f4029529e98d45bee8dfa2743c39a39962b8f",
+        "archiveSha256": "2f58492c6f972c3b7eee066bec5e906acb2049cf92e5c2c19611ef170d748345",
+        "phase": "recorded-before-request"
+      },
+      "submitted": {
+        "attemptId": "956cff18-f7ed-41dc-9c5f-27d3f9100c3d",
+        "requestId": "4278f231-9a78-43f6-a149-b3cae8430af2",
+        "taskId": 2395587,
+        "submittedAt": "2026-10-19T01:16:26.383Z",
+        "outcome": "submitted-not-verified"
+      }
+    },
+    {
+      "attempt": {
+        "id": "52d8ff62-6bc2-44f4-ad5d-2fd5eb85dac9",
+        "startedAt": "2026-10-19T02:53:33.870Z",
+        "command": "stage",
+        "target": {
+          "envId": "atoms-d9gdf8r2036664366",
+          "region": "ap-shanghai",
+          "serverName": "atoms-beta-20261019",
+          "productionServerName": "atoms-production",
+          "origin": "https://atoms-beta-20261019-326112-8-1254675888.sh.run.tcloudbase.com",
+          "cpu": 1,
+          "memory": 2,
+          "minInstances": 0,
+          "maxInstances": 1,
+          "dataMode": "existing-account-data",
+          "namespace": "atoms",
+          "sharedDataAuthorized": true,
+          "maintenance": false,
+          "expectedVersion": "atoms-beta-20261019-001"
+        },
+        "sourceCommit": "7113b8e1820ec8802bd64025662f1f6424402c4d",
+        "sourceDigest": "7b6dd02991c62594af20b4ada18f4029529e98d45bee8dfa2743c39a39962b8f",
+        "image": "ccr.ccs.tencentyun.com/tcb-100001863836-ciwx/ca-dyaswlgf_atoms-beta-20261019@sha256:7be7fef857fa9677bcf8eb3748708c20c74bab5f29b42c9ed45ea789325b03ff",
+        "phase": "recorded-before-request"
+      },
+      "submitted": {
+        "attemptId": "52d8ff62-6bc2-44f4-ad5d-2fd5eb85dac9",
+        "requestId": "b93f9091-a3ad-42a9-92e4-3cdc0217fa91",
+        "taskId": 2396338,
+        "submittedAt": "2026-10-19T02:53:34.485Z",
+        "outcome": "submitted-not-verified"
+      }
+    }
+  ]
+}

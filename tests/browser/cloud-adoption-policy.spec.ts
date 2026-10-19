@@ -45,7 +45,7 @@ test('execution blocking gives its exact reason and cannot be adopted',async({pa
  const store=await fixture();await store.connect(context);await generate(page);await expect(ready(page)).toBeVisible();
  store.render(()=>'<html><head></head><body><script>while(true){}</script></body></html>');
  await page.getByLabel('追加修改需求').fill('blocked execution');await page.getByRole('button',{name:'生成候选',exact:true}).click();
- await expect(page.getByRole('button',{name:'采用修改',exact:true})).toBeDisabled();
- await expect(page.getByRole('status').filter({hasText:'执行阻断'})).toContainText('检测到载入时无条件空循环');
+ const adoption=page.getByRole('button',{name:'采用修改',exact:true});await expect(adoption).toBeDisabled();
+ await expect(adoption).toHaveAccessibleDescription(/当前候选存在执行阻断，修复后才能采用。.*检测到载入时无条件空循环/);
  await expect(page.getByRole('heading',{name:'此代码暂不执行'})).toBeVisible();expect([...store.rows.values()][0].cloud.version.code).toBe(1);
 });

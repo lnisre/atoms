@@ -3,7 +3,8 @@ import { parseEnv } from 'node:util';
 import { randomUUID } from 'node:crypto';
 import { resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { buildManifest, validateManifest, readBlob, verifyDeployment, project, team, productionOrigin } from './release-manifest.mjs';
+import { buildManifest, validateManifest, readBlob } from './release-manifest.mjs';
+import { verifyDeployment, project, team, productionOrigin } from './vercel-manifest.mjs';
 
 const repo = fileURLToPath(new URL('../', import.meta.url));
 const [command, directory, ref] = process.argv.slice(2);

@@ -1,0 +1,12 @@
+{
+  "status": "passed",
+  "mode": "local-controlled-auth-public-ui",
+  "maintenance": true,
+  "generationStatus": 503,
+  "requirementRetained": true,
+  "loginAvailable": true,
+  "projectsStatus": 200,
+  "websockets": 0,
+  "pageErrors": [],
+  "actualProviderCalls": 0
+}

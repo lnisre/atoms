@@ -1,0 +1,18 @@
+{
+  "activeInstance": {
+    "ownedPid": 94368,
+    "portsReleased": {
+      "32315": [],
+      "32316": []
+    },
+    "originalRoot": "/Users/gaowenlong/.codex/worktrees/cloudbase-migration-90/atoms"
+  },
+  "maintenanceInstance": {
+    "ownedPid": 67642,
+    "portsReleased": {
+      "32315": [],
+      "32316": []
+    },
+    "originalRoot": "/Users/gaowenlong/.codex/worktrees/cloudbase-migration-90/atoms"
+  }
+}

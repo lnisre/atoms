@@ -1,0 +1,222 @@
+{
+  "observedAt": "2026-10-18T17:55:36.008Z",
+  "target": {
+    "envId": "atoms-d9gdf8r2036664366",
+    "region": "ap-shanghai"
+  },
+  "billing": {
+    "EnvId": "atoms-d9gdf8r2036664366",
+    "PackageId": "baas_personal",
+    "PackageName": "个人版",
+    "Status": "NORMAL",
+    "PayMode": "PREPAYMENT",
+    "ExpireTime": "2026-11-15 23:59:59",
+    "EnableOverrun": false,
+    "IsAutoRenew": false,
+    "EnvDeductionMode": "credits",
+    "EnvCharged": "yes",
+    "EnvActivated": "no"
+  },
+  "environment": {
+    "EnvId": "atoms-d9gdf8r2036664366",
+    "Region": "ap-shanghai",
+    "Status": "NORMAL",
+    "EnvType": "baas",
+    "PackageType": "baas",
+    "PackageId": "baas_personal",
+    "PackageName": "个人版"
+  },
+  "hostingBase": {
+    "exists": true,
+    "EnvId": "atoms-d9gdf8r2036664366",
+    "Region": "ap-shanghai",
+    "Status": "normal",
+    "EnvType": "baas",
+    "PackageType": "Trial"
+  },
+  "cycle": {
+    "StartTime": "2026-10-15 00:51:59",
+    "EndTime": "2026-11-15 23:59:59"
+  },
+  "plans": [
+    {
+      "PackageId": "baas_personal",
+      "PackageTitle": "个人版",
+      "UnitPrice": "39.9",
+      "monthlyCredits": "40000",
+      "qps": 500
+    }
+  ],
+  "usage": {
+    "DeductValue": 2155.38,
+    "PackageDeductValue": 0,
+    "ReportValue": 0,
+    "HistoryDeducted": 0,
+    "period": {
+      "EnvId": "atoms-d9gdf8r2036664366",
+      "StartDate": "2026-10-15",
+      "EndDate": "2026-10-19"
+    },
+    "modules": [
+      {
+        "Module": "EKS",
+        "CreditsValue": 0.03,
+        "DeductValue": 0.03,
+        "PackageDeductValue": 0,
+        "ReportValue": 0
+      },
+      {
+        "Module": "PostgreSQL",
+        "CreditsValue": 2152.13,
+        "DeductValue": 2152.13,
+        "PackageDeductValue": 0,
+        "ReportValue": 0
+      },
+      {
+        "Module": "Auth",
+        "CreditsValue": 0,
+        "DeductValue": 0,
+        "PackageDeductValue": 0,
+        "ReportValue": 0
+      },
+      {
+        "Module": "APIInvocation",
+        "CreditsValue": 3.17,
+        "DeductValue": 3.17,
+        "PackageDeductValue": 0,
+        "ReportValue": 0
+      },
+      {
+        "Module": "HTTPInvocation",
+        "CreditsValue": 0.05,
+        "DeductValue": 0.05,
+        "PackageDeductValue": 0,
+        "ReportValue": 0
+      },
+      {
+        "Module": "COS",
+        "CreditsValue": 0,
+        "DeductValue": 0,
+        "PackageDeductValue": 0,
+        "ReportValue": 0
+      },
+      {
+        "Module": "HOSTING",
+        "CreditsValue": 0,
+        "DeductValue": 0,
+        "PackageDeductValue": 0,
+        "ReportValue": 0
+      },
+      {
+        "Module": "SCF",
+        "CreditsValue": 0,
+        "DeductValue": 0,
+        "PackageDeductValue": 0,
+        "ReportValue": 0
+      },
+      {
+        "Module": "Other",
+        "CreditsValue": 0,
+        "DeductValue": 0,
+        "PackageDeductValue": 0,
+        "ReportValue": 0
+      }
+    ]
+  },
+  "gateway": {
+    "total": 2,
+    "truncated": false,
+    "domains": [
+      {
+        "Domain": "atoms-d9gdf8r2036664366-1254675888.tcloudbaseapp.com",
+        "DomainType": "STATIC_STORE",
+        "AccessType": "DIRECT",
+        "Protocol": "HTTP_AND_HTTPS",
+        "IsDefault": true,
+        "Enable": true,
+        "Status": "SUCCESS",
+        "DNSStatus": "OK",
+        "routes": [
+          {
+            "Path": "/",
+            "UpstreamResourceType": "STATIC_STORE",
+            "UpstreamResourceName": "staticstore",
+            "EnableAuth": false,
+            "EnableSafeDomain": true,
+            "EnablePathTransmission": false,
+            "Enable": true
+          }
+        ]
+      },
+      {
+        "Domain": "atoms-d9gdf8r2036664366-1254675888.ap-shanghai.app.tcloudbase.com",
+        "DomainType": "HTTPSERVICE",
+        "AccessType": "DIRECT",
+        "Protocol": "HTTP_AND_HTTPS",
+        "IsDefault": true,
+        "Enable": true,
+        "Status": "SUCCESS",
+        "DNSStatus": "OK"
+      }
+    ]
+  },
+  "servers": {
+    "total": 0,
+    "truncated": false,
+    "items": []
+  },
+  "requests": [
+    {
+      "action": "DescribeEnvInfo",
+      "requestId": "243a4943-8f1c-4d5d-9973-2cade6a7f754",
+      "httpStatus": 200
+    },
+    {
+      "action": "DescribeEnvAccountCircle",
+      "requestId": "2ddf6364-7115-4654-8cbc-6f7c4aa13c10",
+      "httpStatus": 200
+    },
+    {
+      "action": "DescribeBillingInfo",
+      "requestId": "8a4f2088-2e83-495e-b810-5323103d043b",
+      "httpStatus": 200
+    },
+    {
+      "action": "DescribeEnvBaseInfo",
+      "requestId": "1b94ef28-ccc4-4a12-99f6-28574f00b8b9",
+      "httpStatus": 200
+    },
+    {
+      "action": "DescribeEnvPlans",
+      "requestId": "3e4db054-e3b0-4f5a-97db-e2706427264a",
+      "httpStatus": 200
+    },
+    {
+      "action": "DescribeHTTPServiceRoute",
+      "requestId": "566b2b8c-0d85-4b74-8438-498197e9f184",
+      "httpStatus": 200
+    },
+    {
+      "action": "DescribeCreditsUsage",
+      "requestId": "6e203dbf-422f-4b0d-902b-ecefbd492b1f",
+      "httpStatus": 200
+    },
+    {
+      "action": "DescribeCreditsUsageDetail",
+      "requestId": "e261478f-0a65-4192-abdd-b4132b647628",
+      "httpStatus": 200
+    },
+    {
+      "action": "DescribeCloudRunServers",
+      "requestId": "ca48bb64-584f-482a-af49-95cc9c055476",
+      "httpStatus": 200
+    }
+  ],
+  "gate": {
+    "publicEntry": "unverified",
+    "wss600Seconds": "unverified",
+    "releaseAndRollback": "unverified",
+    "nextTicketReleased": false
+  },
+  "caveat": "Read-only inventory does not verify current spendable balance, deployment permission, container resources or public-entry behaviour. Resource usage can be delayed by up to two days."
+}

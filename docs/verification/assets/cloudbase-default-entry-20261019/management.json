@@ -1,0 +1,1055 @@
+{
+  "envId": "atoms-d9gdf8r2036664366",
+  "serviceName": "atoms-t1-probe-20261019",
+  "owned": true,
+  "events": [
+    {
+      "at": "2026-10-18T16:50:33.077Z",
+      "action": "DescribeBillingInfo",
+      "httpStatus": 200,
+      "requestId": "ef5e2f73-e4d7-44db-9ee9-fddbe63edfcd"
+    },
+    {
+      "at": "2026-10-18T16:50:33.596Z",
+      "action": "DescribeCloudRunServers",
+      "httpStatus": 200,
+      "requestId": "2db6b4cf-26f1-41fe-8342-a3392e667612"
+    },
+    {
+      "at": "2026-10-18T16:50:34.207Z",
+      "action": "DescribeCloudBaseBuildService",
+      "httpStatus": 200,
+      "requestId": "43de631b-7e61-4085-8501-48ea64c95a47"
+    },
+    {
+      "at": "2026-10-18T16:50:35.688Z",
+      "action": "CreateCloudRunServer",
+      "httpStatus": 200,
+      "requestId": "cd12d8b2-ad00-40d0-b885-cea407bce46a"
+    },
+    {
+      "at": "2026-10-18T16:51:15.780Z",
+      "action": "DescribeCloudRunServerDetail",
+      "httpStatus": 200,
+      "requestId": "18abce06-c8c5-49ca-9dfb-37323f8c09ec"
+    },
+    {
+      "at": "2026-10-18T16:51:16.066Z",
+      "action": "DescribeServerManageTask",
+      "httpStatus": 200,
+      "requestId": "a6d08650-3575-4b06-a510-d9c069cce3db"
+    },
+    {
+      "at": "2026-10-18T16:52:52.654Z",
+      "action": "DescribeCloudRunDeployRecord",
+      "httpStatus": 200,
+      "requestId": "bf37014e-fa23-4f1e-b896-21d312da717d"
+    },
+    {
+      "at": "2026-10-18T16:53:26.142Z",
+      "action": "DescribeCloudRunBuildLog",
+      "httpStatus": 200,
+      "requestId": "22038192-3e48-43cf-9a81-e145f1d2c0e6"
+    },
+    {
+      "at": "2026-10-18T16:53:26.829Z",
+      "action": "DescribeCloudRunServerDetail",
+      "httpStatus": 200,
+      "requestId": "d5f13bfe-f428-4940-93f0-d2eb5b4b0021"
+    },
+    {
+      "at": "2026-10-18T16:53:27.076Z",
+      "action": "DescribeServerManageTask",
+      "httpStatus": 200,
+      "requestId": "d212c9c6-d8dc-4424-a9fd-5733dce44ad1"
+    },
+    {
+      "at": "2026-10-18T16:54:05.780Z",
+      "action": "DescribeCloudRunServerDetail",
+      "httpStatus": 200,
+      "requestId": "1bfe25aa-9228-4f68-ba1a-809b8cd9ea36"
+    },
+    {
+      "at": "2026-10-18T16:54:06.360Z",
+      "action": "UpdateCloudRunServer",
+      "httpStatus": 200,
+      "requestId": "4fdb3451-2909-4a56-b19f-f864bdc530e0"
+    },
+    {
+      "at": "2026-10-18T16:54:53.280Z",
+      "action": "DescribeCloudRunServerDetail",
+      "httpStatus": 200,
+      "requestId": "6696f4b1-7c3c-49e8-be31-05acf9befff7"
+    },
+    {
+      "at": "2026-10-18T16:54:53.603Z",
+      "action": "DescribeServerManageTask",
+      "httpStatus": 200,
+      "requestId": "7faa0161-afdb-42f6-b0bb-937da77d0ade"
+    },
+    {
+      "at": "2026-10-18T16:56:17.411Z",
+      "action": "DescribeCloudRunServerDetail",
+      "httpStatus": 200,
+      "requestId": "06dac7da-6627-4199-a7c0-0f7c66ef433a"
+    },
+    {
+      "at": "2026-10-18T16:56:17.982Z",
+      "action": "DescribeServerManageTask",
+      "httpStatus": 200,
+      "requestId": "61aff3e4-2eb4-492f-9a80-aa0d0d1a296c"
+    },
+    {
+      "at": "2026-10-18T16:57:28.882Z",
+      "action": "DescribeCloudRunDeployRecord",
+      "httpStatus": 200,
+      "requestId": "7edf5414-ed05-4aff-bec6-025cf4d20368"
+    },
+    {
+      "at": "2026-10-18T16:58:50.469Z",
+      "action": "DescribeCloudRunServerDetail",
+      "httpStatus": 200,
+      "requestId": "fd45e133-9a82-474d-b211-b4b36189d135"
+    },
+    {
+      "at": "2026-10-18T16:58:51.122Z",
+      "action": "DescribeServerManageTask",
+      "httpStatus": 200,
+      "requestId": "0c79e3a1-2261-4b7e-b6d5-030e61c3ed1f"
+    },
+    {
+      "at": "2026-10-18T17:04:17.751Z",
+      "action": "SearchClsLog",
+      "httpStatus": 200,
+      "requestId": "af1ac055-79f2-435b-a3f9-ee0e00861113",
+      "errorCode": "MissingParameter"
+    },
+    {
+      "at": "2026-10-18T17:05:41.390Z",
+      "action": "SearchClsLog",
+      "httpStatus": 200,
+      "requestId": "346ba918-d5bc-4c12-b14a-d641565e2533"
+    },
+    {
+      "at": "2026-10-18T17:07:41.286Z",
+      "action": "SearchClsLog",
+      "httpStatus": 200,
+      "requestId": "68aff5f6-c769-495f-8835-a3c8490da5eb"
+    },
+    {
+      "at": "2026-10-18T17:07:42.133Z",
+      "action": "DescribeCloudRunServerDetail",
+      "httpStatus": 200,
+      "requestId": "7e0f8084-6346-4ae8-a745-d479eb43baf6"
+    },
+    {
+      "at": "2026-10-18T17:07:42.677Z",
+      "action": "DescribeServerManageTask",
+      "httpStatus": 200,
+      "requestId": "293460ab-a8c1-4dc8-bf52-60bae3e6d60a"
+    },
+    {
+      "at": "2026-10-18T17:08:23.468Z",
+      "action": "SearchClsLog",
+      "httpStatus": 200,
+      "requestId": "6ba9ddff-6e72-4250-809e-2ba8c9623688"
+    },
+    {
+      "at": "2026-10-18T17:08:23.688Z",
+      "action": "DescribeCloudRunPodList",
+      "httpStatus": 200,
+      "requestId": "e62895c8-3d50-4f16-b9b4-aa3aea50c2cc",
+      "errorCode": "UnknownParameter"
+    },
+    {
+      "at": "2026-10-18T17:09:22.746Z",
+      "action": "DescribeCloudRunPodList",
+      "httpStatus": 200,
+      "requestId": "77b3f753-dbe6-47c4-bedf-fe7c24ba2b92"
+    },
+    {
+      "at": "2026-10-18T17:10:05.232Z",
+      "action": "DescribeCloudRunServerDetail",
+      "httpStatus": 200,
+      "requestId": "f05ae118-74b4-4803-8059-ffc28fd47c4c"
+    },
+    {
+      "at": "2026-10-18T17:10:05.851Z",
+      "action": "UpdateCloudRunServer",
+      "httpStatus": 200,
+      "requestId": "b43d8d1c-c222-4802-af35-96137d8b2848"
+    },
+    {
+      "at": "2026-10-18T17:13:06.990Z",
+      "action": "DescribeCloudRunServerDetail",
+      "httpStatus": 200,
+      "requestId": "003aac29-78c7-4ef4-8189-7352764e2bf4"
+    },
+    {
+      "at": "2026-10-18T17:13:07.244Z",
+      "action": "DescribeServerManageTask",
+      "httpStatus": 200,
+      "requestId": "c684d0f3-f198-4c5a-b483-d9f4e69264a5"
+    },
+    {
+      "at": "2026-10-18T17:14:46.587Z",
+      "action": "SubmitServerRollback",
+      "httpStatus": 200,
+      "requestId": "5663ec73-609f-4c50-b4d3-b3b68e97af8f"
+    },
+    {
+      "at": "2026-10-18T17:19:18.809Z",
+      "action": "DescribeCloudRunServerDetail",
+      "httpStatus": 200,
+      "requestId": "af53657e-4196-4466-bc2b-45797915d5bb"
+    },
+    {
+      "at": "2026-10-18T17:19:19.182Z",
+      "action": "DescribeServerManageTask",
+      "httpStatus": 200,
+      "requestId": "b1336659-fd17-499d-a155-ffa702925f75"
+    },
+    {
+      "at": "2026-10-18T17:20:36.097Z",
+      "action": "DescribeCloudRunServerDetail",
+      "httpStatus": 200,
+      "requestId": "9682abe4-b880-4121-b394-fa7308265225"
+    },
+    {
+      "at": "2026-10-18T17:20:36.726Z",
+      "action": "UpdateCloudRunServer",
+      "httpStatus": 200,
+      "requestId": "b70d1ad7-be99-42f5-a102-41c03b13fa27"
+    },
+    {
+      "at": "2026-10-18T17:21:48.955Z",
+      "action": "DescribeCloudRunServerDetail",
+      "httpStatus": 200,
+      "requestId": "2f0f2b17-62f9-4fc1-a00d-025ed488c7cf"
+    },
+    {
+      "at": "2026-10-18T17:21:49.339Z",
+      "action": "DescribeServerManageTask",
+      "httpStatus": 200,
+      "requestId": "7dcff418-9ae8-4111-84c2-1a308193425b"
+    },
+    {
+      "at": "2026-10-18T17:23:52.484Z",
+      "action": "DescribeCloudRunServerDetail",
+      "httpStatus": 200,
+      "requestId": "db8d5123-8e22-4a16-ae8f-11768af24226"
+    },
+    {
+      "at": "2026-10-18T17:23:52.754Z",
+      "action": "DescribeServerManageTask",
+      "httpStatus": 200,
+      "requestId": "922c556f-3777-4a46-8b2b-c631063ec2f6"
+    },
+    {
+      "at": "2026-10-18T17:36:27.931Z",
+      "action": "DescribeCloudRunServerDetail",
+      "httpStatus": 200,
+      "requestId": "dde3f893-615d-484b-ad83-206b1ec83f14"
+    },
+    {
+      "at": "2026-10-18T17:36:28.516Z",
+      "action": "UpdateCloudRunServer",
+      "httpStatus": 200,
+      "requestId": "95f5a612-e500-4a7b-be03-dc6f7928b6b2"
+    },
+    {
+      "at": "2026-10-18T17:39:23.543Z",
+      "action": "DescribeCloudRunServerDetail",
+      "httpStatus": 200,
+      "requestId": "1d7b2c64-6600-4ffa-ab2f-41bcfb959d81"
+    },
+    {
+      "at": "2026-10-18T17:39:23.927Z",
+      "action": "DescribeServerManageTask",
+      "httpStatus": 200,
+      "requestId": "cf3dd51c-f194-4685-a150-cc26f9e25b73"
+    },
+    {
+      "at": "2026-10-18T17:43:46.701Z",
+      "action": "SearchClsLog",
+      "httpStatus": 200,
+      "requestId": "435b7fab-a87c-4946-b969-1ad658c99ee5"
+    },
+    {
+      "at": "2026-10-18T17:43:47.639Z",
+      "action": "SearchClsLog",
+      "httpStatus": 200,
+      "requestId": "c485cedf-d1a3-4fc9-89e0-d21bbffbecd1"
+    },
+    {
+      "at": "2026-10-18T17:43:48.190Z",
+      "action": "SearchClsLog",
+      "httpStatus": 200,
+      "requestId": "ca8a1af3-bb56-4697-a417-bffb8aebe278"
+    },
+    {
+      "at": "2026-10-18T17:53:38.669Z",
+      "action": "SearchClsLog",
+      "httpStatus": 200,
+      "requestId": "5bcc2a3c-66b7-4ab4-b7c7-cc464ef65c20"
+    },
+    {
+      "at": "2026-10-18T17:53:39.352Z",
+      "action": "SearchClsLog",
+      "httpStatus": 200,
+      "requestId": "af2c888e-d7d7-4193-855f-a1436034afa9"
+    },
+    {
+      "at": "2026-10-18T17:53:39.937Z",
+      "action": "SearchClsLog",
+      "httpStatus": 200,
+      "requestId": "f8f39d50-fb99-4c69-824a-86cf54ac406d"
+    },
+    {
+      "at": "2026-10-18T17:53:40.459Z",
+      "action": "DeleteCloudRunServer",
+      "httpStatus": 200,
+      "requestId": "823982a2-d59d-4715-8d8c-0735f763c775"
+    },
+    {
+      "at": "2026-10-18T17:53:40.997Z",
+      "action": "DescribeCloudRunServers",
+      "httpStatus": 200,
+      "requestId": "c9251659-f715-4091-93ec-0c25db3e5f73"
+    },
+    {
+      "at": "2026-10-18T17:56:21.834Z",
+      "action": "DescribeCloudRunServers",
+      "httpStatus": 200,
+      "requestId": "79b1f299-0d2f-40ba-bb88-2d8673438f1b"
+    }
+  ],
+  "billing": {
+    "PackageId": "baas_personal",
+    "PayMode": "PREPAYMENT",
+    "EnableOverrun": false,
+    "ExpireTime": "2026-11-15 23:59:59"
+  },
+  "sourceSha256": "65dcda77715e03f585c9bd96ab936f1c7c4e4bf8ca7906724f615416f33c91ad",
+  "sourceBytes": 4764,
+  "attemptedAt": "2026-10-18T16:50:33.708Z",
+  "packageUploaded": true,
+  "package": {
+    "PackageName": "atoms-t1-probe-20261019.zip",
+    "PackageVersion": "1792342236"
+  },
+  "create": {
+    "TaskId": 2394452,
+    "RequestId": "cd12d8b2-ad00-40d0-b885-cea407bce46a"
+  },
+  "detail": {
+    "base": {
+      "ServerName": "atoms-t1-probe-20261019",
+      "Status": "normal",
+      "DefaultDomainName": "https://atoms-t1-probe-20261019-326112-8-1254675888.sh.run.tcloudbase.com",
+      "CustomDomainName": ""
+    },
+    "config": {
+      "Cpu": 0.25,
+      "Mem": 0.5,
+      "MinNum": 0,
+      "MaxNum": 1,
+      "Port": 8080,
+      "OpenAccessTypes": [
+        "PUBLIC"
+      ]
+    },
+    "versions": [
+      {
+        "VersionName": "atoms-t1-probe-20261019-005",
+        "ImageUrl": "ccr.ccs.tencentyun.com/tcb-100001863836-ciwx/ca-dyaswlgf_atoms-t1-probe-20261019:atoms-t1-probe-20261019-001-20261019005045",
+        "FlowRatio": "100"
+      }
+    ]
+  },
+  "task": {
+    "exists": true,
+    "Id": 2394657,
+    "Status": "finished",
+    "CreateTime": "2026-10-19 01:36:31",
+    "ReleaseType": "FULL",
+    "steps": [
+      {
+        "Name": "CreateVersion",
+        "Status": "finished",
+        "StartTime": "2026-10-19 01:36:31",
+        "EndTime": "2026-10-19 01:38:31",
+        "CostTime": 120
+      },
+      {
+        "Name": "RunPipeline",
+        "Status": "notInvolve",
+        "StartTime": "",
+        "EndTime": "",
+        "CostTime": 0
+      },
+      {
+        "Name": "GrayRelease",
+        "Status": "notInvolve",
+        "StartTime": "",
+        "EndTime": "",
+        "CostTime": 0
+      },
+      {
+        "Name": "ReleaseVersion",
+        "Status": "finished",
+        "StartTime": "2026-10-19 01:38:32",
+        "EndTime": "2026-10-19 01:38:36",
+        "CostTime": 4
+      }
+    ]
+  },
+  "records": [
+    {
+      "Status": "normal",
+      "DeployTime": "2026-10-19 00:50:40",
+      "BuildId": 2608919919,
+      "RunId": "multi_tenant_1xIU5n1hWEvnYC",
+      "ImageUrl": "ccr.ccs.tencentyun.com/tcb-100001863836-ciwx/ca-dyaswlgf_atoms-t1-probe-20261019:atoms-t1-probe-20261019-001-20261019005045",
+      "FlowRatio": 0
+    },
+    {
+      "Status": "normal",
+      "DeployTime": "2026-10-19 00:54:10",
+      "BuildId": 0,
+      "RunId": "multi_tenant_1xIU9CrozztKA5",
+      "ImageUrl": "ccr.ccs.tencentyun.com/tcb-100001863836-ciwx/ca-dyaswlgf_atoms-t1-probe-20261019:atoms-t1-probe-20261019-001-20261019005045",
+      "FlowRatio": 100
+    }
+  ],
+  "buildLog": {
+    "keys": [
+      "Log",
+      "RequestId"
+    ],
+    "digest": [
+      "sha256:6f7b03f7c2c8e2e784dcf9295400527b9b1270fd37b7e9a7285cf83b6951452d",
+      "sha256:6f7b03f7c2c8e2e784dcf9295400527b9b1270fd37b7e9a7285cf83b6951452d",
+      "sha256:6f7b03f7c2c8e2e784dcf9295400527b9b1270fd37b7e9a7285cf83b6951452d",
+      "sha256:3f4664f9b20d6f144b2674c2c40de02509aabd87eae0a2d31a62de37444d13e8",
+      "sha256:3f4664f9b20d6f144b2674c2c40de02509aabd87eae0a2d31a62de37444d13e8",
+      "sha256:15f27b93c93d3aaa4df09438a96bad3709b6cbbc38659014d17cc61d8d4fabb9",
+      "sha256:35e38e1826d7cdf22ea45a4223741e4cc126db5a2a07cf2072b229270180f920",
+      "sha256:af54a8f1f08bff19af42c05615745e74742a74437bb1c5e1e99bf0dcb8048257",
+      "sha256:597c6c618d36213af657a6a8444a5d87801f9a219682b206ad21ccb8f3e57bbd",
+      "sha256:af54a8f1f08bff19af42c05615745e74742a74437bb1c5e1e99bf0dcb8048257",
+      "sha256:15f27b93c93d3aaa4df09438a96bad3709b6cbbc38659014d17cc61d8d4fabb9",
+      "sha256:35e38e1826d7cdf22ea45a4223741e4cc126db5a2a07cf2072b229270180f920",
+      "sha256:597c6c618d36213af657a6a8444a5d87801f9a219682b206ad21ccb8f3e57bbd",
+      "sha256:35e38e1826d7cdf22ea45a4223741e4cc126db5a2a07cf2072b229270180f920",
+      "sha256:597c6c618d36213af657a6a8444a5d87801f9a219682b206ad21ccb8f3e57bbd",
+      "sha256:35e38e1826d7cdf22ea45a4223741e4cc126db5a2a07cf2072b229270180f920",
+      "sha256:597c6c618d36213af657a6a8444a5d87801f9a219682b206ad21ccb8f3e57bbd",
+      "sha256:35e38e1826d7cdf22ea45a4223741e4cc126db5a2a07cf2072b229270180f920",
+      "sha256:597c6c618d36213af657a6a8444a5d87801f9a219682b206ad21ccb8f3e57bbd",
+      "sha256:35e38e1826d7cdf22ea45a4223741e4cc126db5a2a07cf2072b229270180f920",
+      "sha256:597c6c618d36213af657a6a8444a5d87801f9a219682b206ad21ccb8f3e57bbd",
+      "sha256:35e38e1826d7cdf22ea45a4223741e4cc126db5a2a07cf2072b229270180f920",
+      "sha256:597c6c618d36213af657a6a8444a5d87801f9a219682b206ad21ccb8f3e57bbd",
+      "sha256:597c6c618d36213af657a6a8444a5d87801f9a219682b206ad21ccb8f3e57bbd",
+      "sha256:597c6c618d36213af657a6a8444a5d87801f9a219682b206ad21ccb8f3e57bbd",
+      "sha256:597c6c618d36213af657a6a8444a5d87801f9a219682b206ad21ccb8f3e57bbd",
+      "sha256:597c6c618d36213af657a6a8444a5d87801f9a219682b206ad21ccb8f3e57bbd",
+      "sha256:6f7b03f7c2c8e2e784dcf9295400527b9b1270fd37b7e9a7285cf83b6951452d",
+      "sha256:af54a8f1f08bff19af42c05615745e74742a74437bb1c5e1e99bf0dcb8048257",
+      "sha256:35e38e1826d7cdf22ea45a4223741e4cc126db5a2a07cf2072b229270180f920",
+      "sha256:35e38e1826d7cdf22ea45a4223741e4cc126db5a2a07cf2072b229270180f920",
+      "sha256:6f7b03f7c2c8e2e784dcf9295400527b9b1270fd37b7e9a7285cf83b6951452d",
+      "sha256:15f27b93c93d3aaa4df09438a96bad3709b6cbbc38659014d17cc61d8d4fabb9",
+      "sha256:3f4664f9b20d6f144b2674c2c40de02509aabd87eae0a2d31a62de37444d13e8",
+      "sha256:366f46c8660eba2b646ac608e99af6db81ef1da0c2c1af56ef2a9493209804e1",
+      "sha256:6f90969ca33741fa6c8a214dc79b489bcfe102ce1c5f44887dbff3352d9cebd6",
+      "sha256:9a269cd53f8f4398acbcbae3829f946e5901cb6554854ad2ad7d59e97c61b08a",
+      "sha256:50736ae7e8b2c61c6085ea3c8ce9a62dd9e9883c338589df716aeab3046d67ac",
+      "sha256:50736ae7e8b2c61c6085ea3c8ce9a62dd9e9883c338589df716aeab3046d67ac"
+    ],
+    "buildPassed": true,
+    "node24": true
+  },
+  "updates": [
+    {
+      "label": "v1",
+      "TaskId": 2394470,
+      "RequestId": "4fdb3451-2909-4a56-b19f-f864bdc530e0"
+    },
+    {
+      "label": "v2",
+      "TaskId": 2394545,
+      "RequestId": "b43d8d1c-c222-4802-af35-96137d8b2848"
+    },
+    {
+      "label": "v1",
+      "TaskId": 2394596,
+      "RequestId": "b70d1ad7-be99-42f5-a102-41c03b13fa27"
+    },
+    {
+      "label": "v1",
+      "TaskId": 2394657,
+      "RequestId": "95f5a612-e500-4a7b-be03-dc6f7928b6b2"
+    }
+  ],
+  "stdoutSummary": {
+    "keys": [
+      "LogResults",
+      "RequestId"
+    ],
+    "count": 2,
+    "entryKeys": [
+      [
+        "TopicId",
+        "TopicName",
+        "Timestamp",
+        "Content",
+        "FileName",
+        "Source",
+        "PkgLogId"
+      ]
+    ],
+    "events": [
+      {
+        "event": "close",
+        "connection": "c44f8934-eabc-42e7-99e3-699077f1f42d",
+        "mode": "heartbeat",
+        "version": "v1",
+        "durationMs": 600093,
+        "code": 1000
+      },
+      {
+        "event": "open",
+        "connection": "c44f8934-eabc-42e7-99e3-699077f1f42d",
+        "mode": "heartbeat",
+        "version": "v1"
+      }
+    ]
+  },
+  "stdoutByConnection": {
+    "254bb8de-67b9-4bc7-aa01-151e6ecb0721": {
+      "keys": [
+        "LogResults",
+        "RequestId"
+      ],
+      "count": 2,
+      "entryKeys": [
+        [
+          "TopicId",
+          "TopicName",
+          "Timestamp",
+          "Content",
+          "FileName",
+          "Source",
+          "PkgLogId"
+        ]
+      ],
+      "events": [
+        {
+          "event": "close",
+          "connection": "254bb8de-67b9-4bc7-aa01-151e6ecb0721",
+          "mode": "normal",
+          "version": "v1",
+          "durationMs": 272712,
+          "code": 1006
+        },
+        {
+          "event": "open",
+          "connection": "254bb8de-67b9-4bc7-aa01-151e6ecb0721",
+          "mode": "normal",
+          "version": "v1"
+        }
+      ]
+    },
+    "694f4322-0c4f-4a20-a9b6-7bbc58a3ac7c": {
+      "keys": [
+        "LogResults",
+        "RequestId"
+      ],
+      "count": 2,
+      "entryKeys": [
+        [
+          "TopicId",
+          "TopicName",
+          "Timestamp",
+          "Content",
+          "FileName",
+          "Source",
+          "PkgLogId"
+        ]
+      ],
+      "events": [
+        {
+          "event": "close",
+          "connection": "694f4322-0c4f-4a20-a9b6-7bbc58a3ac7c",
+          "mode": "normal",
+          "version": "v1",
+          "durationMs": 600063,
+          "code": 1000
+        },
+        {
+          "event": "open",
+          "connection": "694f4322-0c4f-4a20-a9b6-7bbc58a3ac7c",
+          "mode": "normal",
+          "version": "v1"
+        }
+      ]
+    },
+    "718cdef6-2d6a-4499-92ea-9802e01d5c3c": {
+      "keys": [
+        "LogResults",
+        "RequestId"
+      ],
+      "count": 2,
+      "entryKeys": [
+        [
+          "TopicId",
+          "TopicName",
+          "Timestamp",
+          "Content",
+          "FileName",
+          "Source",
+          "PkgLogId"
+        ]
+      ],
+      "events": [
+        {
+          "event": "close",
+          "connection": "718cdef6-2d6a-4499-92ea-9802e01d5c3c",
+          "mode": "normal",
+          "version": "v1",
+          "durationMs": 600071,
+          "code": 1000
+        },
+        {
+          "event": "open",
+          "connection": "718cdef6-2d6a-4499-92ea-9802e01d5c3c",
+          "mode": "normal",
+          "version": "v1"
+        }
+      ]
+    },
+    "18a8c292-a032-4bc7-bafd-9009e59b2b4f": {
+      "keys": [
+        "LogResults",
+        "RequestId"
+      ],
+      "count": 2,
+      "entryKeys": [
+        [
+          "TopicId",
+          "TopicName",
+          "Timestamp",
+          "Content",
+          "FileName",
+          "Source",
+          "PkgLogId"
+        ]
+      ],
+      "events": [
+        {
+          "event": "close",
+          "connection": "18a8c292-a032-4bc7-bafd-9009e59b2b4f",
+          "mode": "heartbeat",
+          "version": "v1",
+          "durationMs": 600045,
+          "code": 1000
+        },
+        {
+          "event": "open",
+          "connection": "18a8c292-a032-4bc7-bafd-9009e59b2b4f",
+          "mode": "heartbeat",
+          "version": "v1"
+        }
+      ]
+    },
+    "cc4abbdf-961d-4850-82a6-268511671f35": {
+      "keys": [
+        "LogResults",
+        "RequestId"
+      ],
+      "count": 2,
+      "entryKeys": [
+        [
+          "TopicId",
+          "TopicName",
+          "Timestamp",
+          "Content",
+          "FileName",
+          "Source",
+          "PkgLogId"
+        ]
+      ],
+      "events": [
+        {
+          "event": "close",
+          "connection": "cc4abbdf-961d-4850-82a6-268511671f35",
+          "mode": "normal",
+          "version": "v1",
+          "durationMs": 600073,
+          "code": 1000
+        },
+        {
+          "event": "open",
+          "connection": "cc4abbdf-961d-4850-82a6-268511671f35",
+          "mode": "normal",
+          "version": "v1"
+        }
+      ]
+    },
+    "b1bb1fe0-1a8e-4f2c-86cd-c0c681bfa492": {
+      "keys": [
+        "LogResults",
+        "RequestId"
+      ],
+      "count": 2,
+      "entryKeys": [
+        [
+          "TopicId",
+          "TopicName",
+          "Timestamp",
+          "Content",
+          "FileName",
+          "Source",
+          "PkgLogId"
+        ]
+      ],
+      "events": [
+        {
+          "event": "close",
+          "connection": "b1bb1fe0-1a8e-4f2c-86cd-c0c681bfa492",
+          "mode": "normal",
+          "version": "v1",
+          "durationMs": 600100,
+          "code": 1000
+        },
+        {
+          "event": "open",
+          "connection": "b1bb1fe0-1a8e-4f2c-86cd-c0c681bfa492",
+          "mode": "normal",
+          "version": "v1"
+        }
+      ]
+    },
+    "c44f8934-eabc-42e7-99e3-699077f1f42d": {
+      "keys": [
+        "LogResults",
+        "RequestId"
+      ],
+      "count": 2,
+      "entryKeys": [
+        [
+          "TopicId",
+          "TopicName",
+          "Timestamp",
+          "Content",
+          "FileName",
+          "Source",
+          "PkgLogId"
+        ]
+      ],
+      "events": [
+        {
+          "event": "close",
+          "connection": "c44f8934-eabc-42e7-99e3-699077f1f42d",
+          "mode": "heartbeat",
+          "version": "v1",
+          "durationMs": 600093,
+          "code": 1000
+        },
+        {
+          "event": "open",
+          "connection": "c44f8934-eabc-42e7-99e3-699077f1f42d",
+          "mode": "heartbeat",
+          "version": "v1"
+        }
+      ]
+    }
+  },
+  "pods": {
+    "keys": [
+      "PodList",
+      "RequestId",
+      "TotalCount"
+    ],
+    "items": [
+      {
+        "PodId": "atoms-t1-probe-20261019-002-54c6bd9d86-5zk9p",
+        "Status": "Running",
+        "CreateTime": "2026-10-19 00:54:19"
+      }
+    ]
+  },
+  "rollback": {
+    "TaskId": 2394565,
+    "RequestId": "5663ec73-609f-4c50-b4d3-b3b68e97af8f"
+  },
+  "snapshots": [
+    {
+      "at": "2026-10-18T17:19:19.182Z",
+      "detail": {
+        "base": {
+          "ServerName": "atoms-t1-probe-20261019",
+          "Status": "normal",
+          "DefaultDomainName": "https://atoms-t1-probe-20261019-326112-8-1254675888.sh.run.tcloudbase.com",
+          "CustomDomainName": ""
+        },
+        "config": {
+          "Cpu": 0.25,
+          "Mem": 0.5,
+          "MinNum": 0,
+          "MaxNum": 1,
+          "Port": 8080,
+          "OpenAccessTypes": [
+            "PUBLIC"
+          ]
+        },
+        "versions": [
+          {
+            "VersionName": "atoms-t1-probe-20261019-002",
+            "ImageUrl": "ccr.ccs.tencentyun.com/tcb-100001863836-ciwx/ca-dyaswlgf_atoms-t1-probe-20261019:atoms-t1-probe-20261019-001-20261019005045",
+            "FlowRatio": "100"
+          }
+        ]
+      },
+      "task": {
+        "exists": true,
+        "Id": 2394565,
+        "Status": "finished",
+        "CreateTime": "2026-10-19 01:14:49",
+        "ReleaseType": "FULL",
+        "steps": [
+          {
+            "Name": "CreateVersion",
+            "Status": "notInvolve",
+            "StartTime": "",
+            "EndTime": "",
+            "CostTime": 0
+          },
+          {
+            "Name": "RunPipeline",
+            "Status": "notInvolve",
+            "StartTime": "",
+            "EndTime": "",
+            "CostTime": 0
+          },
+          {
+            "Name": "GrayRelease",
+            "Status": "notInvolve",
+            "StartTime": "",
+            "EndTime": "",
+            "CostTime": 0
+          },
+          {
+            "Name": "ReleaseVersion",
+            "Status": "finished",
+            "StartTime": "2026-10-19 01:14:49",
+            "EndTime": "2026-10-19 01:14:53",
+            "CostTime": 4
+          }
+        ]
+      }
+    },
+    {
+      "at": "2026-10-18T17:21:49.340Z",
+      "detail": {
+        "base": {
+          "ServerName": "atoms-t1-probe-20261019",
+          "Status": "normal",
+          "DefaultDomainName": "https://atoms-t1-probe-20261019-326112-8-1254675888.sh.run.tcloudbase.com",
+          "CustomDomainName": ""
+        },
+        "config": {
+          "Cpu": 0.25,
+          "Mem": 0.5,
+          "MinNum": 1,
+          "MaxNum": 1,
+          "Port": 8080,
+          "OpenAccessTypes": [
+            "PUBLIC"
+          ]
+        },
+        "versions": [
+          {
+            "VersionName": "atoms-t1-probe-20261019-002",
+            "ImageUrl": "ccr.ccs.tencentyun.com/tcb-100001863836-ciwx/ca-dyaswlgf_atoms-t1-probe-20261019:atoms-t1-probe-20261019-001-20261019005045",
+            "FlowRatio": "100"
+          }
+        ]
+      },
+      "task": {
+        "exists": true,
+        "Id": 2394596,
+        "Status": "running",
+        "CreateTime": "2026-10-19 01:20:39",
+        "ReleaseType": "FULL",
+        "steps": [
+          {
+            "Name": "CreateVersion",
+            "Status": "running",
+            "StartTime": "2026-10-19 01:20:40",
+            "EndTime": "",
+            "CostTime": 0
+          },
+          {
+            "Name": "RunPipeline",
+            "Status": "notInvolve",
+            "StartTime": "",
+            "EndTime": "",
+            "CostTime": 0
+          },
+          {
+            "Name": "GrayRelease",
+            "Status": "notInvolve",
+            "StartTime": "",
+            "EndTime": "",
+            "CostTime": 0
+          },
+          {
+            "Name": "ReleaseVersion",
+            "Status": "todo",
+            "StartTime": "",
+            "EndTime": "",
+            "CostTime": 0
+          }
+        ]
+      }
+    },
+    {
+      "at": "2026-10-18T17:23:52.754Z",
+      "detail": {
+        "base": {
+          "ServerName": "atoms-t1-probe-20261019",
+          "Status": "normal",
+          "DefaultDomainName": "https://atoms-t1-probe-20261019-326112-8-1254675888.sh.run.tcloudbase.com",
+          "CustomDomainName": ""
+        },
+        "config": {
+          "Cpu": 0.25,
+          "Mem": 0.5,
+          "MinNum": 1,
+          "MaxNum": 1,
+          "Port": 8080,
+          "OpenAccessTypes": [
+            "PUBLIC"
+          ]
+        },
+        "versions": [
+          {
+            "VersionName": "atoms-t1-probe-20261019-004",
+            "ImageUrl": "ccr.ccs.tencentyun.com/tcb-100001863836-ciwx/ca-dyaswlgf_atoms-t1-probe-20261019:atoms-t1-probe-20261019-001-20261019005045",
+            "FlowRatio": "100"
+          }
+        ]
+      },
+      "task": {
+        "exists": true,
+        "Id": 2394596,
+        "Status": "finished",
+        "CreateTime": "2026-10-19 01:20:39",
+        "ReleaseType": "FULL",
+        "steps": [
+          {
+            "Name": "CreateVersion",
+            "Status": "finished",
+            "StartTime": "2026-10-19 01:20:40",
+            "EndTime": "2026-10-19 01:23:04",
+            "CostTime": 144
+          },
+          {
+            "Name": "RunPipeline",
+            "Status": "notInvolve",
+            "StartTime": "",
+            "EndTime": "",
+            "CostTime": 0
+          },
+          {
+            "Name": "GrayRelease",
+            "Status": "notInvolve",
+            "StartTime": "",
+            "EndTime": "",
+            "CostTime": 0
+          },
+          {
+            "Name": "ReleaseVersion",
+            "Status": "finished",
+            "StartTime": "2026-10-19 01:23:05",
+            "EndTime": "2026-10-19 01:23:07",
+            "CostTime": 2
+          }
+        ]
+      }
+    },
+    {
+      "at": "2026-10-18T17:39:23.929Z",
+      "detail": {
+        "base": {
+          "ServerName": "atoms-t1-probe-20261019",
+          "Status": "normal",
+          "DefaultDomainName": "https://atoms-t1-probe-20261019-326112-8-1254675888.sh.run.tcloudbase.com",
+          "CustomDomainName": ""
+        },
+        "config": {
+          "Cpu": 0.25,
+          "Mem": 0.5,
+          "MinNum": 0,
+          "MaxNum": 1,
+          "Port": 8080,
+          "OpenAccessTypes": [
+            "PUBLIC"
+          ]
+        },
+        "versions": [
+          {
+            "VersionName": "atoms-t1-probe-20261019-005",
+            "ImageUrl": "ccr.ccs.tencentyun.com/tcb-100001863836-ciwx/ca-dyaswlgf_atoms-t1-probe-20261019:atoms-t1-probe-20261019-001-20261019005045",
+            "FlowRatio": "100"
+          }
+        ]
+      },
+      "task": {
+        "exists": true,
+        "Id": 2394657,
+        "Status": "finished",
+        "CreateTime": "2026-10-19 01:36:31",
+        "ReleaseType": "FULL",
+        "steps": [
+          {
+            "Name": "CreateVersion",
+            "Status": "finished",
+            "StartTime": "2026-10-19 01:36:31",
+            "EndTime": "2026-10-19 01:38:31",
+            "CostTime": 120
+          },
+          {
+            "Name": "RunPipeline",
+            "Status": "notInvolve",
+            "StartTime": "",
+            "EndTime": "",
+            "CostTime": 0
+          },
+          {
+            "Name": "GrayRelease",
+            "Status": "notInvolve",
+            "StartTime": "",
+            "EndTime": "",
+            "CostTime": 0
+          },
+          {
+            "Name": "ReleaseVersion",
+            "Status": "finished",
+            "StartTime": "2026-10-19 01:38:32",
+            "EndTime": "2026-10-19 01:38:36",
+            "CostTime": 4
+          }
+        ]
+      }
+    }
+  ],
+  "deleted": {
+    "at": "2026-10-18T17:53:40.461Z",
+    "RequestId": "823982a2-d59d-4715-8d8c-0735f763c775"
+  },
+  "finalServices": []
+}

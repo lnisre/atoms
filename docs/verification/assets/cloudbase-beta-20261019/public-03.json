@@ -1,0 +1,471 @@
+{
+  "startedAt": "2026-10-19T02:59:49.731Z",
+  "origin": "https://atoms-beta-20261019-326112-8-1254675888.sh.run.tcloudbase.com",
+  "mode": "public",
+  "driver": "verify-atoms/public-browser/no-fixtures",
+  "sourceCommit": "7113b8e1820ec8802bd64025662f1f6424402c4d",
+  "sourceDigest": "7b6dd02991c62594af20b4ada18f4029529e98d45bee8dfa2743c39a39962b8f",
+  "confirmationClicked": true,
+  "responses": [
+    {
+      "path": "/",
+      "status": 404,
+      "resourceType": "document",
+      "contentType": "text/html; charset=utf-8",
+      "attachment": false
+    },
+    {
+      "path": "/",
+      "status": 200,
+      "resourceType": "document",
+      "contentType": "text/html; charset=utf-8",
+      "attachment": false
+    },
+    {
+      "path": "/_next/static/chunks/2fzk3r63kby96.css",
+      "status": 200,
+      "resourceType": "stylesheet",
+      "contentType": "text/css; charset=UTF-8",
+      "attachment": false
+    },
+    {
+      "path": "/_next/static/chunks/2bfpjic5ve8yf.js",
+      "status": 200,
+      "resourceType": "script",
+      "contentType": "application/javascript; charset=UTF-8",
+      "attachment": false
+    },
+    {
+      "path": "/_next/static/chunks/04z73u5_kinzt.css",
+      "status": 200,
+      "resourceType": "stylesheet",
+      "contentType": "text/css; charset=UTF-8",
+      "attachment": false
+    },
+    {
+      "path": "/_next/static/chunks/02u608azvqmwa.js",
+      "status": 200,
+      "resourceType": "script",
+      "contentType": "application/javascript; charset=UTF-8",
+      "attachment": false
+    },
+    {
+      "path": "/_next/static/chunks/turbopack-0gpk4a5p6f81b.js",
+      "status": 200,
+      "resourceType": "script",
+      "contentType": "application/javascript; charset=UTF-8",
+      "attachment": false
+    },
+    {
+      "path": "/_next/static/chunks/1jrsrbu0kkidg.js",
+      "status": 200,
+      "resourceType": "script",
+      "contentType": "application/javascript; charset=UTF-8",
+      "attachment": false
+    },
+    {
+      "path": "/_next/static/chunks/2hdfy67fzhspc.js",
+      "status": 200,
+      "resourceType": "script",
+      "contentType": "application/javascript; charset=UTF-8",
+      "attachment": false
+    },
+    {
+      "path": "/_next/static/chunks/2dp2np_3c8m30.js",
+      "status": 200,
+      "resourceType": "script",
+      "contentType": "application/javascript; charset=UTF-8",
+      "attachment": false
+    },
+    {
+      "path": "/_next/static/chunks/24_e3iu2wa260.js",
+      "status": 200,
+      "resourceType": "script",
+      "contentType": "application/javascript; charset=UTF-8",
+      "attachment": false
+    },
+    {
+      "path": "/_next/static/chunks/2z3ur1omx4tus.js",
+      "status": 200,
+      "resourceType": "script",
+      "contentType": "application/javascript; charset=UTF-8",
+      "attachment": false
+    },
+    {
+      "path": "/api/auth/session",
+      "status": 401,
+      "resourceType": "fetch",
+      "contentType": "application/json",
+      "attachment": false
+    },
+    {
+      "path": "/healthz",
+      "status": 200,
+      "resourceType": "fetch",
+      "contentType": "application/json",
+      "attachment": false
+    },
+    {
+      "path": "/examples/tip-calculator-v1.html",
+      "status": 200,
+      "resourceType": "fetch",
+      "contentType": "text/html; charset=UTF-8",
+      "attachment": false
+    },
+    {
+      "path": "/",
+      "status": 200,
+      "resourceType": "document",
+      "contentType": "text/html; charset=utf-8",
+      "attachment": false
+    },
+    {
+      "path": "/_next/static/chunks/2fzk3r63kby96.css",
+      "status": 200,
+      "resourceType": "stylesheet",
+      "contentType": "text/css; charset=UTF-8",
+      "attachment": false
+    },
+    {
+      "path": "/_next/static/chunks/04z73u5_kinzt.css",
+      "status": 200,
+      "resourceType": "stylesheet",
+      "contentType": "text/css; charset=UTF-8",
+      "attachment": false
+    },
+    {
+      "path": "/_next/static/chunks/2bfpjic5ve8yf.js",
+      "status": 200,
+      "resourceType": "script",
+      "contentType": "application/javascript; charset=UTF-8",
+      "attachment": false
+    },
+    {
+      "path": "/_next/static/chunks/02u608azvqmwa.js",
+      "status": 200,
+      "resourceType": "script",
+      "contentType": "application/javascript; charset=UTF-8",
+      "attachment": false
+    },
+    {
+      "path": "/_next/static/chunks/2dp2np_3c8m30.js",
+      "status": 200,
+      "resourceType": "script",
+      "contentType": "application/javascript; charset=UTF-8",
+      "attachment": false
+    },
+    {
+      "path": "/_next/static/chunks/2hdfy67fzhspc.js",
+      "status": 200,
+      "resourceType": "script",
+      "contentType": "application/javascript; charset=UTF-8",
+      "attachment": false
+    },
+    {
+      "path": "/_next/static/chunks/turbopack-0gpk4a5p6f81b.js",
+      "status": 200,
+      "resourceType": "script",
+      "contentType": "application/javascript; charset=UTF-8",
+      "attachment": false
+    },
+    {
+      "path": "/_next/static/chunks/1jrsrbu0kkidg.js",
+      "status": 200,
+      "resourceType": "script",
+      "contentType": "application/javascript; charset=UTF-8",
+      "attachment": false
+    },
+    {
+      "path": "/_next/static/chunks/24_e3iu2wa260.js",
+      "status": 200,
+      "resourceType": "script",
+      "contentType": "application/javascript; charset=UTF-8",
+      "attachment": false
+    },
+    {
+      "path": "/_next/static/chunks/2z3ur1omx4tus.js",
+      "status": 200,
+      "resourceType": "script",
+      "contentType": "application/javascript; charset=UTF-8",
+      "attachment": false
+    },
+    {
+      "path": "/api/auth/session",
+      "status": 401,
+      "resourceType": "fetch",
+      "contentType": "application/json",
+      "attachment": false
+    },
+    {
+      "path": "/api/auth/session",
+      "status": 401,
+      "resourceType": "fetch",
+      "contentType": "application/json",
+      "attachment": false
+    },
+    {
+      "path": "/api/projects",
+      "status": 401,
+      "resourceType": "fetch",
+      "contentType": "application/json",
+      "attachment": false
+    },
+    {
+      "path": "/api/generate",
+      "status": 401,
+      "resourceType": "fetch",
+      "contentType": "application/json",
+      "attachment": false
+    },
+    {
+      "path": "/",
+      "status": 200,
+      "resourceType": "document",
+      "contentType": "text/html; charset=utf-8",
+      "attachment": false
+    },
+    {
+      "path": "/_next/static/chunks/2fzk3r63kby96.css",
+      "status": 200,
+      "resourceType": "stylesheet",
+      "contentType": "text/css; charset=UTF-8",
+      "attachment": false
+    },
+    {
+      "path": "/_next/static/chunks/04z73u5_kinzt.css",
+      "status": 200,
+      "resourceType": "stylesheet",
+      "contentType": "text/css; charset=UTF-8",
+      "attachment": false
+    },
+    {
+      "path": "/_next/static/chunks/2bfpjic5ve8yf.js",
+      "status": 200,
+      "resourceType": "script",
+      "contentType": "application/javascript; charset=UTF-8",
+      "attachment": false
+    },
+    {
+      "path": "/_next/static/chunks/02u608azvqmwa.js",
+      "status": 200,
+      "resourceType": "script",
+      "contentType": "application/javascript; charset=UTF-8",
+      "attachment": false
+    },
+    {
+      "path": "/_next/static/chunks/2dp2np_3c8m30.js",
+      "status": 200,
+      "resourceType": "script",
+      "contentType": "application/javascript; charset=UTF-8",
+      "attachment": false
+    },
+    {
+      "path": "/_next/static/chunks/2hdfy67fzhspc.js",
+      "status": 200,
+      "resourceType": "script",
+      "contentType": "application/javascript; charset=UTF-8",
+      "attachment": false
+    },
+    {
+      "path": "/_next/static/chunks/turbopack-0gpk4a5p6f81b.js",
+      "status": 200,
+      "resourceType": "script",
+      "contentType": "application/javascript; charset=UTF-8",
+      "attachment": false
+    },
+    {
+      "path": "/_next/static/chunks/1jrsrbu0kkidg.js",
+      "status": 200,
+      "resourceType": "script",
+      "contentType": "application/javascript; charset=UTF-8",
+      "attachment": false
+    },
+    {
+      "path": "/_next/static/chunks/24_e3iu2wa260.js",
+      "status": 200,
+      "resourceType": "script",
+      "contentType": "application/javascript; charset=UTF-8",
+      "attachment": false
+    },
+    {
+      "path": "/_next/static/chunks/2z3ur1omx4tus.js",
+      "status": 200,
+      "resourceType": "script",
+      "contentType": "application/javascript; charset=UTF-8",
+      "attachment": false
+    },
+    {
+      "path": "/api/auth/session",
+      "status": 401,
+      "resourceType": "fetch",
+      "contentType": "application/json",
+      "attachment": false
+    },
+    {
+      "path": "/",
+      "status": 200,
+      "resourceType": "document",
+      "contentType": "text/html; charset=utf-8",
+      "attachment": false
+    },
+    {
+      "path": "/_next/static/chunks/2fzk3r63kby96.css",
+      "status": 200,
+      "resourceType": "stylesheet",
+      "contentType": "text/css; charset=UTF-8",
+      "attachment": false
+    },
+    {
+      "path": "/_next/static/chunks/04z73u5_kinzt.css",
+      "status": 200,
+      "resourceType": "stylesheet",
+      "contentType": "text/css; charset=UTF-8",
+      "attachment": false
+    },
+    {
+      "path": "/_next/static/chunks/2bfpjic5ve8yf.js",
+      "status": 200,
+      "resourceType": "script",
+      "contentType": "application/javascript; charset=UTF-8",
+      "attachment": false
+    },
+    {
+      "path": "/_next/static/chunks/02u608azvqmwa.js",
+      "status": 200,
+      "resourceType": "script",
+      "contentType": "application/javascript; charset=UTF-8",
+      "attachment": false
+    },
+    {
+      "path": "/_next/static/chunks/2dp2np_3c8m30.js",
+      "status": 200,
+      "resourceType": "script",
+      "contentType": "application/javascript; charset=UTF-8",
+      "attachment": false
+    },
+    {
+      "path": "/_next/static/chunks/2hdfy67fzhspc.js",
+      "status": 200,
+      "resourceType": "script",
+      "contentType": "application/javascript; charset=UTF-8",
+      "attachment": false
+    },
+    {
+      "path": "/_next/static/chunks/turbopack-0gpk4a5p6f81b.js",
+      "status": 200,
+      "resourceType": "script",
+      "contentType": "application/javascript; charset=UTF-8",
+      "attachment": false
+    },
+    {
+      "path": "/_next/static/chunks/1jrsrbu0kkidg.js",
+      "status": 200,
+      "resourceType": "script",
+      "contentType": "application/javascript; charset=UTF-8",
+      "attachment": false
+    },
+    {
+      "path": "/_next/static/chunks/24_e3iu2wa260.js",
+      "status": 200,
+      "resourceType": "script",
+      "contentType": "application/javascript; charset=UTF-8",
+      "attachment": false
+    },
+    {
+      "path": "/_next/static/chunks/2z3ur1omx4tus.js",
+      "status": 200,
+      "resourceType": "script",
+      "contentType": "application/javascript; charset=UTF-8",
+      "attachment": false
+    }
+  ],
+  "pageErrors": [],
+  "emailRequests": 0,
+  "uiGenerationRequests": 0,
+  "websocketAttempts": 0,
+  "checks": [
+    {
+      "criterion": "Frozen source, ready Next and maintenance=false",
+      "status": "pass"
+    },
+    {
+      "criterion": "Public guest example, static JS, inert form and code viewer",
+      "status": "pass"
+    },
+    {
+      "criterion": "Guest generation opens login and preserves requirement; no email/model WebSocket",
+      "status": "pass"
+    },
+    {
+      "criterion": "Real anonymous session/project/generation endpoints deny access",
+      "status": "pass"
+    },
+    {
+      "criterion": "Refresh and project deep link render without repeated platform prompt",
+      "status": "pass"
+    }
+  ],
+  "navigationStatus": 404,
+  "confirmationSeen": true,
+  "confirmationClickedAt": "2026-10-19T02:59:55.941Z",
+  "title": "Atoms Demo",
+  "finalUrl": "https://atoms-beta-20261019-326112-8-1254675888.sh.run.tcloudbase.com/",
+  "health": {
+    "status": 200,
+    "contentType": "application/json",
+    "cacheControl": "no-store",
+    "body": {
+      "status": "ready",
+      "nextReady": true,
+      "protocol": "atoms-team/3",
+      "sourceCommit": "7113b8e1820ec8802bd64025662f1f6424402c4d",
+      "sourceDigest": "7b6dd02991c62594af20b4ada18f4029529e98d45bee8dfa2743c39a39962b8f",
+      "activeConnections": 0,
+      "uptimeMs": 313346,
+      "stopping": false,
+      "maintenance": false
+    }
+  },
+  "anonymous": [
+    {
+      "path": "/api/auth/session",
+      "status": 401,
+      "code": "unauthenticated",
+      "cacheControl": "no-store"
+    },
+    {
+      "path": "/api/projects",
+      "status": 401,
+      "code": "unauthenticated",
+      "cacheControl": "no-store"
+    },
+    {
+      "path": "/api/generate",
+      "status": 401,
+      "code": "unauthenticated",
+      "cacheControl": "no-store"
+    }
+  ],
+  "confirmationRepeated": false,
+  "deepLinkAppRendered": true,
+  "cookieMetadata": [
+    {
+      "name": "cloudbase_confirm_domain_access",
+      "domain": "atoms-beta-20261019-326112-8-1254675888.sh.run.tcloudbase.com",
+      "expires": 1792407595.895185,
+      "httpOnly": true,
+      "secure": false,
+      "sameSite": "Lax"
+    }
+  ],
+  "unverified": [
+    "Real email login and JWT/PG session",
+    "Authenticated save/read/restore",
+    "Actual paid model generation/modification",
+    "Full application 480-second task through remote ingress",
+    "Production cutover and 48-hour production observation"
+  ],
+  "status": "pass-selected-scope",
+  "completedAt": "2026-10-19T02:59:59.143Z",
+  "browserClosed": true
+}

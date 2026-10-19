@@ -97,7 +97,9 @@ export async function startTeam(request: Request, started = Date.now(), ownerId 
   const stream = new ReadableStream({
     start(controller) {
       let terminal = false;
-      const send = (value: unknown) => { if (!cancelled && !terminal) controller.enqueue(new TextEncoder().encode(JSON.stringify(value) + "\n")); };
+      let lastTransportWrite = Date.now();
+      const write = (line: string) => { if (!cancelled && !terminal) { controller.enqueue(new TextEncoder().encode(line)); lastTransportWrite = Date.now(); } };
+      const send = (value: unknown) => write(JSON.stringify(value) + "\n");
       const events: ExecutionEvent[] = [];
       const record = createRecorder(taskId, "server", event => { events.push(event); send({ type: "step", event }); });
       const proof = (result: NonNullable<ReturnType<typeof resultOf>>, reply: string) => {
@@ -124,7 +126,15 @@ export async function startTeam(request: Request, started = Date.now(), ownerId 
       tasks.set(taskId, session);
       const abort = () => stop("生成连接已断开，停止后续步骤。", "stopped");
       request.signal.addEventListener("abort", abort, { once: true });
-      const watchdog = setInterval(() => { if (Date.now() >= deadline) stop("任务已达到 8 分钟上限。", "limit"); else if (Date.now() - session.lease > 15_000) stop("浏览器已断线，停止后续步骤。", "stopped"); }, 500);
+      const watchdog = setInterval(() => {
+        const now = Date.now();
+        if (now >= deadline) stop("任务已达到 8 分钟上限。", "limit");
+        else if (now - session.lease > 15_000) stop("浏览器已断线，停止后续步骤。", "stopped");
+        // Internal HTTP has its own body-idle timeout even while browser WS
+        // heartbeats succeed. Empty NDJSON lines keep that transport alive;
+        // the gateway discards them. They are neither progress nor a lease.
+        else if (now - lastTransportWrite >= 5_000) write("\n");
+      }, 500);
       const hardTimeout = setTimeout(() => stop("任务已达到 8 分钟上限。", "limit"), Math.max(1, Math.min(TEAM_TIMEOUT_MS, deadline - Date.now())));
       send({ type: "session", protocol: TEAM_PROTOCOL, taskId, projectId: body.projectId, token, deadline });
       record("team", "启动 MetaGPT 四角色", "started", "原生 Team/MGXEnv 调度；每任务最多 8 分钟、20 次模型请求。请保持页面打开。");

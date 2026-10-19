@@ -2,7 +2,8 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { fileURLToPath } from 'node:url';
 import { readFileSync } from 'node:fs';
-import { buildManifest, validateFiles, validateManifest, verifyDeployment, project, readBlob } from '../scripts/release-manifest.mjs';
+import { buildManifest, validateFiles, validateManifest, readBlob } from '../scripts/release-manifest.mjs';
+import { verifyDeployment, project } from '../scripts/vercel-manifest.mjs';
 
 const repo = fileURLToPath(new URL('../', import.meta.url));
 const manifest = buildManifest(repo, 'HEAD');
@@ -39,7 +40,7 @@ test('ordinary Next entry or missing Python build gates cannot masquerade as a t
 });
 
 test('credentials and workspace caches are never valid upload inputs', () => {
-  for (const file of ['.vercel_atoms_agent.token', '.env.local', 'runtime/team/.env', 'src/secret.key', 'runtime/team/__pycache__/runner.pyc']) {
+  for (const file of ['.vercel_atoms_agent.token', '.env.local', 'runtime/team/.env', 'runtime/team/tx.tokens', 'src/secret.key', 'runtime/team/__pycache__/runner.pyc']) {
     assert.throws(() => validateFiles([...manifest.files, { file }], read), /Unsafe release path/);
   }
 });

@@ -1,0 +1,15 @@
+{
+  "origin": "https://atoms-beta-20261019-326112-8-1254675888.sh.run.tcloudbase.com",
+  "observedAt": "2026-10-19T02:59:56.921Z",
+  "body": {
+    "status": "ready",
+    "nextReady": true,
+    "protocol": "atoms-team/3",
+    "sourceCommit": "7113b8e1820ec8802bd64025662f1f6424402c4d",
+    "sourceDigest": "7b6dd02991c62594af20b4ada18f4029529e98d45bee8dfa2743c39a39962b8f",
+    "activeConnections": 0,
+    "uptimeMs": 313346,
+    "stopping": false,
+    "maintenance": false
+  }
+}

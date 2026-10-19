@@ -1,0 +1,23 @@
+{
+  "fullNodeAfterRecoveryTool": {
+    "tests": 132,
+    "pass": 132,
+    "fail": 0,
+    "cancelled": 0,
+    "skipped": 0
+  },
+  "fullNodeDurationMs": 45958.119792,
+  "podScopeFollowup": {
+    "commit": "c59f6c716976548a0ef68beb79b63c1159453d79",
+    "targetedReleaseTests": 9,
+    "eslint": "passed",
+    "diffCheck": "passed",
+    "evidenceBoundary": "Owning subagent report; full Node run preceded this read-only scope addition."
+  },
+  "applicationFrozenCommit": "7113b8e1820ec8802bd64025662f1f6424402c4d",
+  "sourceDigest": "7b6dd02991c62594af20b4ada18f4029529e98d45bee8dfa2743c39a39962b8f",
+  "applicationInputs": 95,
+  "applicationInputsUnchangedAtToolHead": "c59f6c716976548a0ef68beb79b63c1159453d79",
+  "temporaryBrowserDriverSha256": "aece443558eee49c081ea675ba54ccb6c2b1944c84b1df9e51931744891083ab",
+  "mode": "Real remote DOM/iframe, no fixtures, fresh Chrome context; zero mail/provider calls."
+}

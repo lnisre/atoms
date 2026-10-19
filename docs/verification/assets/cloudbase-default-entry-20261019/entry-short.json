@@ -1,0 +1,130 @@
+{
+  "origin": "https://atoms-t1-probe-20261019-326112-8-1254675888.sh.run.tcloudbase.com",
+  "at": "2026-10-18T16:59:33.892Z",
+  "synthetic": true,
+  "responses": [
+    {
+      "path": "/probe",
+      "status": 404,
+      "contentType": "text/html; charset=utf-8",
+      "attachment": false,
+      "setCookieCount": 0
+    },
+    {
+      "path": "/probe",
+      "status": 200,
+      "contentType": "text/html; charset=utf-8",
+      "attachment": false,
+      "setCookieCount": 3
+    },
+    {
+      "path": "/probe/client.mjs",
+      "status": 200,
+      "contentType": "text/javascript; charset=utf-8",
+      "attachment": false,
+      "setCookieCount": 0
+    },
+    {
+      "path": "/probe",
+      "status": 200,
+      "contentType": "text/html; charset=utf-8",
+      "attachment": false,
+      "setCookieCount": 2
+    },
+    {
+      "path": "/probe/client.mjs",
+      "status": 200,
+      "contentType": "text/javascript; charset=utf-8",
+      "attachment": false,
+      "setCookieCount": 0
+    },
+    {
+      "path": "/probe/cookies",
+      "status": 200,
+      "contentType": "application/json",
+      "attachment": false,
+      "setCookieCount": 0
+    }
+  ],
+  "pageErrors": [],
+  "confirmationClicked": true,
+  "navigationStatus": 404,
+  "confirmationSeen": true,
+  "entryTitle": "Atoms synthetic hosting probe",
+  "clientLoaded": "undefined",
+  "confirmationRepeated": false,
+  "short": {
+    "synthetic": true,
+    "origin": "https://atoms-t1-probe-20261019-326112-8-1254675888.sh.run.tcloudbase.com",
+    "startedAt": "2026-10-18T16:59:38.553Z",
+    "requestedDurationMs": 1500,
+    "cookiesPresent": true,
+    "connections": [
+      {
+        "name": "normal-1",
+        "mode": "normal",
+        "version": "v1",
+        "opened": true,
+        "durationMs": 2559,
+        "heartbeatAcks": 1,
+        "echoes": 1,
+        "code": 1000,
+        "error": false,
+        "observationCompleted": true,
+        "connection": "0432c71e-9ae6-4550-b49b-f7a372b6aa20",
+        "lastAckAgeMs": 2390,
+        "lastEchoAgeMs": 2390,
+        "status": "passed"
+      },
+      {
+        "name": "normal-2",
+        "mode": "normal",
+        "version": "v1",
+        "opened": true,
+        "durationMs": 2559,
+        "heartbeatAcks": 1,
+        "echoes": 1,
+        "code": 1000,
+        "error": false,
+        "observationCompleted": true,
+        "connection": "bcb36edd-512a-4b15-b0ff-9dd2d5accaea",
+        "lastAckAgeMs": 2391,
+        "lastEchoAgeMs": 2390,
+        "status": "passed"
+      },
+      {
+        "name": "business-silent",
+        "mode": "heartbeat",
+        "version": "v1",
+        "opened": true,
+        "durationMs": 2560,
+        "heartbeatAcks": 1,
+        "echoes": 0,
+        "code": 1000,
+        "error": false,
+        "observationCompleted": true,
+        "connection": "188545eb-7fc6-4f57-9d0d-fb2a1488487a",
+        "lastAckAgeMs": 2391,
+        "lastEchoAgeMs": null,
+        "status": "passed"
+      },
+      {
+        "name": "fully-idle",
+        "mode": "idle",
+        "version": "v1",
+        "opened": true,
+        "durationMs": 2575,
+        "heartbeatAcks": 0,
+        "echoes": 0,
+        "code": 1000,
+        "error": false,
+        "observationCompleted": true,
+        "connection": "c42a8a65-7604-45ec-bd95-674faf39a77a",
+        "lastAckAgeMs": null,
+        "lastEchoAgeMs": null,
+        "status": "observed"
+      }
+    ],
+    "active600SecondGate": "unverified-short-local-check"
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "checkedAt": "2026-10-19T01:20:25.670Z",
+  "alias": "https://v0-test0-nine.vercel.app",
+  "deploymentId": "dpl_A2xqy6cFfWTwo5UrwGph8d2kuhHE",
+  "readyState": "READY",
+  "target": "production",
+  "sourceCommit": null,
+  "unchangedExpectedDeployment": true
+}

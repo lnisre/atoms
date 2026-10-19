@@ -1,0 +1,29 @@
+{
+  "observedAt": "2026-10-19T02:54:37.412Z",
+  "runId": "multi_tenant_1xIbzIoVEraTiu",
+  "count": 6,
+  "chars": 336,
+  "sha256": "1b8ac74d21be1d6f294c3c06c8b6d9a54a44d4f225316514e959c42a2252f871",
+  "markers": {
+    "ImagePullBackOff": false,
+    "ErrImagePull": false,
+    "Pulling": false,
+    "Pulled": false,
+    "OOMKilled": false,
+    "CrashLoopBackOff": false,
+    "Readiness": false,
+    "connection refused": false,
+    "Missing frozen release identity": false,
+    "Next.js": false,
+    "Team gateway listening": false,
+    "Cannot find module": false,
+    "SyntaxError": false,
+    "启动": false,
+    "健康": false,
+    "超时": false,
+    "build": true,
+    "image": true,
+    "构建": true
+  },
+  "requestId": "23e0aa2e-29de-46c7-9dff-0f41570bbca6"
+}

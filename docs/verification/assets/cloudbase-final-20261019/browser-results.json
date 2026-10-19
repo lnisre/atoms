@@ -1,0 +1,85 @@
+{
+  "initialWide": {
+    "startTime": "2026-10-18T18:30:38.668Z",
+    "duration": 190473.039,
+    "expected": 61,
+    "skipped": 0,
+    "unexpected": 3,
+    "flaky": 0
+  },
+  "initialFailures": [
+    {
+      "file": "cloud-adoption-policy.spec.ts",
+      "title": "execution blocking gives its exact reason and cannot be adopted",
+      "status": "failed",
+      "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoContainText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('status').filter({ hasText: '执行阻断' })\nExpected substring: \u001b[32m\"检测到载入时无条件空循环\"\u001b[39m\nError: strict mode violation: getByRole('status').filter({ hasText: '执行阻断' }) resolved to 2 elements:\n    1) <p role=\"status\" class=\"generation-progress-status\">执行阻断 · 此代码暂不执行</p> aka getByText('执行阻断 · 此代码暂不执行')\n    2) <div role=\"status\" class=\"adoption-block\" id=\"adoption-block-reason\">…</div> aka getByText('当前候选存在执行阻断，修复后才能采用。检测到载入时无条件空循环：while(true){}')\n\nCall log:\n\u001b[2m  - Expect \"toContainText\" getByRole('status').filter({ hasText: '执行阻断' }) with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('status').filter({ hasText: '执行阻断' })\u001b[22m\n"
+    },
+    {
+      "file": "cloud-generation.spec.ts",
+      "title": "restored restricted code remains trial; explicit permitted activation never copies trial data",
+      "status": "failed",
+      "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('iframe[title=\"生成的应用\"]').contentFrame().locator('#count')\nExpected: \u001b[32m\"1\"\u001b[39m\nReceived: \u001b[31m\"0\"\u001b[39m\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveText\" locator('iframe[title=\"生成的应用\"]').contentFrame().locator('#count') with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('iframe[title=\"生成的应用\"]').contentFrame().locator('#count')\u001b[22m\n\u001b[2m    14 × locator resolved to <output id=\"count\">0</output>\u001b[22m\n\u001b[2m       - unexpected value \"0\"\u001b[22m\n"
+    },
+    {
+      "file": "cloud-regressions.spec.ts",
+      "title": "first pointer activation reaches a freshly restored opaque iframe",
+      "status": "failed",
+      "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('iframe[title=\"生成的应用\"]').contentFrame().locator('#count')\nExpected: \u001b[32m\"1\"\u001b[39m\nReceived: \u001b[31m\"0\"\u001b[39m\nTimeout:  2000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveText\" locator('iframe[title=\"生成的应用\"]').contentFrame().locator('#count') with timeout 2000ms\u001b[22m\n\u001b[2m  - waiting for locator('iframe[title=\"生成的应用\"]').contentFrame().locator('#count')\u001b[22m\n\u001b[2m    20 × locator resolved to <output id=\"count\">0</output>\u001b[22m\n\u001b[2m       - unexpected value \"0\"\u001b[22m\n"
+    }
+  ],
+  "firstDriverRepairAttempt": {
+    "stats": {
+      "startTime": "2026-10-18T19:05:42.550Z",
+      "duration": 66757.217,
+      "expected": 1,
+      "skipped": 0,
+      "unexpected": 1,
+      "flaky": 0
+    },
+    "failures": [
+      {
+        "file": "cloud-adoption-policy.spec.ts",
+        "title": "execution blocking gives its exact reason and cannot be adopted",
+        "status": "timedOut",
+        "error": "\u001b[31mTest timeout of 30000ms exceeded while setting up \"context\".\u001b[39m"
+      }
+    ]
+  },
+  "finalTargetedRecheck": {
+    "startTime": "2026-10-18T19:45:24.432Z",
+    "duration": 96631.994,
+    "expected": 5,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  },
+  "finalCases": [
+    {
+      "file": "cloud-adoption-policy.spec.ts",
+      "title": "execution blocking gives its exact reason and cannot be adopted",
+      "status": "passed"
+    },
+    {
+      "file": "cloud-generation.spec.ts",
+      "title": "restored restricted code remains trial; explicit permitted activation never copies trial data",
+      "status": "passed"
+    },
+    {
+      "file": "cloud-native-stop.spec.ts",
+      "title": "first generation stop after cached repair rejects late result",
+      "status": "passed"
+    },
+    {
+      "file": "cloud-native-stop.spec.ts",
+      "title": "modification stop after cached repair rejects late result",
+      "status": "passed"
+    },
+    {
+      "file": "cloud-regressions.spec.ts",
+      "title": "first pointer activation reaches a freshly restored opaque iframe",
+      "status": "passed"
+    }
+  ],
+  "seam": "Real DOM/opaque iframe and native cancellation; identity/storage/model providers are explicitly synthetic.",
+  "pointerCaveat": "Original direct first-click failure is retained. The unchanged direct probe later passed six clicks; no product fix for the historical race is claimed."
+}

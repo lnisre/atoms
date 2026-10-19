@@ -1,0 +1,51 @@
+{
+  "kind": "cloudbase-source-build",
+  "checkedAt": "2026-10-19T02:52:59.856Z",
+  "target": {
+    "envId": "atoms-d9gdf8r2036664366",
+    "region": "ap-shanghai",
+    "serverName": "atoms-beta-20261019",
+    "productionServerName": "atoms-production",
+    "origin": "https://unconfigured.invalid",
+    "cpu": 1,
+    "memory": 2,
+    "minInstances": 0,
+    "maxInstances": 1,
+    "dataMode": "existing-account-data",
+    "namespace": "atoms",
+    "sharedDataAuthorized": true,
+    "maintenance": false
+  },
+  "sourceCommit": "7113b8e1820ec8802bd64025662f1f6424402c4d",
+  "sourceDigest": "7b6dd02991c62594af20b4ada18f4029529e98d45bee8dfa2743c39a39962b8f",
+  "sourceAttemptId": "956cff18-f7ed-41dc-9c5f-27d3f9100c3d",
+  "archiveSha256": "2f58492c6f972c3b7eee066bec5e906acb2049cf92e5c2c19611ef170d748345",
+  "packageName": "atoms-beta-20261019.zip",
+  "packageVersion": "1792372579",
+  "image": "ccr.ccs.tencentyun.com/tcb-100001863836-ciwx/ca-dyaswlgf_atoms-beta-20261019@sha256:7be7fef857fa9677bcf8eb3748708c20c74bab5f29b42c9ed45ea789325b03ff",
+  "buildEvidence": {
+    "digest": "sha256:7be7fef857fa9677bcf8eb3748708c20c74bab5f29b42c9ed45ea789325b03ff",
+    "pages": [
+      {
+        "offset": 0,
+        "delivered": 109930,
+        "total": 109930,
+        "more": false,
+        "sha256": "5e35ee3f27093828d92ffe834e70eb98338470f44f7dcd0463bb815cabe014e2",
+        "requestId": "db3d1748-a37a-4a96-a98b-ee056faad872"
+      }
+    ]
+  },
+  "sourceBuildVerified": true,
+  "artifactVerified": false,
+  "deploymentVerified": false,
+  "recovery": {
+    "taskId": 2395587,
+    "version": "atoms-beta-20261019-001",
+    "buildId": 2608937894,
+    "deployId": "001",
+    "builtImageTag": "ccr.ccs.tencentyun.com/tcb-100001863836-ciwx/ca-dyaswlgf_atoms-beta-20261019:atoms-beta-20261019-001-20261019091636",
+    "sourceAttemptId": "956cff18-f7ed-41dc-9c5f-27d3f9100c3d"
+  },
+  "outcome": "image-built-original-version-create-timeout-no-application-health"
+}

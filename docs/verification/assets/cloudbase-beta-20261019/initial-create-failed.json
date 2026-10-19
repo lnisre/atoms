@@ -1,0 +1,55 @@
+{
+  "observedAt": "2026-10-19T02:54:11.359Z",
+  "taskId": 2395587,
+  "status": "failed",
+  "knownFailure": "timeout",
+  "version": "atoms-beta-20261019-001",
+  "sourcePackageFields": {
+    "PackageName": false,
+    "PackageVersion": false,
+    "DeployRemark": false
+  },
+  "steps": [
+    {
+      "name": "CreateVersion",
+      "status": "running",
+      "costTime": 0,
+      "hasFailure": false
+    },
+    {
+      "name": "RunPipeline",
+      "status": "notInvolve",
+      "costTime": 0,
+      "hasFailure": false
+    },
+    {
+      "name": "GrayRelease",
+      "status": "notInvolve",
+      "costTime": 0,
+      "hasFailure": false
+    },
+    {
+      "name": "ReleaseVersion",
+      "status": "todo",
+      "costTime": 0,
+      "hasFailure": false
+    }
+  ],
+  "record": {
+    "deployId": "001",
+    "status": "create_failed",
+    "runId": "multi_tenant_1xIbzIoVEraTiu",
+    "buildId": 2608937894,
+    "image": "ccr.ccs.tencentyun.com/tcb-100001863836-ciwx/ca-dyaswlgf_atoms-beta-20261019:atoms-beta-20261019-001-20261019091636"
+  },
+  "buildGates": {
+    "pipCheck": true,
+    "pythonTestsRan": true,
+    "pythonOK": true
+  },
+  "requests": [
+    "8f54477b-df53-4448-9a44-1abc28f44218",
+    "f41e9383-2280-4a47-aec1-1eb42759dfd9",
+    "101eeee2-35d5-4617-8a97-291397079c86"
+  ]
+}

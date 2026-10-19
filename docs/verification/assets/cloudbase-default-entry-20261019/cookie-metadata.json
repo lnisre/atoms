@@ -1,0 +1,31 @@
+{
+  "origin": "https://atoms-t1-probe-20261019-326112-8-1254675888.sh.run.tcloudbase.com",
+  "confirmationAt": "2026-10-18T17:28:05.031Z",
+  "cookies": [
+    {
+      "name": "cloudbase_confirm_domain_access",
+      "domain": "atoms-t1-probe-20261019-326112-8-1254675888.sh.run.tcloudbase.com",
+      "expires": 1792373285.00945,
+      "httpOnly": true,
+      "secure": false,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "atoms_probe_a",
+      "domain": "atoms-t1-probe-20261019-326112-8-1254675888.sh.run.tcloudbase.com",
+      "expires": -1,
+      "httpOnly": true,
+      "secure": true,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "atoms_probe_b",
+      "domain": "atoms-t1-probe-20261019-326112-8-1254675888.sh.run.tcloudbase.com",
+      "expires": -1,
+      "httpOnly": true,
+      "secure": true,
+      "sameSite": "Lax"
+    }
+  ],
+  "note": "Independent cookie-metadata-only check; no values read into output or stored."
+}

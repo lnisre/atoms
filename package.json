@@ -8,11 +8,12 @@
     "start": "next start",
     "lint": "eslint",
     "typecheck": "next typegen && tsc --noEmit",
-    "test": "node --import tsx --test tests/generate.test.ts tests/team.test.ts tests/team-socket.test.ts tests/team-client.test.ts tests/preview-policy.test.ts tests/source-code.test.ts tests/tip-calculator.test.ts tests/generation-record.test.tsx tests/release.test.mjs tests/auth.test.ts tests/auth-gateway.test.mjs tests/cloud-projects.test.ts tests/cloud-history.test.ts tests/cloud-history-sql.test.ts",
+    "test": "node --import tsx --test tests/generate.test.ts tests/team.test.ts tests/team-socket.test.ts tests/team-client.test.ts tests/preview-policy.test.ts tests/source-code.test.ts tests/tip-calculator.test.ts tests/generation-record.test.tsx tests/release.test.mjs tests/cloudbase-hosting.test.mjs tests/cloudbase-release.test.mjs tests/auth.test.ts tests/auth-gateway.test.mjs tests/cloud-projects.test.ts tests/cloud-history.test.ts tests/cloud-history-sql.test.ts",
     "test:e2e": "playwright test",
     "team:build": "next build && node runtime/team/prepare.mjs",
     "team:start": "node runtime/team/gateway.mjs",
-    "release:vercel": "node --use-env-proxy scripts/vercel-release.mjs"
+    "release:vercel": "node --use-env-proxy scripts/vercel-release.mjs",
+    "release:cloudbase": "node --use-env-proxy scripts/cloudbase/release.mjs"
   },
   "dependencies": {
     "acorn": "8.18.0",

@@ -1,0 +1,14 @@
+[
+  {
+    "type": "pointerdown",
+    "target": "IFRAME"
+  },
+  {
+    "type": "pointerup",
+    "target": "IFRAME"
+  },
+  {
+    "type": "click",
+    "target": "IFRAME"
+  }
+]

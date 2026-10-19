@@ -1,0 +1,134 @@
+{
+  "startedAt": "2026-10-19T02:58:24.565Z",
+  "origin": "https://atoms-beta-20261019-326112-8-1254675888.sh.run.tcloudbase.com",
+  "mode": "public",
+  "driver": "verify-atoms/public-browser/no-fixtures",
+  "sourceCommit": "7113b8e1820ec8802bd64025662f1f6424402c4d",
+  "sourceDigest": "7b6dd02991c62594af20b4ada18f4029529e98d45bee8dfa2743c39a39962b8f",
+  "confirmationClicked": true,
+  "responses": [
+    {
+      "path": "/",
+      "status": 404,
+      "resourceType": "document",
+      "contentType": "text/html; charset=utf-8",
+      "attachment": false
+    },
+    {
+      "path": "/",
+      "status": 200,
+      "resourceType": "document",
+      "contentType": "text/html; charset=utf-8",
+      "attachment": false
+    },
+    {
+      "path": "/_next/static/chunks/2fzk3r63kby96.css",
+      "status": 200,
+      "resourceType": "stylesheet",
+      "contentType": "text/css; charset=UTF-8",
+      "attachment": false
+    },
+    {
+      "path": "/_next/static/chunks/04z73u5_kinzt.css",
+      "status": 200,
+      "resourceType": "stylesheet",
+      "contentType": "text/css; charset=UTF-8",
+      "attachment": false
+    },
+    {
+      "path": "/_next/static/chunks/2bfpjic5ve8yf.js",
+      "status": 200,
+      "resourceType": "script",
+      "contentType": "application/javascript; charset=UTF-8",
+      "attachment": false
+    },
+    {
+      "path": "/_next/static/chunks/02u608azvqmwa.js",
+      "status": 200,
+      "resourceType": "script",
+      "contentType": "application/javascript; charset=UTF-8",
+      "attachment": false
+    },
+    {
+      "path": "/_next/static/chunks/turbopack-0gpk4a5p6f81b.js",
+      "status": 200,
+      "resourceType": "script",
+      "contentType": "application/javascript; charset=UTF-8",
+      "attachment": false
+    },
+    {
+      "path": "/_next/static/chunks/1jrsrbu0kkidg.js",
+      "status": 200,
+      "resourceType": "script",
+      "contentType": "application/javascript; charset=UTF-8",
+      "attachment": false
+    },
+    {
+      "path": "/_next/static/chunks/24_e3iu2wa260.js",
+      "status": 200,
+      "resourceType": "script",
+      "contentType": "application/javascript; charset=UTF-8",
+      "attachment": false
+    },
+    {
+      "path": "/_next/static/chunks/2hdfy67fzhspc.js",
+      "status": 200,
+      "resourceType": "script",
+      "contentType": "application/javascript; charset=UTF-8",
+      "attachment": false
+    },
+    {
+      "path": "/_next/static/chunks/2dp2np_3c8m30.js",
+      "status": 200,
+      "resourceType": "script",
+      "contentType": "application/javascript; charset=UTF-8",
+      "attachment": false
+    },
+    {
+      "path": "/_next/static/chunks/2z3ur1omx4tus.js",
+      "status": 200,
+      "resourceType": "script",
+      "contentType": "application/javascript; charset=UTF-8",
+      "attachment": false
+    }
+  ],
+  "pageErrors": [],
+  "emailRequests": 0,
+  "uiGenerationRequests": 0,
+  "websocketAttempts": 0,
+  "checks": [
+    {
+      "criterion": "Frozen source, ready Next and maintenance=false",
+      "status": "pass"
+    }
+  ],
+  "navigationStatus": 404,
+  "confirmationSeen": true,
+  "confirmationClickedAt": "2026-10-19T02:58:30.711Z",
+  "title": "Atoms Demo",
+  "finalUrl": "https://atoms-beta-20261019-326112-8-1254675888.sh.run.tcloudbase.com/",
+  "health": {
+    "status": 200,
+    "contentType": "application/json",
+    "cacheControl": "no-store",
+    "body": {
+      "status": "ready",
+      "nextReady": true,
+      "protocol": "atoms-team/3",
+      "sourceCommit": "7113b8e1820ec8802bd64025662f1f6424402c4d",
+      "sourceDigest": "7b6dd02991c62594af20b4ada18f4029529e98d45bee8dfa2743c39a39962b8f",
+      "activeConnections": 0,
+      "uptimeMs": 227399,
+      "stopping": false,
+      "maintenance": false
+    }
+  },
+  "status": "failed",
+  "failure": {
+    "phase": "guest-example",
+    "name": "Error",
+    "message": "expect(locator).toHaveText(expected) failed\n\nLocator: locator('iframe[title=\"生成的应用\"]').contentFrame().locator('#perPersonVal')\nExpected: \"¥5.25\"\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n  - Expect \"toHaveText\" locator('iframe[title=\"生成的应用\"]').contentFrame().locator('#perPersonVal') with timeout 5000ms\n  - waiting for locator('iframe[title=\"生成的应用\"]').contentFrame().locator('#perPersonVal')\n"
+  },
+  "completedAt": "2026-10-19T02:58:37.011Z",
+  "browserClosed": true
+}

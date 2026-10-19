@@ -1,0 +1,44 @@
+{
+  "applicationCommit": "7113b8e1820ec8802bd64025662f1f6424402c4d",
+  "applicationSourceDigest": "7b6dd02991c62594af20b4ada18f4029529e98d45bee8dfa2743c39a39962b8f",
+  "node": "24.18.0",
+  "pnpm": "10.12.1",
+  "python": "3.11.14",
+  "metaGPTCommit": "11cdf466d042aece04fc6cfd13b28e1a70341b1f",
+  "lint": "passed",
+  "typecheck": "passed",
+  "build": "passed",
+  "nodeTests": {
+    "passed": 130,
+    "failed": 0,
+    "skipped": 0
+  },
+  "pythonNativeTests": {
+    "passed": 20,
+    "failed": 0
+  },
+  "actualProviderCalls": 0,
+  "rawLogs": [
+    {
+      "file": "stream-fix/lint.log",
+      "sha256": "2ac76b50e75e941a33839dca273104cf1af4faf1fe6860ce9767ee05123c6bb9"
+    },
+    {
+      "file": "stream-fix/typecheck.log",
+      "sha256": "957cc028c21fc8798aca242ec011ef6c0d2a2f14ad9105b2a110004e95b058e6"
+    },
+    {
+      "file": "stream-fix/build.log",
+      "sha256": "ecf258e59de9966ec967debdd427ce85afdcb5cb62e52d0b9bd5c03e1dfbe9fa"
+    },
+    {
+      "file": "stream-fix/node-tests.log",
+      "sha256": "f865678a8fb43b31cbfdcd8b0bd0632877cefdcb465039968ecee94c6d41f459"
+    },
+    {
+      "file": "python-tests.log",
+      "sha256": "7747b61d521daba012323356b8a441b8283c35a0cb05e6a31389b4168b1d2945"
+    }
+  ],
+  "durableEvidence": "Selected summaries, real-time native driver and synthetic screenshots archived here; full raw logs/traces remain in the private run directory."
+}

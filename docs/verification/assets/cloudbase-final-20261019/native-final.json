@@ -1,0 +1,94 @@
+{
+  "status": "passed",
+  "mode": "offline-native-team-real-wall-clock",
+  "actualProviderCalls": 0,
+  "sourceCommit": "7113b8e1820ec8802bd64025662f1f6424402c4d",
+  "records": [
+    {
+      "name": "420-second-success",
+      "modelCalls": 7,
+      "engineerCalls": 1,
+      "artifacts": 1,
+      "terminalOutcome": "passed",
+      "closed": true,
+      "heartbeats": 106,
+      "acks": 106,
+      "socketAt": 1792354142803,
+      "deadline": 1792354622766,
+      "sessionAt": 1792354142824,
+      "terminalAt": 1792354568860,
+      "closedAt": 1792354568881
+    },
+    {
+      "name": "480-second-timeout",
+      "modelCalls": 4,
+      "engineerCalls": 1,
+      "artifacts": 0,
+      "terminalOutcome": "limit",
+      "closed": true,
+      "heartbeats": 119,
+      "acks": 119,
+      "socketAt": 1792354142862,
+      "deadline": 1792354622846,
+      "sessionAt": 1792354142868,
+      "terminalAt": 1792354622933,
+      "closedAt": 1792354622933
+    },
+    {
+      "name": "third-task-rejected",
+      "modelCalls": 0,
+      "engineerCalls": 0,
+      "artifacts": 0,
+      "terminalOutcome": null,
+      "closed": true,
+      "heartbeats": 0,
+      "acks": 0,
+      "socketAt": 1792354149708,
+      "socketError": "生成执行器繁忙，请稍后重试。",
+      "closedAt": 1792354149757
+    }
+  ],
+  "errors": [],
+  "durationMs": 485753,
+  "peakOwnedRssKiB": 658016,
+  "limits": "Darwin local runtime with synthetic identity/storage/model. Does not prove Linux CloudBase resources or real provider behaviour.",
+  "cleanup": {
+    "browserClosed": true,
+    "remainingOwnedPython": 0
+  },
+  "memory": {
+    "sampleCount": 51,
+    "peakOwnedRssKiB": 658016,
+    "peakSample": {
+      "at": 1792354148213,
+      "rssKiB": 658016,
+      "processes": [
+        {
+          "pid": 41831,
+          "parent": 94372,
+          "rssKiB": 295808,
+          "command": "Python"
+        },
+        {
+          "pid": 41832,
+          "parent": 94372,
+          "rssKiB": 294512,
+          "command": "Python"
+        },
+        {
+          "pid": 94368,
+          "parent": 1,
+          "rssKiB": 28784,
+          "command": "node"
+        },
+        {
+          "pid": 94372,
+          "parent": 94368,
+          "rssKiB": 38912,
+          "command": "next-server (v16.3.6)"
+        }
+      ]
+    },
+    "scope": "Local Darwin process-tree RSS; not CloudBase Linux capacity evidence."
+  }
+}
