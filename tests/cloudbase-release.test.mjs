@@ -61,6 +61,8 @@ test('process log reads require a run identity observed from this service deploy
   await api.call('tcbr', 'DescribeCloudRunDeployRecord', { EnvId: target.envId, ServerName: target.serverName });
   await api.call('tcbr', 'DescribeCloudRunProcessLog', { EnvId: target.envId, RunId: 'owned-run' });
   await assert.rejects(api.call('tcbr', 'DescribeCloudRunProcessLog', { EnvId: target.envId, RunId: 'foreign-run' }), /outside/);
+  await api.call('tcbr', 'DescribeCloudRunPodList', { EnvId: target.envId, ServerName: target.serverName, PageSize: 50, PageNum: 1 });
+  await assert.rejects(api.call('tcbr', 'DescribeCloudRunPodList', { EnvId: target.envId, ServerName: 'foreign-service' }), /outside/);
 });
 
 function fakeApi({ existing = false, mutationTimeout = false, altered = false, moving = false } = {}) {

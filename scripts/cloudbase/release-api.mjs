@@ -6,7 +6,7 @@ import { createHash, createHmac } from 'node:crypto';
 const actions = {
   tcb: new Set(['DescribeBillingInfo', 'DescribeCloudBaseBuildService']),
   tcbr: new Set(['DescribeCloudRunServers', 'DescribeCloudRunServerDetail',
-    'DescribeCloudRunDeployRecord', 'DescribeCloudRunBuildLog', 'DescribeCloudRunProcessLog', 'DescribeVersionDetail',
+    'DescribeCloudRunDeployRecord', 'DescribeCloudRunBuildLog', 'DescribeCloudRunProcessLog', 'DescribeCloudRunPodList', 'DescribeVersionDetail',
     'DescribeServerManageTask', 'CreateCloudRunServer', 'UpdateCloudRunServer', 'SubmitServerRollback']),
 };
 const hash = value => createHash('sha256').update(value).digest('hex');
