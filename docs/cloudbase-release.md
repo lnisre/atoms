@@ -52,6 +52,18 @@ node --use-env-proxy scripts/cloudbase/release.mjs verify DIRECTORY --credential
 
 完整 Python 镜像的构建日志可能超过一页；工具按官方 `Delivered` 条数推进 `Offset`，直到 `More=false`，上限 100 页、16 MiB。证据只记录页偏移、条数、内容摘要和 request ID，不落原始构建日志。分页缺失、停滞或出现多个 push digest 均拒绝核验。
 
+### 构建成功而首版本创建超时
+
+平台可能已经把完整镜像推入 registry，管理任务却在 `CreateVersion` 超时，且从未出现在线版本。不要重发创建或把构建成功写成健康通过。先保存原 attempt、提交 task、状态和版本记录；仅当同一 owned package task 明确 `failed / timeout`、没有在线版本，且其精确版本对应唯一 build ID 和 push digest 时，可执行：
+
+```sh
+node --use-env-proxy scripts/cloudbase/release.mjs build-artifact ORIGINAL_DIRECTORY --credentials EXISTING_CREDENTIAL_FILE
+```
+
+这生成独立 `build-artifact.json`：`sourceBuildVerified=true`，`artifactVerified=false`、`deploymentVerified=false`，不包含应用健康结论。它绑定原上传 package、archive/source digest、task、版本、build ID 和 immutable image。修复发布工具本身不改变已冻结应用输入时可复用该构建；需要修改容器或应用则必须重新冻结、重建。
+
+新恢复目标使用原失败版本作为 `expectedVersion`，以 `--image-verification ORIGINAL_DIRECTORY/build-artifact.json` 创建新计划。提交前再次读回同一失败 task、版本、build ID、镜像 tag 与“无在线版本”；任一状态改变都拒绝。恢复只通过 `UpdateCloudRunServer` 部署已证明的同一 immutable image，保留原失败目录，不复用 attempt 或盲目重建。恢复后仍须完整 `verify` 验证真实运行镜像、配置和健康；digest 被平台改写且缺少可核验映射时不能放宽通过。
+
 ## 同一镜像更新与回退
 
 第二次计划使用 `--image-verification PRIOR_DIRECTORY/verification.json`，只接受同一冻结源码的已核验 digest；无需再构建。新目标包含实际 origin 和 `expectedVersion`。服务配置仍独立注入；镜像中不包含秘密。命令不隐式改 DNS、Vercel 或生产服务。

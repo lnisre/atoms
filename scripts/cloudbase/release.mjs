@@ -16,8 +16,8 @@ const recordFields = ['DeployId', 'DeployTime', 'Status', 'RunId', 'BuildId', 'I
 const taskFields = ['Id', 'Status', 'CurrentVersionName', 'VersionName', 'DeployType', 'ReleaseType'];
 const imagePattern = /^sha256:[a-f\d]{64}$/;
 
-// Offset counts log entries, not bytes. Full Python builds routinely exceed
-// one page; retain only a digest of each page, never raw dependency/build logs.
+// Advance Offset only by the provider's Delivered cursor units. Full Python
+// builds may exceed a page; never retain raw dependency/build logs as evidence.
 export async function readBuildManifest(api, scope) {
   let offset = 0, text = '';
   const pages = [];
@@ -84,6 +84,49 @@ export function prepareRollback(snapshot, recorded, currentVersion, rollbackVers
     OperatorRemark: `atoms-owned-beta-rollback:${recorded.id}` };
 }
 
+function recoveryMatches(snapshot, target, source) {
+  const recovery = source.recovery, task = snapshot.raw.task.Task;
+  return recovery && source.verifiedTarget?.envId === target.envId && source.verifiedTarget?.serverName === target.serverName
+    && target.expectedVersion === recovery.version && snapshot.safe.versions.length === 0
+    && snapshot.raw.task.IsExist && task?.Id === recovery.taskId && task.Status === 'failed'
+    && task.VersionName === recovery.version && task.DeployType === 'package' && task.FailReason === 'timeout'
+    && snapshot.safe.records.some(record => record.DeployId === recovery.deployId && record.BuildId === recovery.buildId
+      && record.Status === 'create_failed' && record.ImageUrl === recovery.builtImageTag
+      && `${target.serverName}-${record.DeployId}` === recovery.version);
+}
+
+export async function verifySourceBuild({ api, target, manifest, source, attempt, submitted, upload }) {
+  if (source.image || !submitted?.taskId || submitted.attemptId !== attempt.id || attempt.command !== 'stage' || !attempt.id
+    || attempt.sourceCommit !== manifest.commit || attempt.sourceDigest !== manifest.sourceDigest
+    || attempt.archiveSha256 !== source.archiveSha256 || upload.archiveSha256 !== source.archiveSha256
+    || !upload.packageName || !upload.packageVersion || JSON.stringify(attempt.target) !== JSON.stringify(target)) throw Error('Owned source upload identity unavailable');
+  const snapshot = await inspectRelease(api, target, submitted);
+  const task = snapshot.raw.task.Task;
+  if (!snapshot.raw.task.IsExist || task?.Id !== submitted.taskId || task.Status !== 'failed'
+    || task.DeployType !== 'package' || task.FailReason !== 'timeout' || snapshot.safe.versions.length) throw Error('Source recovery requires the owned failed timeout task without an online version');
+  for (const [key, expected] of [['PackageName', upload.packageName], ['PackageVersion', upload.packageVersion],
+    ['DeployRemark', `atoms:${manifest.commit}:${manifest.sourceDigest}`]]) {
+    if (task[key] !== undefined && task[key] !== expected) throw Error('Remote source package metadata mismatch');
+  }
+  const matches = snapshot.safe.records.filter(record => `${target.serverName}-${record.DeployId}` === task.VersionName
+    && record.Status === 'create_failed' && Number.isInteger(record.BuildId) && record.BuildId > 0 && record.ImageUrl);
+  if (matches.length !== 1) throw Error('Unique failed source build identity unavailable');
+  const record = matches[0];
+  const buildEvidence = await readBuildManifest(api, { EnvId: target.envId, ServerName: target.serverName,
+    BuildId: record.BuildId, ServerVersion: task.VersionName });
+  const image = immutableImage(record.ImageUrl, buildEvidence.digest);
+  const final = await inspectRelease(api, target, submitted);
+  if (final.raw.task.Task?.FailReason !== 'timeout'
+    || JSON.stringify(final.safe) !== JSON.stringify({ ...snapshot.safe, checkedAt: final.safe.checkedAt, requests: final.safe.requests })) throw Error('Source build state changed during verification');
+  return { kind: 'cloudbase-source-build', checkedAt: new Date().toISOString(), target,
+    sourceCommit: manifest.commit, sourceDigest: manifest.sourceDigest, sourceAttemptId: attempt.id,
+    archiveSha256: source.archiveSha256, packageName: upload.packageName, packageVersion: upload.packageVersion,
+    image, buildEvidence, sourceBuildVerified: true, artifactVerified: false, deploymentVerified: false,
+    recovery: { taskId: task.Id, version: task.VersionName, buildId: record.BuildId,
+      deployId: record.DeployId, builtImageTag: record.ImageUrl, sourceAttemptId: attempt.id },
+    outcome: 'image-built-original-version-create-timeout-no-application-health' };
+}
+
 export async function stageRelease({ api, target, runtime, manifest, source, readArchive, save, attemptExists }) {
   if (attemptExists()) throw Error('Attempt already recorded; run status before any retry');
   validateTarget(target);
@@ -97,7 +140,9 @@ export async function stageRelease({ api, target, runtime, manifest, source, rea
   if (existing) {
     if (!target.expectedVersion) throw Error('Existing service requires explicit expectedVersion');
     const snapshot = await inspectRelease(api, target);
-    if (snapshot.safe.unambiguousCurrentVersion !== target.expectedVersion) throw Error('Expected remote version changed');
+    if (source.recovery) {
+      if (!recoveryMatches(snapshot, target, source)) throw Error('Owned failed-version recovery no longer matches remote state');
+    } else if (snapshot.safe.unambiguousCurrentVersion !== target.expectedVersion) throw Error('Expected remote version changed');
     if (snapshot.raw.task.IsExist && !['finished', 'failed'].includes(snapshot.raw.task.Task?.Status)) throw Error('Another deployment may be running');
     previous = snapshot.safe;
   } else if (target.expectedVersion) throw Error('Expected service missing');
@@ -199,7 +244,7 @@ async function main(args) {
     const key = flags[index]; if (!/^--[a-z-]+$/.test(key) || !flags[index + 1] || options[key]) throw Error('Invalid or duplicate option');
     options[key] = flags[index + 1];
   }
-  if (!['plan', 'stage', 'status', 'verify', 'promote', 'rollback'].includes(command) || !directory) throw Error('Usage: release.mjs plan|stage|status|verify|promote|rollback DIRECTORY [--option VALUE]');
+  if (!['plan', 'stage', 'status', 'verify', 'build-artifact', 'promote', 'rollback'].includes(command) || !directory) throw Error('Usage: release.mjs plan|stage|status|verify|build-artifact|promote|rollback DIRECTORY [--option VALUE]');
   if (Object.keys(options).some(key => !['--ref', '--target', '--runtime', '--runtime-env', '--credentials', '--health', '--image-verification', '--current-version', '--rollback-version', '--execute'].includes(key))) throw Error('Unknown option');
   const dir = resolve(directory);
   const save = (name, value) => writeFileSync(resolve(dir, name), JSON.stringify(value, null, 2) + '\n', { mode: 0o600, flag: 'wx' });
@@ -213,10 +258,15 @@ async function main(args) {
     let source;
     if (options['--image-verification']) {
       const prior = JSON.parse(readFileSync(options['--image-verification'], 'utf8'));
-      if (prior.kind !== 'cloudbase-application-deployment' || !prior.artifactVerified
+      const deployment = prior.kind === 'cloudbase-application-deployment' && prior.artifactVerified;
+      const build = prior.kind === 'cloudbase-source-build' && prior.sourceBuildVerified && prior.recovery
+        && !prior.artifactVerified && !prior.deploymentVerified && target.expectedVersion === prior.recovery.version
+        && target.envId === prior.target?.envId && target.serverName === prior.target?.serverName;
+      if ((!deployment && !build)
         || prior.sourceCommit !== manifest.commit || prior.sourceDigest !== manifest.sourceDigest) throw Error('Verified image source mismatch');
       source = { image: immutableImage(prior.image, prior.image?.split('@')[1]),
-        verifiedVersion: prior.version, verifiedTarget: prior.target };
+        verifiedVersion: prior.version ?? prior.recovery?.version, verifiedTarget: prior.target,
+        ...(build ? { recovery: prior.recovery } : {}) };
     } else source = createSourcePackage(repo, manifest, dir);
     save('source.json', source); save('plan.json', { kind: 'isolated-beta-plan', target, merged,
       sourceCommit: manifest.commit, sourceDigest: manifest.sourceDigest, source,
@@ -247,6 +297,12 @@ async function main(args) {
   if (command === 'status') {
     const result = (await inspectRelease(api, target, submitted)).safe;
     save(`status-${Date.now()}.json`, result); return result;
+  }
+  if (command === 'build-artifact') {
+    if (!recorded || !submitted) throw Error('No owned source stage attempt');
+    const result = await verifySourceBuild({ api, target, manifest, source: load('source.json'),
+      attempt: recorded, submitted, upload: load('upload.json') });
+    save('build-artifact.json', result); return result;
   }
   if (command === 'rollback') {
     const snapshot = await inspectRelease(api, target);

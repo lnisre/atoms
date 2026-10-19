@@ -6,7 +6,7 @@ import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { releaseApi } from '../scripts/cloudbase/release-api.mjs';
 import { runtimeConfiguration, configurationFingerprint, configurationItems, validateTarget } from '../scripts/cloudbase/release-config.mjs';
-import { stageRelease, verifyRelease, readBuildManifest, prepareRollback } from '../scripts/cloudbase/release.mjs';
+import { stageRelease, verifyRelease, verifySourceBuild, readBuildManifest, prepareRollback } from '../scripts/cloudbase/release.mjs';
 import { buildManifest } from '../scripts/release-manifest.mjs';
 import { createSourcePackage, pushedImageDigest, immutableImage, digest } from '../scripts/cloudbase/release-source.mjs';
 
@@ -51,6 +51,16 @@ test('real API boundary signs official requests, refuses other scope/actions and
     assert.doesNotMatch(error.message, /SYNTHETIC_ONLY/); return error.code === 'UnauthorizedOperation';
   });
   assert.equal(requests.length, 1);
+});
+
+test('process log reads require a run identity observed from this service deploy records', async () => {
+  const api = releaseApi({ credentials, ...target, fetcher: async (_url, options) => ({ ok: true,
+    json: async () => ({ Response: { RequestId: 'owned-service', ...(options.headers['X-TC-Action'] === 'DescribeCloudRunDeployRecord'
+      ? { DeployRecords: [{ RunId: 'owned-run' }] } : { Logs: [] }) } }) }) });
+  await assert.rejects(api.call('tcbr', 'DescribeCloudRunProcessLog', { EnvId: target.envId, RunId: 'owned-run' }), /outside/);
+  await api.call('tcbr', 'DescribeCloudRunDeployRecord', { EnvId: target.envId, ServerName: target.serverName });
+  await api.call('tcbr', 'DescribeCloudRunProcessLog', { EnvId: target.envId, RunId: 'owned-run' });
+  await assert.rejects(api.call('tcbr', 'DescribeCloudRunProcessLog', { EnvId: target.envId, RunId: 'foreign-run' }), /outside/);
 });
 
 function fakeApi({ existing = false, mutationTimeout = false, altered = false, moving = false } = {}) {
@@ -120,6 +130,55 @@ test('rollback executes only against the recorded prior version after maintenanc
   assert.equal(request.ServerName, target.serverName); assert.doesNotMatch(JSON.stringify(request), /SYNTHETIC_ONLY/);
   snapshot.raw.task.Task.Status = 'running';
   assert.throws(() => prepareRollback(snapshot, record, 'atoms-beta-002', 'atoms-beta-001', true), /deployment/);
+});
+
+function failedSourceApi({ task = {}, records, online = [] } = {}) {
+  const api = fakeApi({ existing: true }), original = api.call;
+  api.call = async (...args) => {
+    const data = await original(...args);
+    if (args[1] === 'DescribeServerManageTask') return { IsExist: true, Task: { Id: 42, Status: 'failed',
+      VersionName: 'atoms-beta-001', DeployType: 'package', FailReason: 'timeout', ...task } };
+    if (args[1] === 'DescribeCloudRunDeployRecord') return { DeployRecords: records ?? [{ DeployId: '001',
+      Status: 'create_failed', BuildId: 123, ImageUrl: image }] };
+    if (args[1] === 'DescribeCloudRunServerDetail') data.OnlineVersionInfos = online;
+    return data;
+  };
+  return api;
+}
+
+test('a known timed-out package attempt can prove only its pushed source build, never running application health', async () => {
+  const options = { target, manifest, source, attempt: { id: 'owned', command: 'stage', target,
+    sourceCommit: manifest.commit, sourceDigest: manifest.sourceDigest, archiveSha256: source.archiveSha256 },
+    submitted: { taskId: 42, attemptId: 'owned' }, upload: { archiveSha256: source.archiveSha256, packageName: 'owned-package', packageVersion: 'v1' } };
+  const proof = await verifySourceBuild({ ...options, api: failedSourceApi() });
+  assert.equal(proof.sourceBuildVerified, true); assert.equal(proof.artifactVerified, false); assert.equal(proof.deploymentVerified, false);
+  assert.equal(proof.recovery.buildId, 123); assert.equal(proof.image, immutableImage(image, imageDigest));
+  for (const api of [failedSourceApi({ task: { Id: 99 } }), failedSourceApi({ task: { VersionName: 'atoms-beta-999' } }),
+    failedSourceApi({ task: { Status: 'running' } }), failedSourceApi({ online: [{ VersionName: 'atoms-beta-002', FlowRatio: '100', ImageUrl: image }] })]) {
+    await assert.rejects(verifySourceBuild({ ...options, api }), /requires|identity/);
+  }
+  await assert.rejects(verifySourceBuild({ ...options, api: failedSourceApi(), upload: { ...options.upload, archiveSha256: 'wrong' } }), /upload identity/);
+  await assert.rejects(verifySourceBuild({ ...options, api: failedSourceApi(), submitted: { ...options.submitted, attemptId: 'foreign-attempt' } }), /upload identity/);
+  await assert.rejects(verifySourceBuild({ ...options, api: failedSourceApi({ task: { PackageVersion: 'wrong-package' } }) }), /metadata mismatch/);
+  await assert.rejects(verifySourceBuild({ ...options, api: failedSourceApi(), attempt: { ...options.attempt, target: { ...target, serverName: 'foreign-service' } } }), /upload identity/);
+  const recoveryTarget = { ...target, expectedVersion: proof.recovery.version };
+  const recoverySource = { image: proof.image, verifiedTarget: target, recovery: proof.recovery };
+  const api = failedSourceApi(), saved = {};
+  await stageRelease({ api, target: recoveryTarget, runtime, manifest, source: recoverySource,
+    save: (key, value) => { saved[key] = value; }, attemptExists: () => false });
+  assert.equal(api.calls.filter(v => v.action === 'UpdateCloudRunServer').length, 1);
+  assert.equal(api.calls.find(v => v.action === 'UpdateCloudRunServer').params.DeployInfo.ImageUrl, proof.image);
+  assert.equal(saved['attempt.json'].previous.versions.length, 0);
+  for (const [changedApi, changedSource] of [[failedSourceApi({ task: { Id: 99 } }), recoverySource],
+    [failedSourceApi({ task: { VersionName: 'atoms-beta-999' } }), recoverySource],
+    [failedSourceApi({ records: [{ DeployId: '001', Status: 'create_failed', BuildId: 456, ImageUrl: image }] }), recoverySource],
+    [failedSourceApi(), { ...recoverySource, verifiedTarget: { ...target, serverName: 'foreign-service' } }],
+    [failedSourceApi({ task: { Status: 'running' } }), recoverySource],
+    [failedSourceApi({ online: [{ VersionName: 'atoms-beta-002', FlowRatio: '100', ImageUrl: image }] }), recoverySource]]) {
+    await assert.rejects(stageRelease({ api: changedApi, target: recoveryTarget, runtime, manifest, source: changedSource,
+      save: () => assert.fail('must not record or mutate changed recovery'), attemptExists: () => false }), /recovery/);
+    assert.equal(changedApi.calls.some(v => v.action === 'UpdateCloudRunServer'), false);
+  }
 });
 
 test('verify binds actual resource config, source health, version and build manifest digest; unknown or moving state fails closed', async () => {

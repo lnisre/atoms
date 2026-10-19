@@ -6,7 +6,7 @@ import { createHash, createHmac } from 'node:crypto';
 const actions = {
   tcb: new Set(['DescribeBillingInfo', 'DescribeCloudBaseBuildService']),
   tcbr: new Set(['DescribeCloudRunServers', 'DescribeCloudRunServerDetail',
-    'DescribeCloudRunDeployRecord', 'DescribeCloudRunBuildLog', 'DescribeVersionDetail',
+    'DescribeCloudRunDeployRecord', 'DescribeCloudRunBuildLog', 'DescribeCloudRunProcessLog', 'DescribeVersionDetail',
     'DescribeServerManageTask', 'CreateCloudRunServer', 'UpdateCloudRunServer', 'SubmitServerRollback']),
 };
 const hash = value => createHash('sha256').update(value).digest('hex');
@@ -23,10 +23,12 @@ export function releaseApi({ credentials, envId, region, serverName, fetcher = f
     || !/^[a-z][a-z\d-]{2,44}$/.test(serverName)) throw Error('Invalid CloudBase target');
   if ([credentials.CLOUDBASE_ENV_ID, credentials.TENCENTCLOUD_ENVID].some(value => value && value !== envId)) throw Error('Credential environment mismatch');
   if (!credentials.TENCENTCLOUD_SECRETID || !credentials.TENCENTCLOUD_SECRETKEY) throw Error('Missing management credentials');
+  const ownedRunIds = new Set();
   const call = async (service, action, params = {}) => {
     if (!actions[service]?.has(action) || params.EnvId !== envId
       || (params.ServerName && params.ServerName !== serverName)
-      || (params.ServiceName && params.ServiceName !== serverName)) throw Error('CloudBase action outside release scope');
+      || (params.ServiceName && params.ServiceName !== serverName)
+      || (action === 'DescribeCloudRunProcessLog' && !ownedRunIds.has(params.RunId))) throw Error('CloudBase action outside release scope');
     const body = JSON.stringify(params), host = `${service}.tencentcloudapi.com`;
     const timestamp = Math.floor(Date.now() / 1000), date = new Date(timestamp * 1000).toISOString().slice(0, 10);
     const type = 'application/json; charset=utf-8', signed = 'content-type;host', scope = `${date}/${service}/tc3_request`;
@@ -43,6 +45,9 @@ export function releaseApi({ credentials, envId, region, serverName, fetcher = f
       const data = (await response.json()).Response;
       if (!response.ok || data?.Error || !data?.RequestId) throw new ReleaseApiError(action,
         /^[\w.]+$/.test(data?.Error?.Code) ? data.Error.Code : `HTTP${response.status}`, data?.RequestId);
+      if (action === 'DescribeCloudRunDeployRecord') for (const record of data.DeployRecords ?? []) {
+        if (typeof record.RunId === 'string') ownedRunIds.add(record.RunId);
+      }
       return data;
     } catch (error) {
       if (error instanceof ReleaseApiError) throw error;
